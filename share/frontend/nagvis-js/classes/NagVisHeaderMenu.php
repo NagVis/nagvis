@@ -27,17 +27,35 @@
  */
 class NagVisHeaderMenu
 {
+    /** @var GlobalMapCfg */
     private $OBJ;
+
+    /** @var FrontendTemplateSystem */
     private $TMPL;
+
+    /** @var Dwoo */
     private $TMPLSYS;
 
+    /** @var string */
     private $templateName;
+
+    /** @var string */
     private $pathHtmlBase;
+
+    /** @var string */
     private $pathTemplateFile;
 
+    /** @var array */
     private $aMacros = [];
+
+    /** @var bool */
     private $bRotation = false;
 
+    /**
+     * @param string $templateName
+     * @param GlobalMapCfg $OBJ
+     * @throws NagVisException
+     */
     public function __construct($templateName, $OBJ = null)
     {
         $this->OBJ = $OBJ;
@@ -55,10 +73,9 @@ class NagVisHeaderMenu
     }
 
     /**
-     * PUBLIC setRotationEnabled()
-     *
      * Tells the header menu that the current view is rotating
      *
+     * @return void
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRotationEnabled()
@@ -69,11 +86,18 @@ class NagVisHeaderMenu
     /**
      * Print the HTML code
      *
-     * return   String  HTML Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string HTML Code
+     * @throws Dwoo_Exception
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __toString()
     {
+        /**
+         * @var CoreAuthHandler $AUTH
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         * @var CoreUriHandler $UHANDLER
+         */
         global $AUTH, $AUTHORISATION, $UHANDLER;
 
         // In case of some really bad errors, the header menu can not be rendered, because basic
@@ -93,11 +117,13 @@ class NagVisHeaderMenu
     /**
      * Returns a list of available languages for the header menus macro list
      *
-     * return   Array
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getLangList()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         // Build language list
         $aLang = $CORE->getAvailableAndEnabledLanguages();
@@ -139,11 +165,18 @@ class NagVisHeaderMenu
     /**
      * Returns a list of maps for the header menus macro list
      *
-     * return   Array
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array
+     * @throws NagVisException
+     * @throws Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getMapList()
     {
+        /**
+         * @var GlobalMainCfg $_MAINCFG
+         * @var GlobalCore $CORE
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         */
         global $_MAINCFG, $CORE, $AUTHORISATION;
 
         // Get all the maps global content and use only those which are needed
@@ -234,6 +267,11 @@ class NagVisHeaderMenu
         return [$this->mapListToTree($aMaps, $childMaps), $permEditAnyMap];
     }
 
+    /**
+     * @param array $maps
+     * @param array $childMaps
+     * @return array
+     */
     private function mapListToTree($maps, $childMaps)
     {
         foreach ($maps as $map) {
@@ -248,14 +286,20 @@ class NagVisHeaderMenu
     }
 
     /**
-     * PRIVATE getMacros()
-     *
      * Returns all macros for the header template
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getMacros()
     {
+        /**
+         * @var GlobalCore $CORE
+         * @var CoreAuthHandler $AUTH
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         * @var CoreUriHandler $UHANDLER
+         */
         global $CORE, $AUTH, $AUTHORISATION, $UHANDLER;
         // First get all static macros
         $this->aMacros = $this->getStaticMacros();
@@ -348,6 +392,11 @@ class NagVisHeaderMenu
         $this->aMacros['mapNames'] = json_encode($CORE->getListMaps());
     }
 
+    /**
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
     private function sortHostgroups($a, $b)
     {
         return strnatcasecmp($a['name1'], $b['name1']);
@@ -358,6 +407,7 @@ class NagVisHeaderMenu
      * It either returns the language tag for the current language when a
      * documentation exists or en_US as fallback when no docs exist
      *
+     * @return string
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getDocLanguage()
@@ -371,14 +421,18 @@ class NagVisHeaderMenu
     }
 
     /**
-     * PRIVATE getStaticMacros()
-     *
      * Get all static macros for the template code
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getStaticMacros()
     {
+        /**
+         * @var SessionHandler $SHANDLER
+         * @var CoreAuthHandler $AUTH
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         * @var CoreUriHandler $UHANDLER
+         */
         global $SHANDLER, $AUTH, $AUTHORISATION, $UHANDLER;
 
         // Replace paths and language macros
@@ -468,12 +522,14 @@ class NagVisHeaderMenu
     /**
      * Checks for readable header template
      *
-     * @param 	bool	$printErr
-     * @return	bool	Is Check Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Check Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateReadable($printErr)
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         return $CORE->checkReadable($this->pathTemplateFile, $printErr);
     }

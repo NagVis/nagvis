@@ -27,6 +27,7 @@
  */
 class FrontendTemplateSystem
 {
+    /** @var Dwoo */
     private $TMPL;
 
     public function __construct()
@@ -39,11 +40,19 @@ class FrontendTemplateSystem
             . 'tmpl/compile', cfg('paths', 'var') . 'tmpl/cache');
     }
 
+    /**
+     * @return Dwoo
+     */
     public function getTmplSys()
     {
         return $this->TMPL;
     }
 
+    /**
+     * @param string $sTheme
+     * @param string $sTmpl
+     * @return Dwoo_Template_File
+     */
     public function getTmplFile($sTheme, $sTmpl)
     {
         $F = new Dwoo_Template_File(path('sys', '', 'templates', $sTheme . '.' . $sTmpl . '.html'));
