@@ -39,23 +39,40 @@ function listAvailableLanguages() {
  */
 class GlobalMainCfg
 {
+    /** @var bool */
     private $useCache = true;
+
+    /** @var GlobalFileCache */
     private $CACHE;
+
+    /** @var GlobalFileCache */
     private $PUCACHE;
 
+    /** @var array */
     protected $config = [];
+
+    /** @var array|null */
     protected $preUserConfig = null;
+
+    /** @var array */
     protected $runtimeConfig = [];
+
+    /** @var array */
     protected $stateWeight;
+
+    /** @var bool */
     protected $onlyUserConfig = false;
 
+    /** @var array */
     protected $configFiles;
 
+    /** @var array */
     protected $validConfig;
 
     /**
      * Class Constructor
      *
+     * @throws NagVisException
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct()
@@ -1892,6 +1909,9 @@ class GlobalMainCfg
 
     /**
      * Loads the custom action definitions from their files
+     *
+     * @return void
+     * @throws NagVisException
      */
     private function fetchCustomActions()
     {
@@ -1911,6 +1931,10 @@ class GlobalMainCfg
         }
     }
 
+    /**
+     * @param array $arr
+     * @return void
+     */
     public function setConfigFiles($arr)
     {
         $this->configFiles = $arr;
@@ -1919,6 +1943,9 @@ class GlobalMainCfg
     /**
      * Returns an array of all config files to be used by NagVis.
      * The paths are given as paths.
+     *
+     * @return array
+     * @throws NagVisException
      */
     public function getConfigFiles()
     {
@@ -1943,6 +1970,12 @@ class GlobalMainCfg
         return $files;
     }
 
+    /**
+     * @param bool $onlyUserConfig
+     * @param string $cacheSuffix
+     * @return false|void
+     * @throws NagVisException
+     */
     public function init($onlyUserConfig = false, $cacheSuffix = '')
     {
         $this->onlyUserConfig = $onlyUserConfig;
@@ -2014,6 +2047,7 @@ class GlobalMainCfg
      * Gets the cookie domain from the webservers environment and sets the
      * session cookie domain to this value
      *
+     * @return void
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setCookieDomainByEnv()
@@ -2028,7 +2062,9 @@ class GlobalMainCfg
      * definitions were moved to the backends so it is easier to create new
      * backends without any need to modify the main configuration
      *
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getBackendValidConf()
     {
@@ -2055,6 +2091,7 @@ class GlobalMainCfg
      *
      * @param string $base
      * @param string $htmlBase
+     * @return void
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setPathsByBase($base, $htmlBase)
@@ -2116,9 +2153,12 @@ class GlobalMainCfg
     /**
      * Reads the specified config file
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $configFile
+     * @param bool|int $printErr
+     * @param bool $isUserMainCfg
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readConfig($configFile, $printErr = 1, $isUserMainCfg = false)
     {
@@ -2279,6 +2319,10 @@ class GlobalMainCfg
     /**
      * Returns the computed (merged) valid configuration for the instanciated section
      * of a specific type. Is used for "backend" and "action" at the moment.
+     *
+     * @param string $what
+     * @param string $sec
+     * @return mixed
      */
     private function getInstanceableValidConfig($what, $sec)
     {
@@ -2297,9 +2341,10 @@ class GlobalMainCfg
     /**
      * Checks if the main config file is valid
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMainConfigIsValid($printErr)
     {
@@ -2486,7 +2531,6 @@ class GlobalMainCfg
      * Public Adaptor for the isCached method of CACHE object
      *
      * @return  bool  Result
-     * @return  int  Unix timestamp of cache creation time or -1 when not cached
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function isCached()
@@ -2523,11 +2567,23 @@ class GlobalMainCfg
         return true;
     }
 
+    /**
+     * @param string $sec
+     * @param string $var
+     * @return void
+     */
     public function unsetValue($sec, $var)
     {
         unset($this->config[$sec][$var]);
     }
 
+    /**
+     * @param string $type
+     * @param string $loc
+     * @param string $var
+     * @param string $relfile
+     * @return string|null
+     */
     public function getPath($type, $loc, $var, $relfile = '')
     {
         $lb = $this->getValue('paths', 'local_base', true) . HTDOCS_DIR;
@@ -2566,6 +2622,10 @@ class GlobalMainCfg
     /**
      * returns the hard coded default value of a config option
      * FIXME: Needs to be simplified
+     *
+     * @param string $sec
+     * @param string $var
+     * @return mixed|void|null
      */
     public function getDefaultValue($sec, $var)
     {
@@ -2620,6 +2680,12 @@ class GlobalMainCfg
     /**
      * Returns the value of a main configuration option. Either the hard coded default
      * value, or the configured one
+     *
+     * @param string $sec
+     * @param string $var
+     * @param bool $ignoreDefault
+     * @param bool $ignoreUserConfig
+     * @return mixed|null
      */
     public function getValue($sec, $var, $ignoreDefault = false, $ignoreUserConfig = false)
     {
@@ -2740,6 +2806,8 @@ class GlobalMainCfg
     /**
      * Populates the state weight structure, provided by hardcoded defaults
      * and maybe the user configuration
+     *
+     * @return void
      */
     private function parseStateWeight()
     {
@@ -2898,8 +2966,9 @@ class GlobalMainCfg
     /**
      * Writes the config file completly from array $this->configFile
      *
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function writeConfig()
     {
@@ -3015,9 +3084,10 @@ class GlobalMainCfg
     /**
      * Checks for writeable config file
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkNagVisConfigWriteable($printErr)
     {
@@ -3043,6 +3113,10 @@ class GlobalMainCfg
         return $val;
     }
 
+    /**
+     * @param string $sec
+     * @return string
+     */
     public function getSectionTitle($sec)
     {
         $titles = [
@@ -3063,6 +3137,11 @@ class GlobalMainCfg
 
     /**
      * Returns the name of the list function for the given map config option
+     *
+     * @param string $sec
+     * @param string $key
+     * @return mixed
+     * @throws NagVisException
      */
     public function getListFunc($sec, $key)
     {
@@ -3076,6 +3155,10 @@ class GlobalMainCfg
 
     /**
      * Finds out if an attribute has dependant attributes
+     *
+     * @param string $sec
+     * @param string $key
+     * @return bool
      */
     public function hasDependants($sec, $key)
     {

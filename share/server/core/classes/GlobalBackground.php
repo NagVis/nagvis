@@ -27,11 +27,21 @@
  */
 class GlobalBackground
 {
+    /** @var string */
     protected $image;
+
+    /** @var string */
     protected $path;
+
+    /** @var string */
     protected $webPath;
+
+    /** @var string */
     protected $type;
 
+    /**
+     * @param string $image
+     */
     public function __construct($image)
     {
         $this->image = $image;
@@ -63,6 +73,8 @@ class GlobalBackground
 
     /**
      * Fetches the path and saves it on initial load
+     *
+     * @return void
      */
     private function fetchPath()
     {
@@ -106,9 +118,10 @@ class GlobalBackground
     /**
      * Checks for existing map image file
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkFileExists($printErr)
     {
@@ -119,9 +132,10 @@ class GlobalBackground
     /**
      * Checks for readable map image file
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkFileReadable($printErr)
     {
@@ -132,9 +146,10 @@ class GlobalBackground
     /**
      * Checks for writeable map image file
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkFileWriteable($printErr)
     {
@@ -145,9 +160,10 @@ class GlobalBackground
     /**
      * Checks for writeable map image folder
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkFolderWriteable($printErr)
     {
@@ -158,9 +174,10 @@ class GlobalBackground
     /**
      * Deletes the map image
      *
-     * @param	bool	$printErr
-     * @return	bool	Is Check Successful?
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Check Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteImage($printErr = 1)
     {

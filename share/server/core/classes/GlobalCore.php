@@ -29,15 +29,28 @@
  */
 class GlobalCore
 {
+    /** @var GlobalMainCfg */
     protected static $MAINCFG = null;
+
+    /** @var null */
     protected static $LANG = null;
+
+    /** @var CoreAuthHandler */
     protected static $AUTHENTICATION = null;
+
+    /** @var CoreAuthorisationHandler */
     protected static $AUTHORIZATION = null;
 
+    /** @var self */
     private static $instance = null;
+
+    /** @var array */
     protected $iconsetTypeCache = [];
+
+    /** @var array */
     protected $selectable_sources = [];
 
+    /** @var bool[] */
     public $statelessObjectTypes = [
         'textbox'   => true,
         'shape'     => true,
@@ -45,6 +58,7 @@ class GlobalCore
         'container' => true,
     ];
 
+    /** @var string[] */
     public $demoMaps = [
         'demo-germany',
         'demo-ham-racks',
@@ -85,6 +99,9 @@ class GlobalCore
      * Getter function to initialize the user maincfg instance
      * Only needed in some rare cases when only the values from
      * the user (web) controllable nagvis.ini.php file are needed
+     *
+     * @return GlobalMainCfg
+     * @throws Exception
      */
     public static function getUserMainCfg()
     {
@@ -100,6 +117,9 @@ class GlobalCore
     /**
      * Setter for AA
      *
+     * @param CoreAuthHandler $A1
+     * @param CoreAuthorisationHandler $A2
+     * @return void
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function setAA(CoreAuthHandler $A1, CoreAuthorisationHandler $A2 = null)
@@ -111,6 +131,7 @@ class GlobalCore
     /**
      * Getter function for AUTHORIZATION
      *
+     * @return CoreAuthorisationHandler
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getAuthorization()
@@ -121,6 +142,7 @@ class GlobalCore
     /**
      * Getter function for AUTHENTICATION
      *
+     * @return CoreAuthHandler
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getAuthentication()
@@ -131,6 +153,7 @@ class GlobalCore
     /**
      * Static method for getting the instance
      *
+     * @return self
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getInstance()
@@ -148,9 +171,10 @@ class GlobalCore
     /**
      * Check if GD-Libs installed, when GD-Libs are enabled
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkGd($printErr)
     {
@@ -167,8 +191,10 @@ class GlobalCore
     /**
      * Reads all defined Backend-ids from the main configuration
      *
-     * @return	array Backend-IDs
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $onlyUserCfg
+     * @return array Backend-IDs
+     * @throws Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinedBackends($onlyUserCfg = false)
     {
@@ -191,7 +217,7 @@ class GlobalCore
     /**
      * Gets all rotation pools
      *
-     * @return	array pools
+     * @return array pools
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinedRotationPools()
@@ -209,6 +235,8 @@ class GlobalCore
 
     /**
      * Only returns rotations the users is permitted for
+     *
+     * @return array
      */
     public function getPermittedRotationPools()
     {
@@ -224,6 +252,8 @@ class GlobalCore
 
     /**
      * Gets all available custom actions
+     *
+     * @return array
      */
     public function getDefinedCustomActions()
     {
@@ -242,8 +272,9 @@ class GlobalCore
      * Reads all languages which are available in NagVis and
      * are enabled by the configuration
      *
-     * @return	array list
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableAndEnabledLanguages()
     {
@@ -261,8 +292,9 @@ class GlobalCore
     /**
      * Reads all languages
      *
-     * @return	array list
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableLanguages()
     {
@@ -272,8 +304,9 @@ class GlobalCore
     /**
      * Returns languages of all available documentations
      *
-     * @return	array list
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableDocs()
     {
@@ -283,8 +316,9 @@ class GlobalCore
     /**
      * Reads all available backends
      *
-     * @return	array Html
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array Html
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableBackends()
     {
@@ -294,8 +328,9 @@ class GlobalCore
     /**
      * Reads all hover templates
      *
-     * @return	array hover templates
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array hover templates
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableHoverTemplates()
     {
@@ -319,8 +354,9 @@ class GlobalCore
     /**
      * Reads all header templates
      *
-     * @return	array list
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableHeaderTemplates()
     {
@@ -344,8 +380,9 @@ class GlobalCore
     /**
      * Reads all header templates
      *
-     * @return	array list
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableContextTemplates()
     {
@@ -369,8 +406,9 @@ class GlobalCore
     /**
      * Reads all PNG images in shape path
      *
-     * @return	array Shapes
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array Shapes
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableShapes()
     {
@@ -383,8 +421,9 @@ class GlobalCore
     /**
      * Reads all iconsets in icon path
      *
-     * @return	array iconsets
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array iconsets
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableIconsets()
     {
@@ -397,8 +436,9 @@ class GlobalCore
     /**
      * Reads all available sources
      *
-     * @return	array hover templates
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array hover templates
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableSources()
     {
@@ -410,6 +450,9 @@ class GlobalCore
 
     /**
      * Returns the list of available custom action files
+     *
+     * @return array
+     * @throws NagVisException
      */
     public function getAvailableCustomActions()
     {
@@ -422,9 +465,10 @@ class GlobalCore
     /**
      * Returns the filetype of an iconset
      *
-     * @param   string $iconset Iconset name
-     * @return	string  Iconset file type
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $iconset Iconset name
+     * @return string Iconset file type
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getIconsetFiletype($iconset)
     {
@@ -458,6 +502,11 @@ class GlobalCore
 
     /**
      * Reads all source files for the geomap in the specified path
+     *
+     * @param string|null $strMatch
+     * @param bool|null $setKey
+     * @return array
+     * @throws NagVisException
      */
     public function getAvailableGeomapSourceFiles($strMatch = null, $setKey = null)
     {
@@ -474,9 +523,11 @@ class GlobalCore
     /**
      * Reads all maps in mapcfg path
      *
-     * @param   string $strMatch Regex to match the map name
-     * @return	array   Array of maps
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string|null $strMatch Regex to match the map name
+     * @param bool|null $setKey
+     * @return array Array of maps
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableMaps($strMatch = null, $setKey = null)
     {
@@ -490,6 +541,10 @@ class GlobalCore
         );
     }
 
+    /**
+     * @return array
+     * @throws NagVisException
+     */
     public function getPermittedMaps()
     {
         global $AUTHORISATION;
@@ -525,6 +580,10 @@ class GlobalCore
         return $list;
     }
 
+    /**
+     * @return int[]|string[]
+     * @throws NagVisException
+     */
     public function getListMaps()
     {
         $list = [];
@@ -551,8 +610,9 @@ class GlobalCore
     /**
      * Reads all map images in map path
      *
-     * @return	array map images
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array map images
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableBackgroundImages()
     {
@@ -579,8 +639,9 @@ class GlobalCore
     /**
      * Reads all available gadgets
      *
-     * @return	array   Array of gadgets
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array Array of gadgets
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableGadgets()
     {
@@ -607,15 +668,18 @@ class GlobalCore
     }
 
     /**
-   * Lists the contents of a directory with some checking, filtering and sorting
+     * Lists the contents of a directory with some checking, filtering and sorting
      *
-     * @param   string $dir Path to the directory
-     * @param   string $allowRegex Regex the file(s) need to match
-     * @param   array $ignoreList Lists of filenames to ignore (The filenames need to be the keys)
-     * @param   int $allowPartRegex Match part to be returned
-     * @param   bool $returnPart Print errors when dir does not exist
-     * @return	array   Sorted list of file names/parts in this directory
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $dir Path to the directory
+     * @param string|null $allowRegex Regex the file(s) need to match
+     * @param array|null $ignoreList Lists of filenames to ignore (The filenames need to be the keys)
+     * @param int|null $allowPartRegex Match part to be returned
+     * @param bool|null $returnPart Print errors when dir does not exist
+     * @param bool|null $setKey
+     * @param bool|null $printErr
+     * @return array Sorted list of file names/parts in this directory
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function listDirectory(
         $dir,
@@ -670,6 +734,12 @@ class GlobalCore
 
     }
 
+    /**
+     * @param string $path
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
     public function checkExisting($path, $printErr = true)
     {
         if ($path != '' && file_exists($path)) {
@@ -683,6 +753,12 @@ class GlobalCore
         return false;
     }
 
+    /**
+     * @param string $path
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
     public function checkReadable($path, $printErr = true)
     {
         if ($path != '' && is_readable($path)) {
@@ -695,6 +771,13 @@ class GlobalCore
 
         return false;
     }
+
+    /**
+     * @param string $path
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
     public function checkWriteable($path, $printErr = true)
     {
         if ($path != '' && is_writeable($path)) {
@@ -711,9 +794,10 @@ class GlobalCore
     /**
      * Checks for existing var folder
      *
-     * @param		bool 	$printErr
-     * @return	bool		Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkVarFolderExists($printErr)
     {
@@ -723,9 +807,10 @@ class GlobalCore
     /**
      * Checks for writeable VarFolder
      *
-     * @param		bool 	$printErr
-     * @return	bool		Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkVarFolderWriteable($printErr)
     {
@@ -735,9 +820,10 @@ class GlobalCore
     /**
      * Checks for existing shared var folder
      *
-     * @param		bool 	$printErr
-     * @return	bool		Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkSharedVarFolderExists($printErr)
     {
@@ -747,9 +833,10 @@ class GlobalCore
     /**
      * Checks for writeable shared var folder
      *
-     * @param		bool 	$printErr
-     * @return	bool		Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkSharedVarFolderWriteable($printErr)
     {
@@ -760,6 +847,7 @@ class GlobalCore
      * Tries to set correct permissions on files
      * Works completely silent - no error messages here
      *
+     * @param string $file
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setPerms($file)
@@ -782,8 +870,8 @@ class GlobalCore
      * Transforms a NagVis version to integer which can be used
      * for comparing different versions.
      *
-     * @param	  string $s Version string
-     * @return  int   Version as integer
+     * @param string $s Version string
+     * @return int Version as integer
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function versionToTag($s)
@@ -807,8 +895,8 @@ class GlobalCore
      * Returns the human readable upload error message
      * matching the given error code.
      *
-     * @param	  int $id Error code from $_FILE
-     * @return  string    The error message
+     * @param int $id Error code from $_FILE
+     * @return string The error message
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getUploadErrorMsg($id)
@@ -833,8 +921,12 @@ class GlobalCore
         }
     }
 
-    // Returns localalized strings which are used by different pages
-    // in the JS frontend and not only used on some specific pages.
+    /**
+     * Returns localalized strings which are used by different pages
+     * in the JS frontend and not only used on some specific pages.
+     *
+     * @return array
+     */
     public function getGeneralJSLocales()
     {
         return [
@@ -861,18 +953,33 @@ class GlobalCore
         ];
     }
 
-    // Sort array of map arrays by alias
+    /**
+     * Sort array of map arrays by alias
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
     public static function cmpAlias($a, $b)
     {
         return strnatcasecmp($a['alias'], $b['alias']);
     }
 
-    // Sort array of map arrays by alias used for header menu
+    /**
+     * Sort array of map arrays by alias used for header menu
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
     public static function cmpMapAlias($a, $b)
     {
         return strnatcasecmp($a['mapAlias'], $b['mapAlias']);
     }
 
+    /**
+     * @return string|null
+     */
     public function omdSite()
     {
         if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
@@ -882,11 +989,18 @@ class GlobalCore
         return null;
     }
 
+    /**
+     * @param string $source_name
+     * @return void
+     */
     public function addSelectableSource($source_name)
     {
         $this->selectable_sources[$source_name] = $source_name;
     }
 
+    /**
+     * @return array
+     */
     public function getSelectableSources()
     {
         return $this->selectable_sources;

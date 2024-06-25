@@ -27,16 +27,26 @@
  */
 class GlobalLanguage
 {
+    /** @var CoreUserCfg */
     private $USERCFG = null;
+
+    /** @var string */
     private $textDomain;
+
+    /** @var string */
     private $sCurrentLanguage;
+
+    /** @var string */
     private $sCurrentEncoding;
+
+    /** @var array */
     private $cache = [];
 
     /**
      * Class Constructor
      *
      * @param string $textDomain
+     * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($textDomain = 'nagvis')
@@ -69,6 +79,10 @@ class GlobalLanguage
     /**
      * Sets the language to be used for future localized strings
      * while processing the current page.
+     *
+     * @param bool $handleUserCfg
+     * @return void
+     * @throws NagVisException
      */
     public function setLanguage($handleUserCfg = false)
     {
@@ -90,7 +104,8 @@ class GlobalLanguage
     /**
      * Reads the language to use in NagVis
      *
-     * @return  string
+     * @return string
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherCurrentLanguage()
@@ -150,7 +165,8 @@ class GlobalLanguage
     /**
      * Checks if the user requested a language by the url
      *
-     * @return  string
+     * @return string
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getUserLanguage()
@@ -180,7 +196,8 @@ class GlobalLanguage
      * HTTP_ACCEPT_LANGUAGE var. Returns a language string when found one language
      * which is available
      *
-     * @return  string
+     * @return string
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getBrowserLanguage()
@@ -234,7 +251,7 @@ class GlobalLanguage
     /**
      * Returns the string representing the current language
      *
-     * @return  string
+     * @return string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCurrentLanguage()
@@ -245,10 +262,11 @@ class GlobalLanguage
     /**
      * Checks if the choosen language is available
      *
-     * @param   string $sLang Language definition string
-     * @param   bool $printErr Print error message or not
-     * @param   bool $ignoreConf Check language_available config or not
-     * @return  bool
+     * @param string $sLang Language definition string
+     * @param bool|int $printErr Print error message or not
+     * @param bool $ignoreConf Check language_available config or not
+     * @return bool
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkLanguageAvailable($sLang, $printErr = 1, $ignoreConf = false)
