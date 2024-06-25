@@ -25,22 +25,45 @@
 
 const N = "\n";
 
+/**
+ * @param string $s
+ * @return string
+ */
 function escape_html($s) {
     return htmlentities($s, ENT_COMPAT, 'UTF-8');
 }
 
+/**
+ * @param string $name
+ * @param mixed $default
+ * @return mixed|null
+ */
 function post($name, $default = null) {
     return isset($_POST[$name]) ? $_POST[$name] : $default;
 }
 
+/**
+ * @param string $name
+ * @param mixed $default
+ * @return mixed|null
+ */
 function get($name, $default = null) {
     return isset($_GET[$name]) ? $_GET[$name] : $default;
 }
 
+/**
+ * @param string $name
+ * @param mixed $default
+ * @return mixed|null
+ */
 function req($name, $default = null) {
     return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
 }
 
+/**
+ * @param string $key
+ * @return bool
+ */
 function has_var($key) {
     return isset($_REQUEST[$key]);
 }
@@ -52,44 +75,89 @@ function has_var($key) {
 $form_keys   = [];
 $form_errors = [];
 
+/**
+ * @param string $key
+ * @param mixed $default
+ * @return bool
+ */
 function get_checkbox($key, $default = null) {
     return (bool)req($key, $default);
 }
 
+/**
+ * @param string $field
+ * @param mixed $msg
+ * @return void
+ */
 function form_error($field, $msg) {
+    /** @var array $form_errors */
     global $form_errors;
     $form_errors[$field] = $msg;
 }
 
-// Special form of form errors: Are not displayed at the start of
-// the form becaus they occur during rendering of the fields. Make
-// the message part an array in this case.
+/**
+ * Special form of form errors: Are not displayed at the start of
+ * the form becaus they occur during rendering of the fields. Make
+ * the message part an array in this case.
+ *
+ * @param string $field
+ * @param string $msg
+ * @return void
+ */
 function form_render_error($field, $msg) {
     form_error($field, [false, $msg]);
 }
 
+/**
+ * @param string $key
+ * @return mixed|null
+ */
 function get_error($key) {
+    /** @var array $form_errors */
     global $form_errors;
     return isset($form_errors[$key]) ? $form_errors[$key] : null;
 }
 
+/**
+ * @param string $name
+ * @return bool
+ */
 function has_form_error($name) {
+    /** @var array $form_errors */
+    /** @var string $form_name */
     global $form_errors, $form_name;
     return (!submitted() || submitted($form_name)) && isset($form_errors[$name]);
 }
 
+/**
+ * @param string $msg
+ * @return void
+ */
 function success($msg) {
     msg($msg, 'success');
 }
 
+/**
+ * @param string $msg
+ * @return void
+ */
 function error($msg) {
     msg($msg, 'error');
 }
 
+/**
+ * @param string $msg
+ * @param string $cls
+ * @return void
+ */
 function msg($msg, $cls) {
     echo '<div class="' . $cls . '">' . escape_html($msg) . '</div>' . N;
 }
 
+/**
+ * @param string $form_name
+ * @return bool
+ */
 function submitted($form_name = null) {
     if ($form_name) {
         // check if a specific form has been submitted
@@ -100,18 +168,32 @@ function submitted($form_name = null) {
     }
 }
 
+/**
+ * @return bool
+ */
 function is_action() {
     return (submitted() || (bool)get('_action')) && post('_update', '0') == '0';
 }
 
+/**
+ * @return bool
+ */
 function is_update() {
     return post('_update', '0') == '1';
 }
 
+/**
+ * @param string $code
+ * @return void
+ */
 function js($code) {
     echo '<script>' . $code . '</script>' . N;
 }
 
+/**
+ * @param string $name
+ * @return void
+ */
 function show_form_render_error($name) {
     // only display form rendering errors here
     if (has_form_error($name)) {
@@ -122,7 +204,12 @@ function show_form_render_error($name) {
     }
 }
 
-// Starts a HTML form which is submitted (and can be updated) via AJAX call
+/**
+ * Starts a HTML form which is submitted (and can be updated) via AJAX call
+ *
+ * @param string $name
+ * @return void
+ */
 function js_form_start($name) {
     form_start($name, 'javascript:submitForm(\'' . cfg('paths', 'htmlbase')
         . '/server/core/ajax_handler.php?mod=' . $_REQUEST['mod']
