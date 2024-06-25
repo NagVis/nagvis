@@ -24,8 +24,16 @@
 
 class ViewAck
 {
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @return false|string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     public function parse()
     {
         global $CORE, $_BACKEND, $AUTH;
