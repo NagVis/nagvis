@@ -27,8 +27,12 @@
  */
 class FrontendModLogonDialog extends FrontendModule
 {
-    protected $CORE;
+    /** @var GlobalCore */
+    private $CORE;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
         $this->sName = 'LogonDialog';
@@ -37,8 +41,12 @@ class FrontendModLogonDialog extends FrontendModule
         $this->aActions = ['view' => !REQUIRES_AUTHORISATION];
     }
 
+    /**
+     * @return string
+     */
     public function handleAction()
     {
+        /** @var CoreAuthHandler $AUTH */
         global $AUTH;
         $sReturn = '';
 
