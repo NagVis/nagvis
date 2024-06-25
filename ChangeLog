@@ -1,4 +1,6 @@
 1.9.42
+Security:
+  * FIX: Fix XSS in std_table.php gadget
 
 1.9.41
 Frontend:
