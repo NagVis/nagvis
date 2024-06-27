@@ -1,6 +1,7 @@
 1.9.42
 Security:
   * FIX: Fix XSS in std_table.php gadget
+  * FIX: Fix potential RCE due to being able to upload malicious maps
 
 1.9.41
 Frontend:
