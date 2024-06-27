@@ -787,7 +787,7 @@ function automap_tree_to_map_config(
 
 /**
  * @param GlobalMapCfg $MAPCFG
- * @param array $map_name
+ * @param string $map_name
  * @param array $map_config
  * @return true
  * @throws NagVisException

@@ -240,7 +240,7 @@ class GlobalBackendTest implements GlobalBackendInterface
 
     /**
      * @param string $name
-     * @param string[] $members
+     * @param array[] $members
      * @return array
      */
     private function servicegroup($name, $members)
@@ -944,6 +944,7 @@ class GlobalBackendTest implements GlobalBackendInterface
 
                 foreach ($this->obj['hostgroup'][$name]['members'] as $hostname) {
                     $resp = $this->getHostMemberCounts(
+                        // TODO: what is $backendId? Seems to alternate between string and array
                         [[new NagVisHost($this->backendId, $hostname)]],
                         $options,
                         [['key' => 'host_name', 'op' => '=', 'val' => 'name']]
@@ -1009,6 +1010,7 @@ class GlobalBackendTest implements GlobalBackendInterface
                         continue;
                     }
 
+                    // TODO: what is $backendId? Seems to alternate between string and array
                     $resp = $this->getHostMemberCounts([[new NagVisHost($this->backendId, $hostname)]], $options,
                         [['key' => 'host_name', 'op' => '=', 'val' => 'name']]);
                     foreach ($resp[$hostname]['counts'] as $state => $substates) {

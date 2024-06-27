@@ -111,6 +111,7 @@ class FrontendModOverview extends FrontendModule
         if ($this->rotation != '') {
             $ROTATION = new FrontendRotation($this->rotation);
             $ROTATION->setStep('overview', '', $this->rotationStep);
+            // todo: this method doesn't exist?
             $this->VIEW->setRotation($ROTATION->getRotationProperties());
         }
 

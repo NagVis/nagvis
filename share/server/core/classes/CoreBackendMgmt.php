@@ -402,6 +402,8 @@ class CoreBackendMgmt
     }
 
     /**
+     * TODO: what is $backendId? Seems to alternate between string and array
+     *
      * @param string $backendId
      * @param string $host
      * @param string $descr
@@ -423,6 +425,8 @@ class CoreBackendMgmt
     }
 
     /**
+     * TODO: what is $backendId? Seems to alternate between string and array
+     *
      * @param string $backendId
      * @param string $name
      * @param array $state
@@ -643,6 +647,8 @@ class CoreBackendMgmt
     }
 
     /**
+     * TODO: what is $backendId? Seems to alternate between string and array
+     *
      * @param string $backendId
      * @param int $options
      * @param array<array<NagvisStatefulObject>> $aObjs
