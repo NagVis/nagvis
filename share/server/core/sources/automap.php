@@ -228,8 +228,13 @@ $hiddenConfigVars = [
 
 /**
  * Get root host object by NagVis configuration or by backend.
+ *
+ * @param $params
+ * @return mixed|string
+ * @throws NagVisException
  */
 function automap_get_root_hostname($params) {
+    /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     /**
      * NagVis tries to take configured host from main
@@ -260,6 +265,11 @@ function automap_get_root_hostname($params) {
     }
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @return array
+ * @throws NagVisException
+ */
 function automap_load_params($MAPCFG) {
     $params = $MAPCFG->getSourceParams();
 
@@ -299,8 +309,15 @@ function automap_hostnames_to_object_ids($names) {
 
 /**
  * Loads the hostname to object_id mapping table from the central file
+ *
+ * @return array
+ * @throws NagVisException
  */
 function automap_load_object_ids() {
+    /**
+     * @var string $automap_object_id_file
+     * @var array $automap_object_ids
+     */
     global $automap_object_id_file, $automap_object_ids;
     if (!isset($automap_object_ids[0])) {
         if (GlobalCore::getInstance()->checkExisting($automap_object_id_file, false)) {
@@ -315,13 +332,30 @@ function automap_load_object_ids() {
 
 /**
  * Saves the given hostname to object_id mapping table in the central file
+ *
+ * @return bool
  */
 function automap_store_object_ids() {
+    /**
+     * @var string $automap_object_id_file
+     * @var array $automap_object_ids
+     */
     global $automap_object_id_file, $automap_object_ids;
     return file_put_contents($automap_object_id_file, json_encode($automap_object_ids)) !== false;
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $params
+ * @param array $saved_config
+ * @param string $obj_name
+ * @return array|mixed
+ */
 function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
+    /**
+     * @var array $automap_object_ids
+     * @var bool $automap_object_ids_changed
+     */
     global $automap_object_ids, $automap_object_ids_changed;
 
     // Generate an object id if it does not exist
@@ -346,6 +380,14 @@ function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
     return $obj;
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $params
+ * @param array $saved_config
+ * @param string $obj_name
+ * @return array|mixed
+ * @throws NagVisException
+ */
 function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
     $obj = automap_obj_base($MAPCFG, $params, $saved_config, $obj_name);
 
@@ -400,6 +442,14 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
     return $obj;
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $params
+ * @param array $saved_config
+ * @param array $from_obj
+ * @param array $to_obj
+ * @return array|mixed
+ */
 function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj) {
     $obj_name = $from_obj['object_id'] . 'x' . $to_obj['object_id'];
 
@@ -422,6 +472,17 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
 /**
  * Gets all child/parent objects of this host from the backend. The child objects are
  * saved to the childObjects array
+ *
+ * @param string $dir
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $params
+ * @param array $saved_config
+ * @param string $obj_name
+ * @param int $layers_left
+ * @param array $this_tree_lvl
+ * @param array $object_names
+ * @return void
+ * @throws NagVisException
  */
 function automap_fetch_tree(
     $dir,
@@ -519,6 +580,13 @@ function automap_fetch_tree(
     }
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $params
+ * @param array $saved_config
+ * @return array|mixed
+ * @throws NagVisException
+ */
 function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
     $root_name = $params['root'];
 
@@ -565,10 +633,12 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
     return $tree;
 }
 
-// allowed_ids - contains an assoziative array of object_ids to keep in the tree where 
-//               the object_ids are the keys.
-// obj         - is the base object in the tree to use as start point for filtering.
-//               This is basically the root object of the automap.
+/**
+ * @param array $allowed_ids contains an assoziative array of object_ids to keep in the tree where the object_ids are the keys.
+ * @param array $obj is the base object in the tree to use as start point for filtering. This is basically the root object of the automap.
+ * @param array|null $directions
+ * @return bool
+ */
 function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
     // Is the current object allowed to remain on the map on its own?
     $remain = isset($allowed_ids[$obj['object_id']]);
@@ -599,6 +669,10 @@ function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
 /**
  * On automap updates not all objects are updated at once. Filter
  * the child tree by the given list of host object ids.
+ *
+ * @param array $obj
+ * @param array|null $params
+ * @return void
  */
 function automap_filter_by_ids(&$obj, $params = null) {
     if (isset($params['filter_by_ids']) && $params['filter_by_ids'] != '') {
@@ -608,7 +682,7 @@ function automap_filter_by_ids(&$obj, $params = null) {
 }
 
 /**
- * It is possible to filter the object tree by a hostgroup. In this mode 
+ * It is possible to filter the object tree by a hostgroup. In this mode
  * the list of hostnames in this group is fetched from the backend and the
  * parent/child trees are filtered using this list.
  *
@@ -616,6 +690,11 @@ function automap_filter_by_ids(&$obj, $params = null) {
  * host which is not in the group. These 'connector' hosts need to be added
  * too. Those hosts will be added by default but this can be disabled by
  * config option. This sort of hosts should be visualized in another way.
+ *
+ * @param array $obj
+ * @param array $params
+ * @return void
+ * @throws NagVisException
  */
 function automap_filter_by_group(&$obj, $params) {
     if (!isset($params['filter_group']) || $params['filter_group'] == '') {
@@ -638,6 +717,11 @@ function automap_filter_by_group(&$obj, $params) {
  * It would be cleaner to apply the NagVis state aggregation mechanism to determine
  * whether or not an object is OK/UP or not, but this would be less efficient for
  * most cases. Let's hope this is ok for most use cases.
+ *
+ * @param array $obj
+ * @param array $params
+ * @return void
+ * @throws NagVisException
  */
 function automap_filter_by_state(&$obj, $params) {
     if (!isset($params['filter_by_state']) || $params['filter_by_state'] != 1) {
@@ -658,6 +742,13 @@ function automap_filter_by_state(&$obj, $params) {
 
 /**
  * Links the object in the object tree to the map objects
+ *
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $params
+ * @param array $saved_config
+ * @param array $map_config
+ * @param array $tree
+ * @return void
  */
 function automap_tree_to_map_config(
     $MAPCFG,
@@ -694,6 +785,13 @@ function automap_tree_to_map_config(
     }
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $map_name
+ * @param array $map_config
+ * @return true
+ * @throws NagVisException
+ */
 function process_automap($MAPCFG, $map_name, &$map_config) {
     global $automap_object_id_file, $automap_object_ids, $automap_object_ids_changed;
 
@@ -752,6 +850,11 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
     return true; // allow caching
 }
 
+/**
+ * @param array $p
+ * @return int
+ * @throws NagVisException
+ */
 function automap_program_start($p) {
     global $_BACKEND;
     $_BACKEND->checkBackendExists($p['backend_id'][0], true);
@@ -759,6 +862,12 @@ function automap_program_start($p) {
     return $_BACKEND->getBackend($p['backend_id'][0])->getProgramStart();
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param int $compare_time
+ * @return bool
+ * @throws NagVisException
+ */
 function changed_automap($MAPCFG, $compare_time) {
     $params = $MAPCFG->getSourceParams();
     return automap_program_start($params) > $compare_time;

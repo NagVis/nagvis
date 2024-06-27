@@ -49,6 +49,10 @@ class CoreModManageShapes extends CoreModule
 
     /**
      * @return false|string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
      */
     public function handleAction()
     {

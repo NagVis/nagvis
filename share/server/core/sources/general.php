@@ -45,6 +45,11 @@ $configVarMap = [
     ],
 ];
 
+/**
+ * @param string $iconset
+ * @return array|false|int[]
+ * @throws NagVisException
+ */
 function iconset_size($iconset) {
     global $CORE;
     $fileType = $CORE->getIconsetFiletype($iconset);

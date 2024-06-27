@@ -31,6 +31,9 @@
 class CoreSessionHandler
 {
 
+    /**
+     * @throws ErrorException
+     */
     public function __construct()
     {
         $sDomain   = cfg('global', 'sesscookiedomain');

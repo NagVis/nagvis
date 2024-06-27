@@ -195,6 +195,7 @@ abstract class CoreModule {
      * @param array $aDefaults
      * @param bool $mixed
      * @return array
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function getCustomOptions($aKeys, $aDefaults = [], $mixed = false)
@@ -262,6 +263,7 @@ abstract class CoreModule {
      * @param string|null $reload
      * @param string|null $redirectUrl
      * @return mixed
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function handleResponse(
@@ -355,6 +357,7 @@ abstract class CoreModule {
      * @param string[] $files
      * @return false|string|null Returns null when nothing changed or a structure of the changed objects
      * @throws MapCfgInvalid
+     * @throws NagVisException
      */
     protected function checkFilesChanged($files)
     {

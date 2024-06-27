@@ -45,6 +45,7 @@ class FrontendModInfo extends FrontendModule
 
     /**
      * @return string
+     * @throws Dwoo_Exception
      */
     public function handleAction()
     {
@@ -61,6 +62,7 @@ class FrontendModInfo extends FrontendModule
 
     /**
      * @return string
+     * @throws Dwoo_Exception
      */
     private function displayDialog()
     {

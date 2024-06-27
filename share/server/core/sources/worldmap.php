@@ -114,7 +114,16 @@ $updateConfigVars = [
 // The worldmap database object
 $DB = null;
 
+/**
+ * @return void
+ * @throws WorldmapError
+ * @throws NagVisException
+ */
 function worldmap_init_schema() {
+    /**
+     * @var CorePDOHandler|null $DB
+     * @var GlobalCore $CORE
+     */
     global $DB, $CORE;
     // Create initial db scheme if needed
     if (!$DB->tableExist('objects')) {
@@ -164,7 +173,13 @@ function worldmap_init_schema() {
     //}
 }
 
+/**
+ * @return void
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function worldmap_init_db() {
+    /** @var CorePDOHandler|null $DB */
     global $DB;
     if ($DB !== null) {
         return;
@@ -181,8 +196,16 @@ function worldmap_init_db() {
     worldmap_init_schema();
 }
 
-// compuetes 2D line constants from a segment (2 points)
-// returns parameters r,s,t of the common 2D "rx + sy + t = 0" equation
+/**
+ * compuetes 2D line constants from a segment (2 points)
+ * returns parameters r,s,t of the common 2D "rx + sy + t = 0" equation
+ *
+ * @param int|float $ax
+ * @param int|float $ay
+ * @param int|float $bx
+ * @param int|float $by
+ * @return array
+ */
 function line_parameters($ax, $ay, $bx, $by) {
     // segment vector
     $ux = $bx - $ax;
@@ -203,7 +226,18 @@ function line_parameters($ax, $ay, $bx, $by) {
 
     return [$r, $s, $t];
 }
+
+/**
+ * @param int|float $sw_lng
+ * @param int|float $sw_lat
+ * @param int|float $ne_lng
+ * @param int|float $ne_lat
+ * @return array
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
+    /** @var CorePDOHandler|null $DB */
     global $DB;
     worldmap_init_db();
 
@@ -305,7 +339,14 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     return $objects;
 }
 
+/**
+ * @param string $id
+ * @return mixed|void
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function worldmap_get_object_by_id($id) {
+    /** @var CorePDOHandler $DB */
     global $DB;
     worldmap_init_db();
 
@@ -317,7 +358,20 @@ function worldmap_get_object_by_id($id) {
     }
 }
 
-// Worldmap internal helper function to add an object to the worldmap
+/**
+ * Worldmap internal helper function to add an object to the worldmap
+ *
+ * @param $obj_id
+ * @param int|float $lat
+ * @param int|float $lng
+ * @param array $obj
+ * @param int|float|null $lat2
+ * @param int|float|null $lng2
+ * @param bool $insert
+ * @return true
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function worldmap_db_update_object(
     $obj_id,
     $lat,
@@ -364,6 +418,16 @@ function worldmap_db_update_object(
     }
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param string $obj_id
+ * @param bool $insert
+ * @return bool
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function worldmap_update_object(
     $MAPCFG,
     $map_name,
@@ -404,15 +468,33 @@ function worldmap_update_object(
 // The following functions are used directly by NagVis
 //
 
-// Set the needed values for maps currently being created
+/**
+ * Set the needed values for maps currently being created
+ *
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @return void
+ */
 function init_map_worldmap($MAPCFG, $map_name, &$map_config) {
+    /** @var array $configVars */
     global $configVars;
     $MAPCFG->setValue(0, "worldmap_center", $configVars["worldmap_center"]["default"]);
     $MAPCFG->setValue(0, "worldmap_zoom", $configVars["worldmap_zoom"]["default"]);
 }
 
-// Returns the minimum bounds needed to be able to display all objects
+/**
+ * Returns the minimum bounds needed to be able to display all objects
+ *
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @return array[]
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
+    /** @var CorePDOHandler|null $DB */
     global $DB;
     worldmap_init_db();
 
@@ -426,7 +508,17 @@ function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
     ];
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param string $obj_id
+ * @return true|void
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
+    /** @var CorePDOHandler|null $DB */
     global $DB;
     worldmap_init_db();
 
@@ -441,7 +533,17 @@ function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     }
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param string $obj_id
+ * @return true
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
+    /** @var CorePDOHandler|null $DB */
     global $DB;
     worldmap_init_db();
 
@@ -455,14 +557,40 @@ function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     }
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param string $obj_id
+ * @return bool
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function update_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     return worldmap_update_object($MAPCFG, $map_name, $map_config, $obj_id, false);
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param string $obj_id
+ * @return bool
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     return worldmap_update_object($MAPCFG, $map_name, $map_config, $obj_id);
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @return bool
+ * @throws NagVisException
+ * @throws WorldmapError
+ */
 function process_worldmap($MAPCFG, $map_name, &$map_config) {
     $bbox = val($_GET, 'bbox', null);
     $clone_id = val($_GET, 'clone_id', null);
@@ -494,11 +622,21 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
     return false;
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param int $compare_time
+ * @return bool
+ */
 function changed_worldmap($MAPCFG, $compare_time) {
     $db_path = cfg('paths', 'cfg') . 'worldmap.db';
     return !file_exists($db_path) || filemtime($db_path) > $compare_time;
 }
 
+/**
+ * @param mixed $x
+ * @param mixed $y
+ * @return void
+ */
 function swap(&$x, &$y) {
     $tmp = $x;
     $x = $y;

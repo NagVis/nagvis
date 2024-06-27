@@ -35,6 +35,7 @@ class CoreModUrl extends CoreModule
 
     /**
      * @param GlobalCore $CORE
+     * @throws NagVisException
      */
     public function __construct(GlobalCore $CORE)
     {

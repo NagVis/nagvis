@@ -39,12 +39,24 @@ $_MAINCFG->init();
  * This is mainly a short access to config options. In the past the whole
  * language object method call was used all arround NagVis. This has been
  * introduced to keep the code shorter
+ *
+ * @param string $sec
+ * @param string $key
+ * @param bool $ignoreDefaults
+ * @return mixed|null
  */
 function cfg($sec, $key, $ignoreDefaults = false) {
     global $_MAINCFG;
     return $_MAINCFG->getValue($sec, $key, $ignoreDefaults);
 }
 
+/**
+ * @param string $type
+ * @param string $loc
+ * @param string $var
+ * @param string $relfile
+ * @return string|null
+ */
 function path($type, $loc, $var, $relfile = '') {
     global $_MAINCFG;
     return $_MAINCFG->getPath($type, $loc, $var, $relfile);
@@ -58,6 +70,10 @@ $_LANG = new GlobalLanguage();
  * This is mainly a short access to localized strings. In the past the whole
  * language object method call was used all arround NagVis. This has been
  * introduced to keep the code shorter
+ *
+ * @param $txt
+ * @param null $vars
+ * @return mixed|string
  */
 function l($txt, $vars = null) {
     global $_LANG;
@@ -71,6 +87,9 @@ function l($txt, $vars = null) {
     }
 }
 
+/**
+ * @return string
+ */
 function curLang() {
     global $_LANG;
     return $_LANG->getCurrentLanguage();

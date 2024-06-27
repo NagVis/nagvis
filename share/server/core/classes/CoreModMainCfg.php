@@ -48,6 +48,8 @@ class CoreModMainCfg extends CoreModule
 
     /**
      * @return false|string
+     * @throws FieldInputError
+     * @throws NagVisException
      */
     public function handleAction()
     {

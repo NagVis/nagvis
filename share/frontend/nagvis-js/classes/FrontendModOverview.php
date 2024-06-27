@@ -41,6 +41,7 @@ class FrontendModOverview extends FrontendModule
 
     /**
      * @param GlobalCore $CORE
+     * @throws NagVisException
      */
     public function __construct(GlobalCore $CORE)
     {
@@ -63,6 +64,8 @@ class FrontendModOverview extends FrontendModule
 
     /**
      * @return string
+     * @throws NagVisException
+     * @throws Dwoo_Exception
      */
     public function handleAction()
     {
@@ -81,6 +84,7 @@ class FrontendModOverview extends FrontendModule
     /**
      * @return string
      * @throws NagVisException
+     * @throws Dwoo_Exception
      */
     private function showViewDialog()
     {

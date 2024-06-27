@@ -34,7 +34,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
     /** @var string */
     private $file;
 
-    /** @var array */
+    /** @var string[] */
     private $backends;
 
     /** @var array|null */
@@ -46,6 +46,9 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
     /** @var array */
     private $perms;
 
+    /**
+     * @throws NagVisException
+     */
     public function __construct()
     {
         $this->file     = cfg('global', 'authorisation_group_perms_file');

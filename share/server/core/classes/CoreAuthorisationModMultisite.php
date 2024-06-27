@@ -34,6 +34,9 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule
     /** @var array */
     private $permissions;
 
+    /**
+     * @throws NagVisException
+     */
     public function __construct()
     {
         $this->file = cfg('global', 'authorisation_multisite_file');

@@ -43,6 +43,7 @@ class FrontendModLogonDialog extends FrontendModule
 
     /**
      * @return string
+     * @throws Dwoo_Exception
      */
     public function handleAction()
     {
