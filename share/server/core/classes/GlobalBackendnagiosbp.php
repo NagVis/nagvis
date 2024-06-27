@@ -352,6 +352,13 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     /**
      * Returns the state with detailed information of a list of services. Using
      * the given objects and filters.
+     *
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     public function getServiceState($objects, $options, $filters)
     {
@@ -460,8 +467,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC Method getValidConfig
      * Returns the valid config for this backend
+     *
+     * @return array
      */
     public static function getValidConfig()
     {
@@ -472,36 +480,67 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * Not implemented methods
      **************************************************************************/
 
+    /**
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     */
     public function getHostState($objects, $options, $filters)
     {
         return [];
     }
 
+    /**
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     */
     public function getHostMemberCounts($objects, $options, $filters)
     {
         return [];
     }
 
+    /**
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     */
     public function getHostgroupStateCounts($objects, $options, $filters)
     {
         return [];
     }
 
+    /**
+     * @return array
+     */
     public function getHostNamesWithNoParent()
     {
         return [];
     }
 
+    /**
+     * @return array
+     */
     public function getDirectChildNamesByHostName($hostName)
     {
         return [];
     }
 
+    /**
+     * @return array
+     */
     public function getDirectParentNamesByHostName($hostName)
     {
         return [];
     }
 
+    /**
+     * @param string $hostName
+     * @return array
+     */
     public function getDirectChildDependenciesNamesByHostName($hostName)
     {
         return [];

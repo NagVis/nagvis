@@ -610,6 +610,7 @@ class CorePDOHandler
 
     /**
      * @return void
+     * @throws NagVisException
      */
     public function updateDb()
     {

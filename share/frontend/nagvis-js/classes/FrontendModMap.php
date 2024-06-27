@@ -95,6 +95,7 @@ class FrontendModMap extends FrontendModule
      * @throws MapCfgInvalid
      * @throws MapCfgInvalidObject
      * @throws NagVisException
+     * @throws Dwoo_Exception
      */
     public function handleAction()
     {
@@ -118,6 +119,7 @@ class FrontendModMap extends FrontendModule
      * @throws MapCfgInvalid
      * @throws MapCfgInvalidObject
      * @throws NagVisException
+     * @throws Dwoo_Exception
      */
     private function showViewDialog()
     {

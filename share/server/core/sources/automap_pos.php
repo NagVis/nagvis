@@ -4,8 +4,13 @@ $automap_graphviz_path = '';
 
 /**
  * Checks if a Graphviz binary can be found on the system
+ *
+ * @param string $binary
+ * @return true
+ * @throws NagVisException
  */
 function automap_check_graphviz($binary) {
+    /** @var string $automap_graphviz_path */
     global $automap_graphviz_path;
     /**
      * Check if the graphviz binaries can be found in the PATH or in the
@@ -33,6 +38,11 @@ function automap_check_graphviz($binary) {
     return true;
 }
 
+/**
+ * @param array $params
+ * @return void
+ * @throws NagVisException
+ */
 function automap_pos_check_preflight($params) {
     GlobalCore::getInstance()->checkVarFolderWriteable(true);
 
@@ -44,10 +54,21 @@ function automap_pos_check_preflight($params) {
     automap_check_graphviz('fdp');
 }
 
+/**
+ * @param string $from_id
+ * @param string $to_id
+ * @return string
+ */
 function graphviz_config_connector($from_id, $to_id) {
     return '    "' . $from_id . '" -- "' . $to_id . '" [ weight=2 ];' . "\n";
 }
 
+/**
+ * @param array $params
+ * @param array $tree
+ * @param int $layer
+ * @return string
+ */
 function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     $str = '';
 
@@ -116,6 +137,10 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
  * Generates a graphviz configuration string from the object tree.
  * This string is later used to feed graphviz which will then generate
  * the coordinates for the automap.
+ *
+ * @param array $params
+ * @param array $tree
+ * @return string
  */
 function graphviz_config(&$params, &$tree) {
     $str  = "graph automap {\n";
@@ -188,8 +213,18 @@ function graphviz_config(&$params, &$tree) {
 
 /**
  * Renders the imagemap html code for the automap
+ *
+ * @param string $map_name
+ * @param array $params
+ * @param string $cfg
+ * @return string
+ * @throws NagVisException
  */
 function graphviz_run($map_name, &$params, $cfg) {
+    /**
+     * @var GlobalCore $CORE
+     * @var string $automap_graphviz_path
+     */
     global $CORE, $automap_graphviz_path;
     /**
      * possible render modes are set by selecting the correct binary:
@@ -247,6 +282,10 @@ function graphviz_run($map_name, &$params, $cfg) {
 
 /**
  * Parses the imagemap code to extract the map object coordinates
+ *
+ * @param array $map_config
+ * @param string $imagemap
+ * @return void
  */
 function graphviz_parse(&$map_config, $imagemap) {
     /*
@@ -369,6 +408,15 @@ function graphviz_parse(&$map_config, $imagemap) {
     //}
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param array $tree
+ * @param array $params
+ * @return true
+ * @throws NagVisException
+ */
 function process_automap_pos($MAPCFG, $map_name, &$map_config, &$tree, &$params) {
     automap_pos_check_preflight($params);
 
@@ -384,6 +432,9 @@ function process_automap_pos($MAPCFG, $map_name, &$map_config, &$tree, &$params)
 
 /**
  * This methods converts pixels to inches. Assuming 72dpi
+ *
+ * @param int $px
+ * @return string
  */
 function graphviz_px2inch($px) {
     return number_format($px / 72, 4, '.', '');

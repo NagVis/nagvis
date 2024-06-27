@@ -362,6 +362,7 @@ class GlobalMapCfg
      * @param bool $onlyGlobal
      * @return false|void
      * @throws NagVisException
+     * @throws Exception
      */
     public function parseConfigFile($onlyGlobal)
     {
@@ -972,6 +973,7 @@ class GlobalMapCfg
      * @param bool $useCache
      * @return void
      * @throws NagVisException
+     * @throws Exception
      */
     private function processSources($useCache)
     {
@@ -2262,8 +2264,9 @@ class GlobalMapCfg
     /**
      * Deletes the lockfile for a map
      *
-     * @return	bool     Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return    bool     Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteMapLock()
     {

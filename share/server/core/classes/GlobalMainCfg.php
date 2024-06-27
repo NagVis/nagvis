@@ -22,6 +22,9 @@
  *
  *****************************************************************************/
 
+/**
+ * @return array
+ */
 function listMultisiteSnapinLayouts() {
     return [
         'tree' => l('Show the map tree'),
@@ -29,7 +32,12 @@ function listMultisiteSnapinLayouts() {
     ];
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function listAvailableLanguages() {
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableLanguages();
 }
