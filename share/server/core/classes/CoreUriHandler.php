@@ -36,6 +36,9 @@ class CoreUriHandler
     /** @var string[] */
     private $aAliases;
 
+    /**
+     * @throws NagVisException
+     */
     public function __construct()
     {
         $this->aAliases = ['module' => 'mod', 'action' => 'act'];

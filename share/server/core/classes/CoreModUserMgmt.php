@@ -38,6 +38,9 @@ class CoreModUserMgmt extends CoreModule
 
     /**
      * @return false|string
+     * @throws CoreAuthModNoSupport
+     * @throws FieldInputError
+     * @throws NagVisException
      */
     public function handleAction()
     {

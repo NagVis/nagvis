@@ -38,6 +38,7 @@ class ViewManageBackends
 
     /**
      * @throws NagVisException
+     * @throws Exception
      */
     public function __construct()
     {

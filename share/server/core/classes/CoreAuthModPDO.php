@@ -48,6 +48,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
      */
     abstract public function getConfig();
 
+    /**
+     * @throws NagVisException
+     */
     public function __construct()
     {
         parent::$aFeatures = [

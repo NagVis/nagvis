@@ -73,6 +73,7 @@ class CoreModGeneral extends CoreModule
     /**
      * @param string $type
      * @return false|string
+     * @throws NagVisException
      */
     private function getTemplate($type)
     {

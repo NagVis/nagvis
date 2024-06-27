@@ -424,6 +424,9 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * @param string $name1Pattern
      * @param string $name2Pattern
      * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendException
+     * @throws BackendInvalidResponse
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
     {

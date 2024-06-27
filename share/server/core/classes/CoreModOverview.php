@@ -47,6 +47,8 @@ class CoreModOverview extends CoreModule
 
     /**
      * @return false|string
+     * @throws MapCfgInvalid
+     * @throws NagVisException
      */
     public function handleAction()
     {
@@ -296,8 +298,9 @@ class CoreModOverview extends CoreModule
     /**
      * Parses the rotations for the overview page
      *
-     * @return	string  Json Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return    string  Json Code
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseRotationsJson()
     {
@@ -364,7 +367,8 @@ class CoreModOverview extends CoreModule
      * @param string $imgPath
      * @param string $thumbPath
      * @return string
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function createThumbnail($imgPath, $thumbPath)
     {

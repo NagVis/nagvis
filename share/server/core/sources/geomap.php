@@ -8,10 +8,19 @@ class GeomapError extends MapSourceError
 // CSV source file handling
 //
 
+/**
+ * @param array $p
+ * @return string
+ */
 function geomap_source_file($p) {
     return cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
 }
 
+/**
+ * @param array $p
+ * @return array
+ * @throws GeomapError
+ */
 function geomap_read_csv($p) {
     $locations = [];
     $f = geomap_source_file($p);
@@ -53,7 +62,13 @@ function geomap_read_csv($p) {
 // Backend source handling
 //
 
+/**
+ * @param array $p
+ * @return array
+ * @throws NagVisException
+ */
 function geomap_backend_locations($p) {
+    /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     $hosts = [];
     foreach ($p['backend_id'] as $backend_id) {
@@ -65,7 +80,13 @@ function geomap_backend_locations($p) {
     return $hosts;
 }
 
+/**
+ * @param array $p
+ * @return null
+ * @throws NagVisException
+ */
 function geomap_backend_program_start($p) {
+    /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     $t = null;
     foreach ($p['backend_id'] as $backend_id) {
@@ -84,6 +105,12 @@ function geomap_backend_program_start($p) {
 // General source handling code
 //
 
+/**
+ * @param array $p
+ * @return array
+ * @throws GeomapError
+ * @throws NagVisException
+ */
 function geomap_get_locations($p) {
     switch ($p['source_type']) {
         case 'csv':
@@ -104,6 +131,12 @@ function geomap_get_locations($p) {
 //    return cfg('paths', 'var') . '/source-geomap-locations' . $fname . '.cache';
 //}
 
+/**
+ * @param array $p
+ * @return false|int|null
+ * @throws GeomapError
+ * @throws NagVisException
+ */
 function geomap_source_age($p) {
     switch ($p['source_type']) {
         case 'csv':
@@ -115,6 +148,11 @@ function geomap_source_age($p) {
     }
 }
 
+/**
+ * @param string $url
+ * @return false|string
+ * @throws GeomapError
+ */
 function geomap_get_contents($url) {
     try {
         $opts = [
@@ -146,12 +184,18 @@ function geomap_get_contents($url) {
     }
 }
 
+/**
+ * @return string[]
+ */
 function list_geomap_types() {
     return [
         'mapnik'     => 'Mapnik',
     ];
 }
 
+/**
+ * @return array
+ */
 function list_geomap_source_types() {
     return [
         'csv'     => l('CSV-File'),
@@ -159,7 +203,12 @@ function list_geomap_source_types() {
     ];
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function list_geomap_source_files() {
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableGeomapSourceFiles();
 }

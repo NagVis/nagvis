@@ -4,7 +4,14 @@ class DynmapError extends MapSourceError
 {
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $p
+ * @return array
+ * @throws NagVisException
+ */
 function dynmap_get_objects($MAPCFG, $p) {
+    /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     $objects = [];
 
@@ -38,7 +45,14 @@ function dynmap_get_objects($MAPCFG, $p) {
     return $objects;
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param array $p
+ * @return null
+ * @throws NagVisException
+ */
 function dynmap_program_start($MAPCFG, $p) {
+    /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     $newest = null;
     foreach ($MAPCFG->getValue(0, 'backend_id') as $backend_id) {
@@ -60,6 +74,10 @@ $viewParams = [
     'dynmap' => [],
 ];
 
+/**
+ * @param $CORE
+ * @return array
+ */
 function listDynObjectTypes($CORE) {
     return [
         'host'         => l('Hosts'),
@@ -143,6 +161,11 @@ $configVarMap = [
     ],
 ];
 
+/**
+ * @param array $params
+ * @param array $map_object
+ * @return bool
+ */
 function dynmap_object_in_grid($params, $map_object) {
     $top  = $params['dynmap_init_y'];
     $left = $params['dynmap_init_x'];
@@ -153,7 +176,22 @@ function dynmap_object_in_grid($params, $map_object) {
         && $map_object['y'] - $top > 0 && ($map_object['y'] - $top) % $step_y === 0;
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param array $params
+ * @param array $objects
+ * @return void
+ * @throws NagVisException
+ * @throws Exception
+ */
 function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objects) {
+    /**
+     * @var string $g_dynmap_order
+     * @var NagVisMapObj $g_map_obj
+     * @var CoreBackendMgmt $_BACKEND
+     */
     global $g_dynmap_order, $g_map_obj, $_BACKEND;
 
     $g_dynmap_order = $params['dynmap_order'];
@@ -198,6 +236,11 @@ function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objec
     }
 }
 
+/**
+ * @param array $o1
+ * @param array $o2
+ * @return int
+ */
 function dynmap_sort_objects_by_name($o1, $o2) {
     $o1_str = '';
     $o2_str = '';
@@ -216,7 +259,13 @@ function dynmap_sort_objects_by_name($o1, $o2) {
     return ($o1_str > $o2_str) ? 1 : -1;
 }
 
+/**
+ * @param array $o1
+ * @param array $o2
+ * @return int
+ */
 function dynmap_sort_objects_by_state($o1, $o2) {
+    /** @var string $g_dynmap_order */
     global $g_dynmap_order;
     return NagVisObject::sortStatesByStateValues($o1['.state'], $o1['.sub_state'],
         $o2['.state'], $o2['.sub_state'], $g_dynmap_order);
@@ -224,6 +273,13 @@ function dynmap_sort_objects_by_state($o1, $o2) {
 
 $g_dynmap_order = 'asc';
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @return true
+ * @throws NagVisException
+ */
 function process_dynmap($MAPCFG, $map_name, &$map_config) {
     $params = $MAPCFG->getSourceParams();
 
@@ -282,6 +338,11 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
 
 /**
  * Report as changed when the core has been restarted since caching
+ *
+ * @param GlobalMapCfg $MAPCFG
+ * @param int $compare_time
+ * @return bool
+ * @throws NagVisException
  */
 function changed_dynmap($MAPCFG, $compare_time) {
     $params = $MAPCFG->getSourceParams();

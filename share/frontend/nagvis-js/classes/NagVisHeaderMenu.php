@@ -408,7 +408,8 @@ class NagVisHeaderMenu
      * documentation exists or en_US as fallback when no docs exist
      *
      * @return string
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getDocLanguage()
     {
@@ -423,7 +424,8 @@ class NagVisHeaderMenu
     /**
      * Get all static macros for the template code
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getStaticMacros()
     {

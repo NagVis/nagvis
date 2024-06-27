@@ -44,6 +44,7 @@ class FrontendModRotation extends FrontendModule
 
     /**
      * @param GlobalCore $CORE
+     * @throws NagVisException
      */
     public function __construct(GlobalCore $CORE)
     {
@@ -78,6 +79,7 @@ class FrontendModRotation extends FrontendModule
 
     /**
      * @return string
+     * @throws NagVisException
      */
     public function handleAction()
     {

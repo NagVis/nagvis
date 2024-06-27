@@ -46,6 +46,11 @@ $configVarMap = [
  * In case of the automap it does filter the object tree before this
  * place is reached. Means in case of an automap this function should
  * not change anything.
+ *
+ * @param array $map_config
+ * @param array $p
+ * @return void
+ * @throws NagVisException
  */
 function filter_hostgroup(&$map_config, $p) {
     if (!isset($p['filter_group']) || $p['filter_group'] == '') {
@@ -68,6 +73,14 @@ function filter_hostgroup(&$map_config, $p) {
     }
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param array $params
+ * @return true
+ * @throws NagVisException
+ */
 function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     global $filter_processed;
     // Skip implicit calls if already processed explicit

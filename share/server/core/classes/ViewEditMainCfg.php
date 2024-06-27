@@ -34,6 +34,7 @@ class ViewEditMainCfg
      * @return void
      * @throws FieldInputError
      * @throws NagVisException
+     * @throws Exception
      */
     private function handleAction()
     {
@@ -92,6 +93,7 @@ class ViewEditMainCfg
     /**
      * @return false|string
      * @throws NagVisException
+     * @throws Exception
      */
     public function parse()
     {

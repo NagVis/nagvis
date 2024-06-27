@@ -241,6 +241,7 @@ class CoreAuthorisationHandler
 
     /**
      * @return void
+     * @throws NagVisException
      */
     public function cleanupPermissions()
     {

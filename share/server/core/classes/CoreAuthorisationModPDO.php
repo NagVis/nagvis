@@ -34,6 +34,9 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
      */
     abstract public function getConfig();
 
+    /**
+     * @throws NagVisException
+     */
     public function __construct()
     {
         $this->DB = new CorePDOHandler();

@@ -1884,6 +1884,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * a list of their contactgroups as value
      *
      * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     public function getContactsWithGroups()
     {

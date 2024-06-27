@@ -583,6 +583,7 @@ class GlobalCore
     /**
      * @return int[]|string[]
      * @throws NagVisException
+     * @throws Exception
      */
     public function getListMaps()
     {

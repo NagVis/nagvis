@@ -95,6 +95,8 @@ class NagVisDynGroup extends NagVisStatefulObject
 
     /**
      * Applies the fetched state
+     *
+     * @throws NagVisException
      */
     public function applyState()
     {

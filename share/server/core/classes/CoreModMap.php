@@ -38,6 +38,7 @@ class CoreModMap extends CoreModule
 
     /**
      * @param GlobalCore $CORE
+     * @throws NagVisException
      */
     public function __construct(GlobalCore $CORE)
     {
@@ -193,6 +194,8 @@ class CoreModMap extends CoreModule
     /**
      * @return false|string
      * @throws MapCfgInvalid
+     * @throws NagVisException
+     * @throws Exception
      */
     protected function getWorldmapBounds()
     {
@@ -205,6 +208,7 @@ class CoreModMap extends CoreModule
      * @param string $name
      * @return bool
      * @throws FieldInputError
+     * @throws NagVisException
      */
     protected function doExportMap($name)
     {
@@ -225,6 +229,7 @@ class CoreModMap extends CoreModule
      * @param array $a
      * @return true
      * @throws NagVisException
+     * @throws Exception
      */
     protected function doDeleteObject($a)
     {
@@ -301,6 +306,7 @@ class CoreModMap extends CoreModule
      * @param $a
      * @return false|string
      * @throws NagVisException
+     * @throws Exception
      */
     protected function doModifyObject($a)
     {

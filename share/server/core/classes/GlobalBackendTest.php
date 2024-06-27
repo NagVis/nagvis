@@ -965,7 +965,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * algorithm.
      *
      * @param array $objects List of objects to query
-     * @param array $options List of filters to apply
+     * @param int $options
+     * @param array $filters List of filters to apply
      * @return array List of states and counts
      * @throws BackendException
      * @author  Lars Michelsen <lm@larsmichelsen.com>

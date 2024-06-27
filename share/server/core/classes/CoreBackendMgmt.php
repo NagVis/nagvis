@@ -66,6 +66,7 @@ class CoreBackendMgmt
     /**
      * @param string $id
      * @return GlobalBackendInterface
+     * @throws NagVisException
      */
     public function getBackend($id)
     {
@@ -253,6 +254,7 @@ class CoreBackendMgmt
      * @param int $options
      * @param array<array<NagvisStatefulObject>> $aObjs
      * @return void
+     * @throws NagVisException
      */
     private function fetchAggrMemberDetails($backendId, $options, $aObjs)
     {
@@ -336,6 +338,7 @@ class CoreBackendMgmt
      * @param int $options
      * @param array<array<NagvisStatefulObject>> $aObjs
      * @return void
+     * @throws NagVisException
      */
     private function fetchDynGroupMemberDetails($backendId, $options, $aObjs)
     {
@@ -426,6 +429,7 @@ class CoreBackendMgmt
      * @param array $config
      * @param array|null $service_states
      * @return NagVisHost
+     * @throws NagVisException
      */
     private function createHostObject($backendId, $name, $state, $config, $service_states)
     {
@@ -461,7 +465,8 @@ class CoreBackendMgmt
      * @param int $options
      * @param array<array<NagvisStatefulObject>> $aObjs
      * @return void
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchServicegroupMemberDetails($backendId, $options, $aObjs)
     {
@@ -504,7 +509,8 @@ class CoreBackendMgmt
      * @param int $options
      * @param array<array<NagvisStatefulObject>> $aObjs
      * @return void
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchHostgroupMemberDetails($backendId, $options, $aObjs)
     {
@@ -641,6 +647,7 @@ class CoreBackendMgmt
      * @param int $options
      * @param array<array<NagvisStatefulObject>> $aObjs
      * @return void
+     * @throws NagVisException
      */
     private function fetchHostMemberDetails($backendId, $options, $aObjs)
     {
@@ -671,7 +678,8 @@ class CoreBackendMgmt
      *
      * @return void
      * @throws NagVisException
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @throws Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function loadBackends()
     {
@@ -718,7 +726,8 @@ class CoreBackendMgmt
      *
      * @param string $backendId
      * @param string $statusHost
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function backendAlive($backendId, $statusHost)
     {

@@ -77,6 +77,7 @@ class CoreModUser extends CoreModule
     /**
      * @param array $a
      * @return bool
+     * @throws NagVisException
      */
     protected function doSet($a)
     {

@@ -45,6 +45,7 @@ class CoreModMultisite extends CoreModule
 
     /**
      * @return false|string
+     * @throws NagVisException
      */
     public function handleAction()
     {
@@ -73,6 +74,7 @@ class CoreModMultisite extends CoreModule
 
     /**
      * @return array[]
+     * @throws NagVisException
      */
     private function renderTree()
     {
@@ -96,6 +98,7 @@ class CoreModMultisite extends CoreModule
 
     /**
      * @return array
+     * @throws NagVisException
      */
     private function renderTable()
     {
