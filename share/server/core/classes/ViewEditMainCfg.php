@@ -27,7 +27,7 @@ class ViewEditMainCfg
     /** @var string */
     private $exclude_pattern = '/^(backend|internal|rotation|auth|action|wui)/i';
 
-    /** @var string|null */
+    /** @var FieldInputError|null */
     private $error = null;
 
     /**

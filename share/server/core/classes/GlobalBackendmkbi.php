@@ -713,5 +713,6 @@ if (!function_exists('l')) {
     }
 
     $O = new GlobalBackendmkbi('bi');
+    // todo: this method is private
     print_r($O->getAggregationNames());
 }
