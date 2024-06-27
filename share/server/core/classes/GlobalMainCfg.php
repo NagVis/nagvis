@@ -47,7 +47,7 @@ function listAvailableLanguages() {
  */
 class GlobalMainCfg
 {
-    /** @var bool */
+    /** @var bool|int */
     private $useCache = true;
 
     /** @var GlobalFileCache */
@@ -2538,7 +2538,7 @@ class GlobalMainCfg
     /**
      * Public Adaptor for the isCached method of CACHE object
      *
-     * @return  bool  Result
+     * @return  bool|int  Result
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function isCached()
