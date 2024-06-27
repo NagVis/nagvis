@@ -302,6 +302,10 @@ $updateConfigVars = [
     ],
 ];
 
+/**
+ * @param array $params
+ * @return string[]
+ */
 function geomap_files($params) {
     // The source_file parameter was filtered here in previous versions. Users
     // reported that this is not very useful. So I removed it. Hope it works
@@ -319,6 +323,11 @@ function geomap_files($params) {
     ];
 }
 
+/**
+ * @param string $url
+ * @return void
+ * @throws GeomapError
+ */
 function validate_geomap_server_base_url($url) {
     # If the given url contains non standard URL characters, throw an error
     $sanitized_url = filter_var($url, FILTER_SANITIZE_URL);
@@ -346,6 +355,14 @@ function validate_geomap_server_base_url($url) {
     }
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @return true
+ * @throws GeomapError
+ * @throws NagVisException
+ */
 function process_geomap($MAPCFG, $map_name, &$map_config) {
     $params = $MAPCFG->getSourceParams();
     list($image_name, $image_path, $data_path) = geomap_files($params);
@@ -540,6 +557,12 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
  * a) either the image file or the data file do not exist
  * b) or when the source file is newer than the compare_time
  * c) or when the image/data files are older than the source file
+ *
+ * @param GlobalMapCfg $MAPCFG
+ * @param int $compare_time
+ * @return bool
+ * @throws GeomapError
+ * @throws NagVisException
  */
 function changed_geomap($MAPCFG, $compare_time) {
     $params = $MAPCFG->getSourceParams();
@@ -565,12 +588,16 @@ function changed_geomap($MAPCFG, $compare_time) {
     return false;
 }
 
-# calculate lat on Mercator based map
-# for details see:
-#    http://wiki.openstreetmap.org/wiki/Slippy_map_tilesnames#X_and_Y
-# function copied from
-#    http://almien.co.uk/OSM/Tools/Coord/source.php
-
+/**
+ * calculate lat on Mercator based map
+ * for details see:
+ *    http://wiki.openstreetmap.org/wiki/Slippy_map_tilesnames#X_and_Y
+ * function copied from
+ *    http://almien.co.uk/OSM/Tools/Coord/source.php
+ *
+ * @param int|float $Lat
+ * @return float
+ */
 function ProjectF($Lat) {
     $Lat = deg2rad($Lat);
     $Y = log(tan($Lat) + (1 / cos($Lat)));
