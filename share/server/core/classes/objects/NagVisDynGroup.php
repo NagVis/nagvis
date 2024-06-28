@@ -181,11 +181,13 @@ class NagVisDynGroup extends NagVisStatefulObject
 
         // Fallback for hostgroups without members
         if ($iSumCount == 0) {
-            $this->sum[OUTPUT] = l('The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
+            $this->sum[OUTPUT] = l(
+                'The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
                 [
                     'GROUP' => $this->name,
                     'BACKEND' => implode(',', $this->backend_id)
-                ]);
+                ]
+            );
         } else {
             // FIXME: Recode mergeSummaryOutput method
             $this->mergeSummaryOutput($arrHostStates, l('hosts'), false);
@@ -227,11 +229,13 @@ class NagVisDynGroup extends NagVisStatefulObject
 
             $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
-            $this->sum[OUTPUT] = l('The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
+            $this->sum[OUTPUT] = l(
+                'The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
                 [
                     'GROUP' => $this->name,
                     'BACKEND' => implode(',', $this->backend_id)
-                ]);
+                ]
+            );
         }
     }
 }

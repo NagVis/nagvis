@@ -631,11 +631,13 @@ class NagVisMapObj extends NagVisStatefulObject
                     $OBJ = new NagVisLine();
                     break;
                 default:
-                    throw new NagVisException(l('unknownObject',
+                    throw new NagVisException(l(
+                        'unknownObject',
                         [
                             'TYPE'    => $type,
                             'MAPNAME' => $this->getName()
-                        ]));
+                        ]
+                    ));
             }
 
             log_mem('preconf');

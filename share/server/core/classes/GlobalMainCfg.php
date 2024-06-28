@@ -3156,8 +3156,10 @@ class GlobalMainCfg
         if (isset($this->validConfig[$sec][$key]['list'])) {
             return $this->validConfig[$sec][$key]['list'];
         } else {
-            throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',
-                ['OPT' => $sec, 'TYPE' => $key]));
+            throw new NagVisException(l(
+                'No "list" function registered for option "[OPT]" of type "[TYPE]"',
+                ['OPT' => $sec, 'TYPE' => $key]
+            ));
         }
     }
 

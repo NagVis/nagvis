@@ -174,11 +174,13 @@ class NagVisAggr extends NagVisStatefulObject
 
         // Fallback for hostgroups without members
         if ($iSumCount == 0) {
-            $this->sum[OUTPUT] = l('The aggregation "[NAME]" has no members (Backend: [BACKEND]).',
+            $this->sum[OUTPUT] = l(
+                'The aggregation "[NAME]" has no members (Backend: [BACKEND]).',
                 [
                     'NAME' => $this->name,
                     'BACKEND' => implode(',', $this->backend_id)
-                ]);
+                ]
+            );
         } else {
             $this->mergeSummaryOutput($node_states, l('Nodes'), true);
         }
@@ -219,11 +221,13 @@ class NagVisAggr extends NagVisStatefulObject
 
             $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
-            $this->sum[OUTPUT] = l('The aggregation "[NAME]" has no members (Backend: [BACKEND]).',
+            $this->sum[OUTPUT] = l(
+                'The aggregation "[NAME]" has no members (Backend: [BACKEND]).',
                 [
                     'NAME' => $this->name,
                     'BACKEND' => implode(',', $this->backend_id)
-                ]);
+                ]
+            );
         }
     }
 }

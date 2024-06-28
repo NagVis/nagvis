@@ -33,10 +33,14 @@ function _build_dsn_common($params) {
         "dbname" => $params['dbname'],
     ], function($v) { return isset($v) && strlen($v) > 0; });
 
-    return implode(';', array_map(
-        function($k, $v) { return "$k=$v"; },
-        array_keys($connData),
-        $connData));
+    return implode(
+        ';',
+        array_map(
+            function($k, $v) { return "$k=$v"; },
+            array_keys($connData),
+            $connData
+        )
+    );
 }
 
 class CorePDOHandler
@@ -659,8 +663,10 @@ class CorePDOHandler
                         $this->DB->beginTransaction();
                         $this->inTrans = true;
                     }
-                    $this->query('-create-pop-roles-perms-1',
-                        ['r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map]);
+                    $this->query(
+                        '-create-pop-roles-perms-1',
+                        ['r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map]
+                    );
                 }
             }
 
@@ -833,7 +839,9 @@ class CorePDOHandler
         // Access assignment: Administrators => * * *
         $this->queryFatal('-create-pop-roles-perms-1', [
             'r1' => 'Administrators',
-            'mod' => '*', 'act' => '*', 'obj' => '*'
+            'mod' => '*',
+            'act' => '*',
+            'obj' => '*'
         ]);
 
         /*

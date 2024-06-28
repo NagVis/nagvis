@@ -90,8 +90,7 @@ class ViewAck
                 // Now send the acknowledgement
                 foreach ($backendIds as $backendId) {
                     $BACKEND = $_BACKEND->getBackend($backendId);
-                    $BACKEND->actionAcknowledge($type, $spec, $comment,
-                        $sticky, $notify, $persist, $AUTH->getUser());
+                    $BACKEND->actionAcknowledge($type, $spec, $comment, $sticky, $notify, $persist, $AUTH->getUser());
                 }
 
                 success(l('The problem has been acknowledged.'));

@@ -93,8 +93,10 @@ foreach ($_modules as $mod) {
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 if ($MODULE == null) {
-    throw new NagVisException(l('The module [MOD] is not known',
-        ['MOD' => htmlentities($UHANDLER->get('mod'), ENT_COMPAT, 'UTF-8')]));
+    throw new NagVisException(l(
+        'The module [MOD] is not known',
+        ['MOD' => htmlentities($UHANDLER->get('mod'), ENT_COMPAT, 'UTF-8')]
+    ));
 }
 $MODULE->setAction($UHANDLER->get('act'));
 $MODULE->initObject();

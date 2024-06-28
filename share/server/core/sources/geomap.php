@@ -177,10 +177,12 @@ function geomap_get_contents($url) {
 
         return file_get_contents($url, false, $context);
     } catch (Exception $e) {
-        throw new GeomapError(l('Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
+        throw new GeomapError(l(
+            'Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
             . 'some data from the internet via webservice API. Please take a look '
             . 'at the docs for more details.<br /><br /><small>[E]</small>',
-            ['U' => $url, 'E' => $e->getMessage()]));
+            ['U' => $url, 'E' => $e->getMessage()]
+        ));
     }
 }
 
@@ -332,26 +334,22 @@ function validate_geomap_server_base_url($url) {
     # If the given url contains non standard URL characters, throw an error
     $sanitized_url = filter_var($url, FILTER_SANITIZE_URL);
     if ($sanitized_url !== $url) {
-        throw new GeomapError(l('Geomap server URL contains not allowed characters. Url: "[U]"',
-            ['U' => $url]));
+        throw new GeomapError(l('Geomap server URL contains not allowed characters. Url: "[U]"', ['U' => $url]));
     }
 
     $url_scheme = parse_url($url, PHP_URL_SCHEME);
     if (!$url_scheme || !in_array(strtolower($url_scheme), ["http", "https"])) {
-        throw new GeomapError(l('Invalid scheme in Geomap server URL: "[U]"',
-            ['U' => $url]));
+        throw new GeomapError(l('Invalid scheme in Geomap server URL: "[U]"', ['U' => $url]));
     }
 
     $url_query = parse_url($url, PHP_URL_QUERY);
     if (!empty($url_query)) {
-        throw new GeomapError(l('Geomap server cannot contain query parameters. URL: "[U]"',
-            ['U' => $url]));
+        throw new GeomapError(l('Geomap server cannot contain query parameters. URL: "[U]"', ['U' => $url]));
     }
 
     $url_fragment = parse_url($url, PHP_URL_FRAGMENT);
     if (!empty($url_fragment)) {
-        throw new GeomapError(l('Geomap server cannot contain anchors. URL: "[U]"',
-            ['U' => $url]));
+        throw new GeomapError(l('Geomap server cannot contain anchors. URL: "[U]"', ['U' => $url]));
     }
 }
 
@@ -499,8 +497,9 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             || str_starts_with($contents, chr(137) . chr(80) . chr(78))
         ) {
             // Got an png image as answer - catch this!
-            throw new GeomapError(l('Got invalid response from "[U]". This is mostly caused by an unhandled request.',
-                ['U' => $data_url]));
+            throw new GeomapError(
+                l('Got invalid response from "[U]". This is mostly caused by an unhandled request.', ['U' => $data_url])
+            );
         }
 
         if (!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents)) {

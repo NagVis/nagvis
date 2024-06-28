@@ -117,8 +117,10 @@ class CoreModGeneral extends CoreModule
 
         $result = json_encode($arrReturn);
         if ($result === false) {
-            throw new NagVisException(l('Data not parsable: [URL] ([MSG])',
-                ['URL' => htmlentities($sUrl, ENT_COMPAT, 'UTF-8'), 'MSG' => json_last_error_msg()]));
+            throw new NagVisException(l(
+                'Data not parsable: [URL] ([MSG])',
+                ['URL' => htmlentities($sUrl, ENT_COMPAT, 'UTF-8'), 'MSG' => json_last_error_msg()]
+            ));
         }
         return $result;
     }

@@ -162,11 +162,13 @@ class GlobalFileCache
             return $this->getCacheFileAge();
         } else {
             if ($printErr) {
-                throw new NagVisException(l('fileNotCached',
+                throw new NagVisException(l(
+                    'fileNotCached',
                     [
                         'FILE' => json_encode($this->files),
                         'CACHEFILE' => $this->cacheFile
-                    ]));
+                    ]
+                ));
             }
             return -1;
         }

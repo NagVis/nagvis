@@ -54,8 +54,10 @@ class ViewManageMaps
                 }
 
                 if (!preg_match(MATCH_MAP_NAME, $name)) {
-                    throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                        ['M' => MATCH_MAP_NAME]));
+                    throw new FieldInputError(
+                        'name',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
                 }
 
                 $type = post('type');
@@ -65,8 +67,10 @@ class ViewManageMaps
 
                 $alias = post('alias');
                 if ($alias && !preg_match(MATCH_STRING, $alias)) {
-                    throw new FieldInputError('alias', l('This is not a valid map alias (need to match [M])',
-                        ['M' => MATCH_STRING]));
+                    throw new FieldInputError(
+                        'alias',
+                        l('This is not a valid map alias (need to match [M])', ['M' => MATCH_STRING])
+                    );
                 }
 
                 $MAPCFG = new GlobalMapCfg($name);
@@ -166,8 +170,10 @@ class ViewManageMaps
         $AUTHORISATION->renameMapPermissions($name, $new_name);
 
         // rename config file
-        rename(cfg('paths', 'mapcfg') . $name . '.cfg',
-            cfg('paths', 'mapcfg') . $new_name . '.cfg');
+        rename(
+            cfg('paths', 'mapcfg') . $name . '.cfg',
+            cfg('paths', 'mapcfg') . $new_name . '.cfg'
+        );
     }
 
     /**
@@ -202,8 +208,10 @@ class ViewManageMaps
                 }
 
                 if (!preg_match(MATCH_MAP_NAME, $new_name)) {
-                    throw new FieldInputError('new_name', l('This is not a valid map name (need to match [M])',
-                        ['M' => MATCH_MAP_NAME]));
+                    throw new FieldInputError(
+                        'new_name',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
                 }
 
                 $this->doRename($name, $new_name);
@@ -400,8 +408,13 @@ class ViewManageMaps
 
                 $file = $_FILES['map_file'];
                 if (!is_uploaded_file($file['tmp_name'])) {
-                    throw new FieldInputError('map_file', l('The file could not be uploaded (Error: [ERROR]).',
-                        ['ERROR' => $file['error'] . ': ' . $CORE->getUploadErrorMsg($file['error'])]));
+                    throw new FieldInputError(
+                        'map_file',
+                        l(
+                            'The file could not be uploaded (Error: [ERROR]).',
+                            ['ERROR' => $file['error'] . ': ' . $CORE->getUploadErrorMsg($file['error'])]
+                        )
+                    );
                 }
 
                 $file_name = $file['name'];
@@ -413,8 +426,10 @@ class ViewManageMaps
                 }
 
                 if (!preg_match(MATCH_MAP_NAME, $map_name)) {
-                    throw new FieldInputError('map_file', l('This is not a valid map name (need to match [M])',
-                        ['M' => MATCH_MAP_NAME]));
+                    throw new FieldInputError(
+                        'map_file',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
                 }
 
                 // FIXME: We really should validate the contents of the file

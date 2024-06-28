@@ -1011,8 +1011,11 @@ class GlobalBackendTest implements GlobalBackendInterface
                     }
 
                     // TODO: what is $backendId? Seems to alternate between string and array
-                    $resp = $this->getHostMemberCounts([[new NagVisHost($this->backendId, $hostname)]], $options,
-                        [['key' => 'host_name', 'op' => '=', 'val' => 'name']]);
+                    $resp = $this->getHostMemberCounts(
+                        [[new NagVisHost($this->backendId, $hostname)]],
+                        $options,
+                        [['key' => 'host_name', 'op' => '=', 'val' => 'name']]
+                    );
                     foreach ($resp[$hostname]['counts'] as $state => $substates) {
                         foreach ($substates as $substate => $count) {
                             $aReturn[$name]['counts'][$state][$substate] += $count;

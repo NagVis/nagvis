@@ -49,8 +49,10 @@ class ViewToStaticMap
                 }
 
                 if (!preg_match(MATCH_MAP_NAME, $name)) {
-                    throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                        ['M' => MATCH_MAP_NAME]));
+                    throw new FieldInputError(
+                        'name',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
                 }
 
                 if (count($CORE->getAvailableMaps('/^' . $name . '$/')) > 0) {

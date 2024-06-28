@@ -60,9 +60,11 @@ class CoreLogonMultisite extends CoreLogonModule
             $this->authFile = 'htpasswd';
 
         } else {
-            throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
-                . 'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
-                ['HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath]));
+            throw new NagVisException(l(
+                'LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
+                    . 'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
+                ['HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath]
+            ));
         }
 
         if (!file_exists($this->secretPath)) {
@@ -251,7 +253,8 @@ class CoreLogonMultisite extends CoreLogonModule
 
         // Check if the user exists
         if (
-            $this->verifyUserExists($username,
+            $this->verifyUserExists(
+                $username,
                 cfg('global', 'logon_multisite_createuser'),
                 cfg('global', 'logon_multisite_createrole'),
                 $printErr

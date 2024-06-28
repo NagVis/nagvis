@@ -181,11 +181,13 @@ class NagVisServicegroup extends NagVisStatefulObject
 
         // Fallback for groups without members
         if ($iSumCount == 0) {
-            $this->sum[OUTPUT] = l('The servicegroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
+            $this->sum[OUTPUT] = l(
+                'The servicegroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
                 [
                     'GROUP' => $this->getName(),
                     'BACKEND' => implode(', ', $this->backend_id)
-                ]);
+                ]
+            );
         }
     }
 

@@ -62,8 +62,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         }
 
         if (!file_exists($this->file)) {
-            throw new NagVisException(l('Unable to open auth file ([FILE]).',
-                ['FILE' => $this->file]));
+            throw new NagVisException(l('Unable to open auth file ([FILE]).', ['FILE' => $this->file]));
         }
 
         $this->backends = cfg('global', 'authorisation_group_backends');
@@ -89,8 +88,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t](//).*)#", '', $json);
         $this->group_perms = json_decode($json, true);
         if ($this->group_perms === null) {
-            throw new NagVisException(l('The permissions file [FILE] could not be parsed.',
-                ['FILE' => $this->file]));
+            throw new NagVisException(l('The permissions file [FILE] could not be parsed.', ['FILE' => $this->file]));
         }
     }
 

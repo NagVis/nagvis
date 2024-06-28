@@ -204,8 +204,10 @@ class ViewManageBackends
 
                     elseif ($val != null) {
                         if (!preg_match($opt['match'], $val)) {
-                            throw new FieldInputError($key, l('Invalid value provided. Needs to match: [P].',
-                                ['P' => $opt['match']]));
+                            throw new FieldInputError($key, l(
+                                'Invalid value provided. Needs to match: [P].',
+                                ['P' => $opt['match']]
+                            ));
                         }
                         $CORE->getUserMainCfg()->setValue('backend_' . $backend_id, $key, $val);
                     }

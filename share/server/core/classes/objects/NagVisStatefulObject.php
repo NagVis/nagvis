@@ -698,8 +698,7 @@ class NagVisStatefulObject extends NagVisObject
         if ($backendId === null) {
             $backendId = $this->backend_id[0];
         }
-        $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
-            ['BACKENDID' => $backendId, 'MSG' => $s]);
+        $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]', ['BACKENDID' => $backendId, 'MSG' => $s]);
     }
 
     /**

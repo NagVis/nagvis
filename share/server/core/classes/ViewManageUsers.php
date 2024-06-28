@@ -50,8 +50,10 @@ class ViewManageUsers
                 }
 
                 if (!preg_match(MATCH_USER_NAME, $name)) {
-                    throw new FieldInputError('name', l('Invalid value provided. Needs to match: [P].',
-                        ['P' => MATCH_USER_NAME]));
+                    throw new FieldInputError(
+                        'name',
+                        l('Invalid value provided. Needs to match: [P].', ['P' => MATCH_USER_NAME])
+                    );
                 }
 
                 if ($AUTH->checkUserExists($name)) {

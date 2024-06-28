@@ -226,8 +226,10 @@ class GlobalBackendmkbi implements GlobalBackendInterface
 
         $s = @file_get_contents($url, false, $this->context);
         if ($s === false) {
-            throw new BackendConnectionProblem(l('Unable to fetch data from URL [U]: [M]',
-                ['U' => $url, 'M' => json_encode(error_get_last())]));
+            throw new BackendConnectionProblem(l(
+                'Unable to fetch data from URL [U]: [M]',
+                ['U' => $url, 'M' => json_encode(error_get_last())]
+            ));
         }
 
         //DEBUG:
@@ -236,22 +238,26 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         //fclose($fh);
 
         if ($s[0] != '[') {
-            throw new BackendInvalidResponse(l('Invalid response ([BACKENDID]): [RESPONSE]',
+            throw new BackendInvalidResponse(l(
+                'Invalid response ([BACKENDID]): [RESPONSE]',
                 [
                     'BACKENDID' => $this->backendId,
                     'RESPONSE' => htmlentities($s, ENT_COMPAT, 'UTF-8')
-                ]));
+                ]
+            ));
         }
 
         // Decode the json response
         // json_decode returns null on syntax problems
         $parsed = json_decode(iso8859_1_to_utf8($s), true);
         if (!is_array($parsed)) {
-            throw new BackendInvalidResponse(l('Invalid response ([BACKENDID]): [RESPONSE]',
+            throw new BackendInvalidResponse(l(
+                'Invalid response ([BACKENDID]): [RESPONSE]',
                 [
                     'BACKENDID' => $this->backendId,
                     'RESPONSE' => htmlentities($s, ENT_COMPAT, 'UTF-8')
-                ]));
+                ]
+            ));
         }
 
         // transform structure of the response to have an array of associative arrays
@@ -334,8 +340,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
             list($short_state, $title) = $pair;
 
             if (!isset(GlobalBackendmkbi::$bi_short_states[$short_state])) {
-                throw new BackendException(l('Invalid state: "[S]"',
-                    ['S' => $short_state]));
+                throw new BackendException(l('Invalid state: "[S]"', ['S' => $short_state]));
             }
             $bi_state = GlobalBackendmkbi::$bi_short_states[$short_state];
 
@@ -349,8 +354,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
                 "in_service_period" => false,
                 // Create some kind of default output when aggregation does
                 // not provide any detail output
-                "output"            => l("BI-State is: [S]",
-                    ["S" => GlobalBackendmkbi::$bi_aggr_states[$bi_state]]),
+                "output"            => l("BI-State is: [S]", ["S" => GlobalBackendmkbi::$bi_aggr_states[$bi_state]]),
             ];
             $elements[] = $element;
         }

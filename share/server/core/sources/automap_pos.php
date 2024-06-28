@@ -29,10 +29,10 @@ function automap_check_graphviz($binary) {
     }
 
     if (!$bFound) {
-        throw new NagVisException(l('graphvizBinaryNotFound', [
-            'NAME' => $binary,
-                                    'PATHS' => $_SERVER['PATH'] . ':' . cfg('automap', 'graphvizpath')
-        ]));
+        throw new NagVisException(l(
+            'graphvizBinaryNotFound',
+            ['NAME' => $binary, 'PATHS' => $_SERVER['PATH'] . ':' . cfg('automap', 'graphvizpath')]
+        ));
     }
 
     return true;
@@ -273,8 +273,10 @@ function graphviz_run($map_name, &$params, $cfg) {
     exec($cmd, $arrMapCode, $returnCode);
 
     if ($returnCode !== 0) {
-        throw new NagVisException(l('Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: "[CMD]"',
-            ['CODE' => $returnCode, 'OUTPUT' => implode("\n", $arrMapCode), 'CMD' => $cmd]));
+        throw new NagVisException(l(
+            'Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: "[CMD]"',
+            ['CODE' => $returnCode, 'OUTPUT' => implode("\n", $arrMapCode), 'CMD' => $cmd]
+        ));
     }
 
     return implode("\n", $arrMapCode);

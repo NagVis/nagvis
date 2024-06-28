@@ -457,11 +457,13 @@ class GlobalMapCfg
             if (str_contains($file[$l], 'define')) {
                 $sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
                 if (!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
-                    throw new NagVisException(l('unknownObject',
+                    throw new NagVisException(l(
+                        'unknownObject',
                         [
                             'TYPE'    => $sObjType,
                             'MAPNAME' => $this->name
-                        ]));
+                        ]
+                    ));
                 }
 
                 // This is a new definition and it's a valid one
@@ -475,8 +477,10 @@ class GlobalMapCfg
             // This is another attribute. But it is only ok to proceed here when
             // there is an open object
             if ($sObjType === '') {
-                throw new NagVisException(l('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
-                    ['MAPNAME' => $this->name, 'LINE' => $l + 1]));
+                throw new NagVisException(l(
+                    'Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
+                    ['MAPNAME' => $this->name, 'LINE' => $l + 1]
+                ));
             }
 
             $iDelimPos = strpos($file[$l], '=');
@@ -794,8 +798,7 @@ class GlobalMapCfg
         // Get keys of all view params belonging to all configured sources
         foreach ($sources as $source) {
             if (!isset(self::$viewParams[$source])) {
-                throw new NagVisException(l('Requested source "[S]" does not exist',
-                    ['S' => $source]));
+                throw new NagVisException(l('Requested source "[S]" does not exist', ['S' => $source]));
             }
             $keys = array_merge($keys, self::$viewParams[$source]);
         }
@@ -842,21 +845,32 @@ class GlobalMapCfg
      * @return array
      * @throws NagVisException
      */
-    public function getSourceParams($only_user_supplied = false, $only_customized = false,
-                                    $only_view_parameters = false)
+    public function getSourceParams(
+        $only_user_supplied = false,
+        $only_customized = false,
+        $only_view_parameters = false
+    )
     {
         // First get a list of source names to get the parameters for
         $config  = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         $sources = array_merge(['*'], $config);
-        $params  = $this->getSourceParamsOfSources($sources, $only_user_supplied,
-            $only_customized, $only_view_parameters);
+        $params  = $this->getSourceParamsOfSources(
+            $sources,
+            $only_user_supplied,
+            $only_customized,
+            $only_view_parameters
+        );
 
         // The map sources might have changed basd on source params - we need an
         // additional run to get params which belong to this sources
         if (isset($params['sources'])) {
             $sources = array_merge(['*'], $params['sources']);
-            $params = $this->getSourceParamsOfSources($sources, $only_user_supplied,
-                $only_customized, $only_view_parameters);
+            $params = $this->getSourceParamsOfSources(
+                $sources,
+                $only_user_supplied,
+                $only_customized,
+                $only_view_parameters
+            );
         }
 
         return $params;
@@ -1027,8 +1041,7 @@ class GlobalMapCfg
         foreach ($sources as $source) {
             $func = 'process_' . $source;
             if (!function_exists($func)) {
-                throw new NagVisException(l('Requested source "[S]" does not exist',
-                    ['S' => $source]));
+                throw new NagVisException(l('Requested source "[S]" does not exist', ['S' => $source]));
             }
             try {
                 $cacheable &= $func($this, $this->name, $this->mapConfig);
@@ -1264,11 +1277,13 @@ class GlobalMapCfg
                         (!isset($element[$key]) || $element[$key] == '')
                         && (!isset($val['default']) || $val['default'] == '')
                     ) {
-                        throw new $exception(l('mapCfgMustValueNotSet',
+                        throw new $exception(l(
+                            'mapCfgMustValueNotSet',
                             [
                                 'MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
                                 'TYPE'    => $type,       'ID'        => $id
-                            ]));
+                            ]
+                        ));
                     }
                 }
             }
@@ -2093,8 +2108,10 @@ class GlobalMapCfg
         if (isset(self::$validConfig[$type][$var]['list'])) {
             return self::$validConfig[$type][$var]['list'];
         } else {
-            throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',
-                ['OPT' => $var, 'TYPE' => $type]));
+            throw new NagVisException(l(
+                'No "list" function registered for option "[OPT]" of type "[TYPE]"',
+                ['OPT' => $var, 'TYPE' => $type]
+            ));
         }
     }
 
@@ -2161,8 +2178,7 @@ class GlobalMapCfg
                 return true;
             } else {
                 if ($printErr) {
-                    throw new NagVisException(l('couldNotDeleteMapCfg',
-                        ['MAPPATH' => $this->configFile]));
+                    throw new NagVisException(l('couldNotDeleteMapCfg', ['MAPPATH' => $this->configFile]));
                 }
                 return false;
             }
@@ -2199,11 +2215,17 @@ class GlobalMapCfg
                 // message the user that there is a lock by another user,
                 // the user can decide wether he want's to override it or not
                 if ($printErr == 1) {
-                    print '<script>if (!confirm(\'' . str_replace("\n", "\\n", l('mapLocked',
+                    print '<script>if (!confirm(\'' . str_replace(
+                        "\n",
+                        "\\n",
+                        l(
+                            'mapLocked',
                             [
                                 'MAP' => $this->name, 'TIME' => date('d.m.Y H:i', $lockdata['time']),
                                 'USER' => $lockdata['user'], 'IP' => $lockdata['ip']
-                            ])) . '\', \'\')) { history.back(); }</script>';
+                            ]
+                        )
+                    ) . '\', \'\')) { history.back(); }</script>';
                 }
                 return true;
             } else {

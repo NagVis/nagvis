@@ -135,8 +135,10 @@ class ViewMapAddModify
 
                 foreach ($val as $part) {
                     if (!preg_match($attrDefs[$key]['match'], $part)) {
-                        throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
-                            ['MATCH' => $attrDefs[$key]['match']]));
+                        throw new FieldInputError(
+                            $key,
+                            l('The attribute has the wrong format (Regex: [MATCH]).', ['MATCH' => $attrDefs[$key]['match']])
+                        );
                     }
                 }
             }
@@ -212,10 +214,7 @@ class ViewMapAddModify
                 }
 
                 $t = $this->object_type == 'global' ? l('map configuration') : $this->object_type;
-                $result = [
-                    2, null, l('The [TYPE] has been modified. Reloading in 2 seconds.',
-                        ['TYPE' => $t])
-                ];
+                $result = [2, null, l('The [TYPE] has been modified. Reloading in 2 seconds.', ['TYPE' => $t])];
 
                 if ($this->object_type == 'global') {
                     $refresh_code = 'location.reload();';

@@ -56,8 +56,10 @@ class CoreRotation
 
         // Check wether the pool is defined
         if (!$this->checkPoolExists()) {
-            throw new NagVisException(l('mapRotationPoolNotExists',
-                ['ROTATION' => htmlentities($this->sPoolName, ENT_COMPAT, 'UTF-8')]));
+            throw new NagVisException(l(
+                'mapRotationPoolNotExists',
+                ['ROTATION' => htmlentities($this->sPoolName, ENT_COMPAT, 'UTF-8')]
+            ));
         }
 
         // Trigger the autorization backend to create new rotation permissions when needed

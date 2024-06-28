@@ -267,8 +267,13 @@ function dynmap_sort_objects_by_name($o1, $o2) {
 function dynmap_sort_objects_by_state($o1, $o2) {
     /** @var string $g_dynmap_order */
     global $g_dynmap_order;
-    return NagVisObject::sortStatesByStateValues($o1['.state'], $o1['.sub_state'],
-        $o2['.state'], $o2['.sub_state'], $g_dynmap_order);
+    return NagVisObject::sortStatesByStateValues(
+        $o1['.state'],
+        $o1['.sub_state'],
+        $o2['.state'],
+        $o2['.sub_state'],
+        $g_dynmap_order
+    );
 }
 
 $g_dynmap_order = 'asc';

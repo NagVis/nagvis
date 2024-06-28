@@ -50,8 +50,10 @@ class ViewManageRoles
                 }
 
                 if (!preg_match(MATCH_ROLE_NAME, $name)) {
-                    throw new FieldInputError('name', l('Invalid value provided. Needs to match: [P].',
-                        ['P' => MATCH_ROLE_NAME]));
+                    throw new FieldInputError(
+                        'name',
+                        l('Invalid value provided. Needs to match: [P].', ['P' => MATCH_ROLE_NAME])
+                    );
                 }
 
                 if ($AUTHORISATION->checkRoleExists($name)) {
@@ -305,8 +307,10 @@ class ViewManageRoles
                 // Check not to delete any referenced role
                 $used_by = $AUTHORISATION->roleUsedBy($role_id);
                 if (count($used_by) > 0) {
-                    throw new NagVisException(l('Not deleting this role, the role is in use by the users [U].',
-                        ['U' => implode(', ', $used_by)]));
+                    throw new NagVisException(l(
+                        'Not deleting this role, the role is in use by the users [U].',
+                        ['U' => implode(', ', $used_by)]
+                    ));
                 }
 
                 if ($AUTHORISATION->deleteRole($role_id)) {

@@ -66,8 +66,10 @@ class NagVisContextMenu
         $this->pathHtmlBase     = cfg('paths', 'htmlbase');
         $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.context.html');
 
-        $this->CACHE = new GlobalFileCache($this->pathTemplateFile,
-            cfg('paths', 'var') . 'context-' . $this->templateName . '-' . curLang() . '.cache');
+        $this->CACHE = new GlobalFileCache(
+            $this->pathTemplateFile,
+            cfg('paths', 'var') . 'context-' . $this->templateName . '-' . curLang() . '.cache'
+        );
 
         // Only use cache when there is
         // a) Some valid cache file
@@ -210,8 +212,11 @@ class NagVisContextMenu
                     $this->code = str_replace('[' . $param . ']', cfg('defaults', $param), $this->code);
                 }
             } else {
-                $this->code = preg_replace('/<!-- BEGIN has_' . $param . ' -->.*?<!-- END has_' . $param . ' -->/ms',
-                    '', $this->code);
+                $this->code = preg_replace(
+                    '/<!-- BEGIN has_' . $param . ' -->.*?<!-- END has_' . $param . ' -->/ms',
+                    '',
+                    $this->code
+                );
             }
         }
     }
