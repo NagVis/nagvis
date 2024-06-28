@@ -49,7 +49,7 @@ class NagVisLoginView
          */
         global $LOGIN_MSG, $_MAINCFG;
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
         $target = CoreRequestHandler::getRequestUri('');

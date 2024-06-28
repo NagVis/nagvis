@@ -244,7 +244,7 @@ class GlobalMapCfg
             'hover_childs_order',
             'hover_childs_limit'
         ];
-        foreach ($aVars As $sVar) {
+        foreach ($aVars as $sVar) {
             $sTmp = $this->getValue(0, $sVar);
 
             $this->typeDefaults['host'][$sVar] = $sTmp;

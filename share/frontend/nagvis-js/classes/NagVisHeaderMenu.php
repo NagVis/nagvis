@@ -65,7 +65,7 @@ class NagVisHeaderMenu
         $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.header.html');
 
         // Initialize template system
-        $this->TMPL = New FrontendTemplateSystem();
+        $this->TMPL = new FrontendTemplateSystem();
         $this->TMPLSYS = $this->TMPL->getTmplSys();
 
         // Read the contents of the template file
