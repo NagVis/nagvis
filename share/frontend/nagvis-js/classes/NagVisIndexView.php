@@ -26,43 +26,77 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisIndexView {
+class NagVisIndexView
+{
+    /** @var string */
     private $sSubtitle = '';
+
+    /** @var string */
     private $sCustomStylesheet = '';
+
+    /** @var string */
     private $sHeaderMenu = '';
+
+    /** @var string */
     private $sContent = '';
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct(GlobalCore $CORE)
+    {
     }
 
-    public function setSubtitle($s) {
+    /**
+     * @param string $s
+     * @return void
+     */
+    public function setSubtitle($s)
+    {
         $this->sSubtitle = ' &rsaquo; ' . $s;
     }
 
-    public function setCustomStylesheet($s) {
+    /**
+     * @param string $s
+     * @return void
+     */
+    public function setCustomStylesheet($s)
+    {
         $this->sCustomStylesheet = $s;
     }
 
-    public function setHeaderMenu($s) {
+    /**
+     * @param string $s
+     * @return void
+     */
+    public function setHeaderMenu($s)
+    {
         $this->sHeaderMenu = $s;
     }
 
-    public function setContent($s) {
+    /**
+     * @param string $s
+     * @return void
+     */
+    public function setContent($s)
+    {
         $this->sContent = $s;
     }
 
     /**
      * Parses the map and the objects for the nagvis-js frontend
      *
-     * @return	String 	String with JS Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with JS Code
+     * @throws Dwoo_Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
-        $aData = Array(
+        $aData = [
             'pageTitle'        => cfg('internal', 'title') . $this->sSubtitle,
             'htmlBase'         => cfg('paths', 'htmlbase'),
             'htmlJs'           => cfg('paths', 'htmljs'),
@@ -73,7 +107,7 @@ class NagVisIndexView {
             'customStylesheet' => $this->sCustomStylesheet,
             'headerMenu'       => $this->sHeaderMenu,
             'content'          => $this->sContent
-        );
+        ];
 
         // Build page based on the template file and the data array
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'index'), $aData);
@@ -82,11 +116,11 @@ class NagVisIndexView {
     /**
      * Checks if the compressed javascript file exists
      *
-     * @return	Boolean
+     * @return bool
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkJsCompressed() {
-        return file_exists(cfg('paths', 'js').'NagVisCompressed.js');
+    private function checkJsCompressed()
+    {
+        return file_exists(cfg('paths', 'js') . 'NagVisCompressed.js');
     }
 }
-?>

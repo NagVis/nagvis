@@ -22,16 +22,20 @@
  *
  ******************************************************************************/
 
-class CoreAuthorisationModSQLite extends CoreAuthorisationModPDO {
-    public function getConfig() {
-        return array(
+class CoreAuthorisationModSQLite extends CoreAuthorisationModPDO
+{
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return [
             'driver' => 'sqlite',
-            'params' => array(
-                'filename' => cfg('paths', 'cfg').'auth.db',
-            ),
+            'params' => [
+                'filename' => cfg('paths', 'cfg') . 'auth.db',
+            ],
             'username' => null,
             'password' => null,
-        );
+        ];
     }
 }
-?>

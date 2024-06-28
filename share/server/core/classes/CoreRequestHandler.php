@@ -22,67 +22,114 @@
  *
  *****************************************************************************/
 
-class CoreRequestHandler {
+class CoreRequestHandler
+{
+    /** @var array */
     private $aOpts;
 
-    public function __construct($aOptions) {
+    /**
+     * @param array $aOptions
+     */
+    public function __construct($aOptions)
+    {
         $this->aOpts = $aOptions;
     }
 
-    public function get($sKey) {
-        if(isset($this->aOpts[$sKey]))
+    /**
+     * @param string $sKey
+     * @return mixed|null
+     */
+    public function get($sKey)
+    {
+        if (isset($this->aOpts[$sKey])) {
             return $this->aOpts[$sKey];
-        else
+        } else {
             return null;
+        }
     }
 
-    public function isLongerThan($sKey, $iLen) {
+    /**
+     * @param string $sKey
+     * @param int $iLen
+     * @return bool
+     */
+    public function isLongerThan($sKey, $iLen)
+    {
         return strlen($this->aOpts[$sKey]) > $iLen;
     }
 
-    public function match($sKey, $regex) {
-        if(!isset($this->aOpts[$sKey]))
+    /**
+     * @param string $sKey
+     * @param string $regex
+     * @return bool|int
+     */
+    public function match($sKey, $regex)
+    {
+        if (!isset($this->aOpts[$sKey])) {
             return false;
+        }
 
         // If this is an array validate the single values. When one of the values
         // is invalid return false.
-        if(is_array($this->aOpts[$sKey])) {
-            foreach($this->aOpts[$sKey] AS $val)
-                if(!preg_match($regex, $val))
+        if (is_array($this->aOpts[$sKey])) {
+            foreach ($this->aOpts[$sKey] as $val) {
+                if (!preg_match($regex, $val)) {
                     return false;
+                }
+            }
             return true;
         } else {
             return preg_match($regex, $this->aOpts[$sKey]);
         }
     }
 
-    public function isSetAndNotEmpty($sKey) {
+    /**
+     * @param string $sKey
+     * @return bool
+     */
+    public function isSetAndNotEmpty($sKey)
+    {
         return (isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
     }
 
-    public function getAll($exclude = Array()) {
-        $ret = Array();
-        foreach($this->aOpts AS $key => $val) {
-            if(!isset($exclude[$key])) {
+    /**
+     * @param array $exclude
+     * @return array
+     */
+    public function getAll($exclude = [])
+    {
+        $ret = [];
+        foreach ($this->aOpts as $key => $val) {
+            if (!isset($exclude[$key])) {
                 $ret[$key] = $val;
             }
         }
         return $ret;
     }
 
-    public static function getReferer($default) {
-        if(isset($_SERVER['HTTP_REFERER']))
+    /**
+     * @param string $default
+     * @return mixed
+     */
+    public static function getReferer($default)
+    {
+        if (isset($_SERVER['HTTP_REFERER'])) {
             return $_SERVER['HTTP_REFERER'];
-        else
+        } else {
             return $default;
+        }
     }
 
-    public static function getRequestUri($default) {
-        if(isset($_SERVER['REQUEST_URI']))
+    /**
+     * @param string $default
+     * @return mixed
+     */
+    public static function getRequestUri($default)
+    {
+        if (isset($_SERVER['REQUEST_URI'])) {
             return $_SERVER['REQUEST_URI'];
-        else
+        } else {
             return $default;
+        }
     }
 }
-
-?>

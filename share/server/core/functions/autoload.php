@@ -21,27 +21,31 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * Load required files for NagVis. This autoloader has no compatibility
  * problem with other autoloaders from external code
  *
- * @param   String  Name of the requested class
- * @author 	Lars Michelsen <lm@larsmichelsen.com>
+ * @param string $sClass Name of the requested class
+ * @return bool
+ * @author    Lars Michelsen <lm@larsmichelsen.com>
  */
-function NagVisAutoload($sClass) {
-	if(substr($sClass, 0, 8) === 'Frontend' 
-	   || substr($sClass, 0, 3) === 'Wui' 
-	   || substr($sClass, 0, 4) === 'Core' 
-	   || substr($sClass, 0, 4) === 'View'
-	   || substr($sClass, 0, 6) === 'NagVis'
-	   || substr($sClass, 0, 6) === 'Nagios' 
-	   || substr($sClass, 0, 6) === 'Global') {
-		require($sClass.'.php');
-		return true;
-	} else {
-		return false;
-	}
+function NagVisAutoload($sClass)
+{
+    if (
+        str_starts_with($sClass, 'Frontend')
+        || str_starts_with($sClass, 'Wui')
+        || str_starts_with($sClass, 'Core')
+        || str_starts_with($sClass, 'View')
+        || str_starts_with($sClass, 'NagVis')
+        || str_starts_with($sClass, 'Nagios')
+        || str_starts_with($sClass, 'Global')
+    ) {
+        require($sClass . '.php');
+        return true;
+    } else {
+        return false;
+    }
 }
 
 spl_autoload_register('NagVisAutoload');
@@ -53,14 +57,14 @@ spl_autoload_register('NagVisAutoload');
 $dir = '../../server/core/functions/';
 if ($handle = opendir($dir)) {
     while (false !== ($file = readdir($handle))) {
-        if (preg_match(MATCH_PHP_FILE, $file)
+        if (
+            preg_match(MATCH_PHP_FILE, $file)
             && $file != 'autoload.php'
             && $file != 'core.php'
-            && $file != 'index.php') {
-            require($dir.$file);
+            && $file != 'index.php'
+        ) {
+            require($dir . $file);
         }
     }
     closedir($handle);
 }
-
-?>

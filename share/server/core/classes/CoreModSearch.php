@@ -25,35 +25,42 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModSearch extends CoreModule {
+class CoreModSearch extends CoreModule
+{
+    /** @var GlobalCore */
     protected $CORE;
 
-    public function __construct($CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
         $this->sName = 'Search';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('view' => REQUIRES_AUTHORISATION);
+        $this->aActions = ['view' => REQUIRES_AUTHORISATION];
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string
+     */
+    public function handleAction()
+    {
         global $AUTH;
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    // Check if user is already authenticated
-                    if($AUTH->isAuthenticated()) {
-                        $VIEW = new ViewSearch();
-                        $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                    } else {
-                        $sReturn = '';
-                    }
-                break;
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                // Check if user is already authenticated
+                if ($AUTH->isAuthenticated()) {
+                    $VIEW = new ViewSearch();
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                } else {
+                    $sReturn = '';
+                }
             }
         }
 
         return $sReturn;
     }
 }
-?>

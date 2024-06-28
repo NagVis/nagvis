@@ -22,7 +22,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
@@ -31,7 +31,6 @@
  * Set the path to look for included files
  */
 set_include_path(
-	get_include_path()
-	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/'
+    get_include_path()
+        . PATH_SEPARATOR . '../../frontend/nagvis-js/classes/'
 );
-?>

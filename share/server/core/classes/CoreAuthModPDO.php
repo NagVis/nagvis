@@ -22,20 +22,39 @@
  *
  ******************************************************************************/
 
-abstract class CoreAuthModPDO extends CoreAuthModule {
+abstract class CoreAuthModPDO extends CoreAuthModule
+{
     private $USERCFG;
+
+    /** @var CorePDOHandler */
     private $DB;
 
+    /** @var int */
     private $iUserId = -1;
+
+    /** @var string */
     private $sUsername = '';
+
+    /** @var string */
     private $sPassword = '';
+
+    /** @var string */
     private $sPasswordNew = '';
+
+    /** @var string */
     private $sPasswordHash = '';
 
+    /**
+     * @return array
+     */
     abstract public function getConfig();
 
-    public function __construct() {
-        parent::$aFeatures = Array(
+    /**
+     * @throws NagVisException
+     */
+    public function __construct()
+    {
+        parent::$aFeatures = [
             // General functions for authentication
             'passCredentials' => true,
             'getCredentials' => true,
@@ -50,108 +69,163 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
             // Managing users
             'createUser' => true,
-        );
+        ];
 
         $this->DB = new CorePDOHandler();
 
         // Open the database
         $config = $this->getConfig();
-        if(!$this->DB->open($config['driver'], $config['params'], $config['username'], $config['password'])) {
-            throw new NagVisException(l('Unable to open auth database ([DB]): [MSG]',
-                Array('DB' => $this->DB->getDSN(),
-                      'MSG' => json_encode($this->DB->error()))));
-        } else {
+        if (!$this->DB->open($config['driver'], $config['params'], $config['username'], $config['password'])) {
+            throw new NagVisException(l(
+                'Unable to open auth database ([DB]): [MSG]',
+                [
+                    'DB' => $this->DB->getDSN(),
+                    'MSG' => json_encode($this->DB->error())
+                ]
+            ));
+        } elseif (!$this->DB->tableExist('users')) {
             // Create initial db scheme if needed
-            if(!$this->DB->tableExist('users')) {
-                $this->DB->createInitialDb();
-            } else {
-                // Maybe an update is needed
-                $this->DB->updateDb();
-            }
+            $this->DB->createInitialDb();
+        } else {
+            // Maybe an update is needed
+            $this->DB->updateDb();
         }
     }
 
-    public function getAllUsers() {
-        $aPerms = Array();
+    /**
+     * Get all the users in the system
+     *
+     * @return array
+     */
+    public function getAllUsers()
+    {
+        $aPerms = [];
 
-        // Get all the users in the system
-      $RES = $this->DB->query('-user-get-all');
-      while($data = $RES->fetch()) {
-      	$aPerms[] = $data;
-      }
+        $RES = $this->DB->query('-user-get-all');
+        while ($data = $RES->fetch()) {
+            $aPerms[] = $data;
+        }
 
-      return $aPerms;
+        return $aPerms;
     }
 
-    public function checkUserExists($name) {
-        return $this->DB->count('-user-count', array('name' => $name));
+    /**
+     * @param string $name
+     * @return int
+     */
+    public function checkUserExists($name)
+    {
+        return $this->DB->count('-user-count', ['name' => $name]);
     }
 
-    private function checkUserAuth($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
-        if($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
-            $res = $this->DB->query('-user-get-by-pass', array('name' => $this->sUsername, 'password' => $this->sPasswordHash));
+    /**
+     * @param bool $bTrustUsername
+     * @return int
+     */
+    private function checkUserAuth($bTrustUsername = AUTH_NOT_TRUST_USERNAME)
+    {
+        if ($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
+            $res = $this->DB->query(
+                '-user-get-by-pass',
+                ['name' => $this->sUsername, 'password' => $this->sPasswordHash]
+            );
         } else {
-            $res = $this->DB->query('-user-get-by-name', array('name' => $this->sUsername));
+            $res = $this->DB->query('-user-get-by-name', ['name' => $this->sUsername]);
         }
 
         $data = $res->fetch();
 
-        if (!isset($data['userId']))
+        if (!isset($data['userId'])) {
             return 0;
+        }
         return intval($data['userId']);
     }
 
-    private function updatePassword($uid, $pw) {
+    /**
+     * @param int $uid
+     * @param string $pw
+     * @return bool
+     */
+    private function updatePassword($uid, $pw)
+    {
         try {
-            $res = $this->DB->query('-user-update-pass', array('id' => $uid, 'password' => $pw));
+            $res = $this->DB->query('-user-update-pass', ['id' => $uid, 'password' => $pw]);
             return $res !== false && $res->rowCount() === 1;
         } catch (PDOException $e) {
-            error_log("Could not update the password of user $uid: ".$e->getMessage());
+            error_log("Could not update the password of user $uid: " . $e->getMessage());
             return false;
         }
     }
 
-    private function addUser($user, $hash) {
-        $this->DB->query('-user-add', array('name' => $user, 'password' => $hash));
+    /**
+     * @param string $user
+     * @param string $hash
+     * @return void
+     */
+    private function addUser($user, $hash)
+    {
+        $this->DB->query('-user-add', ['name' => $user, 'password' => $hash]);
     }
 
-    public function passCredentials($aData) {
-        if(isset($aData['user'])) {
+    /**
+     * @param array $aData
+     * @return void
+     */
+    public function passCredentials($aData)
+    {
+        if (isset($aData['user'])) {
             $this->sUsername = $aData['user'];
         }
-        if(isset($aData['password'])) {
+        if (isset($aData['password'])) {
             $this->sPassword = $aData['password'];
 
             // Remove the password hash when setting a new password
             $this->sPasswordHash = '';
         }
-        if(isset($aData['passwordHash'])) {
+        if (isset($aData['passwordHash'])) {
             $this->sPasswordHash = $aData['passwordHash'];
         }
     }
 
-    public function passNewPassword($aData) {
-        if(isset($aData['user'])) {
+    /**
+     * @param array $aData
+     * @return void
+     */
+    public function passNewPassword($aData)
+    {
+        if (isset($aData['user'])) {
             $this->sUsername = $aData['user'];
         }
-        if(isset($aData['password'])) {
+        if (isset($aData['password'])) {
             $this->sPassword = $aData['password'];
 
             // Remove the password hash when setting a new password
             $this->sPasswordHash = '';
         }
-        if(isset($aData['passwordNew'])) {
+        if (isset($aData['passwordNew'])) {
             $this->sPasswordNew = $aData['passwordNew'];
         }
     }
 
-    public function getCredentials() {
-        return Array('user' => $this->sUsername,
-                     'passwordHash' => $this->sPasswordHash,
-                     'userId' => $this->iUserId);
+    /**
+     * @return array
+     */
+    public function getCredentials()
+    {
+        return [
+            'user' => $this->sUsername,
+            'passwordHash' => $this->sPasswordHash,
+            'userId' => $this->iUserId
+        ];
     }
 
-    public function createUser($user, $password) {
+    /**
+     * @param string $user
+     * @param string $password
+     * @return int
+     */
+    public function createUser($user, $password)
+    {
         $bReturn = false;
 
         // Compose the password hash
@@ -164,16 +238,27 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return $this->checkUserExists($user);
     }
 
-    public function resetPassword($uid, $pw) {
+    /**
+     * @param int $uid
+     * @param string $pw
+     * @return true
+     */
+    public function resetPassword($uid, $pw)
+    {
         // FIXME: To be coded
         $this->updatePassword($uid, $this->createHash($pw));
         return true;
     }
 
-    public function changePassword() {
+    /**
+     * @return bool
+     */
+    public function changePassword()
+    {
         // Check the authentication with the old password
-        if(!$this->isAuthenticated())
+        if (!$this->isAuthenticated()) {
             return false;
+        }
 
         // Set new password to current one
         $this->sPassword = $this->sPasswordNew;
@@ -185,23 +270,29 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return $this->updatePassword($this->iUserId, $this->sPasswordHash);
     }
 
-    public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
+    /**
+     * @param bool $bTrustUsername
+     * @return bool
+     */
+    public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME)
+    {
         // Only handle known users
-        if($this->sUsername === '' || !$this->checkUserExists($this->sUsername))
+        if ($this->sUsername === '' || !$this->checkUserExists($this->sUsername)) {
             return false;
+        }
 
         // Try to calculate the passowrd hash only when no hash is known at
         // this time. For example when the user just entered the password
         // for logging in. If the user is already logged in and this is just
         // a session check don't try to rehash the password.
-        if($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
+        if ($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
             // Compose the password hash for comparing with the stored hash
             $this->sPasswordHash = $this->createHash($this->sPassword);
         }
 
         // Check the password hash
         $userId = $this->checkUserAuth($bTrustUsername);
-        if($userId > 0) {
+        if ($userId > 0) {
             $this->iUserId = $userId;
             return true;
         }
@@ -209,16 +300,28 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return false;
     }
 
-    public function getUser() {
+    /**
+     * @return string
+     */
+    public function getUser()
+    {
         return $this->sUsername;
     }
 
-    public function getUserId() {
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
         return $this->iUserId;
     }
 
-    private function createHash($password) {
-        return sha1(AUTH_PASSWORD_SALT.$password);
+    /**
+     * @param string $password
+     * @return string
+     */
+    private function createHash($password)
+    {
+        return sha1(AUTH_PASSWORD_SALT . $password);
     }
 }
-?>

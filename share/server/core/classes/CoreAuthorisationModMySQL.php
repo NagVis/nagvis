@@ -22,18 +22,22 @@
  *
  ******************************************************************************/
 
-class CoreAuthorisationModMySQL extends CoreAuthorisationModPDO {
-    public function getConfig() {
-        return array(
+class CoreAuthorisationModMySQL extends CoreAuthorisationModPDO
+{
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return [
             'driver' => 'mysql',
-            'params' => array(
+            'params' => [
                 'dbhost' => cfg('auth_mysql', 'dbhost'),
                 'dbport' => cfg('auth_mysql', 'dbport'),
                 'dbname' => cfg('auth_mysql', 'dbname'),
-            ),
+            ],
             'username' => cfg('auth_mysql', 'dbuser'),
             'password' => cfg('auth_mysql', 'dbpass'),
-        );
+        ];
     }
 }
-?>

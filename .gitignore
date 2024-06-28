@@ -51,3 +51,7 @@ share/nagvis/gadgets/*.php
 
 # Exclude all var contents
 var/*
+
+# Exclude IDE directories
+.idea/
+.vscode

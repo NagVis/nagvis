@@ -25,27 +25,47 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisHeaderMenu {
+class NagVisHeaderMenu
+{
+    /** @var GlobalMapCfg */
     private $OBJ;
+
+    /** @var FrontendTemplateSystem */
     private $TMPL;
+
+    /** @var Dwoo */
     private $TMPLSYS;
 
+    /** @var string */
     private $templateName;
+
+    /** @var string */
     private $pathHtmlBase;
+
+    /** @var string */
     private $pathTemplateFile;
 
-    private $aMacros = Array();
+    /** @var array */
+    private $aMacros = [];
+
+    /** @var bool */
     private $bRotation = false;
 
-    public function __construct($templateName, $OBJ = null) {
+    /**
+     * @param string $templateName
+     * @param GlobalMapCfg $OBJ
+     * @throws NagVisException
+     */
+    public function __construct($templateName, $OBJ = null)
+    {
         $this->OBJ = $OBJ;
         $this->templateName = $templateName;
 
-        $this->pathHtmlBase = cfg('paths','htmlbase');
-        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.header.html');
+        $this->pathHtmlBase = cfg('paths', 'htmlbase');
+        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.header.html');
 
         // Initialize template system
-        $this->TMPL = New FrontendTemplateSystem();
+        $this->TMPL = new FrontendTemplateSystem();
         $this->TMPLSYS = $this->TMPL->getTmplSys();
 
         // Read the contents of the template file
@@ -53,30 +73,39 @@ class NagVisHeaderMenu {
     }
 
     /**
-     * PUBLIC setRotationEnabled()
-     *
      * Tells the header menu that the current view is rotating
      *
+     * @return void
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setRotationEnabled() {
+    public function setRotationEnabled()
+    {
         $this->bRotation = true;
     }
 
     /**
      * Print the HTML code
      *
-     * return   String  HTML Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string HTML Code
+     * @throws Dwoo_Exception
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __toString() {
+    public function __toString()
+    {
+        /**
+         * @var CoreAuthHandler $AUTH
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         * @var CoreUriHandler $UHANDLER
+         */
         global $AUTH, $AUTHORISATION, $UHANDLER;
 
         // In case of some really bad errors, the header menu can not be rendered, because basic
         // objects like $UHANDLER, $AUTH and $AUTHORISATION have not been initialized. Catch this
         // case here and terminate rendering
-        if (!isset($UHANDLER) || !isset($AUTH) || !isset($AUTHORISATION))
+        if (!isset($UHANDLER) || !isset($AUTH) || !isset($AUTHORISATION)) {
             return '';
+        }
 
         // Get all macros
         $this->getMacros();
@@ -88,41 +117,44 @@ class NagVisHeaderMenu {
     /**
      * Returns a list of available languages for the header menus macro list
      *
-     * return   Array
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getLangList() {
+    private function getLangList()
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
         // Build language list
         $aLang = $CORE->getAvailableAndEnabledLanguages();
         $numLang = count($aLang);
-        foreach($aLang AS $lang) {
-            $aLangs[$lang] = Array();
+        foreach ($aLang as $lang) {
+            $aLangs[$lang] = [];
             $aLangs[$lang]['language'] = $lang;
 
             // Get translated language name
-            switch($lang) {
+            switch ($lang) {
                 case 'en_US':
                     $languageLocated = l('en_US');
-                break;
+                    break;
                 case 'de_DE':
                     $languageLocated = l('de_DE');
-                break;
+                    break;
                 case 'es_ES':
                     $languageLocated = l('es_ES');
-                break;
+                    break;
                 case 'fr_FR':
                     $languageLocated = l('fr_FR');
-                break;
+                    break;
                 case 'pt_BR':
                     $languageLocated = l('pt_BR');
-                break;
+                    break;
                 case 'ru_RU':
                     $languageLocated = l('ru_RU');
-                break;
+                    break;
                 default:
                     $languageLocated = l($lang);
-                break;
+                    break;
             }
 
             $aLangs[$lang]['langLanguageLocated'] = $languageLocated;
@@ -133,66 +165,80 @@ class NagVisHeaderMenu {
     /**
      * Returns a list of maps for the header menus macro list
      *
-     * return   Array
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array
+     * @throws NagVisException
+     * @throws Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getMapList() {
+    private function getMapList()
+    {
+        /**
+         * @var GlobalMainCfg $_MAINCFG
+         * @var GlobalCore $CORE
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         */
         global $_MAINCFG, $CORE, $AUTHORISATION;
 
         // Get all the maps global content and use only those which are needed
-        $filename = cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache';
+        $filename = cfg('paths', 'var') . 'maplist-full-global.cfg-' . CONST_VERSION . '-cache';
 
         $cfgFiles = $CORE->getAvailableMaps();
         $path = $CORE->getMainCfg()->getValue('paths', 'mapcfg');
-        foreach ($cfgFiles as $name)
-            $cfgFiles[$name] = $path.$name.".cfg";
+        foreach ($cfgFiles as $name) {
+            $cfgFiles[$name] = $path . $name . ".cfg";
+        }
 
-        $CACHE = new GlobalFileCache($cfgFiles,
-            cfg('paths','var').'maplist-full-global.cfg-'.count($cfgFiles).'-'.CONST_VERSION.'-cache');
+        $CACHE = new GlobalFileCache(
+            $cfgFiles,
+            cfg('paths', 'var') . 'maplist-full-global.cfg-' . count($cfgFiles) . '-' . CONST_VERSION . '-cache'
+        );
 
-        if ($CACHE->isCached() !== -1
-           && $_MAINCFG->isCached() !== -1
-           && $CACHE->isCached() >= $_MAINCFG->isCached()) {
+        if (
+            $CACHE->isCached() !== -1
+            && $_MAINCFG->isCached() !== -1
+            && $CACHE->isCached() >= $_MAINCFG->isCached()
+        ) {
             // Read the whole list from the cache
             $list = $CACHE->getCache();
         } else {
             // Get all the maps global config sections and cache them
-            $list = Array();
-            foreach($CORE->getAvailableMaps() AS $mapName) {
+            $list = [];
+            foreach ($CORE->getAvailableMaps() as $mapName) {
                 $MAPCFG = new GlobalMapCfg($mapName);
                 try {
                     $MAPCFG->readMapConfig(ONLY_GLOBAL);
-                } catch(MapCfgInvalid $e) {
+                } catch (MapCfgInvalid $e) {
                     $map['configError'] = true;
-                } catch(NagVisException $e) {
+                } catch (NagVisException $e) {
                     $map['configError'] = true;
                 }
 
                 // Only show maps which should be shown
-                if ($MAPCFG->getValue(0, 'show_in_lists') != 1)
+                if ($MAPCFG->getValue(0, 'show_in_lists') != 1) {
                     continue;
+                }
 
-                $list[$mapName] = Array(
+                $list[$mapName] = [
                     'mapName'   => $MAPCFG->getName(),
                     'mapAlias'  => $MAPCFG->getValue(0, 'alias'),
-                    'childs'    => Array(),
+                    'childs'    => [],
                     'class'     => '',
                     'parent'    => $MAPCFG->getValue(0, 'parent_map'),
-                );
+                ];
             }
 
             // Save the list as cache
-            $CACHE->writeCache($list, 1);
+            $CACHE->writeCache($list);
         }
 
         $permEditAnyMap = false;
-        $aMaps = Array();
-        $childMaps = Array();
+        $aMaps = [];
+        $childMaps = [];
 
         // Perform user specific filtering on the cached data
-        foreach ($list AS $map) {
+        foreach ($list as $map) {
             // Remove unpermitted maps
-            if(!$AUTHORISATION->isPermitted('Map', 'view', $map['mapName'])) {
+            if (!$AUTHORISATION->isPermitted('Map', 'view', $map['mapName'])) {
                 unset($list[$map['mapName']]);
                 continue;
             }
@@ -204,42 +250,57 @@ class NagVisHeaderMenu {
             if ($map['parent'] === '') {
                 $aMaps[$map['mapName']] = $map;
             } else {
-                if(!isset($childMaps[$map['parent']]))
-                    $childMaps[$map['parent']] = Array();
+                if (!isset($childMaps[$map['parent']])) {
+                    $childMaps[$map['parent']] = [];
+                }
                 $childMaps[$map['parent']][$map['mapName']] = $map;
             }
         }
 
-        // auto select current map and apply map specific options to the header menu 
-        if ($this->OBJ !== null && $this->aMacros['mod'] == 'Map'
-            && isset($list[$this->OBJ->getName()])) {
-
-            $list[$this->OBJ->getName()]['selected'] = True;
+        // auto select current map and apply map specific options to the header menu
+        if (
+            $this->OBJ !== null && $this->aMacros['mod'] == 'Map'
+            && isset($list[$this->OBJ->getName()])
+        ) {
+            $list[$this->OBJ->getName()]['selected'] = true;
         }
 
-        return Array($this->mapListToTree($aMaps, $childMaps), $permEditAnyMap);
+        return [$this->mapListToTree($aMaps, $childMaps), $permEditAnyMap];
     }
 
-    private function mapListToTree($maps, $childMaps) {
-        foreach($maps AS $map) {
+    /**
+     * @param array $maps
+     * @param array $childMaps
+     * @return array
+     */
+    private function mapListToTree($maps, $childMaps)
+    {
+        foreach ($maps as $map) {
             $freeParent = $map['mapName'];
-            if(isset($childMaps[$freeParent])) {
+            if (isset($childMaps[$freeParent])) {
                 $maps[$freeParent]['class'] = 'title';
                 $maps[$freeParent]['childs'] = $this->mapListToTree($childMaps[$freeParent], $childMaps);
             }
         }
-        usort($maps, Array('GlobalCore', 'cmpMapAlias'));
+        usort($maps, ['GlobalCore', 'cmpMapAlias']);
         return $maps;
     }
 
     /**
-     * PRIVATE getMacros()
-     *
      * Returns all macros for the header template
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getMacros() {
+    private function getMacros()
+    {
+        /**
+         * @var GlobalCore $CORE
+         * @var CoreAuthHandler $AUTH
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         * @var CoreUriHandler $UHANDLER
+         */
         global $CORE, $AUTH, $AUTHORISATION, $UHANDLER;
         // First get all static macros
         $this->aMacros = $this->getStaticMacros();
@@ -254,8 +315,10 @@ class NagVisHeaderMenu {
         $this->aMacros['permittedOverview'] = $AUTHORISATION->isPermitted('Overview', 'view', '*');
 
         // Check if the user is permitted to edit the current map
-        $this->aMacros['permittedView']  = $this->OBJ !== null && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->OBJ->getName());
-        $this->aMacros['permittedEdit']  = $this->OBJ !== null && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->OBJ->getName());
+        $this->aMacros['permittedView']  = $this->OBJ !== null
+            && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->OBJ->getName());
+        $this->aMacros['permittedEdit']  = $this->OBJ !== null
+            && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->OBJ->getName());
 
         // Permissions for the option menu
         $this->aMacros['permittedSearch']            = $AUTHORISATION->isPermitted('Search', 'view', '*');
@@ -263,25 +326,28 @@ class NagVisHeaderMenu {
         $this->aMacros['permittedManageShapes']      = $AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
         $this->aMacros['permittedManageBackgrounds'] = $AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
         $this->aMacros['permittedManageBackgrounds'] = $AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
-        $this->aMacros['permittedManageMaps']        = $AUTHORISATION->isPermitted('Map', 'add', '*') && $AUTHORISATION->isPermitted('Map', 'edit', '*');
+        $this->aMacros['permittedManageMaps']        = $AUTHORISATION->isPermitted('Map', 'add', '*')
+            && $AUTHORISATION->isPermitted('Map', 'edit', '*');
 
         $this->aMacros['currentUser'] = $AUTH->getUser();
 
         $this->aMacros['permittedChangePassword'] = $AUTHORISATION->isPermitted('ChangePassword', 'change', '*');
 
         $this->aMacros['permittedLogout'] = $AUTH->logoutSupported()
-                                        & $AUTHORISATION->isPermitted('Auth', 'logout', '*');
+            & $AUTHORISATION->isPermitted('Auth', 'logout', '*');
 
         // Replace some special macros for maps
-        if($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
+        if ($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
             $this->aMacros['currentMap']        = $this->OBJ->getName();
             $this->aMacros['currentMapAlias']   = $this->OBJ->getValue(0, 'alias');
             $this->aMacros['usesSources']       = count($this->OBJ->getValue(0, 'sources')) > 0;
             $this->aMacros['zoombar']           = $this->OBJ->getValue(0, 'zoombar');
 
-            $this->aMacros['canAddObjects']  = !in_array('automap', $this->OBJ->getValue(0, 'sources')) && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
+            $this->aMacros['canAddObjects']  = !in_array('automap', $this->OBJ->getValue(0, 'sources'))
+                && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
             $this->aMacros['canEditObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'));
-            $this->aMacros['canMoveObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources')) && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
+            $this->aMacros['canMoveObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'))
+                && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
             $this->aMacros['isWorldmap']     = in_array('worldmap', $this->OBJ->getValue(0, 'sources'));
         } else {
             $this->aMacros['currentMap']        = '';
@@ -295,9 +361,9 @@ class NagVisHeaderMenu {
         }
 
         // Add permitted rotations
-        $this->aMacros['rotations'] = array();
-        foreach($CORE->getDefinedRotationPools() AS $poolName) {
-            if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
+        $this->aMacros['rotations'] = [];
+        foreach ($CORE->getDefinedRotationPools() as $poolName) {
+            if ($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
                 $this->aMacros['rotations'][] = $poolName;
             }
         }
@@ -309,22 +375,31 @@ class NagVisHeaderMenu {
         if ($this->templateName == 'on-demand-filter') {
             global $_BACKEND;
             $this->aMacros['hostgroups'] = $_BACKEND->getBackend($_GET['backend_id'])->getObjects('hostgroup', '', '');
-            usort($this->aMacros['hostgroups'], Array($this, 'sortHostgroups'));
-            array_unshift($this->aMacros['hostgroups'], array('name1' => '', 'name2' => ''));
+            usort($this->aMacros['hostgroups'], [$this, 'sortHostgroups']);
+            array_unshift($this->aMacros['hostgroups'], ['name1' => '', 'name2' => '']);
 
             $default = '';
             $USERCFG = new CoreUserCfg();
             $cfg = $USERCFG->doGet();
-            if (isset($cfg['params-']) && isset($cfg['params-']['filter_group']))
+            if (isset($cfg['params-']['filter_group'])) {
                 $default = $cfg['params-']['filter_group'];
+            }
 
-            $this->aMacros['filter_group'] = isset($_GET['filter_group']) ? htmlspecialchars($_GET['filter_group']) : $default;
+            $this->aMacros['filter_group'] = isset($_GET['filter_group'])
+                ? htmlspecialchars($_GET['filter_group'])
+                : $default;
         }
 
         $this->aMacros['mapNames'] = json_encode($CORE->getListMaps());
     }
 
-    private function sortHostgroups($a, $b) {
+    /**
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    private function sortHostgroups($a, $b)
+    {
         return strnatcasecmp($a['name1'], $b['name1']);
     }
 
@@ -333,39 +408,59 @@ class NagVisHeaderMenu {
      * It either returns the language tag for the current language when a
      * documentation exists or en_US as fallback when no docs exist
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getDocLanguage() {
+    private function getDocLanguage()
+    {
         global $CORE;
-        if(in_array(curLang(), $CORE->getAvailableDocs()))
-	    return curLang();
-	else
-	    return 'en_US';
+        if (in_array(curLang(), $CORE->getAvailableDocs())) {
+            return curLang();
+        } else {
+            return 'en_US';
+        }
     }
 
     /**
-     * PRIVATE getStaticMacros()
-     *
      * Get all static macros for the template code
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getStaticMacros() {
+    private function getStaticMacros()
+    {
+        /**
+         * @var SessionHandler $SHANDLER
+         * @var CoreAuthHandler $AUTH
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         * @var CoreUriHandler $UHANDLER
+         */
         global $SHANDLER, $AUTH, $AUTHORISATION, $UHANDLER;
 
         // Replace paths and language macros
-        $aReturn = Array('pathBase' => $this->pathHtmlBase,
-            'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $UHANDLER->getRequestUri()),
+        $aReturn = [
+            'pathBase' => $this->pathHtmlBase,
+            'currentUri'         => preg_replace(
+                '/[&?]lang=[a-z]{2}_[A-Z]{2}/',
+                '',
+                $UHANDLER->getRequestUri()
+            ),
             'pathImages'         => cfg('paths', 'htmlimages'),
             'showStates'         => cfg('defaults', 'header_show_states'),
-            'pathHeaderJs'       => path('html', 'global', 'templates', $this->templateName.'.header.js?v='.CONST_VERSION),
+            'pathHeaderJs'       => path(
+                'html',
+                'global',
+                'templates',
+                $this->templateName . '.header.js?v=' . CONST_VERSION
+            ),
             'pathTemplates'      => path('html', 'global', 'templates'),
             'pathTemplateImages' => path('html', 'global', 'templateimages'),
             'langSearch'         => l('Search'),
             'langUserMgmt'       => l('Manage Users'),
             'langManageRoles'    => l('Manage Roles'),
             'currentLanguage'    => curLang(),
-	    'docLanguage'        => $this->getDocLanguage(),
+            'docLanguage'        => $this->getDocLanguage(),
             'langChooseLanguage' => l('Choose Language'),
             'langUser' => l('User menu'),
             'langActions' => l('Actions'),
@@ -422,7 +517,7 @@ class NagVisHeaderMenu {
             'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),
             'permittedRoleMgmt' => $AUTHORISATION->isPermitted('RoleMgmt', 'manage'),
             'rolesConfigurable' => $AUTHORISATION->rolesConfigurable()
-        );
+        ];
 
         return $aReturn;
     }
@@ -430,13 +525,15 @@ class NagVisHeaderMenu {
     /**
      * Checks for readable header template
      *
-     * @param 	Boolean	$printErr
-     * @return	Boolean	Is Check Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Check Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkTemplateReadable($printErr) {
+    private function checkTemplateReadable($printErr)
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
         return $CORE->checkReadable($this->pathTemplateFile, $printErr);
     }
 }
-?>

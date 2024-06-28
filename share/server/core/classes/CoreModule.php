@@ -25,33 +25,53 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-abstract class CoreModule {
+abstract class CoreModule
+{
+    /** @var CoreUriHandler|null */
     protected $UHANDLER = null;
+
+    /** @var CoreRequestHandler|null  */
     protected $FHANDLER = null;
 
-    protected $aActions = Array();
-    protected $aObjects = Array();
+    /** @var array */
+    protected $aActions = [];
+
+    /** @var array */
+    protected $aObjects = [];
+
+    /** @var string */
     protected $sName = '';
+
+    /** @var string */
     protected $sAction = '';
+
+    /** @var string|null */
     protected $sObject = null;
 
     /**
      * Tells if the module offers the requested action
      *
+     * @param string $sAction
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function offersAction($sAction) {
+    public function offersAction($sAction)
+    {
         return isset($this->aActions[$sAction]);
     }
 
     /**
      * Stores the requested action in the module
      *
+     * @param string $sAction
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setAction($sAction) {
-        if(!$this->offersAction($sAction))
+    public function setAction($sAction)
+    {
+        if (!$this->offersAction($sAction)) {
             return false;
+        }
 
         $this->sAction = $sAction;
         return true;
@@ -60,18 +80,23 @@ abstract class CoreModule {
     /**
      * Tells wether the requested action requires the users autorisation
      *
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function actionRequiresAuthorisation() {
+    public function actionRequiresAuthorisation()
+    {
         return isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] !== !REQUIRES_AUTHORISATION;
     }
 
     /**
      * Tells wether the requested object is available
      *
+     * @param string $sObject
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function offersObject($sObject) {
+    public function offersObject($sObject)
+    {
         return isset($this->aObjects[$sObject]);
     }
 
@@ -79,10 +104,13 @@ abstract class CoreModule {
      * Stores the requested object name in the module
      * when it is supported
      *
+     * @param string $sObject
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setObject($sObject) {
-        if(!$this->offersObject($sObject)) {
+    public function setObject($sObject)
+    {
+        if (!$this->offersObject($sObject)) {
             // Set sObject to an empty string. This tells the isPermitted() check that
             // this module uses object based authorisation checks. In that case it
             // won't pass the object authorisation check.
@@ -97,50 +125,67 @@ abstract class CoreModule {
     /**
      *  Returns the object string
      *
+     * @return string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObject() {
+    public function getObject()
+    {
         return $this->sObject;
     }
 
     /**
      * Checks if the user is permitted to perform the requested action
      *
+     * @return void
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function isPermitted() {
+    public function isPermitted()
+    {
         global $AUTHORISATION;
         $authorized = true;
-        if(!isset($AUTHORISATION) || $AUTHORISATION === null)
+        if (!isset($AUTHORISATION) || $AUTHORISATION === null) {
             $authorized = false;
+        }
 
         // Maybe the requested action is summarized by some other
         $action = !is_bool($this->aActions[$this->sAction]) ? $this->aActions[$this->sAction] : $this->sAction;
 
-        if($authorized && !$AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
+        if ($authorized && !$AUTHORISATION->isPermitted($this->sName, $action, $this->sObject)) {
             $authorized = false;
+        }
 
-        if(!$authorized)
-            throw new NagVisException(l('You are not permitted to access this page ([PAGE]).',
-                                        Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)));
+        if (!$authorized) {
+            throw new NagVisException(l(
+                'You are not permitted to access this page ([PAGE]).',
+                ['PAGE' => $this->sName . '/' . $action . '/' . $this->sObject]
+            ));
+        }
     }
 
     /**
      * Initializes the URI handler object
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function initUriHandler() {
+    protected function initUriHandler()
+    {
         $this->UHANDLER = new CoreUriHandler();
     }
 
     /**
      * Returns all _GET+_POST vars. Supports optional array of attributes to
      * exclude where the keys are the var names. Always excludes mod/act params
+     *
+     * @param array $exclude
+     * @return array
      */
-    protected function getAllOptions($exclude = Array()) {
-        if(!isset($this->FHANDLER))
+    protected function getAllOptions($exclude = [])
+    {
+        if (!isset($this->FHANDLER)) {
             $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
+        }
         $exclude['mod'] = true;
         $exclude['act'] = true;
         return $this->FHANDLER->getAll($exclude);
@@ -149,32 +194,43 @@ abstract class CoreModule {
     /**
      * Reads a list of custom variables from the request
      *
+     * @param array $aKeys
+     * @param array $aDefaults
+     * @param bool $mixed
+     * @return array
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function getCustomOptions($aKeys, $aDefaults = Array(), $mixed = false) {
-        if($mixed) {
-            if(!isset($this->FHANDLER))
+    protected function getCustomOptions($aKeys, $aDefaults = [], $mixed = false)
+    {
+        if ($mixed) {
+            if (!isset($this->FHANDLER)) {
                 $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
+            }
 
-            $aReturn = Array();
-            foreach($aKeys AS $key => $val)
-                if($this->FHANDLER->match($key, $val))
+            $aReturn = [];
+            foreach ($aKeys as $key => $val) {
+                if ($this->FHANDLER->match($key, $val)) {
                     $aReturn[$key] = $this->FHANDLER->get($key);
+                }
+            }
 
             return $aReturn;
         }
 
         // Initialize on first call
-        if($this->UHANDLER === null)
+        if ($this->UHANDLER === null) {
             $this->initUriHandler();
+        }
 
         // Load the specific params to the UriHandler
         $this->UHANDLER->parseModSpecificUri($aKeys, $aDefaults);
 
         // Now get those params
-        $aReturn = Array();
-        foreach($aKeys AS $key => $val)
+        $aReturn = [];
+        foreach ($aKeys as $key => $val) {
             $aReturn[$key] = $this->UHANDLER->get($key);
+        }
 
         return $aReturn;
     }
@@ -186,14 +242,18 @@ abstract class CoreModule {
      * when using different actions. So these special modules
      * can implement that by overriding this method.
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function initObject() {}
+    public function initObject()
+    {
+    }
 
     /**
      * This method needs to be implemented by each module
      * to handle the user called action
      *
+     * @return string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     abstract public function handleAction();
@@ -201,19 +261,33 @@ abstract class CoreModule {
     /**
      * Helper function to handle default form responses
      *
+     * @param string $validationHandler
+     * @param string $action
+     * @param string|null $successMsg
+     * @param string|null $failMessage
+     * @param string|null $reload
+     * @param string|null $redirectUrl
+     * @return mixed
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function handleResponse($validationHandler, $action, $successMsg = null,
-                                        $failMessage = null, $reload = null, $redirectUrl = null) {
+    protected function handleResponse(
+        $validationHandler,
+        $action,
+        $successMsg = null,
+        $failMessage = null,
+        $reload = null,
+        $redirectUrl = null
+    ) {
         $aReturn = $this->{$validationHandler}();
 
         $type = 'ok';
         $msg = null;
-        if($aReturn !== false) {
+        if ($aReturn !== false) {
             $ret = $this->{$action}($aReturn);
-            if($ret && $successMsg) {
+            if ($ret && $successMsg) {
                 $msg = $successMsg;
-            } elseif(!$ret && $failMessage) {
+            } elseif (!$ret && $failMessage) {
                 $type = 'error';
                 $msg = $failMessage;
             }
@@ -222,44 +296,62 @@ abstract class CoreModule {
             $msg = l('You entered invalid information.');
         }
 
-        if($msg && $type == 'error')
+        if ($msg && $type == 'error') {
             throw new NagVisException($msg, null, $reload, $redirectUrl);
-        elseif($msg && $type == 'ok')
+        } elseif ($msg && $type == 'ok') {
             throw new Success($msg, null, $reload, $redirectUrl);
-        else
+        } else {
             return $ret;
+        }
     }
 
     /**
      * Checks if the listed values are set. Otherwise it raises and error message
      *
+     * @param CoreRequestHandler $HANDLER
+     * @param array $list
+     * @return void
+     * @throws UserInputError
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function verifyValuesSet($HANDLER, $list) {
+    protected function verifyValuesSet($HANDLER, $list)
+    {
         // Check if the array is assoc. When it isn't re-format it.
-        if(array_keys($list) === range(0, count($list) - 1)) {
-            $assoc = Array();
-            foreach($list AS $value)
+        if (array_keys($list) === range(0, count($list) - 1)) {
+            $assoc = [];
+            foreach ($list as $value) {
                 $assoc[$value] = true;
+            }
             $list = $assoc;
         }
 
-        foreach($list AS $key => $value)
-            if(!$HANDLER->isSetAndNotEmpty($key))
-                throw new UserInputError(l('mustValueNotSet1', Array('ATTRIBUTE' => $key)));
+        foreach ($list as $key => $value) {
+            if (!$HANDLER->isSetAndNotEmpty($key)) {
+                throw new UserInputError(l('mustValueNotSet1', ['ATTRIBUTE' => $key]));
+            }
+        }
     }
 
     /**
      * Checks if the listes values match the given patterns. Otherwise it raises
      * an error message.
      *
+     * @param CoreRequestHandler $HANDLER
+     * @param array $list
+     * @return void
+     * @throws UserInputError
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function verifyValuesMatch($HANDLER, $list) {
-        foreach($list AS $key => $pattern)
-            if($pattern && !$HANDLER->match($key, $pattern))
-                throw new UserInputError(l('The value of option "[ATTRIBUTE]" does not match the valid format.',
-                                           Array('ATTRIBUTE' => $key)));
+    protected function verifyValuesMatch($HANDLER, $list)
+    {
+        foreach ($list as $key => $pattern) {
+            if ($pattern && !$HANDLER->match($key, $pattern)) {
+                throw new UserInputError(l(
+                    'The value of option "[ATTRIBUTE]" does not match the valid format.',
+                    ['ATTRIBUTE' => $key]
+                ));
+            }
+        }
 
     }
 
@@ -267,27 +359,32 @@ abstract class CoreModule {
      * Is called with an array of files and timestamps to check if the file ages
      * have changed since these timestamps.
      *
-     * Returns null when nothing changed or a structure of the changed objects
+     * @param string[] $files
+     * @return false|string|null Returns null when nothing changed or a structure of the changed objects
+     * @throws MapCfgInvalid
+     * @throws NagVisException
      */
-    protected function checkFilesChanged($files) {
+    protected function checkFilesChanged($files)
+    {
         global $AUTHORISATION, $CORE;
-        $changed = array();
+        $changed = [];
 
-        foreach($files AS $file) {
+        foreach ($files as $file) {
             $parts = explode(',', $file);
             // Skip invalid requested files
-            if(count($parts) != 3)
+            if (count($parts) != 3) {
                 continue;
+            }
             list($ty, $name, $age) = $parts;
             $age = (int) $age;
 
             // Try to fetch the current age of the requested file
             $cur_age = null;
-            if($ty == 'maincfg') {
+            if ($ty == 'maincfg') {
                 $cur_age = $CORE->getMainCfg()->getConfigFileAge();
 
-            } elseif($ty == 'map') {
-                if($AUTHORISATION->isPermitted('Map', 'view', $name)) {
+            } elseif ($ty == 'map') {
+                if ($AUTHORISATION->isPermitted('Map', 'view', $name)) {
                     $MAPCFG  = new GlobalMapCfg($name);
                     $MAPCFG->readMapConfig();
                     $cur_age = $MAPCFG->getFileModificationTime($age);
@@ -295,19 +392,18 @@ abstract class CoreModule {
             }
 
             // Check if the file has changed; Reply with the changed timestamps
-            if($cur_age !== null && $cur_age > $age) {
+            if ($cur_age !== null && $cur_age > $age) {
                 $changed[$name] = $cur_age;
             }
         }
 
-        if(count($changed) > 0) {
-            return json_encode(array(
+        if (count($changed) > 0) {
+            return json_encode([
                 'status' => 'CHANGED',
                 'data'   => $changed,
-            ));
+            ]);
         } else {
             return null;
         }
     }
 }
-?>

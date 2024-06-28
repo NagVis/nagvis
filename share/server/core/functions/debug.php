@@ -21,66 +21,87 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
- 
+
 // Save the start time of NagVis
-define('DEBUGSTART',microtime_float());
+define('DEBUGSTART', microtime_float());
 
 
 /**
  * Writes the debug output to the debug file
  *
- * @param		String		Debug message
- * @author 	Lars Michelsen <lm@larsmichelsen.com>
+ * @param string $msg Debug message
+ * @return void
+ * @author    Lars Michelsen <lm@larsmichelsen.com>
  */
-function debug($msg) {
-	$fh = fopen(DEBUGFILE, 'a');
-	fwrite($fh, iso8859_1_to_utf8(microtime_float().' '.$msg."\n"));
-	fclose($fh);
+function debug($msg)
+{
+    $fh = fopen(DEBUGFILE, 'a');
+    fwrite($fh, iso8859_1_to_utf8(microtime_float() . ' ' . $msg . "\n"));
+    fclose($fh);
 }
 
 /**
  * Writes the render time and the called URI to the debug file
  *
+ * @return void
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
-function debugFinalize() {
-	debug('==> Render Time: '.round((microtime_float() - DEBUGSTART), 2).'sec'
-             .' Mem peak: '.round(memory_get_peak_usage()/1024/1024, 2).'Mb'
-             .' URI: '.$_SERVER['REQUEST_URI']);
+function debugFinalize()
+{
+    debug('==> Render Time: ' . round((microtime_float() - DEBUGSTART), 2) . 'sec'
+    . ' Mem peak: ' . round(memory_get_peak_usage() / 1024 / 1024, 2) . 'Mb'
+    . ' URI: ' . $_SERVER['REQUEST_URI']);
 }
 
-function log_mem($txt = 'somewhere') {
-    if (DEBUG && DEBUGLEVEL & 2)
-        debug('mem ['.$txt.']: ' . round(memory_get_usage()/1024/1024, 2) . 'Mb');
+/**
+ * @param string $txt
+ * @return void
+ */
+function log_mem($txt = 'somewhere')
+{
+    if (DEBUG && DEBUGLEVEL & 2) {
+        debug('mem [' . $txt . ']: ' . round(memory_get_usage() / 1024 / 1024, 2) . 'Mb');
+    }
 }
 
 /**
  * Returns the current time in microtime as float
  *
- * @return	Float		Microtime
+ * @return float Microtime
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
-function microtime_float() {
-	list($usec, $sec) = explode(' ', microtime());
-	return ((float)$usec + (float)$sec);
+function microtime_float()
+{
+    list($usec, $sec) = explode(' ', microtime());
+    return ((float)$usec + (float)$sec);
 }
 
-function profilingStart() {
-	//xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
+/**
+ * @return void
+ */
+function profilingStart()
+{
+    //xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
 }
 
-function profilingFinalize($pre) {
-	//include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_lib.php";
-	//include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_runs.php";
+/**
+ * @param $pre
+ * @return void
+ */
+function profilingFinalize($pre)
+{
+    //include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_lib.php";
+    //include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_runs.php";
 
-	//$xhprof_runs = new XHProfRuns_Default();
-	//$xhprof_runs->save_run(xhprof_disable(), 'nagvis-'.$pre);
+    //$xhprof_runs = new XHProfRuns_Default();
+    //$xhprof_runs->save_run(xhprof_disable(), 'nagvis-'.$pre);
 }
 
 // Start profiling now when configured to do so
-if (PROFILE) profilingStart();
-?>
+if (PROFILE) {
+    profilingStart();
+}

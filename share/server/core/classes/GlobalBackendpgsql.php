@@ -24,9 +24,13 @@
  *
  *****************************************************************************/
 
-class GlobalBackendpgsql extends GlobalBackendPDO {
-    public function driverName() {
+class GlobalBackendpgsql extends GlobalBackendPDO
+{
+    /**
+     * @return string
+     */
+    public function driverName()
+    {
         return 'pgsql';
     }
 }
-?>

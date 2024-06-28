@@ -25,81 +25,99 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisUrlView {
+class NagVisUrlView
+{
+    /** @var string */
     private $url = '';
+
+    /** @var string */
     private $content = '';
-    private $aRotation = Array();
+
+    /** @var array */
+    private $aRotation = [];
 
     /**
      * Class Constructor
      *
-     * @param    String          $NAME
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param GlobalCore $CORE
+     * @param string $url
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct(GlobalCore $CORE, $url) {
+    public function __construct(GlobalCore $CORE, $url)
+    {
         $this->url = $url;
     }
 
     /**
      * Set the page content
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setContent($s) {
+    public function setContent($s)
+    {
         $this->content = $s;
     }
 
     /**
      * Set the rotation properties if the user wants a rotation
      *
-     * @param   Array
+     * @param array $a
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setRotation($a) {
+    public function setRotation($a)
+    {
         $this->aRotation = $a;
     }
 
-    private function getProperties() {
-        return array(
+    /**
+     * @return array
+     */
+    private function getProperties()
+    {
+        return [
             'url'       => $this->url,
             'view_type' => 'url',
-        );
+        ];
     }
 
     /**
      * Parses the url and the objects for the nagvis-js frontend
      *
-     * @return	String 	String with JS Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with JS Code
+     * @throws Dwoo_Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
+        /** @var GlobalMainCfg $_MAINCFG */
         global $_MAINCFG;
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
         $iframe = false;
         $url = $this->url;
-        if (strpos($this->url, 'iframe:') === 0) {
+        if (str_starts_with($this->url, 'iframe:')) {
             $iframe = true;
             $url = substr($this->url, 7);
         }
 
-        $aData = Array(
+        $aData = [
             'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
             'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
             'pageProperties'     => json_encode($this->getProperties()),
             'iframe'             => $iframe,
             'url'                => $url,
-            'fileAges'           => json_encode(Array(
+            'fileAges'           => json_encode([
                 'maincfg' => $_MAINCFG->getConfigFileAge(),
-            )),
-            'locales'            => json_encode(Array()),
-        );
+            ]),
+            'locales'            => json_encode([]),
+        ];
 
         // Build page based on the template file and the data array
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'url'), $aData);
     }
 }
-?>

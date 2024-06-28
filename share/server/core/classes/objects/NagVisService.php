@@ -26,14 +26,21 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisService extends NagVisStatefulObject {
+class NagVisService extends NagVisStatefulObject
+{
+    /** @var string */
     protected $type = 'service';
 
     protected static $langType = null;
     protected static $langSelf = null;
 
+    /** @var string */
     protected $gadget_url;
+
+    /** @var string */
     protected $host_name;
+
+    /** @var string */
     protected $service_description;
     protected $line_label_show;
     protected $line_label_in;
@@ -42,62 +49,97 @@ class NagVisService extends NagVisStatefulObject {
     protected $line_label_pos_out;
     protected $line_label_y_offset;
 
-    public function __construct($backend_id, $hostName, $serviceDescription) {
-        $this->backend_id = array($backend_id[0]); // only supports one backend
+    /**
+     * @param array $backend_id
+     * @param string $hostName
+     * @param string $serviceDescription
+     */
+    public function __construct($backend_id, $hostName, $serviceDescription)
+    {
+        $this->backend_id = [$backend_id[0]]; // only supports one backend
         $this->host_name = $hostName;
         $this->service_description = $serviceDescription;
         parent::__construct();
     }
 
-    public function getName() {
+    /**
+     * @return string
+     */
+    public function getName()
+    {
         return $this->host_name;
     }
 
-    public function getNumMembers() {
-         return null;
+    /**
+     * @return null
+     */
+    public function getNumMembers()
+    {
+        return null;
     }
 
-    public function hasMembers() {
-         return false;
+    /**
+     * @return false
+     */
+    public function hasMembers()
+    {
+        return false;
     }
-    
-    public function getStateRelevantMembers() {
-        return array();
+
+    /**
+     * @return array
+     */
+    public function getStateRelevantMembers()
+    {
+        return [];
     }
 
     /**
      * Queues state fetching for this object
+     *
+     * @param bool $_unused_flag
+     * @param bool $_unused_flag2
+     * @return void
      */
-    public function queueState($_unused_flag = true, $_unused_flag2 = true) {
+    public function queueState($_unused_flag = true, $_unused_flag2 = true)
+    {
         global $_BACKEND;
-        $_BACKEND->queue(Array('serviceState' => true), $this);
+        $_BACKEND->queue(['serviceState' => true], $this);
     }
 
     /**
      * Applies the fetched state
      */
-    public function applyState() {
-        if($this->problem_msg !== null) {
-            $this->setState(array(
+    public function applyState()
+    {
+        if ($this->problem_msg !== null) {
+            $this->setState([
                 ERROR,
                 $this->problem_msg,
                 null,
                 null,
                 null,
-            ));
+            ]);
         }
 
         $this->sum = $this->state;
     }
 
-    public function getServiceDescription() {
+    /**
+     * @return string
+     */
+    public function getServiceDescription()
+    {
         return $this->service_description;
     }
 
-    protected function fetchObjectAsChild() {
+    /**
+     * @return array
+     */
+    protected function fetchObjectAsChild()
+    {
         $aChild = parent::fetchObjectAsChild();
         $aChild['service_description'] = $this->getServiceDescription();
         return $aChild;
     }
 }
-?>

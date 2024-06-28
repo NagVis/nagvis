@@ -25,56 +25,94 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisMapView {
+class NagVisMapView
+{
+    /** @var GlobalMapCfg|null */
     private $MAPCFG    = null;
-    private $name      = '';
-    private $search    = '';
-    private $aRotation = Array();
-    private $editMode  = false;
-    private $aParams   = Array();
 
-    public function __construct(GlobalCore $CORE, $name) {
+    /** @var string */
+    private $name      = '';
+
+    /** @var string */
+    private $search    = '';
+
+    /** @var array  */
+    private $aRotation = [];
+
+    /** @var bool */
+    private $editMode  = false;
+
+    /** @var array */
+    private $aParams   = [];
+
+    /**
+     * @param GlobalCore $CORE
+     * @param string $name
+     */
+    public function __construct(GlobalCore $CORE, $name)
+    {
         $this->name = $name;
     }
 
     /**
      * Set the search value if the user searches for an object
      *
-     * @param   String    Search string
+     * @param string $s Search string
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setSearch($s) {
+    public function setSearch($s)
+    {
         $this->search = $s;
     }
 
     /**
      * Set the rotation properties if the user wants a rotation
      *
-     * @param   Array
+     * @param array $a
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setRotation($a) {
+    public function setRotation($a)
+    {
         $this->aRotation = $a;
     }
 
     /**
      * Set the url params
+     *
+     * @param array $a
+     * @return void
      */
-    public function setParams($a) {
+    public function setParams($a)
+    {
         $this->aParams = $a;
     }
 
-    public function setEditMode() {
+    /**
+     * @return void
+     */
+    public function setEditMode()
+    {
         $this->editMode = true;
     }
 
     /**
      * Parses the map and the objects for the nagvis-js frontend
      *
-     * @return	String 	String with JS Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with JS Code
+     * @throws Dwoo_Exception
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
+        /**
+         * @var GlobalMainCfg $_MAINCFG
+         * @var GlobalCore $CORE
+         */
         global $_MAINCFG, $CORE;
         // Initialize template system
         $TMPL    = new FrontendTemplateSystem();
@@ -84,7 +122,7 @@ class NagVisMapView {
         $this->MAPCFG = new GlobalMapCfg($this->name);
         $this->MAPCFG->readMapConfig(ONLY_GLOBAL, true, true, true);
 
-        $aData = Array(
+        $aData = [
             'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
             'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
@@ -94,27 +132,30 @@ class NagVisMapView {
             'userProperties'     => $USERCFG->doGetAsJson(),
             'mapName'            => $this->name,
             'zoomFill'           => $this->MAPCFG->getValue(0, 'zoom') == 'fill',
-            'fileAges'           => json_encode(Array(
+            'fileAges'           => json_encode([
                 'maincfg'   => $_MAINCFG->getConfigFileAge(),
                 $this->name => $this->MAPCFG->getFileModificationTime(),
-            )),
+            ]),
             'locales'            => json_encode($CORE->getGeneralJSLocales()),
-        );
+        ];
 
         // Build page based on the template file and the data array
-        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'),'map'), $aData);
+        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'map'), $aData);
     }
 
     /**
      * Parses the view specific properties. In most cases this will be user
      * defined values which maybe given by url or session
      *
-     * @return  String  JSON array
+     * @return string JSON array
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function parseViewProperties() {
+    private function parseViewProperties()
+    {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
-        $arr = Array();
+        $arr = [];
 
         $arr['search']                = $this->search;
         $arr['edit_mode']             = $this->editMode;
@@ -124,8 +165,10 @@ class NagVisMapView {
         $arr['event_repeat_interval'] = intval($this->MAPCFG->getValue(0, 'event_repeat_interval'));
         $arr['event_repeat_duration'] = intval($this->MAPCFG->getValue(0, 'event_repeat_duration'));
         $arr['event_on_load']         = intval($this->MAPCFG->getValue(0, 'event_on_load'));
-        $arr['permitted_edit']        = $AUTHORISATION !== null && $AUTHORISATION->isPermitted('Map', 'edit', $this->name);
-        $arr['permitted_perform']     = $AUTHORISATION !== null && $AUTHORISATION->isPermitted('Action', 'perform', '*');
+        $arr['permitted_edit']        = $AUTHORISATION !== null
+            && $AUTHORISATION->isPermitted('Map', 'edit', $this->name);
+        $arr['permitted_perform']     = $AUTHORISATION !== null
+            && $AUTHORISATION->isPermitted('Action', 'perform', '*');
 
         // hover_menu & context_menu have to be handled separated from the others
         // It is special for them that the object individual settings have to be
@@ -133,10 +176,12 @@ class NagVisMapView {
         // (no global, no hardcoded default)
         // FIXME: Recode to use the user_params
         $userParams = $this->MAPCFG->getSourceParams(true);
-        if(isset($userParams['hover_menu']))
+        if (isset($userParams['hover_menu'])) {
             $arr['hover_menu'] = $userParams['hover_menu'];
-        if(isset($userParams['context_menu']))
+        }
+        if (isset($userParams['context_menu'])) {
             $arr['context_menu'] = $userParams['context_menu'];
+        }
 
         // This sets the user specific parameters
         $arr['user_params'] = $this->MAPCFG->getSourceParams(true, true);
@@ -146,4 +191,3 @@ class NagVisMapView {
         return json_encode($arr);
     }
 }
-?>

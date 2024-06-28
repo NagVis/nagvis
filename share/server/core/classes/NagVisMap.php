@@ -25,24 +25,32 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisMap {
+class NagVisMap
+{
+    /** @var NagVisMapObj|null */
     public $MAPOBJ = null;
+
+    /** @var GlobalMapCfg */
     protected $MAPCFG;
 
-    private $linkedMaps = Array();
+    /** @var array */
+    private $linkedMaps = [];
 
     /**
      * Class Constructor
      *
-     * @param 	GlobalMainCfg 	$MAINCFG
-     * @param 	GlobalMapCfg 	$MAPCFG
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param GlobalMapCfg $MAPCFG
+     * @param bool $getState
+     * @param bool $bIsView
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($MAPCFG, $getState = GET_STATE, $bIsView = IS_VIEW) {
+    public function __construct($MAPCFG, $getState = GET_STATE, $bIsView = IS_VIEW)
+    {
         global $_BACKEND;
         $this->MAPCFG = $MAPCFG;
 
-        if($getState === GET_STATE) {
+        if ($getState === GET_STATE) {
             $this->MAPOBJ = new NagVisMapObj($MAPCFG, $bIsView);
             // FIXME: needed? $this->MAPOBJ->setConfiguration($this->MAPCFG->getTypeDefaults('global'));
             $objConf = $MAPCFG->getMapObject(0);
@@ -50,10 +58,10 @@ class NagVisMap {
             $this->MAPOBJ->setConfiguration($objConf);
             log_mem('postmapinit');
             $this->MAPOBJ->fetchMapObjects();
-            log_mem('map ' .$this->MAPCFG->getName(). ' '.count($this->MAPOBJ->getMembers()));
+            log_mem('map ' . $this->MAPCFG->getName() . ' ' . count($this->MAPOBJ->getMembers()));
             log_mem('postmapobjects');
 
-            if($bIsView === IS_VIEW) {
+            if ($bIsView === IS_VIEW) {
                 $this->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
                 $_BACKEND->execute();
                 $this->MAPOBJ->applyState();
@@ -72,24 +80,27 @@ class NagVisMap {
      *   full:     all object infos of all map objects (might be filtered)
      *   state:    the state of all map objects (might be filtered)
      *
-     * @param   String  The type of request. Can be complete|summary|state
-     * @return	String  Json Code
+     * @param   string $type The type of request. Can be complete|summary|state
+     * @return	string  Json Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseObjectsJson($type = 'complete') {
-        $arrRet = Array();
+    public function parseObjectsJson($type = 'complete')
+    {
+        $arrRet = [];
 
         // First parse the map object itselfs for having the
         // summary information in the frontend
-        if($type === 'complete' || $type === 'summary')
+        if ($type === 'complete' || $type === 'summary') {
             $arrRet[] = $this->MAPOBJ->parseJson();
+        }
 
         // In summary mode only return the map object state
-        if($type === 'summary')
+        if ($type === 'summary') {
             return json_encode($arrRet);
+        }
 
-        foreach($this->MAPOBJ->getMembers() AS $OBJ) {
-            switch(get_class($OBJ)) {
+        foreach ($this->MAPOBJ->getMembers() as $OBJ) {
+            switch (get_class($OBJ)) {
                 case 'NagVisHost':
                 case 'NagVisService':
                 case 'NagVisHostgroup':
@@ -97,7 +108,7 @@ class NagVisMap {
                 case 'NagVisAggr':
                 case 'NagVisServicegroup':
                 case 'NagVisMapObj':
-                    if($type == 'state') {
+                    if ($type == 'state') {
                         $arr = $OBJ->getObjectStateInformations();
                         $arr['object_id'] = $OBJ->getObjectId();
                         $arr['icon'] = $OBJ->get('icon');
@@ -105,15 +116,15 @@ class NagVisMap {
                     } else {
                         $arrRet[] = $OBJ->parseJson();
                     }
-                break;
+                    break;
                 default: // Shape, Line, Textbox and others...
-                    if ($type == 'complete' || $type == 'full')
+                    if ($type == 'complete' || $type == 'full') {
                         $arrRet[] = $OBJ->parseJson();
-                break;
+                    }
+                    break;
             }
         }
 
         return json_encode($arrRet);
     }
 }
-?>

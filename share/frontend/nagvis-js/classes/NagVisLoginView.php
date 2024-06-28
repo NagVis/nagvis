@@ -25,36 +25,47 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisLoginView {
-    public function __construct($CORE) {
+class NagVisLoginView
+{
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
     }
 
     /**
      * Parses the information in html format
      *
-     * @return	String 	String with Html Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with Html Code
+     * @throws Dwoo_Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
+        /**
+         * @var FieldInputError|null $LOGIN_MSG
+         * @var GlobalMainCfg $_MAINCFG
+         */
         global $LOGIN_MSG, $_MAINCFG;
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
         $target = CoreRequestHandler::getRequestUri('');
 
         // Add the language to the target url when the user requested a specific language
-        if(isset($_GET['lang']) && $_GET['lang'] != '' && strpos($target, 'lang=') === false) {
-            if(strpos($target, '?') === false) {
-                $target .= '?lang='.$_GET['lang'];
+        if (isset($_GET['lang']) && $_GET['lang'] != '' && !str_contains($target, 'lang=')) {
+            if (!str_contains($target, '?')) {
+                $target .= '?lang=' . $_GET['lang'];
             } else {
-                $target .= '&lang='.$_GET['lang'];
+                $target .= '&lang=' . $_GET['lang'];
             }
         }
 
-        $aData = Array(
+        $aData = [
             'generalProperties' => $_MAINCFG->parseGeneralProperties(),
-            'locales'           => json_encode(Array()),
+            'locales'           => json_encode([]),
             'pageTitle' => cfg('internal', 'title') . ' &rsaquo; Log In',
             'htmlBase' => cfg('paths', 'htmlbase'),
             'htmlJs' => cfg('paths', 'htmljs'),
@@ -68,12 +79,13 @@ class NagVisLoginView {
             'langPassword' => l('Password'),
             'langLogin' => l('Login'),
             'langTitleCookiesDisabled' => l('Cookies disabled'),
-            'langTextCookiesDisabled' => l('NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'),
-            'loginMsg' => isset($LOGIN_MSG)  && $LOGIN_MSG !== null ? $LOGIN_MSG->msg : '',
-        );
+            'langTextCookiesDisabled' => l(
+                'NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'
+            ),
+            'loginMsg' => $LOGIN_MSG !== null ? $LOGIN_MSG->msg : '',
+        ];
 
         // Build page based on the template file and the data array
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'login'), $aData);
     }
 }
-?>

@@ -28,9 +28,14 @@
  *
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreSessionHandler {
+class CoreSessionHandler
+{
 
-    public function __construct() {
+    /**
+     * @throws ErrorException
+     */
+    public function __construct()
+    {
         $sDomain   = cfg('global', 'sesscookiedomain');
         $sPath     = cfg('global', 'sesscookiepath');
         $iDuration = cfg('global', 'sesscookieduration');
@@ -42,46 +47,53 @@ class CoreSessionHandler {
 
         // Only add the domain when it is no simple hostname
         // This can be easily detected searching for a dot
-        if(strpos($sDomain, '.') === false)
+        if (!str_contains($sDomain, '.')) {
             $sDomain = null;
+        }
 
         // Opera has problems with ip addresses in domains. So skip them
-        if(strpos($_SERVER['HTTP_USER_AGENT'], 'opera') !== false
-           && preg_match('/\d.\d+.\d+.\d+/', $sDomain))
+        if (
+            str_contains($_SERVER['HTTP_USER_AGENT'], 'opera')
+            && preg_match('/\d.\d+.\d+.\d+/', $sDomain)
+        ) {
             $sDomain = null;
+        }
 
         // Set custom params for the session cookie
-        if (version_compare(PHP_VERSION, '5.2') >= 0)
+        if (version_compare(PHP_VERSION, '5.2') >= 0) {
             session_set_cookie_params(0, $sPath, $sDomain, $bSecure, $bHTTPOnly);
-        else
+        } else {
             session_set_cookie_params(0, $sPath, $sDomain, $bSecure);
+        }
 
         // Start a session for the user when not started yet
-        if(!isset($_SESSION)) {
+        if (!isset($_SESSION)) {
             try {
                 session_start();
                 // Write/close to release the lock aquired by session_start().
                 // Each write to the session needs to perform session_start() again
                 session_write_close();
-            } catch(ErrorException $e) {
+            } catch (ErrorException $e) {
                 // Catch and suppress session cleanup errors. This is a problem
                 // especially on current debian/ubuntu:
                 //   PHP error in ajax request handler: Error: (8) session_start():
                 //   ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
-                if(strpos($e->getMessage(), 'ps_files_cleanup_dir') === false)
+                if (!str_contains($e->getMessage(), 'ps_files_cleanup_dir')) {
                     throw $e;
+                }
             }
 
             // Store the creation time of the session
-            if(!$this->issetAndNotEmpty('sessionExpires'))
-                $this->set('sessionExpires', time()+$iDuration);
+            if (!$this->isSetAndNotEmpty('sessionExpires')) {
+                $this->set('sessionExpires', time() + $iDuration);
+            }
         }
 
         // Reset the expiration time of the session cookie
-        if(isset($_COOKIE[SESSION_NAME])) {
+        if (isset($_COOKIE[SESSION_NAME])) {
             // Don't reset the expiration time on every page load - only reset when
             // the half of the expiration time has passed
-            if(time() >= $this->get('sessionExpires') - ($iDuration/2)) {
+            if (time() >= $this->get('sessionExpires') - ($iDuration / 2)) {
                 $exp = time() + $iDuration;
                 setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], $exp, $sPath, $sDomain, $bSecure, $bHTTPOnly);
 
@@ -91,26 +103,42 @@ class CoreSessionHandler {
         }
     }
 
-    public function isSetAndNotEmpty($sKey) {
+    /**
+     * @param string $sKey
+     * @return bool
+     */
+    public function isSetAndNotEmpty($sKey)
+    {
         return isset($_SESSION[$sKey]) && $_SESSION[$sKey] != '';
     }
 
-    public function get($sKey) {
-        if(isset($_SESSION[$sKey])) {
+    /**
+     * @param string $sKey
+     * @return false|mixed
+     */
+    public function get($sKey)
+    {
+        if (isset($_SESSION[$sKey])) {
             return $_SESSION[$sKey];
         } else {
             return false;
         }
     }
 
-    public function set($sKey, $sVal) {
-        if(isset($_SESSION[$sKey])) {
+    /**
+     * @param string $sKey
+     * @param mixed $sVal
+     * @return false|mixed
+     */
+    public function set($sKey, $sVal)
+    {
+        if (isset($_SESSION[$sKey])) {
             $sOld = $_SESSION[$sKey];
         } else {
             $sOld = false;
         }
 
-        if($sVal == false) {
+        if (!$sVal) {
             unset($_SESSION[$sKey]);
         } else {
             $_SESSION[$sKey] = $sVal;
@@ -119,17 +147,28 @@ class CoreSessionHandler {
         return $sOld;
     }
 
-    public function del($key) {
+    /**
+     * @param string $key
+     * @return void
+     */
+    public function del($key)
+    {
         unset($_SESSION[$key]);
     }
 
-    public function aquire() {
+    /**
+     * @return void
+     */
+    public function aquire()
+    {
         session_start();
     }
 
-    public function commit() {
+    /**
+     * @return void
+     */
+    public function commit()
+    {
         session_write_close();
     }
 }
-
-?>

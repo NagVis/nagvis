@@ -22,27 +22,35 @@
  *
  *****************************************************************************/
 
-class CoreModUserMgmt extends CoreModule {
-    public function __construct($CORE) {
+class CoreModUserMgmt extends CoreModule
+{
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
         $this->sName = 'UserMgmt';
 
-        $this->aActions = Array(
+        $this->aActions = [
             'view'         => 'manage',
-        );
+        ];
     }
 
-    public function handleAction() {
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    $VIEW = new ViewManageUsers();
-                    return json_encode(Array('code' => $VIEW->parse()));
-                break;
+    /**
+     * @return false|string
+     * @throws CoreAuthModNoSupport
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                $VIEW = new ViewManageUsers();
+                return json_encode(['code' => $VIEW->parse()]);
             }
         }
 
         return '';
     }
 }
-
-?>

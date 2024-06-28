@@ -39,13 +39,27 @@ $_MAINCFG->init();
  * This is mainly a short access to config options. In the past the whole
  * language object method call was used all arround NagVis. This has been
  * introduced to keep the code shorter
+ *
+ * @param string $sec
+ * @param string $key
+ * @param bool $ignoreDefaults
+ * @return mixed|null
  */
-function cfg($sec, $key, $ignoreDefaults = false) {
+function cfg($sec, $key, $ignoreDefaults = false)
+{
     global $_MAINCFG;
     return $_MAINCFG->getValue($sec, $key, $ignoreDefaults);
 }
 
-function path($type, $loc, $var, $relfile = '') {
+/**
+ * @param string $type
+ * @param string $loc
+ * @param string $var
+ * @param string $relfile
+ * @return string|null
+ */
+function path($type, $loc, $var, $relfile = '')
+{
     global $_MAINCFG;
     return $_MAINCFG->getPath($type, $loc, $var, $relfile);
 }
@@ -58,18 +72,28 @@ $_LANG = new GlobalLanguage();
  * This is mainly a short access to localized strings. In the past the whole
  * language object method call was used all arround NagVis. This has been
  * introduced to keep the code shorter
+ *
+ * @param $txt
+ * @param null $vars
+ * @return mixed|string
  */
-function l($txt, $vars = null) {
+function l($txt, $vars = null)
+{
     global $_LANG;
-    if(isset($_LANG))
+    if (isset($_LANG)) {
         return $_LANG->getText($txt, $vars);
-    elseif($vars !== null)
+    } elseif ($vars !== null) {
         return GlobalLanguage::getReplacedString($txt, $vars);
-    else
+    } else {
         return $txt;
+    }
 }
 
-function curLang() {
+/**
+ * @return string
+ */
+function curLang()
+{
     global $_LANG;
     return $_LANG->getCurrentLanguage();
 }
@@ -85,28 +109,55 @@ $_BACKEND = new CoreBackendMgmt();
 // ----------------------------------------------------------------------------
 // some untilities
 
-function val($arr, $key, $dflt = null) {
+/**
+ * @param array $arr
+ * @param string $key
+ * @param mixed|null $dflt
+ * @return mixed|null
+ */
+function val($arr, $key, $dflt = null)
+{
     return isset($arr[$key]) ? $arr[$key] : $dflt;
 }
 
-function state_str($state) {
-    switch($state) {
-        case UNCHECKED:   return 'UNCHECKED';
-        case UNREACHABLE: return 'UNREACHABLE';
-        case DOWN:        return 'DOWN';
-        case UP:          return 'UP';
-        case PENDING:     return 'PENDING';
-        case UNKNOWN:     return 'UNKNOWN';
-        case CRITICAL:    return 'CRITICAL';
-        case WARNING:     return 'WARNING';
-        case OK:          return 'OK';
-        case ERROR:       return 'ERROR';
-        default:          return 'ERROR'; // unspecified state
+/**
+ * @param int $state
+ * @return string
+ */
+function state_str($state)
+{
+    switch ($state) {
+        case UNCHECKED:
+            return 'UNCHECKED';
+        case UNREACHABLE:
+            return 'UNREACHABLE';
+        case DOWN:
+            return 'DOWN';
+        case UP:
+            return 'UP';
+        case PENDING:
+            return 'PENDING';
+        case UNKNOWN:
+            return 'UNKNOWN';
+        case CRITICAL:
+            return 'CRITICAL';
+        case WARNING:
+            return 'WARNING';
+        case OK:
+            return 'OK';
+        case ERROR:
+        default:
+            return 'ERROR'; // unspecified state
     }
 }
 
-function state_num($state_str) {
-    $a = array(
+/**
+ * @param string $state_str
+ * @return mixed
+ */
+function state_num($state_str)
+{
+    $a = [
         'UNCHECKED'     => UNCHECKED,
         'UNREACHABLE'   => UNREACHABLE,
         'DOWN'          => DOWN,
@@ -119,52 +170,93 @@ function state_num($state_str) {
         'OK'            => OK,
         // generic
         'ERROR'         => ERROR
-    );
+    ];
     return $a[$state_str];
 }
 
-function is_host_state($state) {
+/**
+ * @param int $state
+ * @return bool
+ */
+function is_host_state($state)
+{
     return $state == UNCHECKED || $state == UNREACHABLE || $state == DOWN || $state == UP;
 }
 
-function listIconsets() {
+/**
+ * @return array
+ * @throws NagVisException
+ */
+function listIconsets()
+{
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableIconsets();
 }
 
-function listBackendIds() {
+/**
+ * @return array
+ * @throws Exception
+ */
+function listBackendIds()
+{
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getDefinedBackends();
 }
 
-function listHeaderTemplates() {
+/**
+ * @return array
+ * @throws NagVisException
+ */
+function listHeaderTemplates()
+{
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableHeaderTemplates();
 }
 
-function listHoverTemplates() {
+/**
+ * @return array
+ * @throws NagVisException
+ */
+function listHoverTemplates()
+{
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableHoverTemplates();
 }
 
-function listContextTemplates() {
+/**
+ * @return array
+ * @throws NagVisException
+ */
+function listContextTemplates()
+{
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableContextTemplates();
 }
 
-function listHoverChildSorters() {
-    return Array(
+/**
+ * @return array
+ */
+function listHoverChildSorters()
+{
+    return [
         'a' => l('Alphabetically'),
         's' => l('State'),
         'k' => l('Keep original order'),
-    );
+    ];
 }
 
-function listHoverChildOrders() {
-    return Array(
+/**
+ * @return array
+ */
+function listHoverChildOrders()
+{
+    return [
         'asc'  => l('Ascending'),
         'desc' => l('Descending'),
-    );
+    ];
 }
-
-?>

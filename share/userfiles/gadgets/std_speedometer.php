@@ -35,10 +35,10 @@
  *
  *****************************************************************************/
 
-/** 
+/**
  * Dummy perfdata for WUI
  *
- * This string needs to be set in every gadget to have some sample data in the 
+ * This string needs to be set in every gadget to have some sample data in the
  * WUI to be able to place the gadget easily on the map
  ******************************************************************************/
 $sDummyPerfdata = 'config=20%;80;90;0;100';
@@ -50,12 +50,13 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
 $_MODE          = 'img';
 
 // Include the gadgets core. Also handle OMD default and local paths
-if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
     $core = dirname($_SERVER["SCRIPT_FILENAME"]) . '/gadgets_core.php';
-    if(file_exists($core))
+    if (file_exists($core)) {
         require($core);
-    else
+    } else {
         require(str_replace('local/share/', 'share/', $core));
+    }
 } else {
     require('./gadgets_core.php');
 }
@@ -72,8 +73,8 @@ header("Content-type: image/png");
 
 $min = 0;
 $max = -1;
-$default = 0; 
- 
+$default = 0;
+
 /* Now read the parameters */
 
 // This gadget is simple and dirty, it only recognizes the first dataset of
@@ -89,35 +90,35 @@ $max = $aPerfdata[0]['max'];
 // Normalize / Fix value and max
 //================
 
-if($value == null) {
-	$value = $default;
-} else {
-	if($max != '' && $value < $min) {
-		$value = $min;
-	} elseif($max != '' && $max != -1 && $value > $max) {
-		$value = $max;
-	}
+if ($value == null) {
+    $value = $default;
+} elseif ($max != '' && $value < $min) {
+    $value = $min;
+} elseif ($max != '' && $max != -1 && $value > $max) {
+    $value = $max;
 }
 
 // If there is no max value given set it critical or warning value
-if(intval($max) == 0 || $max == '')
-	if(intval($crit) == 0 || $crit != '')
-		$max = $crit + 1;
-	else
-		$max = $warn + 1;
+if (intval($max) == 0 || $max == '') {
+    if (intval($crit) == 0 || $crit != '') {
+        $max = $crit + 1;
+    } else {
+        $max = $warn + 1;
+    }
+}
 
 //================
 // Calculate degrees of value, warn, critical
 //================
 
-$p = 180 / ( $max + $min ) * $value;
-$warnp = -180 + (180 / ( $max - $min ) * ( $warn - $min ) );
-$critp = -180 + (180 / ( $max - $min ) * ( $crit - $min ) );
+$p = 180 / ($max + $min) * $value;
+$warnp = -180 + (180 / ($max - $min) * ($warn - $min));
+$critp = -180 + (180 / ($max - $min) * ($crit - $min));
 
 // If the critp is bigger than -1 it can not be rendered by the php functions.
 // Set it to -1 for having at least a small critical area drawn
-if($critp > -1) {
-	$critp = -1;
+if ($critp > -1) {
+    $critp = -1;
 }
 
 /**
@@ -137,15 +138,15 @@ $linewidth = 3;
 $centerx = $imgwidth / 2;
 $centery = $imgheight - 20;
 $innerrad = $innerdia / 2;
-$outerrad = $outerdia / 2-1;
+$outerrad = $outerdia / 2 - 1;
 $linerad = $linedia / 2;
-$lineext = $linewidth/2;
+$lineext = $linewidth / 2;
 
 //====================
 // Create tacho image.
 //====================
 
-$img=imagecreatetruecolor($imgwidth, $imgheight);
+$img = imagecreatetruecolor($imgwidth, $imgheight);
 
 $oBackground = imagecolorallocate($img, 122, 23, 211);
 $oBlack = imagecolorallocate($img, 0, 0, 0);
@@ -158,30 +159,89 @@ imagefill($img, 0, 0, $oBackground);
 imagecolortransparent($img, $oBackground);
 
 // Base
-imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), 180, 0, $oGreen, IMG_ARC_EDGED);
+imagefilledarc(
+    $img,
+    intval($centerx),
+    intval($centery),
+    intval($outerdia),
+    intval($outerdia),
+    180,
+    0,
+    $oGreen,
+    IMG_ARC_EDGED
+);
 
 // Warning
-if($warn && $warnp <= -1) {
-	// The "360 +" fix has been worked out by hipska. Thanks for that!
-	imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $warnp), 0, $oYellow, IMG_ARC_EDGED);
+if ($warn && $warnp <= -1) {
+    // The "360 +" fix has been worked out by hipska. Thanks for that!
+    imagefilledarc(
+        $img,
+        intval($centerx),
+        intval($centery),
+        intval($outerdia),
+        intval($outerdia),
+        intval(360 + $warnp),
+        0,
+        $oYellow,
+        IMG_ARC_EDGED
+    );
 }
 // Critical
-if($crit && $critp <= -1) {
-	// The "360 +" fix has been worked out by hipska. Thanks for that!
-	imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $critp), 0, $oRed, IMG_ARC_EDGED);
+if ($crit && $critp <= -1) {
+    // The "360 +" fix has been worked out by hipska. Thanks for that!
+    imagefilledarc(
+        $img,
+        intval($centerx),
+        intval($centery),
+        intval($outerdia),
+        intval($outerdia),
+        intval(360 + $critp),
+        0,
+        $oRed,
+        IMG_ARC_EDGED
+    );
 }
 
 // Borders
-imagearc($img, intval($centerx), intval($centery+1), intval($outerdia+2), intval($outerdia+2), 180, 0, $oBlack);
-imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia/10), intval($outerdia/10), 180, 0, $oBlue, IMG_ARC_EDGED);
+imagearc(
+    $img,
+    intval($centerx),
+    intval($centery + 1),
+    intval($outerdia + 2),
+    intval($outerdia + 2),
+    180,
+    0,
+    $oBlack
+);
+imagefilledarc(
+    $img,
+    intval($centerx),
+    intval($centery),
+    intval($outerdia / 10),
+    intval($outerdia / 10),
+    180,
+    0,
+    $oBlue,
+    IMG_ARC_EDGED
+);
 
 //===================
 // Create tacho line.
 //===================
 
-$diffy = sin(deg2rad(-$p+360))*(($outerdia+10)/2);
-$diffx = cos(deg2rad(-$p+360))*(($outerdia+10)/2);
-imagefilledarc($img, intval($centerx-$diffx), intval($centery+$diffy), intval($outerdia+10), intval($outerdia+10),intval($p-1),intval($p+1), $oBlue, IMG_ARC_EDGED);
+$diffy = sin(deg2rad(-$p + 360)) * (($outerdia + 10) / 2);
+$diffx = cos(deg2rad(-$p + 360)) * (($outerdia + 10) / 2);
+imagefilledarc(
+    $img,
+    intval($centerx - $diffx),
+    intval($centery + $diffy),
+    intval($outerdia + 10),
+    intval($outerdia + 10),
+    intval($p - 1),
+    intval($p + 1),
+    $oBlue,
+    IMG_ARC_EDGED
+);
 
 //===================
 // Labels
@@ -189,33 +249,67 @@ imagefilledarc($img, intval($centerx-$diffx), intval($centery+$diffy), intval($o
 
 // Speedometer labels
 
-imageline($img, intval($centerx-$outerdia/2-5), intval($centery+1), intval($centerx+$outerdia/2+5), intval($centery+1), $oBlack);
-imagestring($img, 1, intval($centerx-$outerdia/2-15), intval($centery-6), $min , $oBlack); 
-imagestring($img, 1, intval($centerx+$outerdia/2+8), intval($centery-6), $max, $oBlack);
+imageline(
+    $img,
+    intval($centerx - $outerdia / 2 - 5),
+    intval($centery + 1),
+    intval($centerx + $outerdia / 2 + 5),
+    intval($centery + 1),
+    $oBlack
+);
+imagestring(
+    $img,
+    1,
+    intval($centerx - $outerdia / 2 - 15),
+    intval($centery - 6),
+    $min,
+    $oBlack
+);
+imagestring(
+    $img,
+    1,
+    intval($centerx + $outerdia / 2 + 8),
+    intval($centery - 6),
+    $max,
+    $oBlack
+);
 
 $count = 1;
 $iOffsetX = -10;
-for($degrees=45; $degrees<180; $degrees = $degrees+45) {
-	$bediffy=sin (deg2rad(-$degrees+360))*(($outerdia+10)/2);
-	$bediffx=cos (deg2rad(-$degrees+360))*(($outerdia+10)/2);
-	$bediffy1=sin (deg2rad(-$degrees+360))*(($outerdia-10)/2);
-	$bediffx1=cos (deg2rad(-$degrees+360))*(($outerdia-10)/2);
+for ($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
+    $bediffy = sin(deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
+    $bediffx = cos(deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
+    $bediffy1 = sin(deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
+    $bediffx1 = cos(deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
 
-	imageline($img, intval($centerx-$bediffx), intval($centery+$bediffy),intval($centerx-$bediffx1), intval($centery+$bediffy1), $oBlack);
-	imagestring($img , 1 ,intval($centerx-$bediffx+$iOffsetX-8), intval($centery+$bediffy-10) , intval(($max-$min)/4*$count+$min) , $oBlack); 
+    imageline(
+        $img,
+        intval($centerx - $bediffx),
+        intval($centery + $bediffy),
+        intval($centerx - $bediffx1),
+        intval($centery + $bediffy1),
+        $oBlack
+    );
+    imagestring(
+        $img,
+        1,
+        intval($centerx - $bediffx + $iOffsetX - 8),
+        intval($centery + $bediffy - 10),
+        intval(($max - $min) / 4 * $count + $min),
+        $oBlack
+    );
 
-	$count = $count+1;
-	$iOffsetX = $iOffsetX + 10;
+    $count = $count + 1;
+    $iOffsetX = $iOffsetX + 10;
 }
 
 //==============
 // Output image.
 //==============
 
-if(function_exists('imageantialias')) {
-	imageantialias($img, true);
+if (function_exists('imageantialias')) {
+    imageantialias($img, true);
 }
 
 imagepng($img);
 imagedestroy($img);
-?>

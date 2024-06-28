@@ -30,16 +30,18 @@ require('../../server/core/defines/matches.php');
 require('../../server/core/classes/CoreExceptions.php');
 require('../../server/core/functions/autoload.php');
 
-if (PROFILE) profilingStart();
+if (PROFILE) {
+    profilingStart();
+}
 
-define('CONST_AJAX' , TRUE);
+const CONST_AJAX = true;
 header('Content-Type: application/json');
 
 try {
     require('../../server/core/functions/core.php');
     $MHANDLER = new CoreModuleHandler();
     $_name    = 'core';
-    $_modules = Array(
+    $_modules = [
         'General',
         'Overview',
         'Map',
@@ -55,24 +57,22 @@ try {
         'Multisite',
         'User',
         'Action',
-    );
+    ];
     require('../../server/core/functions/index.php');
     exit(0);
-} catch(NagVisException $e) {
+} catch (NagVisException $e) {
     echo $e;
-} catch(NagVisErrorException $e) {
-    echo json_encode(Array(
+} catch (NagVisErrorException $e) {
+    echo json_encode([
         'type'    => 'error',
         'message' => (string)$e,
         'title'   => l('Error: PHP Error'),
-    ));
-} catch(Exception $e) {
-    echo json_encode(Array(
+    ]);
+} catch (Exception $e) {
+    echo json_encode([
         'type'    => 'error',
         'message' => $e->getMessage(),
         'title'   => l('Error: Unhandled Exception'),
-    ));
+    ]);
 }
 exit(1);
-
-?>

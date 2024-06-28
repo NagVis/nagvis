@@ -22,28 +22,43 @@
  *
  *****************************************************************************/
 
-class ViewError {
-    private function errorPage($e) {
+class ViewError
+{
+    /**
+     * @param Exception $e
+     * @return false|string
+     * @throws NagVisException
+     */
+    private function errorPage($e)
+    {
         global $_MAINCFG;
         ob_start();
         $USERCFG = new CoreUserCfg();
 
-        js('oGeneralProperties = '.$_MAINCFG->parseGeneralProperties().';'.N
-          .'oUserProperties = '.$USERCFG->doGetAsJson().';'.N);
+        js('oGeneralProperties = ' . $_MAINCFG->parseGeneralProperties() . ';' . N
+            . 'oUserProperties = ' . $USERCFG->doGetAsJson() . ';' . N);
 
         echo '<div id="page">';
-        js('frontendMessage({'.N
-          .'    "type"    : "error",'.N
-          .'    "closable": false,'.N
-          .'    "title"   : '.json_encode(l('Error')).','.N
-          .'    "message" : '.json_encode(htmlentities($e->getMessage(), ENT_COMPAT, 'UTF-8')).N
-          .'});');
+        js('frontendMessage({' . N
+            . '    "type"    : "error",' . N
+            . '    "closable": false,' . N
+            . '    "title"   : ' . json_encode(l('Error')) . ',' . N
+            . '    "message" : ' . json_encode(htmlentities($e->getMessage(), ENT_COMPAT, 'UTF-8')) . N
+            . '});');
         echo '</div>';
 
         return ob_get_clean();
     }
 
-    public function parse($e, $MAPCFG = null) {
+    /**
+     * @param Exception $e
+     * @param GlobalMapCfg $MAPCFG
+     * @return string
+     * @throws Dwoo_Exception
+     * @throws NagVisException
+     */
+    public function parse($e, $MAPCFG = null)
+    {
         global $CORE;
 
         $INDEX = new NagVisIndexView($CORE);
@@ -55,12 +70,20 @@ class ViewError {
         return $INDEX->parse();
     }
 
-    public function parseWithMap($e, $map_name) {
+    /**
+     * @param Exception $e
+     * @param string $map_name
+     * @return string
+     * @throws Dwoo_Exception
+     * @throws NagVisException
+     */
+    public function parseWithMap($e, $map_name)
+    {
         $MAPCFG = new GlobalMapCfg($map_name);
         try {
             $MAPCFG->readMapConfig(ONLY_GLOBAL);
-        } catch(MapCfgInvalid $e) {}
+        } catch (MapCfgInvalid $e) {
+        }
         return $this->parse($e, $MAPCFG);
     }
 }
-?>

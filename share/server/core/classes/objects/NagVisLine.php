@@ -26,27 +26,28 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisLine extends NagVisStatelessObject {
+class NagVisLine extends NagVisStatelessObject
+{
     protected $line_color;
     protected $line_color_border;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->type = 'line';
         parent::__construct();
     }
 
     /**
-     * PUBLIC fetchIcon()
-     *
      * Just a dummy here (Shape won't need an icon)
      *
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function fetchIcon() {
+    public function fetchIcon()
+    {
         // Nothing to do here, icon is set in constructor
     }
 
     # End public methods
     # #########################################################################
 }
-?>
