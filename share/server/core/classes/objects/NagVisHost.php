@@ -276,7 +276,7 @@ class NagVisHost extends NagVisStatefulObject
                     ERROR    => 0, PENDING => 0, UNCHECKED => 0
                 ];
 
-                foreach ($this->members AS &$SERVICE) {
+                foreach ($this->members as &$SERVICE) {
                     $arrStates[$SERVICE->getSummaryState()]++;
                 }
 

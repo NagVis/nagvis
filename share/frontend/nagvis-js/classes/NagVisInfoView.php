@@ -50,7 +50,7 @@ class NagVisInfoView
          */
         global $AUTH, $AUTHORISATION;
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
         $userName  = $AUTH->getUser();

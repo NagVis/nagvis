@@ -206,7 +206,7 @@ class NagVisServicegroup extends NagVisStatefulObject
             ];
 
             // Get summary state of this and child objects
-            foreach ($this->members AS &$MEMBER) {
+            foreach ($this->members as &$MEMBER) {
                 $arrStates[$MEMBER->getSummaryState()]++;
             }
 

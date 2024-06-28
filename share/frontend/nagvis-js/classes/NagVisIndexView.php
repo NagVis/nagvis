@@ -93,7 +93,7 @@ class NagVisIndexView
     public function parse()
     {
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = [
