@@ -540,7 +540,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
     $lat_mult  = $params['height'] / (ProjectF($img_top) - ProjectF($img_down));
 
     // Now add the coordinates to the map objects
-    foreach ($map_config AS &$obj) {
+    foreach ($map_config as &$obj) {
         if (!isset($obj['lat'])) {
             continue;
         }

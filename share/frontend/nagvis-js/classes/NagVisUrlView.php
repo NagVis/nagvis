@@ -94,7 +94,7 @@ class NagVisUrlView
         /** @var GlobalMainCfg $_MAINCFG */
         global $_MAINCFG;
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
         $iframe = false;
