@@ -91,7 +91,7 @@ class CoreModAuth extends CoreModule
             'username' => MATCH_USER_NAME,
             'password' => null
         ];
-        $this->verifyValuesSet($this->FHANDLER,   $attr);
+        $this->verifyValuesSet($this->FHANDLER, $attr);
         $this->verifyValuesMatch($this->FHANDLER, $attr);
 
         // Check length limits

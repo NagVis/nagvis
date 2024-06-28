@@ -93,7 +93,7 @@ class CoreModMap extends CoreModule
                 $aVals = $this->getCustomOptions(['show' => MATCH_MAP_NAME_EMPTY], [], true);
                 $this->name = $aVals['show'];
                 break;
-            // And those have the objecs in the POST var "map"
+                // And those have the objecs in the POST var "map"
             case 'modifyObject':
             case 'deleteObject':
                 $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
@@ -243,7 +243,8 @@ class CoreModMap extends CoreModule
         // the problems may get resolved by deleting the object
         try {
             $MAPCFG->readMapConfig();
-        } catch (MapCfgInvalid $e) {}
+        } catch (MapCfgInvalid $e) {
+        }
 
         // Give the sources the chance to load the object
         $MAPCFG->handleSources('load_obj', $a['id']);
@@ -317,7 +318,8 @@ class CoreModMap extends CoreModule
         $MAPCFG = new GlobalMapCfg($a['map']);
         try {
             $MAPCFG->readMapConfig();
-        } catch (MapCfgInvalid $e) {}
+        } catch (MapCfgInvalid $e) {
+        }
 
         // Give the sources the chance to load the object
         $MAPCFG->handleSources('load_obj', $a['id']);

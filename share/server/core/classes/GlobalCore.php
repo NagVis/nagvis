@@ -344,7 +344,7 @@ class GlobalCore
                 MATCH_HOVER_TEMPLATE_FILE
             ),
             self::listDirectory(
-                path('sys', 'local',  'templates'),
+                path('sys', 'local', 'templates'),
                 MATCH_HOVER_TEMPLATE_FILE,
                 null,
                 null,
@@ -370,7 +370,7 @@ class GlobalCore
                 MATCH_HEADER_TEMPLATE_FILE
             ),
             self::listDirectory(
-                path('sys', 'local',  'templates'),
+                path('sys', 'local', 'templates'),
                 MATCH_HEADER_TEMPLATE_FILE,
                 null,
                 null,
@@ -396,7 +396,7 @@ class GlobalCore
                 MATCH_CONTEXT_TEMPLATE_FILE
             ),
             self::listDirectory(
-                path('sys', 'local',  'templates'),
+                path('sys', 'local', 'templates'),
                 MATCH_CONTEXT_TEMPLATE_FILE,
                 null,
                 null,
@@ -418,7 +418,7 @@ class GlobalCore
     {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true),
-            self::listDirectory(path('sys', 'local',  'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true, false)
+            self::listDirectory(path('sys', 'local', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true, false)
         );
     }
 
@@ -433,7 +433,7 @@ class GlobalCore
     {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'icons'), MATCH_ICONSET),
-            self::listDirectory(path('sys', 'local',  'icons'), MATCH_ICONSET, null, null, null, null, false)
+            self::listDirectory(path('sys', 'local', 'icons'), MATCH_ICONSET, null, null, null, null, false)
         );
     }
 
@@ -448,7 +448,7 @@ class GlobalCore
     {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'sources'), MATCH_SOURCE_FILE),
-            self::listDirectory(path('sys', 'local',  'sources'), MATCH_SOURCE_FILE, null, null, null, null, false)
+            self::listDirectory(path('sys', 'local', 'sources'), MATCH_SOURCE_FILE, null, null, null, null, false)
         );
     }
 
@@ -462,7 +462,7 @@ class GlobalCore
     {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'actions'), MATCH_PHP_FILE),
-            self::listDirectory(path('sys', 'local',  'actions'), MATCH_PHP_FILE, null, null, null, null, false)
+            self::listDirectory(path('sys', 'local', 'actions'), MATCH_PHP_FILE, null, null, null, null, false)
         );
     }
 
@@ -575,7 +575,7 @@ class GlobalCore
                 global $SHANDLER;
                 $SHANDLER->aquire();
                 $SHANDLER->set('authCredentials', ['user' => $_GET['filterUser'], 'password' => '']);
-                $SHANDLER->set('authTrusted',     true);
+                $SHANDLER->set('authTrusted', true);
                 $SHANDLER->commit();
             }
 
@@ -630,7 +630,7 @@ class GlobalCore
                 0
             ),
             self::listDirectory(
-                path('sys', 'local',  'backgrounds'),
+                path('sys', 'local', 'backgrounds'),
                 MATCH_PNG_GIF_JPG_FILE,
                 null,
                 null,
@@ -661,7 +661,7 @@ class GlobalCore
                 true
             ),
             self::listDirectory(
-                path('sys', 'local',  'gadgets'),
+                path('sys', 'local', 'gadgets'),
                 MATCH_PHP_FILE,
                 ['gadgets_core.php' => true],
                 null,

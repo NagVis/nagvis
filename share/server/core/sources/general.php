@@ -104,8 +104,7 @@ function shape_size($icon) {
     $iconPathLocal = path('sys',  'local',  'shapes') . '/' . $icon;
     if (file_exists($iconPathLocal)) {
         return getimagesize($iconPathLocal);
-    }
-    elseif (file_exists($iconPath)) {
+    } elseif (file_exists($iconPath)) {
         return getimagesize($iconPath);
     } else {
         return [0, 0];

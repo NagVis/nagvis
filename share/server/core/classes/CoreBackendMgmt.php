@@ -130,8 +130,7 @@ class CoreBackendMgmt
                     $this->aQueue[$backendId][$query][$options][$objFilters] = [$name => [$OBJ]];
                 } elseif (!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name])) {
                     $this->aQueue[$backendId][$query][$options][$objFilters][$name] = [$OBJ];
-                }
-                else {
+                } else {
                     $this->aQueue[$backendId][$query][$options][$objFilters][$name][] = $OBJ;
                 }
             }
@@ -427,7 +426,8 @@ class CoreBackendMgmt
                                 $options,
                                 []
                             );
-                        } catch (BackendException $e) {}
+                        } catch (BackendException $e) {
+                        }
                     }
 
                     $members = [];
@@ -609,7 +609,8 @@ class CoreBackendMgmt
                             $options,
                             $filters
                         );
-                    } catch (BackendException $e) {}
+                    } catch (BackendException $e) {
+                    }
                 }
 
                 $members = [];

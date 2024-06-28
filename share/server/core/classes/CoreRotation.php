@@ -129,8 +129,7 @@ class CoreRotation
         if ($this->stepExists($sType, $sStep)) {
             if ($iStepId != '') {
                 $this->intCurrentStep = (int)$iStepId;
-            }
-            elseif ($sStep !== '') {
+            } elseif ($sStep !== '') {
                 // Get position of current step in the array
                 foreach ($this->arrSteps as $iIndex => $arrStep) {
                     if (isset($arrStep[$sType]) && $arrStep[$sType] === $sStep) {

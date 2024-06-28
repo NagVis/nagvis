@@ -164,7 +164,7 @@ class NagVisHoverMenu
         }
 
         if (str_contains($this->code, '[lang_next_check]')) {
-        $this->code = str_replace('[lang_next_check]', l('nextCheck'), $this->code);
+            $this->code = str_replace('[lang_next_check]', l('nextCheck'), $this->code);
         }
 
         if (str_contains($this->code, '[lang_last_check]')) {

@@ -200,7 +200,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule
         // Get all the roles of the user
         $RES = $this->DB->query('-role-get-by-user', ['id' => $userId]);
         while ($data = $RES->fetch()) {
-                $aRoles[] = $data;
+            $aRoles[] = $data;
         }
 
         return $aRoles;
@@ -216,7 +216,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule
         // Get all the roles of the user
         $RES = $this->DB->query('-role-get-all');
         while ($data = $RES->fetch()) {
-                $aRoles[] = $data;
+            $aRoles[] = $data;
         }
 
         return $aRoles;
@@ -243,7 +243,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule
         // Get all the roles of the user
         $RES = $this->DB->query('-perm-get-all');
         while ($data = $RES->fetch()) {
-                  $aPerms[] = $data;
+            $aPerms[] = $data;
         }
 
         return $aPerms;
@@ -260,7 +260,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule
         // Get all the roles of the user
         $RES = $this->DB->query('-role-get-perm-by-id', ['roleId' => $roleId]);
         while ($data = $RES->fetch()) {
-                  $aRoles[$data['permId']] = true;
+            $aRoles[$data['permId']] = true;
         }
 
         return $aRoles;

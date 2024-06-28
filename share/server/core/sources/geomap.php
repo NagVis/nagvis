@@ -324,9 +324,9 @@ function geomap_files($params)
     // reported that this is not very useful. So I removed it. Hope it works
     // for most users.
     // FIXME: the following two "unset" statements fix an "array to string conversion" error
-    unset ($params['filter_group']);
-    unset ($params['sources']);
-    unset ($params['backend_id']);
+    unset($params['filter_group']);
+    unset($params['sources']);
+    unset($params['backend_id']);
 
     $image_name  = 'geomap-' . implode('_', array_values($params)) . '.png';
     return [
