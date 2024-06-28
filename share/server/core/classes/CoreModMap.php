@@ -143,8 +143,12 @@ class CoreModMap extends CoreModule
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
                     break;
                 case 'modifyObject':
-                    $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
-                        null, l('The object could not be modified.'));
+                    $sReturn = $this->handleResponse(
+                        'handleResponseModifyObject',
+                        'doModifyObject',
+                        null,
+                        l('The object could not be modified.')
+                    );
                     break;
                 case 'deleteObject':
                     $aReturn = $this->handleResponseDeleteObject();

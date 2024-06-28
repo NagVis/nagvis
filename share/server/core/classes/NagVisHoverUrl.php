@@ -112,8 +112,11 @@ class NagVisHoverUrl
 
         // Try to recode non utf-8 encoded responses to utf-8. Later used
         // json_encode() needs utf-8 encoded code
-        $content = mb_convert_encoding($content, 'UTF-8',
-            mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true));
+        $content = mb_convert_encoding(
+            $content,
+            'UTF-8',
+            mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true)
+        );
 
         $this->code = $content;
     }

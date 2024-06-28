@@ -184,8 +184,7 @@ class GlobalBackground
             if(unlink($this->path)) {                return true;
             } else {
                 if ($printErr) {
-                    throw new NagVisException(l('couldNotDeleteMapImage',
-                        ['IMGPATH' => $this->path]));
+                    throw new NagVisException(l('couldNotDeleteMapImage', ['IMGPATH' => $this->path]));
                 }
                 return false;
             }

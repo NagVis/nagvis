@@ -75,11 +75,13 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         // Open the database
         $config = $this->getConfig();
         if (!$this->DB->open($config['driver'], $config['params'], $config['username'], $config['password'])) {
-            throw new NagVisException(l('Unable to open auth database ([DB]): [MSG]',
+            throw new NagVisException(l(
+                'Unable to open auth database ([DB]): [MSG]',
                 [
                     'DB' => $this->DB->getDSN(),
                     'MSG' => json_encode($this->DB->error())
-                ]));
+                ]
+            ));
         } elseif (!$this->DB->tableExist('users')) {
             // Create initial db scheme if needed
             $this->DB->createInitialDb();

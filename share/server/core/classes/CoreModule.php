@@ -155,8 +155,10 @@ abstract class CoreModule {
         }
 
         if (!$authorized) {
-            throw new NagVisException(l('You are not permitted to access this page ([PAGE]).',
-                ['PAGE' => $this->sName . '/' . $action . '/' . $this->sObject]));
+            throw new NagVisException(l(
+                'You are not permitted to access this page ([PAGE]).',
+                ['PAGE' => $this->sName . '/' . $action . '/' . $this->sObject]
+            ));
         }
     }
 
@@ -343,8 +345,10 @@ abstract class CoreModule {
     {
         foreach ($list as $key => $pattern) {
             if ($pattern && !$HANDLER->match($key, $pattern)) {
-                throw new UserInputError(l('The value of option "[ATTRIBUTE]" does not match the valid format.',
-                    ['ATTRIBUTE' => $key]));
+                throw new UserInputError(l(
+                    'The value of option "[ATTRIBUTE]" does not match the valid format.',
+                    ['ATTRIBUTE' => $key]
+                ));
             }
         }
 

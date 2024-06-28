@@ -158,7 +158,8 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         // Check if the user exists
         if (
-            $this->verifyUserExists($username,
+            $this->verifyUserExists(
+                $username,
                 cfg('global', 'logon_multisite_createuser'),
                 cfg('global', 'logon_multisite_createrole'),
                 $printErr
