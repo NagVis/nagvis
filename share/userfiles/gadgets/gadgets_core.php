@@ -80,7 +80,8 @@
  * @return  array   Array which contains parsed performance data information
  * @author      Lars Michelsen <lm@larsmichelsen.com>
  */
-function parsePerfdata($sPerfdata) {
+function parsePerfdata($sPerfdata)
+{
     $aMatches = [];
     $aPerfdata = [];
 
@@ -161,7 +162,8 @@ function parsePerfdata($sPerfdata) {
  * @param       string  $msg    String with error message
  * @author      Lars Michelsen <lm@larsmichelsen.com>
  */
-function errorBox($msg) {
+function errorBox($msg)
+{
     global $_MODE;
     if (isset($_MODE) && $_MODE === 'html') {
         echo '<strong>' . $msg . '</strong>';

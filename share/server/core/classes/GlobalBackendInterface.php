@@ -26,7 +26,8 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-interface GlobalBackendInterface {
+interface GlobalBackendInterface
+{
     public function __construct($backendId);
 
     /**

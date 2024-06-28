@@ -650,7 +650,9 @@ class GlobalBackendTest implements GlobalBackendInterface
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __destruct() {}
+    public function __destruct()
+    {
+    }
 
     /**
      * Returns the valid config for this backend

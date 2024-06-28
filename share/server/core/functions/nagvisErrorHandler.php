@@ -32,7 +32,8 @@
  * @author     Lars Michelsen <lm@larsmichelsen.com>
  */
 
-function nagvisException($OBJ) {
+function nagvisException($OBJ)
+{
     try {
         if (
             get_class($OBJ) == 'NagVisException'
@@ -59,7 +60,8 @@ function nagvisException($OBJ) {
  * @return false
  * @throws NagVisErrorException
  */
-function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
+function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline)
+{
     // Use current error_reporting settings to skip unwanted errors
     if (!(error_reporting() & $errno)) {
         return false;

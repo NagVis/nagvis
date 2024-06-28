@@ -59,7 +59,8 @@ if (function_exists("date_default_timezone_get")) {
 // PHP 8.2 deprecates utf8_encode. To stay compatible with older installations
 // and installations not providing the mbstring extension, we implement an approach
 // which defaults to mbstring and falls back to a polyfill.
-function iso8859_1_to_utf8($s) {
+function iso8859_1_to_utf8($s)
+{
     if (function_exists("mb_convert_encoding")) {
         return mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
     }

@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-abstract class CoreModule {
+abstract class CoreModule
+{
     /** @var CoreUriHandler|null */
     protected $UHANDLER = null;
 
@@ -244,7 +245,9 @@ abstract class CoreModule {
      * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function initObject() {}
+    public function initObject()
+    {
+    }
 
     /**
      * This method needs to be implemented by each module

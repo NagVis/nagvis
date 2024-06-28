@@ -50,7 +50,8 @@ $configVarMap = [
  * @return array|false|int[]
  * @throws NagVisException
  */
-function iconset_size($iconset) {
+function iconset_size($iconset)
+{
     global $CORE;
     $fileType = $CORE->getIconsetFiletype($iconset);
     $iconPath      = path('sys',  'global', 'icons') . '/' . $iconset . '_ok.' . $fileType;
@@ -69,7 +70,8 @@ function iconset_size($iconset) {
  * @param string $icon
  * @return array|false|int[]
  */
-function shape_size($icon) {
+function shape_size($icon)
+{
     $iconPath      = path('sys',  'global', 'shapes') . '/' . $icon;
     $iconPathLocal = path('sys',  'local',  'shapes') . '/' . $icon;
     if (file_exists($iconPathLocal)) {

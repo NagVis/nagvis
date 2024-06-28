@@ -31,7 +31,9 @@ class NagVisInfoView
     /**
      * @param GlobalCore $CORE
      */
-    public function __construct($CORE) {}
+    public function __construct($CORE)
+    {
+    }
 
     /**
      * Parses the information in html format

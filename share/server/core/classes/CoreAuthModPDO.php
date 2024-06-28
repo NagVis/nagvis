@@ -22,7 +22,8 @@
  *
  ******************************************************************************/
 
-abstract class CoreAuthModPDO extends CoreAuthModule {
+abstract class CoreAuthModPDO extends CoreAuthModule
+{
     private $USERCFG;
 
     /** @var CorePDOHandler */

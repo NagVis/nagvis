@@ -22,11 +22,13 @@
  *
  ******************************************************************************/
 
-function _build_dsn_sqlite($params) {
+function _build_dsn_sqlite($params)
+{
     return $params['filename'];
 }
 
-function _build_dsn_common($params) {
+function _build_dsn_common($params)
+{
     $connData = array_filter([
         "host" => $params['dbhost'],
         "port" => $params['dbport'],
@@ -315,7 +317,9 @@ class CorePDOHandler
         ];
     }
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * @param string $driver

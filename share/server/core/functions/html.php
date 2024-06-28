@@ -29,7 +29,8 @@ const N = "\n";
  * @param string $s
  * @return string
  */
-function escape_html($s) {
+function escape_html($s)
+{
     return htmlentities($s, ENT_COMPAT, 'UTF-8');
 }
 
@@ -38,7 +39,8 @@ function escape_html($s) {
  * @param mixed $default
  * @return mixed|null
  */
-function post($name, $default = null) {
+function post($name, $default = null)
+{
     return isset($_POST[$name]) ? $_POST[$name] : $default;
 }
 
@@ -47,7 +49,8 @@ function post($name, $default = null) {
  * @param mixed $default
  * @return mixed|null
  */
-function get($name, $default = null) {
+function get($name, $default = null)
+{
     return isset($_GET[$name]) ? $_GET[$name] : $default;
 }
 
@@ -56,7 +59,8 @@ function get($name, $default = null) {
  * @param mixed $default
  * @return mixed|null
  */
-function req($name, $default = null) {
+function req($name, $default = null)
+{
     return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
 }
 
@@ -64,7 +68,8 @@ function req($name, $default = null) {
  * @param string $key
  * @return bool
  */
-function has_var($key) {
+function has_var($key)
+{
     return isset($_REQUEST[$key]);
 }
 
@@ -80,7 +85,8 @@ $form_errors = [];
  * @param mixed $default
  * @return bool
  */
-function get_checkbox($key, $default = null) {
+function get_checkbox($key, $default = null)
+{
     return (bool)req($key, $default);
 }
 
@@ -89,7 +95,8 @@ function get_checkbox($key, $default = null) {
  * @param mixed $msg
  * @return void
  */
-function form_error($field, $msg) {
+function form_error($field, $msg)
+{
     /** @var array $form_errors */
     global $form_errors;
     $form_errors[$field] = $msg;
@@ -104,7 +111,8 @@ function form_error($field, $msg) {
  * @param string $msg
  * @return void
  */
-function form_render_error($field, $msg) {
+function form_render_error($field, $msg)
+{
     form_error($field, [false, $msg]);
 }
 
@@ -112,7 +120,8 @@ function form_render_error($field, $msg) {
  * @param string $key
  * @return mixed|null
  */
-function get_error($key) {
+function get_error($key)
+{
     /** @var array $form_errors */
     global $form_errors;
     return isset($form_errors[$key]) ? $form_errors[$key] : null;
@@ -122,7 +131,8 @@ function get_error($key) {
  * @param string $name
  * @return bool
  */
-function has_form_error($name) {
+function has_form_error($name)
+{
     /** @var array $form_errors */
     /** @var string $form_name */
     global $form_errors, $form_name;
@@ -133,7 +143,8 @@ function has_form_error($name) {
  * @param string $msg
  * @return void
  */
-function success($msg) {
+function success($msg)
+{
     msg($msg, 'success');
 }
 
@@ -141,7 +152,8 @@ function success($msg) {
  * @param string $msg
  * @return void
  */
-function error($msg) {
+function error($msg)
+{
     msg($msg, 'error');
 }
 
@@ -150,7 +162,8 @@ function error($msg) {
  * @param string $cls
  * @return void
  */
-function msg($msg, $cls) {
+function msg($msg, $cls)
+{
     echo '<div class="' . $cls . '">' . escape_html($msg) . '</div>' . N;
 }
 
@@ -158,7 +171,8 @@ function msg($msg, $cls) {
  * @param string $form_name
  * @return bool
  */
-function submitted($form_name = null) {
+function submitted($form_name = null)
+{
     if ($form_name) {
         // check if a specific form has been submitted
         return post('_form_name') == $form_name;
@@ -171,14 +185,16 @@ function submitted($form_name = null) {
 /**
  * @return bool
  */
-function is_action() {
+function is_action()
+{
     return (submitted() || (bool)get('_action')) && post('_update', '0') == '0';
 }
 
 /**
  * @return bool
  */
-function is_update() {
+function is_update()
+{
     return post('_update', '0') == '1';
 }
 
@@ -186,7 +202,8 @@ function is_update() {
  * @param string $code
  * @return void
  */
-function js($code) {
+function js($code)
+{
     echo '<script>' . $code . '</script>' . N;
 }
 
@@ -194,7 +211,8 @@ function js($code) {
  * @param string $name
  * @return void
  */
-function show_form_render_error($name) {
+function show_form_render_error($name)
+{
     // only display form rendering errors here
     if (has_form_error($name)) {
         $err = get_error($name);
@@ -210,13 +228,15 @@ function show_form_render_error($name) {
  * @param string $name
  * @return void
  */
-function js_form_start($name) {
+function js_form_start($name)
+{
     form_start($name, 'javascript:submitForm(\'' . cfg('paths', 'htmlbase')
         . '/server/core/ajax_handler.php?mod=' . $_REQUEST['mod']
         . '&act=' . $_REQUEST['act'] . '\', \'' . $name . '\');');
 }
 
-function form_start($name, $target, $type = 'POST', $multipart = false) {
+function form_start($name, $target, $type = 'POST', $multipart = false)
+{
     global $form_keys, $form_errors, $form_name;
     $form_name = $name;
     $form_keys = [];
@@ -249,7 +269,8 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
     hidden('_update', '0');
 }
 
-function form_end($keep_context = true) {
+function form_end($keep_context = true)
+{
     global $form_name;
     if ($keep_context) {
         hidden_vars();
@@ -259,7 +280,8 @@ function form_end($keep_context = true) {
 
 // Adds all remaining vars we got as $_POST/$_GET which have not been added to
 // this form yet to keep the current variable context accross the single requests.
-function hidden_vars() {
+function hidden_vars()
+{
     global $form_keys, $form_name;
     //if (submitted($form_name) || !submitted()) {
     foreach ($_REQUEST as $key => $val) {
@@ -277,7 +299,8 @@ function hidden_vars() {
     //}
 }
 
-function hidden($name, $default = '') {
+function hidden($name, $default = '')
+{
     global $form_keys;
     $form_keys[$name] = true;
     echo '<input type="hidden" id="'
@@ -290,7 +313,8 @@ function hidden($name, $default = '') {
         . N;
 }
 
-function radio($name, $value, $checked = false) {
+function radio($name, $value, $checked = false)
+{
     global $form_keys;
     $form_keys[$name] = true;
     $checked = $checked ? ' checked="checked"' : '';
@@ -367,19 +391,23 @@ function field(
     show_form_render_error($name);
 }
 
-function checkbox($name, $default = '', $class = '', $onclick = '') {
+function checkbox($name, $default = '', $class = '', $onclick = '')
+{
     field('checkbox', $name, $default, $class, $onclick);
 }
 
-function input($name, $default = '', $class = '', $style = '', $id = null) {
+function input($name, $default = '', $class = '', $style = '', $id = null)
+{
     field('text', $name, $default, $class, '', $style, $id);
 }
 
-function password($name, $default = '', $class = '') {
+function password($name, $default = '', $class = '')
+{
     field('password', $name, $default, $class);
 }
 
-function textarea($name, $default = '', $class = '', $style = '') {
+function textarea($name, $default = '', $class = '', $style = '')
+{
     global $form_keys, $form_name;
     $form_keys['very_important'] = true;
 
@@ -495,7 +523,8 @@ function select(
     show_form_render_error($name);
 }
 
-function submit($label, $class = '', $name = '_submit') {
+function submit($label, $class = '', $name = '_submit')
+{
     global $form_keys;
     $form_keys['_submit'] = true;
     if ($class) {
@@ -513,7 +542,8 @@ function submit($label, $class = '', $name = '_submit') {
         . N;
 }
 
-function button($name, $label, $onclick) {
+function button($name, $label, $onclick)
+{
     global $form_keys;
     $form_keys[$name] = true;
     echo '<input type="button" name="'
@@ -528,7 +558,8 @@ function button($name, $label, $onclick) {
         . N;
 }
 
-function upload($name) {
+function upload($name)
+{
     global $form_keys, $form_name;
     $form_keys[$name] = true;
 
@@ -544,14 +575,16 @@ function upload($name) {
     echo '<input type="file" name="' . $name . '"' . $class . ' />' . N;
 }
 
-function do_http_redirect($url = null) {
+function do_http_redirect($url = null)
+{
     if ($url === null) {
         $url = $_SERVER['REQUEST_URI'];
     }
     header('Location: ' . $url);
 }
 
-function reload($url, $sec) {
+function reload($url, $sec)
+{
     if ($url == null) {
         js('setTimeout(function() {location.reload();}, ' . $sec . '*1000);');
     } else {
@@ -559,19 +592,23 @@ function reload($url, $sec) {
     }
 }
 
-function focus($name) {
+function focus($name)
+{
     js('try{document.getElementById(\'' . $name . '\').focus();}catch (e){}');
 }
 
-function scroll_up() {
+function scroll_up()
+{
     js('document.body.scrollTop = document.documentElement.scrollTop = 0;');
 }
 
-function get_open_section($default) {
+function get_open_section($default)
+{
     return post('sec', $default);
 }
 
-function render_section_navigation($open, $sections) {
+function render_section_navigation($open, $sections)
+{
     hidden('sec', $open);
 
     // first render navigation
@@ -585,11 +622,13 @@ function render_section_navigation($open, $sections) {
     echo '</ul>';
 }
 
-function render_section_start($sec, $open) {
+function render_section_start($sec, $open)
+{
     $display = $sec != $open ? 'display:none' : '';
     echo '<div id="sec_' . $sec . '" class="section" style="' . $display . '">';
 }
 
-function render_section_end() {
+function render_section_end()
+{
     echo '</div>';
 }

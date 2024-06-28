@@ -82,7 +82,8 @@ class ViewError
         $MAPCFG = new GlobalMapCfg($map_name);
         try {
             $MAPCFG->readMapConfig(ONLY_GLOBAL);
-        } catch (MapCfgInvalid $e) {}
+        } catch (MapCfgInvalid $e) {
+        }
         return $this->parse($e, $MAPCFG);
     }
 }
