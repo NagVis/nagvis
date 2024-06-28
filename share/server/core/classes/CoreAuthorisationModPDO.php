@@ -22,7 +22,8 @@
  *
  ******************************************************************************/
 
-abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
+abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule
+{
     /** @var bool */
     public $rolesConfigurable = true;
 

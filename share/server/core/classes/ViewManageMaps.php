@@ -290,7 +290,8 @@ class ViewManageMaps
                 $MAPCFG = new GlobalMapCfg($name);
                 try {
                     $MAPCFG->readMapConfig();
-                } catch (MapCfgInvalid $e) {}
+                } catch (MapCfgInvalid $e) {
+                }
                 $MAPCFG->deleteMapConfig();
 
                 success(l('The map has been deleted.'));

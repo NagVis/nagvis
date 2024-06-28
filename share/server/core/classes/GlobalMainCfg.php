@@ -25,7 +25,8 @@
 /**
  * @return array
  */
-function listMultisiteSnapinLayouts() {
+function listMultisiteSnapinLayouts()
+{
     return [
         'tree' => l('Show the map tree'),
         'list' => l('Show a flat list'),
@@ -36,7 +37,8 @@ function listMultisiteSnapinLayouts() {
  * @return array
  * @throws NagVisException
  */
-function listAvailableLanguages() {
+function listAvailableLanguages()
+{
     /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableLanguages();

@@ -3,7 +3,8 @@
 /**
  * @return string[]
  */
-function getMapObjectTypes() {
+function getMapObjectTypes()
+{
     return [
         'host',
         'hostgroup',
@@ -23,7 +24,8 @@ function getMapObjectTypes() {
  * @return array
  * @throws NagVisException
  */
-function listMapNames() {
+function listMapNames()
+{
     global $CORE, $AUTHORISATION;
     $list = [];
     $maps = $CORE->getAvailableMaps();
@@ -40,7 +42,8 @@ function listMapNames() {
  * @return array
  * @throws NagVisException
  */
-function listMapImages() {
+function listMapImages()
+{
     global $CORE;
     $options = $CORE->getAvailableBackgroundImages();
     array_unshift($options, 'none');
@@ -50,7 +53,8 @@ function listMapImages() {
 /**
  * @return string[]
  */
-function listLineTypes() {
+function listLineTypes()
+{
     return [
         '10' => '-------><-------',
         '11' => '--------------->',
@@ -64,7 +68,8 @@ function listLineTypes() {
 /**
  * @return string[]
  */
-function listStatelessLineTypes() {
+function listStatelessLineTypes()
+{
     return [
         '10' => '-------><-------',
         '11' => '--------------->',
@@ -75,7 +80,8 @@ function listStatelessLineTypes() {
 /**
  * @return string[]
  */
-function listLineArrows() {
+function listLineArrows()
+{
     return [
         'forward' => '------->',
         'back'    => '<-------',
@@ -87,7 +93,8 @@ function listLineArrows() {
 /**
  * @return array
  */
-function listGadgetTypes() {
+function listGadgetTypes()
+{
     return [
         'img'  => l('Image'),
         'html' => l('HTML Code'),
@@ -98,7 +105,8 @@ function listGadgetTypes() {
  * @return array
  * @throws NagVisException
  */
-function listGadgets() {
+function listGadgets()
+{
     global $CORE;
     return $CORE->getAvailableGadgets();
 }
@@ -106,28 +114,32 @@ function listGadgets() {
 /**
  * @return string[]
  */
-function listViewTypesContainer() {
+function listViewTypesContainer()
+{
     return ['inline', 'iframe'];
 }
 
 /**
  * @return string[]
  */
-function listViewTypesObj() {
+function listViewTypesObj()
+{
     return ['icon', 'line', 'gadget'];
 }
 
 /**
  * @return string[]
  */
-function listViewTypes() {
+function listViewTypes()
+{
     return ['icon', 'line'];
 }
 
 /**
  * @return array
  */
-function listDynGroupTypes() {
+function listDynGroupTypes()
+{
     return [
         'host'    => l('Hosts'),
         'service' => l('Services')
@@ -137,7 +149,8 @@ function listDynGroupTypes() {
 /**
  * @return array
  */
-function listZoomFactors() {
+function listZoomFactors()
+{
     return [
         10     => ' 10%',
         25     => ' 25%',
@@ -159,7 +172,8 @@ function listZoomFactors() {
  * @return array|string[]
  * @throws NagVisException
  */
-function getObjectNames($type, $MAPCFG, $objId, $attrs) {
+function getObjectNames($type, $MAPCFG, $objId, $attrs)
+{
     global $_BACKEND;
     $backendIds = false;
     if (isset($attrs['backend_id']) && $attrs['backend_id'] != '') {
@@ -219,7 +233,8 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
  * @return array|string[]
  * @throws NagVisException
  */
-function listHostNames($MAPCFG, $objId, $attrs) {
+function listHostNames($MAPCFG, $objId, $attrs)
+{
     return getObjectNames('host', $MAPCFG, $objId, $attrs);
 }
 
@@ -230,7 +245,8 @@ function listHostNames($MAPCFG, $objId, $attrs) {
  * @return array|string[]
  * @throws NagVisException
  */
-function listHostgroupNames($MAPCFG, $objId, $attrs) {
+function listHostgroupNames($MAPCFG, $objId, $attrs)
+{
     return getObjectNames('hostgroup', $MAPCFG, $objId, $attrs);
 }
 
@@ -241,7 +257,8 @@ function listHostgroupNames($MAPCFG, $objId, $attrs) {
  * @return array|string[]
  * @throws NagVisException
  */
-function listServiceNames($MAPCFG, $objId, $attrs) {
+function listServiceNames($MAPCFG, $objId, $attrs)
+{
     return getObjectNames('service', $MAPCFG, $objId, $attrs);
 }
 
@@ -252,7 +269,8 @@ function listServiceNames($MAPCFG, $objId, $attrs) {
  * @return array|string[]
  * @throws NagVisException
  */
-function listServicegroupNames($MAPCFG, $objId, $attrs) {
+function listServicegroupNames($MAPCFG, $objId, $attrs)
+{
     return getObjectNames('servicegroup', $MAPCFG, $objId, $attrs);
 }
 
@@ -263,14 +281,16 @@ function listServicegroupNames($MAPCFG, $objId, $attrs) {
  * @return array|string[]
  * @throws NagVisException
  */
-function listAggrNames($MAPCFG, $objId, $attrs) {
+function listAggrNames($MAPCFG, $objId, $attrs)
+{
     return getObjectNames('aggr', $MAPCFG, $objId, $attrs);
 }
 
 /**
  * @return array
  */
-function listTemplateNames() {
+function listTemplateNames()
+{
     return [];
 }
 
@@ -281,7 +301,8 @@ function listTemplateNames() {
  * @return array|string[]
  * @throws NagVisException
  */
-function listShapes($MAPCFG, $objId, $attrs) {
+function listShapes($MAPCFG, $objId, $attrs)
+{
     global $CORE;
     // Return simply nothing when a user just choosen to insert "other" icon
     if (isset($attrs['icon']) && $attrs['icon'] == '<<<other>>>') {
@@ -296,7 +317,8 @@ function listShapes($MAPCFG, $objId, $attrs) {
  * @param array $attrs
  * @return array|string[]
  */
-function listSources($MAPCFG, $objId, $attrs) {
+function listSources($MAPCFG, $objId, $attrs)
+{
     global $CORE;
     // Return simply nothing when a user just choosen to insert "other" sources
     if (isset($attrs['sources']) && $attrs['sources'] == '<<<other>>>') {

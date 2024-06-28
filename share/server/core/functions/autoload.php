@@ -30,7 +30,8 @@
  * @return bool
  * @author    Lars Michelsen <lm@larsmichelsen.com>
  */
-function NagVisAutoload($sClass) {
+function NagVisAutoload($sClass)
+{
     if (
         str_starts_with($sClass, 'Frontend')
         || str_starts_with($sClass, 'Wui')

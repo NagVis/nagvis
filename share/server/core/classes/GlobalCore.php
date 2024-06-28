@@ -74,14 +74,18 @@ class GlobalCore
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Deny clone
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * Getter function to initialize MAINCFG

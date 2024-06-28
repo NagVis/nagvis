@@ -84,7 +84,9 @@ class NagVisObject
     /** @var array|null */
     private static $arrDenyKeys = null;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Get method for all options

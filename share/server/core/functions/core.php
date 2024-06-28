@@ -45,7 +45,8 @@ $_MAINCFG->init();
  * @param bool $ignoreDefaults
  * @return mixed|null
  */
-function cfg($sec, $key, $ignoreDefaults = false) {
+function cfg($sec, $key, $ignoreDefaults = false)
+{
     global $_MAINCFG;
     return $_MAINCFG->getValue($sec, $key, $ignoreDefaults);
 }
@@ -57,7 +58,8 @@ function cfg($sec, $key, $ignoreDefaults = false) {
  * @param string $relfile
  * @return string|null
  */
-function path($type, $loc, $var, $relfile = '') {
+function path($type, $loc, $var, $relfile = '')
+{
     global $_MAINCFG;
     return $_MAINCFG->getPath($type, $loc, $var, $relfile);
 }
@@ -75,12 +77,12 @@ $_LANG = new GlobalLanguage();
  * @param null $vars
  * @return mixed|string
  */
-function l($txt, $vars = null) {
+function l($txt, $vars = null)
+{
     global $_LANG;
     if (isset($_LANG)) {
         return $_LANG->getText($txt, $vars);
-    }
-    elseif ($vars !== null) {
+    } elseif ($vars !== null) {
         return GlobalLanguage::getReplacedString($txt, $vars);
     } else {
         return $txt;
@@ -90,7 +92,8 @@ function l($txt, $vars = null) {
 /**
  * @return string
  */
-function curLang() {
+function curLang()
+{
     global $_LANG;
     return $_LANG->getCurrentLanguage();
 }
@@ -112,7 +115,8 @@ $_BACKEND = new CoreBackendMgmt();
  * @param mixed|null $dflt
  * @return mixed|null
  */
-function val($arr, $key, $dflt = null) {
+function val($arr, $key, $dflt = null)
+{
     return isset($arr[$key]) ? $arr[$key] : $dflt;
 }
 
@@ -120,7 +124,8 @@ function val($arr, $key, $dflt = null) {
  * @param int $state
  * @return string
  */
-function state_str($state) {
+function state_str($state)
+{
     switch ($state) {
         case UNCHECKED:
             return 'UNCHECKED';
@@ -150,7 +155,8 @@ function state_str($state) {
  * @param string $state_str
  * @return mixed
  */
-function state_num($state_str) {
+function state_num($state_str)
+{
     $a = [
         'UNCHECKED'     => UNCHECKED,
         'UNREACHABLE'   => UNREACHABLE,
@@ -172,7 +178,8 @@ function state_num($state_str) {
  * @param int $state
  * @return bool
  */
-function is_host_state($state) {
+function is_host_state($state)
+{
     return $state == UNCHECKED || $state == UNREACHABLE || $state == DOWN || $state == UP;
 }
 
@@ -180,7 +187,8 @@ function is_host_state($state) {
  * @return array
  * @throws NagVisException
  */
-function listIconsets() {
+function listIconsets()
+{
     /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableIconsets();
@@ -190,7 +198,8 @@ function listIconsets() {
  * @return array
  * @throws Exception
  */
-function listBackendIds() {
+function listBackendIds()
+{
     /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getDefinedBackends();
@@ -200,7 +209,8 @@ function listBackendIds() {
  * @return array
  * @throws NagVisException
  */
-function listHeaderTemplates() {
+function listHeaderTemplates()
+{
     /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableHeaderTemplates();
@@ -210,7 +220,8 @@ function listHeaderTemplates() {
  * @return array
  * @throws NagVisException
  */
-function listHoverTemplates() {
+function listHoverTemplates()
+{
     /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableHoverTemplates();
@@ -220,7 +231,8 @@ function listHoverTemplates() {
  * @return array
  * @throws NagVisException
  */
-function listContextTemplates() {
+function listContextTemplates()
+{
     /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableContextTemplates();
@@ -229,7 +241,8 @@ function listContextTemplates() {
 /**
  * @return array
  */
-function listHoverChildSorters() {
+function listHoverChildSorters()
+{
     return [
         'a' => l('Alphabetically'),
         's' => l('State'),
@@ -240,7 +253,8 @@ function listHoverChildSorters() {
 /**
  * @return array
  */
-function listHoverChildOrders() {
+function listHoverChildOrders()
+{
     return [
         'asc'  => l('Ascending'),
         'desc' => l('Descending'),

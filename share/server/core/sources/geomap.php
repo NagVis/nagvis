@@ -12,7 +12,8 @@ class GeomapError extends MapSourceError
  * @param array $p
  * @return string
  */
-function geomap_source_file($p) {
+function geomap_source_file($p)
+{
     return cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
 }
 
@@ -21,7 +22,8 @@ function geomap_source_file($p) {
  * @return array
  * @throws GeomapError
  */
-function geomap_read_csv($p) {
+function geomap_read_csv($p)
+{
     $locations = [];
     $f = geomap_source_file($p);
 
@@ -67,7 +69,8 @@ function geomap_read_csv($p) {
  * @return array
  * @throws NagVisException
  */
-function geomap_backend_locations($p) {
+function geomap_backend_locations($p)
+{
     /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     $hosts = [];
@@ -85,7 +88,8 @@ function geomap_backend_locations($p) {
  * @return null
  * @throws NagVisException
  */
-function geomap_backend_program_start($p) {
+function geomap_backend_program_start($p)
+{
     /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     $t = null;
@@ -111,7 +115,8 @@ function geomap_backend_program_start($p) {
  * @throws GeomapError
  * @throws NagVisException
  */
-function geomap_get_locations($p) {
+function geomap_get_locations($p)
+{
     switch ($p['source_type']) {
         case 'csv':
             return geomap_read_csv($p);
@@ -137,7 +142,8 @@ function geomap_get_locations($p) {
  * @throws GeomapError
  * @throws NagVisException
  */
-function geomap_source_age($p) {
+function geomap_source_age($p)
+{
     switch ($p['source_type']) {
         case 'csv':
             return filemtime(geomap_source_file($p));
@@ -153,7 +159,8 @@ function geomap_source_age($p) {
  * @return false|string
  * @throws GeomapError
  */
-function geomap_get_contents($url) {
+function geomap_get_contents($url)
+{
     try {
         $opts = [
             'http' => [
@@ -189,7 +196,8 @@ function geomap_get_contents($url) {
 /**
  * @return string[]
  */
-function list_geomap_types() {
+function list_geomap_types()
+{
     return [
         'mapnik'     => 'Mapnik',
     ];
@@ -198,7 +206,8 @@ function list_geomap_types() {
 /**
  * @return array
  */
-function list_geomap_source_types() {
+function list_geomap_source_types()
+{
     return [
         'csv'     => l('CSV-File'),
         'backend' => l('NagVis Backend'),
@@ -209,7 +218,8 @@ function list_geomap_source_types() {
  * @return array
  * @throws NagVisException
  */
-function list_geomap_source_files() {
+function list_geomap_source_files()
+{
     /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableGeomapSourceFiles();
@@ -308,7 +318,8 @@ $updateConfigVars = [
  * @param array $params
  * @return string[]
  */
-function geomap_files($params) {
+function geomap_files($params)
+{
     // The source_file parameter was filtered here in previous versions. Users
     // reported that this is not very useful. So I removed it. Hope it works
     // for most users.
@@ -330,7 +341,8 @@ function geomap_files($params) {
  * @return void
  * @throws GeomapError
  */
-function validate_geomap_server_base_url($url) {
+function validate_geomap_server_base_url($url)
+{
     # If the given url contains non standard URL characters, throw an error
     $sanitized_url = filter_var($url, FILTER_SANITIZE_URL);
     if ($sanitized_url !== $url) {
@@ -361,7 +373,8 @@ function validate_geomap_server_base_url($url) {
  * @throws GeomapError
  * @throws NagVisException
  */
-function process_geomap($MAPCFG, $map_name, &$map_config) {
+function process_geomap($MAPCFG, $map_name, &$map_config)
+{
     $params = $MAPCFG->getSourceParams();
     list($image_name, $image_path, $data_path) = geomap_files($params);
 
@@ -563,7 +576,8 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
  * @throws GeomapError
  * @throws NagVisException
  */
-function changed_geomap($MAPCFG, $compare_time) {
+function changed_geomap($MAPCFG, $compare_time)
+{
     $params = $MAPCFG->getSourceParams();
 
     list($image_name, $image_path, $data_path) = geomap_files($params);
@@ -597,7 +611,8 @@ function changed_geomap($MAPCFG, $compare_time) {
  * @param int|float $Lat
  * @return float
  */
-function ProjectF($Lat) {
+function ProjectF($Lat)
+{
     $Lat = deg2rad($Lat);
     $Y = log(tan($Lat) + (1 / cos($Lat)));
     return($Y);
