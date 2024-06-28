@@ -141,7 +141,7 @@ if ($chrSize < 1) {
 //==================
 
 if (isset($aOpts['opts']) && ($aOpts['opts'] != '')) {
-    preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
+    preg_match_all('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
         if ($matches[$i][1] == 'columns') {
             $cols = $matches[$i][2];
@@ -187,9 +187,9 @@ for ($i = 0; $i < $pdc; $i++) {
         $colour = '';
         $value = $aPerfdata[$i]['value'];
         $warn = $aPerfdata[$i]['warning'];
-        $warn = preg_replace ('(:.*)', '', $warn);     // ignore range settings
+        $warn = preg_replace('(:.*)', '', $warn);     // ignore range settings
         $crit = $aPerfdata[$i]['critical'];
-        $crit = preg_replace ('(:.*)', '', $crit);     // ignore range settings
+        $crit = preg_replace('(:.*)', '', $crit);     // ignore range settings
         $min = $aPerfdata[$i]['min'];
         $max = $aPerfdata[$i]['max'];
         $uom = $aPerfdata[$i]['uom'];
@@ -235,14 +235,14 @@ for ($i = 0; $i < $pdc; $i++) {
             }
         }
         // create box
-        imagefilledrectangle ($img, $offX, $offY + 1, $offX + $maxX, $offY + $maxY, $oGreen);
+        imagefilledrectangle($img, $offX, $offY + 1, $offX + $maxX, $offY + $maxY, $oGreen);
         imagerectangle($img, $offX, $offY, $offX + $maxX, $offY + $maxY, $oBlack);
         $maxX--;
         $maxY--;
 
         // "highlight" graph if non-ok value
         if ($colour != '') {
-            imagefilledrectangle ($img, $offX + 1, $offY + $sect3 + 1, $offX + $maxX, $offY + $maxY, $colour);
+            imagefilledrectangle($img, $offX + 1, $offY + $sect3 + 1, $offX + $maxX, $offY + $maxY, $colour);
         }
 
         //================
@@ -300,7 +300,7 @@ for ($i = 0; $i < $pdc; $i++) {
                     $oYellow
                 );
             }
-            if (file_exists ("$font")) {
+            if (file_exists("$font")) {
                 imagettftext(
                     $img,
                     $chrSize * 2,
@@ -386,7 +386,7 @@ for ($i = 0; $i < $pdc; $i++) {
             if ($down) {
                 $maxv = " [down]";
             }
-            if (file_exists ("$font")) {
+            if (file_exists("$font")) {
                 imagettftext(
                     $img,
                     $chrSize * 3.5,
@@ -408,58 +408,58 @@ for ($i = 0; $i < $pdc; $i++) {
                 );
             }
 
-        if ($label == 1) {
-            $hostname = (strlen($aOpts['name1']) > 15)
-                ? substr($aOpts['name1'], 0, 14) . "..."
-                : $aOpts['name1'];
-            $svcdesc = (strlen($aOpts['name2']) > 15)
-                ? substr($aOpts['name2'], 0, 14) . "..."
-                : $aOpts['name2'];
-            if (strlen($desc) > 15) {
-                $desc = substr($desc, 0, 14) . "...";
+            if ($label == 1) {
+                $hostname = (strlen($aOpts['name1']) > 15)
+                    ? substr($aOpts['name1'], 0, 14) . "..."
+                    : $aOpts['name1'];
+                $svcdesc = (strlen($aOpts['name2']) > 15)
+                    ? substr($aOpts['name2'], 0, 14) . "..."
+                    : $aOpts['name2'];
+                if (strlen($desc) > 15) {
+                    $desc = substr($desc, 0, 14) . "...";
+                }
+                if (file_exists("$font")) {
+                    imagettftext(
+                        $img,
+                        $chrSize * 2.5,
+                        0,
+                        $offX + 3,
+                        $offY + $maxY - 1,
+                        $oBlack,
+                        $font,
+                        $hostname
+                    );
+                    imagettftext(
+                        $img,
+                        $chrSize * 2.5,
+                        0,
+                        $offX + $imgwidth / 2,
+                        $offY + $maxY - 1,
+                        $oBlack,
+                        $font,
+                        $svcdesc
+                    );
+                    // ImageTTFText($img, $chrSize*2.5, 0, $offX+$imgwidth/2, $offY+$maxY-1, $oBlack, $font, $desc);
+                } else {
+                    imagestring(
+                        $img,
+                        $chrSize,
+                        $offX + 3,
+                        $offY + $sect3,
+                        $hostname,
+                        $oBlack
+                    );
+                    imagestring(
+                        $img,
+                        $chrSize,
+                        $offX + $imgwidth / 2,
+                        $offY + $sect3,
+                        $svcdesc,
+                        $oBlack
+                    );
+                    // imagestring($img, $chrSize, $offX+$imgwidth/2, $offY+$sect3, $desc, $oBlack); // perf label
+                }
             }
-            if (file_exists ("$font")) {
-                imagettftext(
-                    $img,
-                    $chrSize * 2.5,
-                    0,
-                    $offX + 3,
-                    $offY + $maxY - 1,
-                    $oBlack,
-                    $font,
-                    $hostname
-                );
-                imagettftext(
-                    $img,
-                    $chrSize * 2.5,
-                    0,
-                    $offX + $imgwidth / 2,
-                    $offY + $maxY - 1,
-                    $oBlack,
-                    $font,
-                    $svcdesc
-                );
-//              ImageTTFText($img, $chrSize*2.5, 0, $offX+$imgwidth/2, $offY+$maxY-1, $oBlack, $font, $desc);
-            } else {
-                imagestring(
-                    $img,
-                    $chrSize,
-                    $offX + 3,
-                    $offY + $sect3,
-                    $hostname,
-                    $oBlack
-                );
-                imagestring(
-                    $img,
-                    $chrSize,
-                    $offX + $imgwidth / 2,
-                    $offY + $sect3,
-                    $svcdesc,
-                    $oBlack
-                );
-//              imagestring($img, $chrSize, $offX+$imgwidth/2, $offY+$sect3, $desc, $oBlack); // perf label
-            }
-        }
         }
         $offG++;
     }

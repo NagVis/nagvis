@@ -177,8 +177,7 @@ class ViewManageBackends
 
                 if ($mode == 'add' && isset($this->defined_backends[$backend_id])) {
                     throw new FieldInputError('backend_id', l('This ID is already used by another backend.'));
-                }
-                elseif ($mode == 'edit' && !isset($this->editable_backends[$backend_id])) {
+                } elseif ($mode == 'edit' && !isset($this->editable_backends[$backend_id])) {
                     throw new FieldInputError('backend_id', l('The choosen backend does not exist.'));
                 }
 
@@ -200,9 +199,7 @@ class ViewManageBackends
                     $val = post($key);
                     if ($opt['must'] && !$val) {
                         throw new FieldInputError($key, l('You need to configure this option.'));
-                    }
-
-                    elseif ($val != null) {
+                    } elseif ($val != null) {
                         if (!preg_match($opt['match'], $val)) {
                             throw new FieldInputError($key, l(
                                 'Invalid value provided. Needs to match: [P].',

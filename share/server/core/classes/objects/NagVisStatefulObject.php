@@ -307,20 +307,16 @@ class NagVisStatefulObject extends NagVisObject
         if ($summary) {
             if ($this->sum[ACK] == 1) {
                 return 'ack';
-            }
-            elseif ($this->sum[DOWNTIME] == 1) {
+            } elseif ($this->sum[DOWNTIME] == 1) {
                 return 'downtime';
-            }
-            elseif ($this->isStale($summary)) {
+            } elseif ($this->isStale($summary)) {
                 return 'stale';
             }
         } elseif ($this->state[ACK] == 1) {
             return 'ack';
-        }
-        elseif ($this->state[DOWNTIME] == 1) {
+        } elseif ($this->state[DOWNTIME] == 1) {
             return 'downtime';
-        }
-        elseif ($this->isStale($summary)) {
+        } elseif ($this->isStale($summary)) {
             return 'stale';
         }
         return 'normal';
@@ -449,7 +445,7 @@ class NagVisStatefulObject extends NagVisObject
      */
     public function getExcludeFilter($isCount)
     {
-        // When this is a count use the exclude_member_states over the 
+        // When this is a count use the exclude_member_states over the
         // exclude_members
         $key = $this->getExcludeFilterKey($isCount);
         if ($key == 'exclude_member_states') {
@@ -468,12 +464,11 @@ class NagVisStatefulObject extends NagVisObject
      */
     public function getExcludeFilterKey($isCount)
     {
-        // When this is a count use the exclude_member_states over the 
+        // When this is a count use the exclude_member_states over the
         // exclude_members
         if ($isCount && $this->exclude_member_states !== '') {
             return 'exclude_member_states';
-        }
-        elseif ($this->exclude_members !== '') {
+        } elseif ($this->exclude_members !== '') {
             return 'exclude_members';
         } else {
             return '';
@@ -585,8 +580,8 @@ class NagVisStatefulObject extends NagVisObject
     {
         // Set the paths of this iconset
         if (NagVisStatefulObject::$iconPath === null) {
-            NagVisStatefulObject::$iconPath      = path('sys',  'global', 'icons');
-            NagVisStatefulObject::$iconPathLocal = path('sys',  'local',  'icons');
+            NagVisStatefulObject::$iconPath      = path('sys', 'global', 'icons');
+            NagVisStatefulObject::$iconPathLocal = path('sys', 'local', 'icons');
         }
 
         // Read the filetype of the iconset
@@ -997,11 +992,9 @@ class NagVisStatefulObject extends NagVisObject
                 $objType = 'normal';
                 if ($objAck == 1 && isset($stateWeight[$objSummaryState]['ack'])) {
                     $objType = 'ack';
-                }
-                elseif ($objDowntime == 1 && isset($stateWeight[$objSummaryState]['downtime'])) {
+                } elseif ($objDowntime == 1 && isset($stateWeight[$objSummaryState]['downtime'])) {
                     $objType = 'downtime';
-                }
-                elseif ($objStale == 1 && isset($stateWeight[$objSummaryState]['stale'])) {
+                } elseif ($objStale == 1 && isset($stateWeight[$objSummaryState]['stale'])) {
                     $objType = 'stale';
                 }
 

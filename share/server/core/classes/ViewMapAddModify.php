@@ -176,8 +176,7 @@ class ViewMapAddModify
                 js('document.getElementById("_submit").disabled = true;'
                     . 'window.location.href = makeuri(' . json_encode($attrs) . ');');
                 $show_dialog = true;
-            }
-            elseif ($this->mode == 'view_params' && !$perm && $perm_user) {
+            } elseif ($this->mode == 'view_params' && !$perm && $perm_user) {
                 // This is the 2. case -> saving the options only for the user
                 $USERCFG = new CoreUserCfg();
                 $attrs = $this->attrs;
@@ -394,7 +393,9 @@ class ViewMapAddModify
             $dep_on_propname = $prop['depends_on'];
             list($depInherited, $depValue) = $this->getAttr(
                 $this->MAPCFG->getDefaultValue($this->object_type, $dep_on_propname),
-                $dep_on_propname, $properties[$dep_on_propname]['must']);
+                $dep_on_propname,
+                $properties[$dep_on_propname]['must']
+            );
             if ($depValue != $prop['depends_value']) {
                 $rowHide = ' style="display:none"';
             }
@@ -414,8 +415,7 @@ class ViewMapAddModify
         // Submit the form when an attribute which has dependant attributes is changed
         if ($this->MAPCFG->hasDependants($this->object_type, $propname)) {
             $onChange = 'updateForm(this.form);';
-        }
-        elseif (
+        } elseif (
             ($can_have_other && $value !== '<<<other>>>')
             || ($this->object_type == 'service' && $propname == 'host_name')
         ) {

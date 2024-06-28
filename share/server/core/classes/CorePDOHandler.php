@@ -29,16 +29,23 @@ function _build_dsn_sqlite($params)
 
 function _build_dsn_common($params)
 {
-    $connData = array_filter([
-        "host" => $params['dbhost'],
-        "port" => $params['dbport'],
-        "dbname" => $params['dbname'],
-    ], function($v) { return isset($v) && strlen($v) > 0; });
+    $connData = array_filter(
+        [
+            "host" => $params['dbhost'],
+            "port" => $params['dbport'],
+            "dbname" => $params['dbname'],
+        ],
+        function ($v) {
+            return isset($v) && strlen($v) > 0;
+        }
+    );
 
     return implode(
         ';',
         array_map(
-            function($k, $v) { return "$k=$v"; },
+            function ($k, $v) {
+                return "$k=$v";
+            },
             array_keys($connData),
             $connData
         )

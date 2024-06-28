@@ -334,7 +334,7 @@ foreach ($stats as $stat => $value) {
                 $class = 'EMPTY';
             }
             echo '<td class="' . $class . ' table_stat">';
-                echo $value;
+            echo $value;
             echo "</td>";
         }
     }

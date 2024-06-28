@@ -259,13 +259,13 @@ class GlobalBackendTest implements GlobalBackendInterface
         /**
          * Generate objects for demo maps
          */
-        $this->obj['host']['muc-gw1'] = $this->host('muc-gw1',      UP,   'hard', 'normal');
+        $this->obj['host']['muc-gw1'] = $this->host('muc-gw1', UP, 'hard', 'normal');
         $wan = $this->service('muc-gw1', 'Interface WAN', CRITICAL, 'hard', 'normal');
         $wan[PERFDATA] = 'in=98.13%;85;98 out=12.12%;85;98';
         $wan[OUTPUT]   = 'In: 98.13%, Out: 12.12%';
         $this->obj['service']['muc-gw1'] = [$wan];
 
-        $this->obj['host']['muc-srv1'] = $this->host('muc-srv1',     UP,   'hard', 'normal');
+        $this->obj['host']['muc-srv1'] = $this->host('muc-srv1', UP, 'hard', 'normal');
         $this->obj['service']['muc-srv1'] = [
             $this->service(
                 'muc-srv1',
@@ -357,7 +357,7 @@ class GlobalBackendTest implements GlobalBackendInterface
             ['muc-gw1', 'muc-srv1', 'muc-srv2', 'muc-printer1', 'muc-printer2']
         );
 
-        $this->obj['host']['ham-gw1'] = $this->host('ham-gw1', UP,   'hard', 'normal');
+        $this->obj['host']['ham-gw1'] = $this->host('ham-gw1', UP, 'hard', 'normal');
         $wan = $this->service('ham-gw1', 'Interface WAN', OK, 'hard', 'normal');
         $wan[PERFDATA] = 'in=77.24%;85;98 out=32.89%;85;98';
         $wan[OUTPUT]   = 'In: 77.24%, Out: 32.89%';
@@ -405,7 +405,7 @@ class GlobalBackendTest implements GlobalBackendInterface
         $wan[OUTPUT] = 'In: 19.34%, Out: 0.89%';
         $this->obj['service']['cgn-gw1'] = [$wan];
 
-        $this->obj['host']['cgn-srv1'] = $this->host('cgn-srv1', UP,   'hard', 'normal');
+        $this->obj['host']['cgn-srv1'] = $this->host('cgn-srv1', UP, 'hard', 'normal');
         $this->obj['service']['cgn-srv1'] = [];
         $this->obj['host']['cgn-srv2'] = $this->host('cgn-srv2', WARNING, 'hard', 'ack');
         $this->obj['service']['cgn-srv2'] = [];
@@ -455,7 +455,8 @@ class GlobalBackendTest implements GlobalBackendInterface
                     );
                     $this->obj['service'][$hostname] = [];
                     $this->obj['hostgroup']['hostgroup-' . $ident] = $this->hostgroup(
-                        'hostgroup-' . $ident, [$hostname]
+                        'hostgroup-' . $ident,
+                        [$hostname]
                     );
                 }
             }
@@ -927,8 +928,7 @@ class GlobalBackendTest implements GlobalBackendInterface
                             $aReturn[$name]['counts'][$service[STATE]]['ack']++;
                         } elseif ($service[DOWNTIME] === true) {
                             $aReturn[$name]['counts'][$service[STATE]]['downtime']++;
-                        }
-                        else {
+                        } else {
                             $aReturn[$name]['counts'][$service[STATE]]['normal']++;
                         }
                     }
@@ -999,8 +999,7 @@ class GlobalBackendTest implements GlobalBackendInterface
 
                     if ($host[ACK] === true) {
                         $aReturn[$name]['counts'][$host[STATE]]['ack']++;
-                    }
-                    elseif ($host[DOWNTIME] === true) {
+                    } elseif ($host[DOWNTIME] === true) {
                         $aReturn[$name]['counts'][$host[STATE]]['downtime']++;
                     } else {
                         $aReturn[$name]['counts'][$host[STATE]]['normal']++;
@@ -1078,8 +1077,7 @@ class GlobalBackendTest implements GlobalBackendInterface
 
                         if ($service[ACK] === true) {
                             $aReturn[$name]['counts'][$state]['ack']++;
-                        }
-                        elseif ($service[DOWNTIME] === true) {
+                        } elseif ($service[DOWNTIME] === true) {
                             $aReturn[$name]['counts'][$state]['downtime']++;
                         } else {
                             $aReturn[$name]['counts'][$state]['normal']++;

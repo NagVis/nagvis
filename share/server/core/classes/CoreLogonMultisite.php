@@ -177,8 +177,7 @@ class CoreLogonMultisite extends CoreLogonModule
             } else {
                 $hash = $this->generatePre22Hash($username, $sessionId, (string)$user_secret);
             }
-        }
-        elseif ($this->cookieVersion == 1) {
+        } elseif ($this->cookieVersion == 1) {
             $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
         } else {
             throw new NagVisException(l('The Multisite Cookie version is not supported'));
@@ -211,7 +210,8 @@ class CoreLogonMultisite extends CoreLogonModule
                 session_write_close();
 
                 return $name;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
         return '';
     }
@@ -240,7 +240,7 @@ class CoreLogonMultisite extends CoreLogonModule
         global $AUTH, $CORE;
 
         // Try to auth using the environment auth
-        $ENV= new CoreLogonEnv();
+        $ENV = new CoreLogonEnv();
         if ($ENV->check(false) === true) {
             return true;
         }

@@ -110,7 +110,7 @@ class FrontendModUrl extends FrontendModule
 
             // Put rotation information to header menu
             if ($this->rotation != '') {
-                      $HEADER->setRotationEnabled();
+                $HEADER->setRotationEnabled();
             }
 
             $INDEX->setHeaderMenu($HEADER->__toString());

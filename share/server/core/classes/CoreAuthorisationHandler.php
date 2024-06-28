@@ -399,8 +399,7 @@ class CoreAuthorisationHandler
                     foreach ($acts as $act => $objs) {
                         if (isset($this->aPermissions[$mod][$act][$sObj])) {
                             return true;
-                        }
-                        elseif (isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
+                        } elseif (isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
                             return true;
                         } elseif (DEBUG && DEBUGLEVEL & 2) {
                             debug(

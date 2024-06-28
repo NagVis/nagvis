@@ -42,8 +42,8 @@ class NagVisShape extends NagVisStatelessObject
     public function __construct($icon)
     {
         if (self::$iconPath === null) {
-            self::$iconPath      = path('sys',  'global', 'shapes');
-            self::$iconPathLocal = path('sys',  'local', 'shapes');
+            self::$iconPath      = path('sys', 'global', 'shapes');
+            self::$iconPathLocal = path('sys', 'local', 'shapes');
         }
 
         $this->icon = $icon;

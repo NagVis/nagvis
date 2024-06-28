@@ -54,12 +54,11 @@ function iconset_size($iconset)
 {
     global $CORE;
     $fileType = $CORE->getIconsetFiletype($iconset);
-    $iconPath      = path('sys',  'global', 'icons') . '/' . $iconset . '_ok.' . $fileType;
-    $iconPathLocal = path('sys',  'local',  'icons') . '/' . $iconset . '_ok.' . $fileType;
+    $iconPath      = path('sys', 'global', 'icons') . '/' . $iconset . '_ok.' . $fileType;
+    $iconPathLocal = path('sys', 'local', 'icons') . '/' . $iconset . '_ok.' . $fileType;
     if (file_exists($iconPathLocal)) {
         return getimagesize($iconPathLocal);
-    }
-    elseif (file_exists($iconPath)) {
+    } elseif (file_exists($iconPath)) {
         return getimagesize($iconPath);
     } else {
         return [0, 0];
@@ -72,12 +71,11 @@ function iconset_size($iconset)
  */
 function shape_size($icon)
 {
-    $iconPath      = path('sys',  'global', 'shapes') . '/' . $icon;
-    $iconPathLocal = path('sys',  'local',  'shapes') . '/' . $icon;
+    $iconPath      = path('sys', 'global', 'shapes') . '/' . $icon;
+    $iconPathLocal = path('sys', 'local', 'shapes') . '/' . $icon;
     if (file_exists($iconPathLocal)) {
         return getimagesize($iconPathLocal);
-    }
-    elseif (file_exists($iconPath)) {
+    } elseif (file_exists($iconPath)) {
         return getimagesize($iconPath);
     } else {
         return [0, 0];

@@ -1934,10 +1934,10 @@ class GlobalMapCfg
                 $val = implode(',', $val);
             }
 
-            $val = str_replace( "\n", '<br/>', $val );
-            $val = str_replace( "\r", '', $val );
-            $val = str_replace( "\t", ' ', $val );
-            $val = preg_replace( '/[\x00-\x1f]/', '', $val );
+            $val = str_replace("\n", '<br/>', $val);
+            $val = str_replace("\r", '', $val);
+            $val = str_replace("\t", ' ', $val);
+            $val = preg_replace('/[\x00-\x1f]/', '', $val);
 
             $newLine = $key . '=' . $val . "\n";
 

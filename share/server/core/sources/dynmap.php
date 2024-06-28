@@ -300,7 +300,7 @@ function process_dynmap($MAPCFG, $map_name, &$map_config)
     $objects = dynmap_get_objects($MAPCFG, $params);
     $type = $params['dynmap_object_types'];
 
-    // First remove all objects from the current map config which should 
+    // First remove all objects from the current map config which should
     // not be there anymore (according to the backend response)
     foreach ($map_config as $object_id => $obj) {
         if ($obj['type'] == $type && !isset($objects[$object_id])) {
@@ -309,8 +309,8 @@ function process_dynmap($MAPCFG, $map_name, &$map_config)
     }
 
     // Now remove all entries from $objects which are on the map but not
-    // positioned in the grid anymore (they have been repositioned by the user 
-    // and do not need to be handled in further processing - except that they 
+    // positioned in the grid anymore (they have been repositioned by the user
+    // and do not need to be handled in further processing - except that they
     // are to be added to the map unchanged again)
     foreach ($objects as $object_id => $object) {
         if (isset($map_config[$object_id]) && !dynmap_object_in_grid($params, $map_config[$object_id])) {

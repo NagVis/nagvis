@@ -114,7 +114,7 @@ class CoreModOverview extends CoreModule
             global $SHANDLER;
             $SHANDLER->aquire();
             $SHANDLER->set('authCredentials', ['user' => $_GET['filterUser'], 'password' => '']);
-            $SHANDLER->set('authTrusted',     true);
+            $SHANDLER->set('authTrusted', true);
             $SHANDLER->commit();
         }
 
@@ -380,7 +380,7 @@ class CoreModOverview extends CoreModule
 
             switch ($imgSize[2]) {
                 case 1:
-                    $image = imagecreatefromgif ($imgPath);
+                    $image = imagecreatefromgif($imgPath);
                     $strFileType = 'gif';
                     break;
                 case 2:
@@ -421,14 +421,14 @@ class CoreModOverview extends CoreModule
             } else {
                 // Calculate size
                 if ($thumbResWidth > $thumbResHeight) {
-                        $thumbHeight = $thumbResHeight;
-                        $thumbWidth = $thumbResHeight;
+                    $thumbHeight = $thumbResHeight;
+                    $thumbWidth = $thumbResHeight;
                 } elseif ($thumbResHeight > $thumbResWidth) {
-                        $thumbHeight = $thumbResWidth;
-                        $thumbWidth = $thumbResWidth;
+                    $thumbHeight = $thumbResWidth;
+                    $thumbWidth = $thumbResWidth;
                 } else {
-                        $thumbHeight = $thumbResHeight;
-                        $thumbWidth = $thumbResHeight;
+                    $thumbHeight = $thumbResHeight;
+                    $thumbWidth = $thumbResHeight;
                 }
 
                 // Calculate offset
@@ -456,7 +456,7 @@ class CoreModOverview extends CoreModule
 
             switch ($imgSize[2]) {
                 case 1:
-                    imagegif ($thumb, $thumbPath);
+                    imagegif($thumb, $thumbPath);
                     break;
                 case 2:
                     imagejpeg($thumb, $thumbPath);

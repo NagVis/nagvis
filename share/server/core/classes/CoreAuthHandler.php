@@ -342,10 +342,10 @@ class CoreAuthHandler
     public function storeInSession()
     {
         $this->SESS->aquire();
-        $this->SESS->set('logonModule',        cfg('global', 'logonmodule'));
-        $this->SESS->set('authModule',         $this->sModuleName);
-        $this->SESS->set('authCredentials',    $this->getCredentials());
-        $this->SESS->set('authTrusted',        $this->trustUsername);
+        $this->SESS->set('logonModule', cfg('global', 'logonmodule'));
+        $this->SESS->set('authModule', $this->sModuleName);
+        $this->SESS->set('authCredentials', $this->getCredentials());
+        $this->SESS->set('authTrusted', $this->trustUsername);
         $this->SESS->set('authLogoutPossible', $this->logoutPossible);
         $this->SESS->commit();
     }

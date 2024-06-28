@@ -405,8 +405,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
             $state = $this->getAggrState($element["state"]);
             if ($element["in_downtime"]) {
                 $c[$state]['downtime']++;
-            }
-            elseif ($element["acknowledged"]) {
+            } elseif ($element["acknowledged"]) {
                 $c[$state]['ack']++;
             } else {
                 $c[$state]['normal']++;

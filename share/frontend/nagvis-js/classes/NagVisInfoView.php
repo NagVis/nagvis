@@ -71,7 +71,7 @@ class NagVisInfoView
             'scriptName' => $_SERVER['SCRIPT_NAME'],
             'requestTime' => $_SERVER['REQUEST_TIME'] . ' (gmdate(): ' . gmdate('r', $_SERVER['REQUEST_TIME']) . ')',
             'phpErrorReporting' => ini_get('error_reporting'),
-            'phpSafeMode' => (ini_get('safe_mode')?"yes":"no"),
+            'phpSafeMode' => (ini_get('safe_mode') ? "yes" : "no"),
             'phpMaxExecTime' => ini_get('max_execution_time'),
             'phpMemoryLimit' => ini_get('memory_limit'),
             'phpLoadedExtensions' => implode(", ", get_loaded_extensions()),
@@ -82,10 +82,10 @@ class NagVisInfoView
             'authorisationModule' => cfg('global', 'authorisationmodule'),
             'logonEnvVar'         => cfg('global', 'logonenvvar'),
             'logonEnvVal'         => (
-                                        isset($_SERVER[cfg('global', 'logonenvvar')])
+                isset($_SERVER[cfg('global', 'logonenvvar')])
                                             ? $_SERVER[cfg('global', 'logonenvvar')]
                                             : ''
-                                    ),
+            ),
             'logonEnvCreateUser'  => cfg('global', 'logonenvcreateuser'),
             'logonEnvCreateRole'  => cfg('global', 'logonenvcreaterole'),
             'loggedIn'            => $userName . ' (' . $userId . ')',

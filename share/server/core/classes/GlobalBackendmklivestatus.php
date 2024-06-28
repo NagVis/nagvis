@@ -235,10 +235,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                     'verify_depth' => 1,
                 ];
 
-            $ca_path = cfg('backend_' . $this->backendId, 'verify_tls_ca_path');
-            if ($ca_path) {
-                $ssl_options['cafile'] = $ca_path;
-            }
+                $ca_path = cfg('backend_' . $this->backendId, 'verify_tls_ca_path');
+                if ($ca_path) {
+                    $ssl_options['cafile'] = $ca_path;
+                }
                 $context = stream_context_create([
                     'ssl' => $ssl_options
                 ]);
@@ -251,7 +251,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 ]);
             }
 
-            $this->SOCKET= stream_socket_client(
+            $this->SOCKET = stream_socket_client(
                 "tls://" . $this->socketAddress . ":" . $this->socketPort,
                 $errno,
                 $errstr,
@@ -301,11 +301,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      */
     public function connectErrorHandler($errno, $errstr)
     {
-            if (($errno & E_WARNING) === 0 && ($errno & E_NOTICE) === 0) {
+        if (($errno & E_WARNING) === 0 && ($errno & E_NOTICE) === 0) {
             return false; // use default error handler
-            }
-            $this->CONNECT_ERR .= $errstr . "\n";
-            return true;
+        }
+        $this->CONNECT_ERR .= $errstr . "\n";
+        return true;
     }
 
     /*private function verifyLivestatusVersion() {
@@ -949,7 +949,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                     $data = $this->queryLivestatusSingleRow(
                         "GET downtimes\n" .
                         "Columns: author comment start_time end_time\n" .
-                        "Filter: host_name = " . $e[17] . "\n");
+                        "Filter: host_name = " . $e[17] . "\n"
+                    );
                     if (isset($data[0])) {
                         $dt_details = $data;
                     }
@@ -1021,7 +1022,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
             "last_hard_state_change perf_data scheduled_downtime_depth " .
             "acknowledged host_acknowledged host_scheduled_downtime_depth " .
             "has_been_checked host_name check_command custom_variable_names custom_variable_values " .
-            "staleness\n");
+            "staleness\n"
+        );
 
         $arrReturn = [];
         if (is_array($l) && count($l) > 0) {
@@ -1088,13 +1090,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                                 "GET downtimes\n" .
                                 "Columns: author comment start_time end_time\n" .
                                 "Filter: host_name = " . $e[20] . "\n" .
-                                "Filter: service_description = " . $e[0] . "\n");
+                                "Filter: service_description = " . $e[0] . "\n"
+                            );
                         } else {
                             // Host downtime
                             $data = $this->queryLivestatusSingleRow(
                                 "GET downtimes\n" .
                                 "Columns: author comment start_time end_time\n" .
-                                "Filter: host_name = " . $e[20] . "\n");
+                                "Filter: host_name = " . $e[20] . "\n"
+                            );
                         }
                         if (isset($data[0])) {
                             $dt_details = $data;
@@ -1255,7 +1259,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         }
 
         // Get service information
-        $l = $this->queryLivestatus("GET services\n" .
+        $l = $this->queryLivestatus(
+            "GET services\n" .
             $filter .
             $this->serviceStateStats($stateAttr)
         );
@@ -1788,8 +1793,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     {
         if ($what == 'host') {
             $what = 'HOST';
-        }
-        elseif ($what == 'service') {
+        } elseif ($what == 'service') {
             $what = 'SVC';
         }
 

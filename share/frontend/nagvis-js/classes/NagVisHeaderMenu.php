@@ -257,12 +257,11 @@ class NagVisHeaderMenu
             }
         }
 
-        // auto select current map and apply map specific options to the header menu 
+        // auto select current map and apply map specific options to the header menu
         if (
             $this->OBJ !== null && $this->aMacros['mod'] == 'Map'
             && isset($list[$this->OBJ->getName()])
         ) {
-
             $list[$this->OBJ->getName()]['selected'] = true;
         }
 
@@ -443,18 +442,18 @@ class NagVisHeaderMenu
         $aReturn = [
             'pathBase' => $this->pathHtmlBase,
             'currentUri'         => preg_replace(
-                                        '/[&?]lang=[a-z]{2}_[A-Z]{2}/',
-                                        '',
-                                        $UHANDLER->getRequestUri()
-                                    ),
+                '/[&?]lang=[a-z]{2}_[A-Z]{2}/',
+                '',
+                $UHANDLER->getRequestUri()
+            ),
             'pathImages'         => cfg('paths', 'htmlimages'),
             'showStates'         => cfg('defaults', 'header_show_states'),
             'pathHeaderJs'       => path(
-                                        'html',
-                                        'global',
-                                        'templates',
-                                        $this->templateName . '.header.js?v=' . CONST_VERSION
-                                    ),
+                'html',
+                'global',
+                'templates',
+                $this->templateName . '.header.js?v=' . CONST_VERSION
+            ),
             'pathTemplates'      => path('html', 'global', 'templates'),
             'pathTemplateImages' => path('html', 'global', 'templateimages'),
             'langSearch'         => l('Search'),

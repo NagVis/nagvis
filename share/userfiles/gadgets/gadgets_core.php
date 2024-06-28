@@ -41,10 +41,10 @@
  *****************************************************************************
  *
  * Datastructure:
- * 
+ *
  * $aPerfdata as 2-dimensional array where index ranges from 0 to n-1,
  * depending on how many perfdata values are provided by the service
- * 
+ *
  * aPerfdata[index]['label']         -   label of the perfdata
  *                 ['value']         -   actual perfdata
  *                 ['uom']           -   unit of measurement (might be NULL)
@@ -57,16 +57,16 @@
  *                 ['min']           -   minimum possible value (might be NULL)
  *                 ['max']           -   maximum possible value (might be NULL)
  *
- * 
+ *
  * $aOpts as array of the parameters passed to the gadget
- * 
+ *
  * aOpts['name1']                 -   Hostname
  * aOpts['name2']                 -   Servicename
  * aOpts['state']                 -   State of the service (OK, WARNING,
- *                                    CRITICAL, UNKNOWN)  
+ *                                    CRITICAL, UNKNOWN)
  * aOpts['stateType']             -   Type of the state (HARD, SOFT)
  * aOpts['scale']                 -   Scale of the gadget in percent (INTEGER)
- *  
+ *
  ******************************************************************************/
 
 /**
@@ -215,11 +215,9 @@ foreach ([
 
 if (isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
     $aOpts['perfdata'] = $_GET['perfdata'];
-}
-elseif (isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
+} elseif (isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
     $aOpts['perfdata'] = $sDummyPerfdata;
-}
-elseif (!isset($_GET['opts']) || !str_contains($_GET['opts'], 'no_perf')) {
+} elseif (!isset($_GET['opts']) || !str_contains($_GET['opts'], 'no_perf')) {
     errorBox('ERROR: The needed parameter "perfdata" is missing.');
 }
 

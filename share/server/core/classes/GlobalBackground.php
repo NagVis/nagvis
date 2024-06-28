@@ -88,7 +88,7 @@ class GlobalBackground
             } else {
                 $this->type = 'local';
 
-                $this->path    = path('sys', '',        'backgrounds', $this->getFileName());
+                $this->path    = path('sys', '', 'backgrounds', $this->getFileName());
                 $this->webPath = path('html', 'global', 'backgrounds', $this->getFileName());
             }
         } else {

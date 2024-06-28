@@ -178,6 +178,6 @@ const AUTH_TRUST_USERNAME = true;
 const AUTH_NOT_TRUST_USERNAME = false;
 
 // Salt for the password hashes
-// Note: If you change this you will need to rehash all saved 
+// Note: If you change this you will need to rehash all saved
 //       password hashes
 const AUTH_PASSWORD_SALT = '29d58ead6a65f5c00342ae03cdc6d26565e20954';

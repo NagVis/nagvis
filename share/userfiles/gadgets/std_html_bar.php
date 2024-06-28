@@ -39,10 +39,10 @@
  *
  *****************************************************************************/
 
-/** 
+/**
  * Dummy perfdata for WUI
  *
- * This string needs to be set in every gadget to have some sample data in the 
+ * This string needs to be set in every gadget to have some sample data in the
  * WUI to be able to place the gadget easily on the map
  ******************************************************************************/
 $sDummyPerfdata = 'config=20%;80;90;0;100';

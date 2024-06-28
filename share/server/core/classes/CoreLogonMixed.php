@@ -32,7 +32,7 @@ class CoreLogonMixed
     public function check()
     {
         // Try to auth using the environment auth
-        $ENV= new CoreLogonEnv();
+        $ENV = new CoreLogonEnv();
         if ($ENV->check(false) === true) {
             return true;
         }

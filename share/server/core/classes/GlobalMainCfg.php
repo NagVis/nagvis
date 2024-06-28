@@ -2006,11 +2006,11 @@ class GlobalMainCfg
         );
 
         try {
-              if (
-                  $this->CACHE->isCached(false) === -1
-                  || $this->PUCACHE->isCached(false) === -1
-                  || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)
-              ) {
+            if (
+                $this->CACHE->isCached(false) === -1
+                || $this->PUCACHE->isCached(false) === -1
+                || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)
+            ) {
                 // The cache is too old. Load all config files
                 foreach ($this->configFiles as $configFile) {
                     // Only proceed when the configuration file exists and is readable
@@ -2038,8 +2038,7 @@ class GlobalMainCfg
             // want to reduce the paths in the NagVis config,
             // but don't want to hardcode the paths relative from the bases
             $this->setPathsByBase($this->getValue('paths', 'base'), $this->getValue('paths', 'htmlbase'));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             // Try our best to set the correct paths - even in case of exceptions
             $this->setPathsByBase($this->getValue('paths', 'base'), $this->getValue('paths', 'htmlbase'));
             throw $e;
@@ -2090,7 +2089,8 @@ class GlobalMainCfg
 
             if (is_callable([$class, 'getValidConfig'])) {
                 $this->validConfig['backend']['options'][$backend] = call_user_func(
-                    ['GlobalBackend' . $backend, 'getValidConfig']);
+                    ['GlobalBackend' . $backend, 'getValidConfig']
+                );
                 //$this->validConfig['backend']['options'][$backend] = call_user_func('GlobalBackend'.$backend.'::getValidConfig');
             }
         }
@@ -2314,8 +2314,7 @@ class GlobalMainCfg
                 foreach ($opts as $opt => $val) {
                     if (!isset($this->config[$sec])) {
                         $this->config[$sec] = $opts;
-                    }
-                    elseif (!isset($this->config[$sec][$opt])) {
+                    } elseif (!isset($this->config[$sec][$opt])) {
                         $this->config[$sec][$opt] = $val;
                     }
                 }
@@ -2621,8 +2620,7 @@ class GlobalMainCfg
         // is also not existant it returns an empty string
         if ($loc === 'local' || ($loc === '' && $l_file && file_exists($l_file))) {
             return $type == 'sys' ? $l_file : $lh . '/' . $relpath . $relfile;
-        }
-        elseif ($loc === 'global' || ($loc === '' && file_exists($file))) {
+        } elseif ($loc === 'global' || ($loc === '' && file_exists($file))) {
             return $type == 'sys' ? $file : $h . '/' . $relpath . $relfile;
         } else {
             return '';
@@ -2707,8 +2705,7 @@ class GlobalMainCfg
 
         if (isset($arr[$sec][$var])) {
             return $arr[$sec][$var];
-        }
-        elseif (!$ignoreDefault) {
+        } elseif (!$ignoreDefault) {
             return $this->getDefaultValue($sec, $var);
         } else {
             return null;
@@ -3053,11 +3050,9 @@ class GlobalMainCfg
 
                             if (str_starts_with($key, 'backend_')) {
                                 $arrValidConfig = $this->getInstanceableValidConfig('backend', $key);
-                            }
-                            elseif (str_starts_with($key, 'rotation_')) {
+                            } elseif (str_starts_with($key, 'rotation_')) {
                                 $arrValidConfig = $this->validConfig['rotation'];
-                            }
-                            elseif (str_starts_with($key, 'action_')) {
+                            } elseif (str_starts_with($key, 'action_')) {
                                 $arrValidConfig = $this->getInstanceableValidConfig('action', $key);
                             } else {
                                 $arrValidConfig = $this->validConfig[$key];

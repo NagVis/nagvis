@@ -39,9 +39,9 @@ define('DEBUGSTART', microtime_float());
  */
 function debug($msg)
 {
-        $fh = fopen(DEBUGFILE, 'a');
-        fwrite($fh, iso8859_1_to_utf8(microtime_float() . ' ' . $msg . "\n"));
-        fclose($fh);
+    $fh = fopen(DEBUGFILE, 'a');
+    fwrite($fh, iso8859_1_to_utf8(microtime_float() . ' ' . $msg . "\n"));
+    fclose($fh);
 }
 
 /**
@@ -52,9 +52,9 @@ function debug($msg)
  */
 function debugFinalize()
 {
-        debug('==> Render Time: ' . round((microtime_float() - DEBUGSTART), 2) . 'sec'
-        . ' Mem peak: ' . round(memory_get_peak_usage() / 1024 / 1024, 2) . 'Mb'
-        . ' URI: ' . $_SERVER['REQUEST_URI']);
+    debug('==> Render Time: ' . round((microtime_float() - DEBUGSTART), 2) . 'sec'
+    . ' Mem peak: ' . round(memory_get_peak_usage() / 1024 / 1024, 2) . 'Mb'
+    . ' URI: ' . $_SERVER['REQUEST_URI']);
 }
 
 /**
@@ -94,11 +94,11 @@ function profilingStart()
  */
 function profilingFinalize($pre)
 {
-        //include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_lib.php";
-        //include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_runs.php";
+    //include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_lib.php";
+    //include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_runs.php";
 
-        //$xhprof_runs = new XHProfRuns_Default();
-        //$xhprof_runs->save_run(xhprof_disable(), 'nagvis-'.$pre);
+    //$xhprof_runs = new XHProfRuns_Default();
+    //$xhprof_runs->save_run(xhprof_disable(), 'nagvis-'.$pre);
 }
 
 // Start profiling now when configured to do so
