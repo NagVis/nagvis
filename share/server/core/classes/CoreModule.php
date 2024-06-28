@@ -298,8 +298,7 @@ abstract class CoreModule
 
         if ($msg && $type == 'error') {
             throw new NagVisException($msg, null, $reload, $redirectUrl);
-        }
-        elseif ($msg && $type == 'ok') {
+        } elseif ($msg && $type == 'ok') {
             throw new Success($msg, null, $reload, $redirectUrl);
         } else {
             return $ret;

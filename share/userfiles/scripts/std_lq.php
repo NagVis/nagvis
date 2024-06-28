@@ -43,7 +43,7 @@
  *
  * Query one column from several datasets. Each found cell is displayed in a separate line:
  * std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name\\n&type=column
- * 
+ *
  * Query several columns from several datasets and display them as table:
  * std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name state address\\n&type=list
  */
@@ -54,8 +54,8 @@ $queryTypes  = 'GET';
 $queryTables = '([a-z]+)';
 // Adds the username of the authed user to the livestatus query to filter the objects to query
 // according to the equal named nagios contact. This is enabled by default.
-// If you trust your users and do not want to limit the results with the users permissions 
-// you can set this to false. But be aware: Everyone who can access this script through the 
+// If you trust your users and do not want to limit the results with the users permissions
+// you can set this to false. But be aware: Everyone who can access this script through the
 // browser is able to fetch all information from the configured livestatus backends.
 $setAuthUser = true;
 

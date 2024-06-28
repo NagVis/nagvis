@@ -103,7 +103,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule
 
         $RES = $this->DB->query('-user-get-all');
         while ($data = $RES->fetch()) {
-                  $aPerms[] = $data;
+            $aPerms[] = $data;
         }
 
         return $aPerms;

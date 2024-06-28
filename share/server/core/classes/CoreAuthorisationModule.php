@@ -28,7 +28,8 @@
  *
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-abstract class CoreAuthorisationModule {
+abstract class CoreAuthorisationModule
+{
     /**
      * @param string $sUsername
      * @return mixed

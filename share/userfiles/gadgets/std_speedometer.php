@@ -35,10 +35,10 @@
  *
  *****************************************************************************/
 
-/** 
+/**
  * Dummy perfdata for WUI
  *
- * This string needs to be set in every gadget to have some sample data in the 
+ * This string needs to be set in every gadget to have some sample data in the
  * WUI to be able to place the gadget easily on the map
  ******************************************************************************/
 $sDummyPerfdata = 'config=20%;80;90;0;100';
@@ -111,9 +111,9 @@ if (intval($max) == 0 || $max == '') {
 // Calculate degrees of value, warn, critical
 //================
 
-$p = 180 / ( $max + $min ) * $value;
-$warnp = -180 + (180 / ( $max - $min ) * ( $warn - $min ) );
-$critp = -180 + (180 / ( $max - $min ) * ( $crit - $min ) );
+$p = 180 / ($max + $min) * $value;
+$warnp = -180 + (180 / ($max - $min) * ($warn - $min));
+$critp = -180 + (180 / ($max - $min) * ($crit - $min));
 
 // If the critp is bigger than -1 it can not be rendered by the php functions.
 // Set it to -1 for having at least a small critical area drawn
@@ -277,10 +277,10 @@ imagestring(
 $count = 1;
 $iOffsetX = -10;
 for ($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
-    $bediffy = sin (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
-    $bediffx = cos (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
-    $bediffy1 = sin (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
-    $bediffx1 = cos (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
+    $bediffy = sin(deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
+    $bediffx = cos(deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
+    $bediffy1 = sin(deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
+    $bediffx1 = cos(deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
 
     imageline(
         $img,

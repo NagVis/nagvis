@@ -35,11 +35,11 @@
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 if (!function_exists('date_default_timezone_set')) {
-        function date_default_timezone_set($timezone_identifier)
-        {
-                putenv("TZ=" . $timezone_identifier);
-                return true;
-        }
+    function date_default_timezone_set($timezone_identifier)
+    {
+        putenv("TZ=" . $timezone_identifier);
+        return true;
+    }
 }
 
 // To prevent the annoying and in most cases useless message:

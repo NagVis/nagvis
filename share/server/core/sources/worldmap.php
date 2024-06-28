@@ -291,8 +291,7 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat)
         // line ends within bbox
         . 'OR (lat2 BETWEEN :sw_lat AND :ne_lat AND lng2 BETWEEN :sw_lng AND :ne_lng)'
         // line intersects one of 4 bbox borders
-        . "OR (lat2>0 AND lng2>0 AND ($intWithinWestBound OR $intWithinSouthBound OR $intWithinEastBound OR $intWithinNorthBound))"
-        ;
+        . "OR (lat2>0 AND lng2>0 AND ($intWithinWestBound OR $intWithinSouthBound OR $intWithinEastBound OR $intWithinNorthBound))";
 
     $q = str_replace(':sw_lng', $sw_lng, $q);
     $q = str_replace(':sw_lat', $sw_lat, $q);

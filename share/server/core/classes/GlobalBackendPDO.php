@@ -29,25 +29,25 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
 {
     /** @var CorePDOHandler */
     private $DB;
-    
+
     /** @var string */
     private $backendId;
-    
+
     /** @var string */
     private $dbName;
-    
+
     /** @var string */
     private $dbUser;
-    
+
     /** @var string */
     private $dbPass;
-    
+
     /** @var string */
     private $dbHost;
-    
+
     /** @var int */
     private $dbPort;
-    
+
     /** @var string */
     private $dbPrefix;
 

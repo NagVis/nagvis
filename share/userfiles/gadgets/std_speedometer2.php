@@ -37,15 +37,15 @@
  * gadget_scale=n (n being the size of the graph(s) in percent)
  * gadget_opts=option=value (multiple options are separated by spaces)
  *    option is one of the following:
- *       columns=n 
+ *       columns=n
  *          number of columns of graphs (if applicable), default is 3
- *       string=s 
+ *       string=s
  *          s is a string the perfdata label has to contain
- *       current=<0|1>    
+ *       current=<0|1>
  *          1 = show the current value along with the label (default)
  *       label=<0|1>
  *          1 = show host name/service description in the upper left
- *              corner of the graph (0 is default) 
+ *              corner of the graph (0 is default)
 
  * NagVis also passes the following parameters to the gadget using the array
  * $aOpts:
@@ -57,10 +57,10 @@
  *
  *****************************************************************************/
 
-/** 
+/**
  * Dummy perfdata for WUI
  *
- * This string needs to be set in every gadget to have some sample data in the 
+ * This string needs to be set in every gadget to have some sample data in the
  * WUI to be able to place the gadget easily on the map
  ******************************************************************************/
 $sDummyPerfdata = 'config=20%;80;90;0;100';
@@ -109,11 +109,11 @@ $innerrad  = $outerdia / 10;
 
 // calculate positions of labels
 for ($i = 1; $i <= 3; $i++) {
-    $degrees = deg2rad (-45 * $i + 360);
-    $bediffy[$i] = sin ($degrees) * $outerrad2;
-    $bediffx[$i] = cos ($degrees) * $outerrad2;
-    $bediffy1[$i]= sin ($degrees) * ($outerrad - 5);
-    $bediffx1[$i]= cos ($degrees) * ($outerrad - 5);
+    $degrees = deg2rad(-45 * $i + 360);
+    $bediffy[$i] = sin($degrees) * $outerrad2;
+    $bediffx[$i] = cos($degrees) * $outerrad2;
+    $bediffy1[$i] = sin($degrees) * ($outerrad - 5);
+    $bediffx1[$i] = cos($degrees) * ($outerrad - 5);
 }
 
 //==========================================
@@ -135,7 +135,7 @@ $cols = 3;                        // no. of columns with graphs
 //==================
 
 if (isset($aOpts['opts']) && ($aOpts['opts'] != '')) {
-    preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
+    preg_match_all('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
         if ($matches[$i][1] == 'columns') {
             $cols = $matches[$i][2];
@@ -181,9 +181,9 @@ for ($i = 0; $i < $pdc; $i++) {
         $colour = '';
         $value = $aPerfdata[$i]['value'];
         $warn = $aPerfdata[$i]['warning'];
-        $warn = preg_replace ('(:.*)', '', $warn);        // ignore range settings
+        $warn = preg_replace('(:.*)', '', $warn);        // ignore range settings
         $crit = $aPerfdata[$i]['critical'];
-        $crit = preg_replace ('(:.*)', '', $crit);        // ignore range settings
+        $crit = preg_replace('(:.*)', '', $crit);        // ignore range settings
         $min = $aPerfdata[$i]['min'];
         $max = $aPerfdata[$i]['max'];
         $uom = $aPerfdata[$i]['uom'];
@@ -228,7 +228,7 @@ for ($i = 0; $i < $pdc; $i++) {
         }
         // "highlight" graph if non-ok value
         if ($colour != '') {
-            imagefilledrectangle ($img, $offX, $offY, $offX + $imgwidth - 1, $centery + 20, $colour);
+            imagefilledrectangle($img, $offX, $offY, $offX + $imgwidth - 1, $centery + 20, $colour);
         }
 
         //================
@@ -355,8 +355,8 @@ for ($i = 0; $i < $pdc; $i++) {
         //===================
 
         $degrees = deg2rad(-$p + 360);
-        $diffx = cos ($degrees) * $outerrad2;
-        $diffy = sin ($degrees) * $outerrad2;
+        $diffx = cos($degrees) * $outerrad2;
+        $diffy = sin($degrees) * $outerrad2;
         imagefilledarc(
             $img,
             ($centerx - $diffx),

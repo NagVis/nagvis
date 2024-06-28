@@ -157,7 +157,7 @@ class ViewManageUsers
                 } else {
                     throw new NagVisException(l('Problem while updating user roles.'));
                 }
-        } catch (FieldInputError $e) {
+            } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
