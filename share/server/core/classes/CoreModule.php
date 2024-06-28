@@ -278,8 +278,7 @@ abstract class CoreModule
         $failMessage = null,
         $reload = null,
         $redirectUrl = null
-    )
-    {
+    ) {
         $aReturn = $this->{$validationHandler}();
 
         $type = 'ok';

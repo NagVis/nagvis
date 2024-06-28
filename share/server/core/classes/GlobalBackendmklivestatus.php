@@ -649,8 +649,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         $isMemberQuery = false,
         $isCountQuery = false,
         $isHostQuery = true
-    )
-    {
+    ) {
         $aFilters = [];
         foreach ($objects as $OBJS) {
             $objFilters = [];
@@ -1310,8 +1309,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         $host_filter,
         $service_filter,
         $by_group = true
-    )
-    {
+    ) {
         if ($by_group) {
             $host_suffix    = 'bygroup';
             $service_suffix = 'byhostgroup';
@@ -1830,8 +1828,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     public function getDirectChildDependenciesNamesByHostName(
         $hostName,
         $min_business_impact = false
-    )
-    {
+    ) {
         $query = "GET hosts\nColumns: child_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {
@@ -1867,8 +1864,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     public function getDirectParentDependenciesNamesByHostName(
         $hostName,
         $min_business_impact = false
-    )
-    {
+    ) {
         $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {

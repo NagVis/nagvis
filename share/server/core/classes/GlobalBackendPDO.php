@@ -408,8 +408,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
         $isMemberQuery = false,
         $isCountQuery = false,
         $isHostQuery = true
-    )
-    {
+    ) {
         $aFilters = [];
         $values = [];
         $idx = 1;
@@ -1492,8 +1491,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
     public function getDirectChildDependenciesNamesByHostName(
         $hostName,
         $min_business_impact = false
-    )
-    {
+    ) {
         return $this->getDirectChildNamesByHostName($hostName);
     }
 
@@ -1505,8 +1503,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
     public function getDirectParentDependenciesNamesByHostName(
         $hostName,
         $min_business_impact = false
-    )
-    {
+    ) {
         return $this->getDirectParentNamesByHostName($hostName);
     }
 
