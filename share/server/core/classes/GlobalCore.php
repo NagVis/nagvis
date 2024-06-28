@@ -654,11 +654,7 @@ class GlobalCore
             self::listDirectory(
                 path('sys', 'global', 'gadgets'),
                 MATCH_PHP_FILE,
-                ['gadgets_core.php' => true],
-                null,
-                null,
-                null,
-                true
+                ['gadgets_core.php' => true]
             ),
             self::listDirectory(
                 path('sys', 'local', 'gadgets'),

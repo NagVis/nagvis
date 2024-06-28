@@ -575,7 +575,7 @@ if (!function_exists('l')) {
     }
 
     // TODO: what is $backendId? Seems to alternate between string and array
-    $O = new GlobalBackendnagiosbp([], 't');
+    $O = new GlobalBackendnagiosbp([]);
     // todo: these methods are private
     print_r($O->getProcessIDs());
     print_r($O->getProcessNames());

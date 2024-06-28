@@ -182,7 +182,7 @@ class NagVisAggr extends NagVisStatefulObject
                 ]
             );
         } else {
-            $this->mergeSummaryOutput($node_states, l('Nodes'), true);
+            $this->mergeSummaryOutput($node_states, l('Nodes'));
         }
     }
 

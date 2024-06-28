@@ -488,7 +488,7 @@ class NagVisStatefulObject extends NagVisObject
         $arr['state']                         = state_str(val($this->state, STATE));
         $arr['problem_has_been_acknowledged'] = val($this->state, ACK);
         $arr['in_downtime']                   = val($this->state, DOWNTIME);
-        $arr['stale']                         = $this->isStale(false);
+        $arr['stale']                         = $this->isStale();
         $arr['output']         = $this->escapeStringForJson(val($this->state, OUTPUT, ''));
 
         $arr['summary_state']                 = state_str(val($this->sum, STATE));
@@ -1029,7 +1029,7 @@ class NagVisStatefulObject extends NagVisObject
             return $this->fetchObjectAsChild();
         }
 
-        $arr = parent::getObjectInformation($bFetchChilds);
+        $arr = parent::getObjectInformation();
 
         if ($this->type == 'host' || $this->type == 'service') {
             $obj_attrs = [

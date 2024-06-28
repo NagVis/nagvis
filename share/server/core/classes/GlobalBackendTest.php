@@ -259,13 +259,13 @@ class GlobalBackendTest implements GlobalBackendInterface
         /**
          * Generate objects for demo maps
          */
-        $this->obj['host']['muc-gw1'] = $this->host('muc-gw1', UP, 'hard', 'normal');
-        $wan = $this->service('muc-gw1', 'Interface WAN', CRITICAL, 'hard', 'normal');
+        $this->obj['host']['muc-gw1'] = $this->host('muc-gw1', UP);
+        $wan = $this->service('muc-gw1', 'Interface WAN', CRITICAL);
         $wan[PERFDATA] = 'in=98.13%;85;98 out=12.12%;85;98';
         $wan[OUTPUT]   = 'In: 98.13%, Out: 12.12%';
         $this->obj['service']['muc-gw1'] = [$wan];
 
-        $this->obj['host']['muc-srv1'] = $this->host('muc-srv1', UP, 'hard', 'normal');
+        $this->obj['host']['muc-srv1'] = $this->host('muc-srv1', UP);
         $this->obj['service']['muc-srv1'] = [
             $this->service(
                 'muc-srv1',
@@ -300,7 +300,6 @@ class GlobalBackendTest implements GlobalBackendInterface
                 OK,
                 'hard',
                 'normal',
-                'OK',
                 'OK - 73.3% used (84.71 of 115.5 GB), (levels at 80.0/90.0%), trend: +3.84MB / 24 hours',
                 '/=86747.1757812MB;94641;106472;0;118302.46875'
             ),
@@ -310,7 +309,6 @@ class GlobalBackendTest implements GlobalBackendInterface
                 OK,
                 'hard',
                 'normal',
-                'OK',
                 'OK - 75.2% used (22.21 of 29.5 GB), (levels at 80.0/90.0%), trend: -27.68KB / 24 hours',
                 '/usr=22746.109375MB;24190;27213;0;30237.746094'
             ),
@@ -320,12 +318,11 @@ class GlobalBackendTest implements GlobalBackendInterface
                 OK,
                 'hard',
                 'normal',
-                'OK',
                 'OK - stratum 2, offset 0.02 ms, jitter 0.01 ms'
             ),
         ];
 
-        $this->obj['host']['muc-srv2'] = $this->host('muc-srv2', UP, 'hard', 'normal');
+        $this->obj['host']['muc-srv2'] = $this->host('muc-srv2', UP);
         $this->obj['service']['muc-srv2'] = [
             $this->service(
                 'muc-srv2',
@@ -338,12 +335,7 @@ class GlobalBackendTest implements GlobalBackendInterface
             ),
         ];
 
-        $this->obj['host']['muc-printer1'] = $this->host(
-            'muc-printer1',
-            DOWN,
-            'hard',
-            'normal'
-        );
+        $this->obj['host']['muc-printer1'] = $this->host('muc-printer1', DOWN);
         $this->obj['service']['muc-printer1'] = [];
         $this->obj['host']['muc-printer2'] = $this->host(
             'muc-printer2',
@@ -357,13 +349,13 @@ class GlobalBackendTest implements GlobalBackendInterface
             ['muc-gw1', 'muc-srv1', 'muc-srv2', 'muc-printer1', 'muc-printer2']
         );
 
-        $this->obj['host']['ham-gw1'] = $this->host('ham-gw1', UP, 'hard', 'normal');
-        $wan = $this->service('ham-gw1', 'Interface WAN', OK, 'hard', 'normal');
+        $this->obj['host']['ham-gw1'] = $this->host('ham-gw1', UP);
+        $wan = $this->service('ham-gw1', 'Interface WAN', OK);
         $wan[PERFDATA] = 'in=77.24%;85;98 out=32.89%;85;98';
         $wan[OUTPUT]   = 'In: 77.24%, Out: 32.89%';
         $this->obj['service']['ham-gw1'] = [$wan];
 
-        $this->obj['host']['ham-srv1'] = $this->host('ham-srv1', UP, 'hard', 'normal');
+        $this->obj['host']['ham-srv1'] = $this->host('ham-srv1', UP);
         $this->obj['service']['ham-srv1'] = [
             $this->service(
                 'ham-srv1',
@@ -387,29 +379,24 @@ class GlobalBackendTest implements GlobalBackendInterface
                 'load1=5.0;10;20;0; load5=4.2;5;8;0; load15=3.0;3.5;4;0;'
             ),
         ];
-        $this->obj['host']['ham-printer1'] = $this->host(
-            'ham-printer1',
-            UP,
-            'hard',
-            'normal'
-        );
+        $this->obj['host']['ham-printer1'] = $this->host('ham-printer1', UP);
         $this->obj['service']['ham-printer1'] = [];
         $this->obj['hostgroup']['ham'] = $this->hostgroup(
             'ham',
             ['ham-gw1', 'ham-srv1', 'ham-srv2', 'ham-printer1']
         );
 
-        $this->obj['host']['cgn-gw1'] = $this->host('cgn-gw1', UP, 'hard', 'normal');
-        $wan = $this->service('cgn-gw1', 'Interface WAN', OK, 'hard', 'normal');
+        $this->obj['host']['cgn-gw1'] = $this->host('cgn-gw1', UP);
+        $wan = $this->service('cgn-gw1', 'Interface WAN', OK);
         $wan[PERFDATA] = 'in=19.34%;85;98 out=0.89%;85;98';
         $wan[OUTPUT] = 'In: 19.34%, Out: 0.89%';
         $this->obj['service']['cgn-gw1'] = [$wan];
 
-        $this->obj['host']['cgn-srv1'] = $this->host('cgn-srv1', UP, 'hard', 'normal');
+        $this->obj['host']['cgn-srv1'] = $this->host('cgn-srv1', UP);
         $this->obj['service']['cgn-srv1'] = [];
         $this->obj['host']['cgn-srv2'] = $this->host('cgn-srv2', WARNING, 'hard', 'ack');
         $this->obj['service']['cgn-srv2'] = [];
-        $this->obj['host']['cgn-srv3'] = $this->host('cgn-srv3', UP, 'hard', 'normal');
+        $this->obj['host']['cgn-srv3'] = $this->host('cgn-srv3', UP);
         $this->obj['service']['cgn-srv3'] = [];
         $this->obj['hostgroup']['cgn'] = $this->hostgroup(
             'cgn',

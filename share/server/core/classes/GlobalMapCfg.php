@@ -600,8 +600,8 @@ class GlobalMapCfg
 
             // Build cache
             if ($useCache) {
-                $this->CACHE->writeCache($this->mapConfig, 1);
-                $this->DCACHE->writeCache($this->typeDefaults, 1);
+                $this->CACHE->writeCache($this->mapConfig);
+                $this->DCACHE->writeCache($this->typeDefaults);
             }
         }
 
@@ -1053,7 +1053,7 @@ class GlobalMapCfg
         process_filter($this, $this->name, $this->mapConfig);
 
         if ($cacheable && $useCache) {
-            $CACHE->writeCache($this->mapConfig, 1);
+            $CACHE->writeCache($this->mapConfig);
         }
 
         // FIXME: Invalidate/remove cache files on changed configurations

@@ -87,7 +87,7 @@ class NagVisContextMenu
             $this->replaceStaticMacros();
 
             // Build cache for the template
-            $this->CACHE->writeCache($this->code, 1);
+            $this->CACHE->writeCache($this->code);
         }
     }
 

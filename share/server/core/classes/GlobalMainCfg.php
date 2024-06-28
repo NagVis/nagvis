@@ -2007,16 +2007,16 @@ class GlobalMainCfg
 
         try {
             if (
-                $this->CACHE->isCached(false) === -1
-                || $this->PUCACHE->isCached(false) === -1
+                $this->CACHE->isCached() === -1
+                || $this->PUCACHE->isCached() === -1
                 || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)
             ) {
                 // The cache is too old. Load all config files
                 foreach ($this->configFiles as $configFile) {
                     // Only proceed when the configuration file exists and is readable
                     if (
-                        !GlobalCore::getInstance()->checkExisting($configFile, true)
-                        || !GlobalCore::getInstance()->checkReadable($configFile, true)
+                        !GlobalCore::getInstance()->checkExisting($configFile)
+                        || !GlobalCore::getInstance()->checkReadable($configFile)
                     ) {
                         return false;
                     }
@@ -2033,7 +2033,7 @@ class GlobalMainCfg
             }
 
             // Update the cache time
-            $this->useCache = $this->CACHE->isCached(false);
+            $this->useCache = $this->CACHE->isCached();
 
             // want to reduce the paths in the NagVis config,
             // but don't want to hardcode the paths relative from the bases

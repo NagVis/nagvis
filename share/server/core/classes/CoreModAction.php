@@ -57,7 +57,7 @@ class CoreModAction extends CoreModule
                         'object_id' => MATCH_OBJECTID,
                         'cmd'       => MATCH_STRING_NO_SPACE,
                     ];
-                    $attrs = $this->getCustomOptions($aOpts, []);
+                    $attrs = $this->getCustomOptions($aOpts);
 
                     // Input validations
                     // - Valid custom action?

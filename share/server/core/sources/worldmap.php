@@ -448,7 +448,7 @@ function worldmap_update_object(
     } // adding global section (during map creation)
 
     // disable creating new objects during "view to new map" action
-    if (val($_GET, 'act', null) == 'viewToNewMap') {
+    if (val($_GET, 'act') == 'viewToNewMap') {
         return true;
     }
 
@@ -605,8 +605,8 @@ function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id)
  */
 function process_worldmap($MAPCFG, $map_name, &$map_config)
 {
-    $bbox = val($_GET, 'bbox', null);
-    $clone_id = val($_GET, 'clone_id', null);
+    $bbox = val($_GET, 'bbox');
+    $clone_id = val($_GET, 'clone_id');
 
     if ($bbox !== null) {
         $params = $MAPCFG->getSourceParams();

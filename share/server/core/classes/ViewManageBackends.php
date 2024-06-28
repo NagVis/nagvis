@@ -347,7 +347,7 @@ class ViewManageBackends
     {
         ob_start();
         $this->defaultForm();
-        $this->editForm('add');
+        $this->editForm();
         $this->editForm('edit');
         $this->delForm();
         return ob_get_clean();

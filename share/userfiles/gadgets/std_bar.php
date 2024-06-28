@@ -267,8 +267,8 @@ for ($i = 0; $i < $pdc; $i++) {
         //================
 
         $p = 100 / $limit * $value;
-        $warnp = round(100 / $limit * $warn, 0);
-        $critp = round(100 / $limit * $crit, 0);
+        $warnp = round(100 / $limit * $warn);
+        $critp = round(100 / $limit * $crit);
         $valuev = ($maxX / 100 * $p);
         $warnv = intval($maxX / 100 * $warnp);
         $critv = intval($maxX / 100 * $critp);
