@@ -84,7 +84,7 @@ class GlobalMainCfg {
                     'default'       => '',
                     'depends_on'    => 'authorisationmodule',
                     'depends_value' => 'CoreAuthorisationModMultisite',
-                    'match'         => MATCH_STRING_PATH,
+                    'match'         => MATCH_STRING_PATH_AUTHORISATION,
                 ),
 
                 'authorisation_group_perms_file' => Array(

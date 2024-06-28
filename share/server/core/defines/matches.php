@@ -36,7 +36,9 @@ define('MATCH_STRING_NO_SPACE', '/^[0-9a-zа-яё\p{L}:+[\]()_.,\-\*?!#@=\/\\\\*
 define('MATCH_STRING_NO_SPACE_EMPTY', '/^[0-9a-zа-яё\p{L}:+[\]()_.,\-\*?!#@=\/\\\]*$/iu');
 define('MATCH_CONDITION', '/^[0-9a-zа-яё\p{L}\s_\-~=]*$/iu');
 
+define('DISALLOWED_AUTHORISATION_PATHS', '(.*etc\/nagvis\/maps\/.*)');
 define('MATCH_STRING_PATH', '/^[0-9a-z\s_.\-\/\\\]+$/i');
+define('MATCH_STRING_PATH_AUTHORISATION', '/^(?!' . DISALLOWED_AUTHORISATION_PATHS . ')[0-9a-z\s_.\-\/\\\]+$/i');
 define('MATCH_STRING_URL', '/^[0-9a-z\s:;|+[\]()=%?&_,.\-#@=\/\\\~\{\}]+$/i');
 define('MATCH_STRING_URL_EMPTY', '/^[0-9a-z\s:;|+[\]()=%?&_,.\-#@=\/\\\~]*$/i');
 define('MATCH_GADGET_OPT', '/^[0-9a-z\s:+[\]()_.,\-&?!#@=\/\\\%]+$/i');
