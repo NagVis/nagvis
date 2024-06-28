@@ -175,8 +175,7 @@ class GlobalBackendTest implements GlobalBackendInterface
         $substate = 'normal',
         $output = null,
         $perfdata = ''
-    )
-    {
+    ) {
         $ack = $substate == 'ack';
         $in_downtime = $substate == 'downtime';
         if ($in_downtime) {
@@ -1128,8 +1127,7 @@ class GlobalBackendTest implements GlobalBackendInterface
     public function getDirectChildDependenciesNamesByHostName(
         $hostName,
         $min_business_impact = false
-    )
-    {
+    ) {
         return $this->getDirectChildNamesByHostName($hostName);
     }
 
@@ -1145,8 +1143,7 @@ class GlobalBackendTest implements GlobalBackendInterface
     public function getDirectParentDependenciesNamesByHostName(
         $hostName,
         $min_business_impact = false
-    )
-    {
+    ) {
         return $this->getDirectParentNamesByHostName($hostName);
     }
 }

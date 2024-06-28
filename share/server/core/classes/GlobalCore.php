@@ -694,8 +694,7 @@ class GlobalCore
         $returnPart = null,
         $setKey = null,
         $printErr = true
-    )
-    {
+    ) {
         $files = [];
 
         if ($returnPart === null) {

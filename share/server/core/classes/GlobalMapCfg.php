@@ -518,8 +518,7 @@ class GlobalMapCfg
         $resolveTemplates = true,
         $useCache = true,
         $enforceSources = false
-    )
-    {
+    ) {
 
         global $_MAINCFG, $AUTHORISATION;
         // Only use cache when there is
@@ -792,8 +791,7 @@ class GlobalMapCfg
         $only_user_supplied,
         $only_customized,
         $only_view_parameters
-    )
-    {
+    ) {
         $keys = [];
         // Get keys of all view params belonging to all configured sources
         foreach ($sources as $source) {
@@ -849,8 +847,7 @@ class GlobalMapCfg
         $only_user_supplied = false,
         $only_customized = false,
         $only_view_parameters = false
-    )
-    {
+    ) {
         // First get a list of source names to get the parameters for
         $config  = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         $sources = array_merge(['*'], $config);
