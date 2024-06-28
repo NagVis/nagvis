@@ -228,7 +228,7 @@ class NagVisHeaderMenu
             }
 
             // Save the list as cache
-            $CACHE->writeCache($list, 1);
+            $CACHE->writeCache($list);
         }
 
         $permEditAnyMap = false;

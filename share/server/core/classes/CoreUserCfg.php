@@ -106,7 +106,7 @@ class CoreUserCfg
         global $CORE, $AUTH;
         $file = $this->profilesDir . '/' . $AUTH->getUser() . '.profile';
 
-        if (!$CORE->checkExisting(dirname($file), true) || !$CORE->checkWriteable(dirname($file), true)) {
+        if (!$CORE->checkExisting(dirname($file)) || !$CORE->checkWriteable(dirname($file))) {
             return false;
         }
 

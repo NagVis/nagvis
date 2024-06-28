@@ -373,7 +373,7 @@ class CoreModOverview extends CoreModule
     private function createThumbnail($imgPath, $thumbPath)
     {
         global $CORE;
-        if ($CORE->checkVarFolderWriteable(true) && $CORE->checkExisting($imgPath, true)) {
+        if ($CORE->checkVarFolderWriteable(true) && $CORE->checkExisting($imgPath)) {
             // 0: width, 1:height, 2:type
             $imgSize = getimagesize($imgPath);
             $strFileType = '';

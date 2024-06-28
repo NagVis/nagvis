@@ -155,6 +155,7 @@ class ViewManageMaps
                 foreach ($MAPCFG1->getDefinitions('map') as $key => $obj) {
                     // check if old map name is linked...
                     if ($obj['map_name'] == $name) {
+                        // todo: this method only takes 3 parameters
                         $MAPCFG1->setValue('map', $i, 'map_name', $new_name);
                         // todo: this method doesn't exist?
                         $MAPCFG1->writeElement('map', $i);
@@ -240,7 +241,7 @@ class ViewManageMaps
 
         // eventual currently open map, needed for redirecting the user if the
         // renamed map is currently open
-        hidden('cur_map', '');
+        hidden('cur_map');
         js('document.getElementById(\'cur_map\').value = oPageProperties.map_name;');
 
         echo '<table class="mytable">';
@@ -317,7 +318,7 @@ class ViewManageMaps
 
         // eventual currently open map, needed for redirecting the user if the
         // renamed map is currently open
-        hidden('current_map', '');
+        hidden('current_map');
         js('document.getElementById(\'current_map\').value = oPageProperties.map_name;');
 
         echo '<table class="mytable">';
