@@ -171,8 +171,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
         } else {
             throw new BackendConnectionProblem(
-                l('Unknown socket type given in backend [BACKENDID]',
-                ['BACKENDID' => $this->backendId]));
+                l('Unknown socket type given in backend [BACKENDID]', ['BACKENDID' => $this->backendId])
+            );
         }
     }
 
@@ -252,13 +252,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
             }
 
             $this->SOCKET= stream_socket_client(
-                "tls://" . $this->socketAddress . ":" . $this->socketPort, $errno, $errstr,
-                (float) cfg('backend_' . $this->backendId, 'timeout'), STREAM_CLIENT_CONNECT,
-                $context);
+                "tls://" . $this->socketAddress . ":" . $this->socketPort,
+                $errno,
+                $errstr,
+                (float) cfg('backend_' . $this->backendId, 'timeout'),
+                STREAM_CLIENT_CONNECT,
+                $context
+            );
 
         } elseif ($this->socketType === 'tcp') {
-            $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr,
-                (float) cfg('backend_' . $this->backendId, 'timeout'));
+            $this->SOCKET = fsockopen(
+                $this->socketAddress,
+                $this->socketPort,
+                $errno,
+                $errstr,
+                (float) cfg('backend_' . $this->backendId, 'timeout')
+            );
         }
 
         restore_error_handler();
@@ -271,13 +280,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
             }
 
             $this->SOCKET = null;
-            $this->CONNECT_EXC = new BackendConnectionProblem(
-                l('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
-                    [
-                        'BACKENDID' => $this->backendId,
-                        'SOCKET'    => $this->socketSpec,
-                        'MSG'       => $error_msg
-                    ]));
+            $this->CONNECT_EXC = new BackendConnectionProblem(l(
+                'Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET'    => $this->socketSpec,
+                    'MSG'       => $error_msg
+                ]
+            ));
             throw $this->CONNECT_EXC;
         }
     }
@@ -371,15 +381,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         }
 
         if ($write !== strlen($query)) {
-            throw new BackendConnectionProblem(
-                l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                    [
-                        'BACKENDID' => $this->backendId,
-                        'SOCKET' => $this->socketSpec,
-                        'MSG' => 'Connection terminated.'
-                    ]
-                )
-            );
+            throw new BackendConnectionProblem(l(
+                'Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET' => $this->socketSpec,
+                    'MSG' => 'Connection terminated.'
+                ]
+            ));
         }
 
 
@@ -393,15 +402,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
         // Catch problem while reading
         if ($read === false) {
-            throw new BackendConnectionProblem(
-                l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                    [
-                        'BACKENDID' => $this->backendId,
-                        'SOCKET' => $this->socketSpec,
-                        'MSG' => 'Error while reading socket (header)'
-                    ]
-                )
-            );
+            throw new BackendConnectionProblem(l(
+                'Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET' => $this->socketSpec,
+                    'MSG' => 'Error while reading socket (header)'
+                ]
+            ));
         }
 
         // Extract status code
@@ -415,28 +423,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
         // Catch problem while reading
         if ($read === false) {
-            throw new BackendConnectionProblem(
-                l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                    [
-                        'BACKENDID' => $this->backendId,
-                        'SOCKET'    => $this->socketSpec,
-                        'MSG'       => 'Error while reading socket (content)'
-                    ]
-                )
-            );
+            throw new BackendConnectionProblem(l(
+                'Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET'    => $this->socketSpec,
+                    'MSG'       => 'Error while reading socket (content)'
+                ]
+            ));
         }
 
         // Catch errors (Like HTTP 200 is OK)
         if ($status != "200") {
-            throw new BackendConnectionProblem(
-                l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                    [
-                        'BACKENDID' => $this->backendId,
-                        'SOCKET'    => $this->socketSpec,
-                        'MSG'       => $read
-                    ]
-                )
-            );
+            throw new BackendConnectionProblem(l(
+                'Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET'    => $this->socketSpec,
+                    'MSG'       => $read
+                ]
+            ));
         }
 
         //$fh = fopen('/tmp/live', 'a');
@@ -452,8 +458,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
         // json_decode returns null on syntax problems
         if ($obj === null) {
-            throw new BackendInvalidResponse(l('The response has an invalid format in backend [BACKENDID].',
-                ['BACKENDID' => $this->backendId]));
+            throw new BackendInvalidResponse(l(
+                'The response has an invalid format in backend [BACKENDID].',
+                ['BACKENDID' => $this->backendId]
+            ));
         } else {
             // Return the response object
             return $obj;
@@ -1178,9 +1186,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         if (is_array($l) && count($l) > 0) {
             // livestatus previous 1.1.9i3 answers without host_alias - these users should update.
             if (!isset($l[0][13])) {
-                throw new BackendInvalidResponse(
-                    l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
-                        ['BACKENDID' => $this->backendId]));
+                throw new BackendInvalidResponse(l(
+                    'Livestatus version used in backend [BACKENDID] is too old. Please update.',
+                    ['BACKENDID' => $this->backendId]
+                ));
             }
 
             foreach ($l as $e) {
@@ -1403,9 +1412,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         if (is_array($l) && count($l) > 0) {
             // livestatus previous 1.1.9i3 answers without hostgroup_alias - these users should update.
             if (!isset($l[0][8 + $hoffset])) {
-                throw new BackendInvalidResponse(
-                    l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
-                        ['BACKENDID' => $this->backendId]));
+                throw new BackendInvalidResponse(l(
+                    'Livestatus version used in backend [BACKENDID] is too old. Please update.',
+                    ['BACKENDID' => $this->backendId]
+                ));
             }
             foreach ($l as $e) {
                 // Workaround for Icinga 2 which answers stats queries for not existing objects with
@@ -1581,9 +1591,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         if (is_array($l) && count($l) > 0) {
             // livestatus previous 1.1.9i3 answers without servicegroup_alias - these users should update.
             if (!isset($l[0][13])) {
-                throw new BackendInvalidResponse(
-                    l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
-                        ['BACKENDID' => $this->backendId]));
+                throw new BackendInvalidResponse(l(
+                    'Livestatus version used in backend [BACKENDID] is too old. Please update.',
+                    ['BACKENDID' => $this->backendId]
+                ));
             }
             foreach ($l as $e) {
                 $arrReturn[$e[0]] = [

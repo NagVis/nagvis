@@ -326,9 +326,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         }
 
         /* All objects must have the is_active=1 flag enabled. */
-        $QUERYHANDLE = $this->DB->query('SELECT name1,name2 FROM ' . $this->dbPrefix . 'objects
-            WHERE objecttype_id=:objectType AND ' . $filter . ' is_active=1 AND instance_id=:instance ORDER BY name1',
-            $values);
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT name1,name2 FROM ' . $this->dbPrefix
+                . 'objects WHERE objecttype_id=:objectType AND '
+                . $filter . ' is_active=1 AND instance_id=:instance ORDER BY name1',
+            $values
+        );
         while ($data = $QUERYHANDLE->fetch()) {
             $ret[] = ['name1' => $data['name1'], 'name2' => $data['name2']];
         }
@@ -515,11 +518,17 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         if (isset($this->hostAckCache[$hostName])) {
             $return = $this->hostAckCache[$hostName];
         } else {
-            $QUERYHANDLE = $this->DB->query('SELECT problem_has_been_acknowledged
-            FROM ' . $this->dbPrefix . 'objects AS o,' . $this->dbPrefix . 'hoststatus AS h
-            WHERE (o.objecttype_id=1 AND o.name1 = :hostName AND o.instance_id=:instance) AND h.host_object_id=o.object_id AND (o.is_active=1)
-            LIMIT 1
-            ', ['hostName' => $hostName, 'instance' => $this->dbInstanceId]);
+            $QUERYHANDLE = $this->DB->query(
+                'SELECT problem_has_been_acknowledged
+                FROM ' . $this->dbPrefix . 'objects AS o,
+                    ' . $this->dbPrefix . 'hoststatus AS h
+                WHERE
+                    (o.objecttype_id=1 AND o.name1 = :hostName AND o.instance_id=:instance)
+                    AND h.host_object_id=o.object_id
+                    AND (o.is_active=1)
+                LIMIT 1',
+                ['hostName' => $hostName, 'instance' => $this->dbInstanceId]
+            );
 
             $data = $QUERYHANDLE->fetch();
 
@@ -548,37 +557,41 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         $arrReturn = [];
 
         $filter = $this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, HOST_QUERY);
-        $QUERYHANDLE = $this->DB->query('SELECT
-            o.object_id, alias, display_name, address, o.name1,
-            has_been_checked,
-            last_hard_state,
-            UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change,
-            UNIX_TIMESTAMP(last_state_change) AS last_state_change,
-            current_state,
-            output, perfdata,
-            h.notes,
-            problem_has_been_acknowledged,
-            UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check,
-            hs.state_type, hs.current_check_attempt, hs.max_check_attempts, hs.check_command,
-            UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end,
-            dh.author_name AS downtime_author, dh.comment_data AS downtime_data
-        FROM
-            ' . $this->dbPrefix . 'hosts AS h,
-            ' . $this->dbPrefix . 'objects AS o
-        LEFT JOIN
-            ' . $this->dbPrefix . 'hoststatus AS hs
-            ON hs.host_object_id=o.object_id
-        LEFT JOIN
-            ' . $this->dbPrefix . 'scheduleddowntime AS dh
-            ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
-        WHERE
-            (o.objecttype_id=1 AND (' . $filter['query'] . ')
-            AND o.instance_id=:instance)
-            AND (h.config_type=:configType AND h.instance_id=:instance AND h.host_object_id=o.object_id)
-            AND (o.is_active=1)
-     ', array_merge(
-            $filter['params'],
-            ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType]));
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
+                o.object_id, alias, display_name, address, o.name1,
+                has_been_checked,
+                last_hard_state,
+                UNIX_TIMESTAMP(last_hard_state_change) AS last_hard_state_change,
+                UNIX_TIMESTAMP(last_state_change) AS last_state_change,
+                current_state,
+                output, perfdata,
+                h.notes,
+                problem_has_been_acknowledged,
+                UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check,
+                hs.state_type, hs.current_check_attempt, hs.max_check_attempts, hs.check_command,
+                UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end,
+                dh.author_name AS downtime_author, dh.comment_data AS downtime_data
+            FROM
+                ' . $this->dbPrefix . 'hosts AS h,
+                ' . $this->dbPrefix . 'objects AS o
+            LEFT JOIN
+                ' . $this->dbPrefix . 'hoststatus AS hs
+                ON hs.host_object_id=o.object_id
+            LEFT JOIN
+                ' . $this->dbPrefix . 'scheduleddowntime AS dh
+                ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
+            WHERE
+                (o.objecttype_id=1 AND (' . $filter['query'] . ')
+                AND o.instance_id=:instance)
+                AND (h.config_type=:configType AND h.instance_id=:instance AND h.host_object_id=o.object_id)
+                AND (o.is_active=1)
+            ',
+            array_merge(
+                $filter['params'],
+                ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType]
+            )
+        );
 
         while ($data = $QUERYHANDLE->fetch()) {
 
@@ -683,19 +696,20 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         $arrReturn = [];
 
         $filter = $this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, !HOST_QUERY);
-        $QUERYHANDLE = $this->DB->query('SELECT
-            o.object_id, o.name1, o.name2,
-            s.display_name,
-            s.notes,
-            h.address,
-            ss.has_been_checked, ss.last_hard_state, ss.current_state,
-            UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change,
-            UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change,
-            ss.output, ss.perfdata, ss.problem_has_been_acknowledged,
-            UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check,
-            ss.state_type, ss.current_check_attempt, ss.max_check_attempts, ss.check_command,
-            UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end,
-            dh.author_name AS downtime_author, dh.comment_data AS downtime_data
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
+                o.object_id, o.name1, o.name2,
+                s.display_name,
+                s.notes,
+                h.address,
+                ss.has_been_checked, ss.last_hard_state, ss.current_state,
+                UNIX_TIMESTAMP(ss.last_hard_state_change) AS last_hard_state_change,
+                UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change,
+                ss.output, ss.perfdata, ss.problem_has_been_acknowledged,
+                UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check,
+                ss.state_type, ss.current_check_attempt, ss.max_check_attempts, ss.check_command,
+                UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end,
+                dh.author_name AS downtime_author, dh.comment_data AS downtime_data
             FROM
                 ' . $this->dbPrefix . 'services AS s,
                 ' . $this->dbPrefix . 'hosts AS h,
@@ -709,10 +723,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
             WHERE
                 (o.objecttype_id=2 AND o.is_active=1 AND (' . $filter['query'] . '))
                 AND (s.config_type=:configType AND s.instance_id=:instance AND s.service_object_id=o.object_id)
-                AND (h.config_type=:configType AND h.instance_id=:instance AND h.host_object_id=s.host_object_id)
-                ', array_merge(
-            ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId],
-            $filter['params']));
+                AND (h.config_type=:configType AND h.instance_id=:instance AND h.host_object_id=s.host_object_id)',
+            array_merge(
+                ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId],
+                $filter['params']
+            )
+        );
 
         while ($data = $QUERYHANDLE->fetch()) {
             $arrTmpReturn = [];
@@ -845,25 +861,25 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     {
         $arrReturn = [];
 
-        $QUERYHANDLE = $this->DB->query('
-     select o.name1 as host_name
-     from ' . $this->dbPrefix . 'hoststatus as hs
-     LEFT JOIN ' . $this->dbPrefix . 'objects as o ON hs.host_object_id=o.object_id
-     WHERE o.is_active = 1
-     AND hs.current_state > 0
-     AND hs.config_type=:configType
-     AND o.instance_id=:instance
-     UNION
-     SELECT o.name1 AS host_name
-     FROM ' . $this->dbPrefix . 'servicestatus as ss
-     LEFT JOIN ' . $this->dbPrefix . 'objects as o ON ss.service_object_id=o.object_id
-     LEFT JOIN ' . $this->dbPrefix . 'services as s ON ss.service_object_id=s.service_object_id
-     WHERE s.config_type=:configType
-     AND ss.current_state > 0
-     AND o.is_active=1
-     AND o.instance_id=:instance',
-        ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType]
-           );
+        $QUERYHANDLE = $this->DB->query(
+            'select o.name1 as host_name
+                 from ' . $this->dbPrefix . 'hoststatus as hs
+                 LEFT JOIN ' . $this->dbPrefix . 'objects as o ON hs.host_object_id=o.object_id
+                 WHERE o.is_active = 1
+                 AND hs.current_state > 0
+                 AND hs.config_type=:configType
+                 AND o.instance_id=:instance
+                 UNION
+                 SELECT o.name1 AS host_name
+                 FROM ' . $this->dbPrefix . 'servicestatus as ss
+                 LEFT JOIN ' . $this->dbPrefix . 'objects as o ON ss.service_object_id=o.object_id
+                 LEFT JOIN ' . $this->dbPrefix . 'services as s ON ss.service_object_id=s.service_object_id
+                 WHERE s.config_type=:configType
+                 AND ss.current_state > 0
+                 AND o.is_active=1
+                 AND o.instance_id=:instance',
+            ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType]
+        );
         while ($data = $QUERYHANDLE->fetch()) {
             $arrReturn[] = $data['name1'];
         }
@@ -888,20 +904,21 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         }
 
         $filter = $this->parseFilter($objects, $filters, 'o', 'o', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
-        $QUERYHANDLE = $this->DB->query('SELECT
-            o.name1, h.alias,
-            SUM(CASE WHEN ss.has_been_checked=0 THEN 1 ELSE 0 END) AS pending,
-            SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0) THEN 1 ELSE 0 END) AS ok,
-            SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)) THEN 1 ELSE 0 END) AS ok_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS warning,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)) THEN 1 ELSE 0 END) AS warning_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)) THEN 1 ELSE 0 END) AS warning_ack,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0) AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0 THEN 1 ELSE 0 END) AS critical,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)) THEN 1 ELSE 0 END) AS critical_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)) THEN 1 ELSE 0 END) AS critical_ack,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unknown,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)) THEN 1 ELSE 0 END) AS unknown_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)) THEN 1 ELSE 0 END) AS unknown_ack
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
+                o.name1, h.alias,
+                SUM(CASE WHEN ss.has_been_checked=0 THEN 1 ELSE 0 END) AS pending,
+                SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0) THEN 1 ELSE 0 END) AS ok,
+                SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)) THEN 1 ELSE 0 END) AS ok_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS warning,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)) THEN 1 ELSE 0 END) AS warning_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)) THEN 1 ELSE 0 END) AS warning_ack,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0) AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0 THEN 1 ELSE 0 END) AS critical,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)) THEN 1 ELSE 0 END) AS critical_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)) THEN 1 ELSE 0 END) AS critical_ack,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unknown,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)) THEN 1 ELSE 0 END) AS unknown_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND (ss.problem_has_been_acknowledged=1 OR hs.problem_has_been_acknowledged=1)) THEN 1 ELSE 0 END) AS unknown_ack
             FROM
                 ' . $this->dbPrefix . 'hoststatus AS hs,
                 ' . $this->dbPrefix . 'services AS s,
@@ -916,9 +933,11 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 AND (h.config_type=:configType AND h.instance_id=:instance AND h.host_object_id=s.host_object_id)
                 AND (hs.host_object_id=h.host_object_id)
                 GROUP BY h.host_object_id, h.alias, o.name1',
-                array_merge(
-                    ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId],
-                    $filter['params']));
+            array_merge(
+                ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId],
+                $filter['params']
+            )
+        );
 
         $arrReturn = [];
         while ($data = $QUERYHANDLE->fetch()) {
@@ -974,20 +993,21 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         }
 
         $filter = $this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, HOST_QUERY);
-        $QUERYHANDLE = $this->DB->query('SELECT
-            o.name1, hg.alias,
-            SUM(CASE WHEN hs.has_been_checked=0 THEN 1 ELSE 0 END) AS unchecked,
-            SUM(CASE WHEN (' . $stateAttr . '=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0) THEN 1 ELSE 0 END) AS up,
-            SUM(CASE WHEN (' . $stateAttr . '=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS up_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS down,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS down_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND hs.has_been_checked!=0 AND hs.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS down_ack,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unreachable,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS unreachable_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND hs.has_been_checked!=0 AND hs.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS unreachable_ack,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unknown,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS unknown_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND hs.has_been_checked!=0 AND hs.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS unknown_ack
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
+                o.name1, hg.alias,
+                SUM(CASE WHEN hs.has_been_checked=0 THEN 1 ELSE 0 END) AS unchecked,
+                SUM(CASE WHEN (' . $stateAttr . '=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0) THEN 1 ELSE 0 END) AS up,
+                SUM(CASE WHEN (' . $stateAttr . '=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS up_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS down,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS down_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND hs.has_been_checked!=0 AND hs.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS down_ack,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unreachable,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS unreachable_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND hs.has_been_checked!=0 AND hs.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS unreachable_ack,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unknown,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS unknown_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND hs.has_been_checked!=0 AND hs.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS unknown_ack
             FROM
                 ' . $this->dbPrefix . 'objects AS o,
                 ' . $this->dbPrefix . 'hostgroups AS hg,
@@ -1004,9 +1024,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
                 AND (o.is_active=1)
                 AND (o2.is_active=1)
-            GROUP BY o.object_id, hg.alias', array_merge(
-            ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType],
-            $filter['params']));
+            GROUP BY o.object_id, hg.alias',
+            array_merge(
+                ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType],
+                $filter['params']
+            )
+        );
 
         $arrReturn = [];
         while ($data = $QUERYHANDLE->fetch()) {
@@ -1050,20 +1073,21 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 
         // FIXME: Does not handle host downtimes/acks
         $filter = $this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
-        $QUERYHANDLE = $this->DB->query('SELECT
-            o.name1,
-            SUM(CASE WHEN ss.has_been_checked=0 THEN 1 ELSE 0 END) AS pending,
-            SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0) THEN 1 ELSE 0 END) AS ok,
-            SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS ok_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS warning,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS warning_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS warning_ack,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS critical,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS critical_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS critical_ack,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unknown,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS unknown_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS unknown_ack
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
+                o.name1,
+                SUM(CASE WHEN ss.has_been_checked=0 THEN 1 ELSE 0 END) AS pending,
+                SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0) THEN 1 ELSE 0 END) AS ok,
+                SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS ok_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS warning,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS warning_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS warning_ack,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS critical,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS critical_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS critical_ack,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unknown,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS unknown_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS unknown_ack
             FROM
                 ' . $this->dbPrefix . 'objects AS o,
                 ' . $this->dbPrefix . 'hostgroups AS hg,
@@ -1082,9 +1106,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 AND (o2.objecttype_id=2 AND s.service_object_id=o2.object_id)
                 AND (o.is_active=1)
                 AND (o2.is_active=1)
-            GROUP BY o.object_id', array_merge(
-            ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType],
-            $filter['params']));
+            GROUP BY o.object_id',
+            array_merge(
+                ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType],
+                $filter['params']
+            )
+        );
 
         while ($data = $QUERYHANDLE->fetch()) {
             $arrReturn[$data['name1']]['counts'][PENDING]['normal']    = intval($data['pending']);
@@ -1125,20 +1152,21 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 
         // FIXME: Recognize host ack/downtime
         $filter = $this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
-        $QUERYHANDLE = $this->DB->query('SELECT
-            o.name1, sg.alias,
-            SUM(CASE WHEN ss.has_been_checked=0 THEN 1 ELSE 0 END) AS pending,
-            SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0) THEN 1 ELSE 0 END) AS ok,
-            SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS ok_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS warning,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS warning_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS warning_ack,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS critical,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS critical_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS critical_ack,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unknown,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS unknown_downtime,
-            SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS unknown_ack
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
+                o.name1, sg.alias,
+                SUM(CASE WHEN ss.has_been_checked=0 THEN 1 ELSE 0 END) AS pending,
+                SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0) THEN 1 ELSE 0 END) AS ok,
+                SUM(CASE WHEN (' . $stateAttr . '=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS ok_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS warning,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS warning_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=1 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS warning_ack,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS critical,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS critical_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=2 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS critical_ack,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.problem_has_been_acknowledged=0) THEN 1 ELSE 0 END) AS unknown,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0) THEN 1 ELSE 0 END) AS unknown_downtime,
+                SUM(CASE WHEN (' . $stateAttr . '=3 AND ss.has_been_checked!=0 AND ss.problem_has_been_acknowledged=1) THEN 1 ELSE 0 END) AS unknown_ack
             FROM
                 ' . $this->dbPrefix . 'objects AS o,
                 ' . $this->dbPrefix . 'servicegroups AS sg,
@@ -1157,9 +1185,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 AND (o2.objecttype_id=2 AND s.service_object_id=o2.object_id)
                 AND (o.is_active=1)
                 AND (o2.is_active=1)
-            GROUP BY o.object_id, sg.alias', array_merge(
-            ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType],
-            $filter['params']));
+            GROUP BY o.object_id, sg.alias',
+            array_merge(
+                ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType],
+                $filter['params']
+            )
+        );
 
         $arrReturn = [];
         while ($data = $QUERYHANDLE->fetch()) {
@@ -1209,16 +1240,18 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     {
         $arrReturn = [];
 
-        $QUERYHANDLE = $this->DB->query('SELECT o1.name1
-        FROM
-        ' . $this->dbPrefix . 'objects AS o1,
-        ' . $this->dbPrefix . 'hosts AS h1
-        LEFT OUTER JOIN ' . $this->dbPrefix . 'host_parenthosts AS ph1 ON h1.host_id=ph1.host_id
-        WHERE o1.objecttype_id=1
-        AND (h1.config_type=:configType AND h1.instance_id=:instance AND h1.host_object_id=o1.object_id)
-        AND ph1.parent_host_object_id IS null
-        AND (o1.is_active=1)
-        ', ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId]);
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT o1.name1
+            FROM
+                ' . $this->dbPrefix . 'objects AS o1,
+                ' . $this->dbPrefix . 'hosts AS h1
+            LEFT OUTER JOIN ' . $this->dbPrefix . 'host_parenthosts AS ph1 ON h1.host_id=ph1.host_id
+            WHERE o1.objecttype_id=1
+                AND (h1.config_type=:configType AND h1.instance_id=:instance AND h1.host_object_id=o1.object_id)
+                AND ph1.parent_host_object_id IS null
+                AND (o1.is_active=1)',
+            ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId]
+        );
 
         while ($data = $QUERYHANDLE->fetch()) {
             $arrReturn[] = $data['name1'];
@@ -1238,19 +1271,21 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     {
         $aParentNames = [];
 
-        $QUERYHANDLE = $this->DB->query('SELECT o2.name1
-        FROM
-        ' . $this->dbPrefix . 'objects AS o1,
-        ' . $this->dbPrefix . 'hosts AS h1,
-        ' . $this->dbPrefix . 'host_parenthosts AS ph1,
-        ' . $this->dbPrefix . 'objects AS o2
-        WHERE o1.objecttype_id=1 AND o1.name1=\'' . $hostName . '\'
-        AND (h1.config_type=:configType AND h1.instance_id=:instance AND h1.host_object_id=o1.object_id)
-        AND h1.host_id=ph1.host_id
-        AND o2.objecttype_id=1 AND o2.object_id=ph1.parent_host_object_id
-        AND (o1.is_active=1)
-        AND (o2.is_active=1)
-        ', ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId]);
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT o2.name1
+                FROM
+                ' . $this->dbPrefix . 'objects AS o1,
+                ' . $this->dbPrefix . 'hosts AS h1,
+                ' . $this->dbPrefix . 'host_parenthosts AS ph1,
+                ' . $this->dbPrefix . 'objects AS o2
+                WHERE o1.objecttype_id=1 AND o1.name1=\'' . $hostName . '\'
+                AND (h1.config_type=:configType AND h1.instance_id=:instance AND h1.host_object_id=o1.object_id)
+                AND h1.host_id=ph1.host_id
+                AND o2.objecttype_id=1 AND o2.object_id=ph1.parent_host_object_id
+                AND (o1.is_active=1)
+                AND (o2.is_active=1)',
+            ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId]
+        );
         while ($data = $QUERYHANDLE->fetch()) {
             $aParentNames[] = $data['name1'];
         }
@@ -1268,21 +1303,23 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     {
         $arrChildNames = [];
 
-        $QUERYHANDLE = $this->DB->query('SELECT o2.name1
-        FROM
-        ' . $this->dbPrefix . 'objects AS o1,
-        ' . $this->dbPrefix . 'hosts AS h1,
-        ' . $this->dbPrefix . 'host_parenthosts AS ph1,
-        ' . $this->dbPrefix . 'hosts AS h2,
-        ' . $this->dbPrefix . 'objects AS o2
-        WHERE o1.objecttype_id=1 AND o1.name1=:hostName
-        AND (h1.config_type=:configType AND h1.instance_id=:instance AND h1.host_object_id=o1.object_id)
-        AND o1.object_id=ph1.parent_host_object_id
-        AND (h2.config_type=:configType AND h2.instance_id=:instance AND h2.host_id=ph1.host_id)
-        AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id
-        AND (o1.is_active=1)
-        AND (o2.is_active=1)
-        ', ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId, 'hostName' => $hostName]);
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT o2.name1
+            FROM
+            ' . $this->dbPrefix . 'objects AS o1,
+            ' . $this->dbPrefix . 'hosts AS h1,
+            ' . $this->dbPrefix . 'host_parenthosts AS ph1,
+            ' . $this->dbPrefix . 'hosts AS h2,
+            ' . $this->dbPrefix . 'objects AS o2
+            WHERE o1.objecttype_id=1 AND o1.name1=:hostName
+                AND (h1.config_type=:configType AND h1.instance_id=:instance AND h1.host_object_id=o1.object_id)
+                AND o1.object_id=ph1.parent_host_object_id
+                AND (h2.config_type=:configType AND h2.instance_id=:instance AND h2.host_id=ph1.host_id)
+                AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id
+                AND (o1.is_active=1)
+                AND (o2.is_active=1)',
+            ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId, 'hostName' => $hostName]
+        );
         while ($data = $QUERYHANDLE->fetch()) {
             $arrChildNames[] = $data['name1'];
         }
@@ -1300,7 +1337,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     {
         $arrReturn = [];
 
-        $QUERYHANDLE = $this->DB->query('SELECT
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
                 o2.name1
             FROM
                 ' . $this->dbPrefix . 'objects AS o,
@@ -1313,8 +1351,13 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 AND hgm.hostgroup_id=hg.hostgroup_id
                 AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
                 AND (o.is_active=1)
-                AND (o2.is_active=1)
-                ', ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId, 'hostgroupName' => $hostgroupName]);
+                AND (o2.is_active=1)',
+            [
+                'configType' => $this->objConfigType,
+                'instance' => $this->dbInstanceId,
+                'hostgroupName' => $hostgroupName
+            ]
+        );
 
         while ($data = $QUERYHANDLE->fetch()) {
             // Assign actual dataset to return array
@@ -1345,7 +1388,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     {
         $arrReturn = [];
 
-        $QUERYHANDLE = $this->DB->query('SELECT
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
                 o2.name1, o2.name2
             FROM
                 ' . $this->dbPrefix . 'objects AS o,
@@ -1358,8 +1402,13 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 AND sgm.servicegroup_id=sg.servicegroup_id
                 AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id)
                 AND (o.is_active=1)
-                AND (o2.is_active=1)
-                ', ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId, 'servicegroupName' => $servicegroupName]);
+                AND (o2.is_active=1)',
+            [
+                'configType' => $this->objConfigType,
+                'instance' => $this->dbInstanceId,
+                'servicegroupName' => $servicegroupName
+            ]
+        );
 
         while ($data = $QUERYHANDLE->fetch()) {
             // Assign actual dataset to return array
@@ -1390,11 +1439,11 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 AND (sg.config_type=:configType AND sg.instance_id=:instance AND sg.servicegroup_object_id=o.object_id)
                 AND (o.is_active=1)
                 LIMIT 1',
-                [
-                    'configType' => $this->objConfigType,
-                    'instance' => $this->dbInstanceId,
-                    'servicegroupName' => $servicegroupName
-                ]
+            [
+                'configType' => $this->objConfigType,
+                'instance' => $this->dbInstanceId,
+                'servicegroupName' => $servicegroupName
+            ]
         );
 
         $data = $QUERYHANDLE->fetch();
@@ -1414,7 +1463,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     {
         $arrReturn = [];
 
-        $QUERYHANDLE = $this->DB->query('SELECT
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT
                 o.object_id, g.alias
             FROM
                 ' . $this->dbPrefix . 'objects AS o,
@@ -1424,7 +1474,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 AND (g.config_type=:configType AND g.instance_id=:instance AND g.hostgroup_object_id=o.object_id)
                 AND (o.is_active=1)
                 LIMIT 1',
-                ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId, 'groupName' => $groupName]);
+            ['configType' => $this->objConfigType, 'instance' => $this->dbInstanceId, 'groupName' => $groupName]
+        );
 
         $data = $QUERYHANDLE->fetch();
 
@@ -1463,9 +1514,11 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      */
     public function getProgramStart()
     {
-        $QUERYHANDLE = $this->DB->query('SELECT UNIX_TIMESTAMP(program_start_time) AS program_start '
-            . 'FROM ' . $this->dbPrefix . 'programstatus WHERE instance_id=:instance',
-            ['instance' => $this->dbInstanceId]);
+        $QUERYHANDLE = $this->DB->query(
+            'SELECT UNIX_TIMESTAMP(program_start_time) AS program_start '
+                . 'FROM ' . $this->dbPrefix . 'programstatus WHERE instance_id=:instance',
+            ['instance' => $this->dbInstanceId]
+        );
         $data = $QUERYHANDLE->fetch();
         if ($data !== false && $this->DB->is_nonnull_int($data['program_start'])) {
             return intval($data['program_start']);

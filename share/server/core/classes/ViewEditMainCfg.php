@@ -73,8 +73,10 @@ class ViewEditMainCfg
 
                     // now check for value format
                     if (!preg_match($spec['match'], $raw_val)) {
-                        throw new FieldInputError($ident, l('Invalid format given. Regex: [r]',
-                            ['r' => $spec['match']]));
+                        throw new FieldInputError(
+                            $ident,
+                            l('Invalid format given. Regex: [r]', ['r' => $spec['match']])
+                        );
                     }
 
                     $UMAINCFG->setValue($sec, $key, $val);

@@ -45,8 +45,13 @@ class ViewManageShapes
 
                 $file = $_FILES['image'];
                 if (!is_uploaded_file($file['tmp_name'])) {
-                    throw new FieldInputError('image', l('The file could not be uploaded (Error: [ERROR]).',
-                        ['ERROR' => $file['error'] . ': ' . $CORE->getUploadErrorMsg($file['error'])]));
+                    throw new FieldInputError(
+                        'image',
+                        l(
+                            'The file could not be uploaded (Error: [ERROR]).',
+                            ['ERROR' => $file['error'] . ': ' . $CORE->getUploadErrorMsg($file['error'])]
+                        )
+                    );
                 }
 
                 $file_name = $file['name'];
@@ -138,9 +143,14 @@ class ViewManageShapes
                     }
                 }
                 if ($using) {
-                    throw new FieldInputError('name', l('Unable to delete this shape, because it is '
-                        . 'currently used by these maps: [M].',
-                        ['M' => implode(',', $using)]));
+                    throw new FieldInputError(
+                        'name',
+                        l(
+                            'Unable to delete this shape, because it is '
+                            . 'currently used by these maps: [M].',
+                            ['M' => implode(',', $using)]
+                        )
+                    );
                 }
 
                 $path = path('sys', '', 'shapes', $name);

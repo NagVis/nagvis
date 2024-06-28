@@ -168,11 +168,13 @@ class NagVisHostgroup extends NagVisStatefulObject
 
         // Fallback for hostgroups without members
         if ($iSumCount == 0) {
-            $this->sum[OUTPUT] = l('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
+            $this->sum[OUTPUT] = l(
+                'The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
                 [
                     'GROUP' => $this->getName(),
                     'BACKEND' => implode(", ", $this->backend_id)
-                ]);
+                ]
+            );
         } else {
             // FIXME: Recode mergeSummaryOutput method
             $this->mergeSummaryOutput($arrHostStates, l('hosts'), false);

@@ -143,8 +143,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
 
         $s = @file_get_contents($url, false, $this->context);
         if ($s === false) {
-            throw new BackendConnectionProblem(l('Unable to fetch data from URL [U]: [M]',
-                ['U' => $url, 'M' => json_encode(error_get_last())]));
+            throw new BackendConnectionProblem(l(
+                'Unable to fetch data from URL [U]: [M]',
+                ['U' => $url, 'M' => json_encode(error_get_last())]
+            ));
         }
 
         //DEBUG:
@@ -160,15 +162,19 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
         // json_decode returns null on syntax problems
         $obj = json_decode(iso8859_1_to_utf8($s), true);
         if ($obj === null || !isset($obj['json_created'])) {
-            throw new BackendInvalidResponse(l('The response has an invalid format in backend [BACKENDID].',
-                ['BACKENDID' => $this->backendId]));
+            throw new BackendInvalidResponse(l(
+                'The response has an invalid format in backend [BACKENDID].',
+                ['BACKENDID' => $this->backendId]
+            ));
         }
 
         // Check age of 'json_created'
         $created = strptime($obj['json_created'], '%Y-%m-%d %H:%M:%S');
         if ($created < strtotime('-60 seconds')) {
-            throw new BackendInvalidResponse(l('Response data is too old (json_created: [C])',
-                ['C' => $obj['json_created']]));
+            throw new BackendInvalidResponse(l(
+                'Response data is too old (json_created: [C])',
+                ['C' => $obj['json_created']]
+            ));
         }
 
         // Cache the valid response
@@ -260,8 +266,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
         foreach ($bp['components'] as $component) {
             $s = $this->getBPState($component['hardstate']);
             if (!isset($c[$s])) {
-                throw new BackendException(l('Invalid state: "[S]"',
-                    ['S' => $s]));
+                throw new BackendException(l('Invalid state: "[S]"', ['S' => $s]));
             }
             $c[$s]['normal']++;
         }

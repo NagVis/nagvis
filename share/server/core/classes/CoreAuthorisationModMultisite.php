@@ -50,8 +50,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule
         }
 
         if (!file_exists($this->file)) {
-            throw new NagVisException(l('Unable to open auth file ([FILE]).',
-                ['FILE' => $this->file]));
+            throw new NagVisException(l('Unable to open auth file ([FILE]).', ['FILE' => $this->file]));
         }
 
         $this->readFile();
