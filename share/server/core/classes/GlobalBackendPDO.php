@@ -25,7 +25,8 @@
  *
  *****************************************************************************/
 
-abstract class GlobalBackendPDO implements GlobalBackendInterface {
+abstract class GlobalBackendPDO implements GlobalBackendInterface
+{
     /** @var CorePDOHandler */
     private $DB;
     

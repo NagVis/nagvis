@@ -756,7 +756,8 @@ class ViewMapAddModify
             // FIXME: When to ignore?
             //$this->MAPCFG->skipSourceErrors();
             $this->MAPCFG->readMapConfig();
-        } catch (MapCfgInvalid $e) {}
+        } catch (MapCfgInvalid $e) {
+        }
 
         $this->clone_id = req('clone_id');
         if ($this->clone_id !== null && !preg_match(MATCH_OBJECTID, $this->clone_id)) {

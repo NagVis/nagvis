@@ -33,7 +33,8 @@ if (cfg('global', 'shinken_features')) {
     $viewParams['automap'][] = 'min_business_impact';
 }
 
-function list_automap_render_modes() {
+function list_automap_render_modes()
+{
     return [
         'directed'    => 'directed',
         'undirected'  => 'undirected',
@@ -44,7 +45,8 @@ function list_automap_render_modes() {
     ];
 }
 
-function list_automap_rankdirs() {
+function list_automap_rankdirs()
+{
     return [
         'TB' => l('Top to bottom'),
         'LR' => l('Left to right'),
@@ -53,7 +55,8 @@ function list_automap_rankdirs() {
     ];
 }
 
-function list_automap_overlaps() {
+function list_automap_overlaps()
+{
     return [
         'true'     => l('true'),
         'false'    => l('false'),
@@ -69,7 +72,8 @@ function list_automap_overlaps() {
     ];
 }
 
-function list_automaps($CORE) {
+function list_automaps($CORE)
+{
     $arr = [];
     foreach ($CORE->getAvailableAutomaps() as $mapName) {
         $arr[$mapName] = $mapName;
@@ -233,7 +237,8 @@ $hiddenConfigVars = [
  * @return mixed|string
  * @throws NagVisException
  */
-function automap_get_root_hostname($params) {
+function automap_get_root_hostname($params)
+{
     /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     /**
@@ -246,7 +251,8 @@ function automap_get_root_hostname($params) {
     if (!isset($defaultRoot) || $defaultRoot == '') {
         try {
             $hostsWithoutParent = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
-        } catch (BackendConnectionProblem $e) {}
+        } catch (BackendConnectionProblem $e) {
+        }
 
         if (isset($hostsWithoutParent) && count($hostsWithoutParent) == 1) {
             $defaultRoot = $hostsWithoutParent[0];
@@ -270,7 +276,8 @@ function automap_get_root_hostname($params) {
  * @return array
  * @throws NagVisException
  */
-function automap_load_params($MAPCFG) {
+function automap_load_params($MAPCFG)
+{
     $params = $MAPCFG->getSourceParams();
 
     if (isset($params['ignore_hosts'])) {
@@ -293,7 +300,8 @@ function automap_load_params($MAPCFG) {
  * Transforms a list of hostnames to object_ids using the object_id
  * translation file
  */
-function automap_hostnames_to_object_ids($names) {
+function automap_hostnames_to_object_ids($names)
+{
     global $automap_object_ids;
 
     $ids = [];
@@ -313,7 +321,8 @@ function automap_hostnames_to_object_ids($names) {
  * @return array
  * @throws NagVisException
  */
-function automap_load_object_ids() {
+function automap_load_object_ids()
+{
     /**
      * @var string $automap_object_id_file
      * @var array $automap_object_ids
@@ -335,7 +344,8 @@ function automap_load_object_ids() {
  *
  * @return bool
  */
-function automap_store_object_ids() {
+function automap_store_object_ids()
+{
     /**
      * @var string $automap_object_id_file
      * @var array $automap_object_ids
@@ -351,7 +361,8 @@ function automap_store_object_ids() {
  * @param string $obj_name
  * @return array|mixed
  */
-function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
+function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name)
+{
     /**
      * @var array $automap_object_ids
      * @var bool $automap_object_ids_changed
@@ -388,7 +399,8 @@ function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
  * @return array|mixed
  * @throws NagVisException
  */
-function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
+function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name)
+{
     $obj = automap_obj_base($MAPCFG, $params, $saved_config, $obj_name);
 
     if ($obj_name === '<<<monitoring>>>') {
@@ -450,7 +462,8 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
  * @param array $to_obj
  * @return array|mixed
  */
-function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj) {
+function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj)
+{
     $obj_name = $from_obj['object_id'] . 'x' . $to_obj['object_id'];
 
     $obj = automap_obj_base($MAPCFG, $params, $saved_config, $obj_name);
@@ -521,8 +534,7 @@ function automap_fetch_tree(
                     ->getBackend($params['backend_id'][0])
                     ->getDirectChildNamesByHostName($obj_name);
             }
-        }
-        elseif ($obj_name != '<<<monitoring>>>') {
+        } elseif ($obj_name != '<<<monitoring>>>') {
             if (cfg('global', 'shinken_features')) {
                 if ($params['min_business_impact']) {
                     $tmp_array = array_flip(list_business_impact());
@@ -543,7 +555,8 @@ function automap_fetch_tree(
                 $relations[] = '<<<monitoring>>>';
             }
         }
-    } catch (BackendException $e) {}
+    } catch (BackendException $e) {
+    }
 
     foreach ($relations as $rel_name) {
         if (isset($object_names[$rel_name])) {
@@ -587,7 +600,8 @@ function automap_fetch_tree(
  * @return array|mixed
  * @throws NagVisException
  */
-function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
+function automap_get_object_tree($MAPCFG, $params, &$saved_config)
+{
     $root_name = $params['root'];
 
     $root_obj = automap_obj($MAPCFG, $params, $saved_config, $root_name);
@@ -639,7 +653,8 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
  * @param array|null $directions
  * @return bool
  */
-function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
+function automap_filter_tree($allowed_ids, &$obj, $directions = null)
+{
     // Is the current object allowed to remain on the map on its own?
     $remain = isset($allowed_ids[$obj['object_id']]);
 
@@ -674,7 +689,8 @@ function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
  * @param array|null $params
  * @return void
  */
-function automap_filter_by_ids(&$obj, $params = null) {
+function automap_filter_by_ids(&$obj, $params = null)
+{
     if (isset($params['filter_by_ids']) && $params['filter_by_ids'] != '') {
         $allowed_ids = array_flip(explode(',', $params['filter_by_ids']));
         automap_filter_tree($allowed_ids, $obj);
@@ -696,7 +712,8 @@ function automap_filter_by_ids(&$obj, $params = null) {
  * @return void
  * @throws NagVisException
  */
-function automap_filter_by_group(&$obj, $params) {
+function automap_filter_by_group(&$obj, $params)
+{
     if (!isset($params['filter_group']) || $params['filter_group'] == '') {
         return;
     }
@@ -723,7 +740,8 @@ function automap_filter_by_group(&$obj, $params) {
  * @return void
  * @throws NagVisException
  */
-function automap_filter_by_state(&$obj, $params) {
+function automap_filter_by_state(&$obj, $params)
+{
     if (!isset($params['filter_by_state']) || $params['filter_by_state'] != 1) {
         return;
     }
@@ -792,7 +810,8 @@ function automap_tree_to_map_config(
  * @return true
  * @throws NagVisException
  */
-function process_automap($MAPCFG, $map_name, &$map_config) {
+function process_automap($MAPCFG, $map_name, &$map_config)
+{
     global $automap_object_id_file, $automap_object_ids, $automap_object_ids_changed;
 
     // Initialize global vars
@@ -855,7 +874,8 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
  * @return int
  * @throws NagVisException
  */
-function automap_program_start($p) {
+function automap_program_start($p)
+{
     global $_BACKEND;
     $_BACKEND->checkBackendExists($p['backend_id'][0], true);
     $_BACKEND->checkBackendFeature($p['backend_id'][0], 'getProgramStart', true);
@@ -868,7 +888,8 @@ function automap_program_start($p) {
  * @return bool
  * @throws NagVisException
  */
-function changed_automap($MAPCFG, $compare_time) {
+function changed_automap($MAPCFG, $compare_time)
+{
     $params = $MAPCFG->getSourceParams();
     return automap_program_start($params) > $compare_time;
 }

@@ -28,7 +28,8 @@
  *
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-abstract class CoreAuthModule {
+abstract class CoreAuthModule
+{
     /** @var array */
     protected static $aFeatures;
 

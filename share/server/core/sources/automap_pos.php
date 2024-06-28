@@ -9,7 +9,8 @@ $automap_graphviz_path = '';
  * @return true
  * @throws NagVisException
  */
-function automap_check_graphviz($binary) {
+function automap_check_graphviz($binary)
+{
     /** @var string $automap_graphviz_path */
     global $automap_graphviz_path;
     /**
@@ -43,7 +44,8 @@ function automap_check_graphviz($binary) {
  * @return void
  * @throws NagVisException
  */
-function automap_pos_check_preflight($params) {
+function automap_pos_check_preflight($params)
+{
     GlobalCore::getInstance()->checkVarFolderWriteable(true);
 
     // Check all possibly used binaries of graphviz
@@ -59,7 +61,8 @@ function automap_pos_check_preflight($params) {
  * @param string $to_id
  * @return string
  */
-function graphviz_config_connector($from_id, $to_id) {
+function graphviz_config_connector($from_id, $to_id)
+{
     return '    "' . $from_id . '" -- "' . $to_id . '" [ weight=2 ];' . "\n";
 }
 
@@ -69,7 +72,8 @@ function graphviz_config_connector($from_id, $to_id) {
  * @param int $layer
  * @return string
  */
-function graphviz_config_tree(&$params, &$tree, $layer = 0) {
+function graphviz_config_tree(&$params, &$tree, $layer = 0)
+{
     $str = '';
 
     $name = $tree['host_name'];
@@ -142,7 +146,8 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
  * @param array $tree
  * @return string
  */
-function graphviz_config(&$params, &$tree) {
+function graphviz_config(&$params, &$tree)
+{
     $str  = "graph automap {\n";
     //, ranksep="0.1", nodesep="0.4", ratio=auto, bb="0,0,500,500"
     $str .= '    graph [';
@@ -220,7 +225,8 @@ function graphviz_config(&$params, &$tree) {
  * @return string
  * @throws NagVisException
  */
-function graphviz_run($map_name, &$params, $cfg) {
+function graphviz_run($map_name, &$params, $cfg)
+{
     /**
      * @var GlobalCore $CORE
      * @var string $automap_graphviz_path
@@ -289,7 +295,8 @@ function graphviz_run($map_name, &$params, $cfg) {
  * @param string $imagemap
  * @return void
  */
-function graphviz_parse(&$map_config, $imagemap) {
+function graphviz_parse(&$map_config, $imagemap)
+{
     /*
      * Sample code to parse:
      * <map id="automap" name="automap">
@@ -419,7 +426,8 @@ function graphviz_parse(&$map_config, $imagemap) {
  * @return true
  * @throws NagVisException
  */
-function process_automap_pos($MAPCFG, $map_name, &$map_config, &$tree, &$params) {
+function process_automap_pos($MAPCFG, $map_name, &$map_config, &$tree, &$params)
+{
     automap_pos_check_preflight($params);
 
     $cfg      = graphviz_config($params, $tree);
@@ -438,6 +446,7 @@ function process_automap_pos($MAPCFG, $map_name, &$map_config, &$tree, &$params)
  * @param int $px
  * @return string
  */
-function graphviz_px2inch($px) {
+function graphviz_px2inch($px)
+{
     return number_format($px / 72, 4, '.', '');
 }

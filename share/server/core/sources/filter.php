@@ -52,7 +52,8 @@ $configVarMap = [
  * @return void
  * @throws NagVisException
  */
-function filter_hostgroup(&$map_config, $p) {
+function filter_hostgroup(&$map_config, $p)
+{
     if (!isset($p['filter_group']) || $p['filter_group'] == '') {
         return;
     }
@@ -81,7 +82,8 @@ function filter_hostgroup(&$map_config, $p) {
  * @return true
  * @throws NagVisException
  */
-function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
+function process_filter($MAPCFG, $map_name, &$map_config, $params = null)
+{
     global $filter_processed;
     // Skip implicit calls if already processed explicit
     if ($params === null && $filter_processed) {
