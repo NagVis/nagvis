@@ -538,8 +538,12 @@ class GlobalCore {
         if($path != '' && file_exists($path))
             return true;
 
-        if($printErr)
+        if($printErr) {
+            if (isset($_SERVER['OMD_ROOT'])) {
+                throw new NagVisException(l('The path "[PATH]" does not exist on your site.', Array('PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path))));
+            }
             throw new NagVisException(l('The path "[PATH]" does not exist.', Array('PATH' => $path)));
+        }
 
         return false;
     }
@@ -549,6 +553,9 @@ class GlobalCore {
             return true;
 
         if($printErr) {
+            if (isset($_SERVER['OMD_ROOT'])) {
+                throw new NagVisException(l('The path "[PATH]" is not readable on your site.', Array('PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path))));
+            }
             throw new NagVisException(l('The path "[PATH]" is not readable.', Array('PATH' => $path)));
         }
 
@@ -558,8 +565,12 @@ class GlobalCore {
         if($path != '' && is_writeable($path))
             return true;
 
-        if($printErr)
+        if($printErr) {
+            if (isset($_SERVER['OMD_ROOT'])) {
+                throw new NagVisException(l('The path "[PATH]" is not writable on your site.', Array('PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path))));
+            }
             throw new NagVisException(l('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
+        }
 
         return false;
     }
