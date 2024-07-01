@@ -48,6 +48,7 @@ abstract class CoreAuthModule {
     abstract public function changePassword();
     abstract public function getCredentials();
     abstract public function isAuthenticated();
+    abstract public function usesBcrypt($username);
     abstract public function getUser();
     abstract public function getUserId();
 }

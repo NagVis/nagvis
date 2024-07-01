@@ -174,6 +174,10 @@ class CoreAuthHandler {
         return $this->logoutPossible;
     }
 
+    public function usesBcrypt() {
+        return $this->MOD->usesBcrypt($this->getUser());
+    }
+
     public function logout($enforce = false) {
         if(!$enforce && !$this->logoutSupported())
             return false;
