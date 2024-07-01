@@ -687,6 +687,24 @@ function escapeUrlValues(sStr) {
     return sStr;
 }
 
+
+/**
+ * Function to map html special characters into their html entities before
+ * printing them to the screen
+ */
+
+function htmlspecialchars(sStr) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    };
+    return sStr.replace(/[&<>"']/g, match => map[match]);
+}
+
+
 /**
  * Function to dumping arrays/objects in javascript for debugging purposes
  * Taken from http://refactormycode.com/codes/226-recursively-dump-an-object

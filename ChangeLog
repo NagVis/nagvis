@@ -2,6 +2,8 @@
 Security:
   * FIX: Fix XSS in std_table.php gadget
   * FIX: Fix potential RCE due to being able to upload malicious maps
+  * FIX: Prevent XSS in NagVis for service names and script outpus (CVSS score: 5.4)
+    CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N
 
 1.9.41
 Frontend:
