@@ -986,7 +986,7 @@ class GlobalMainCfg {
                     'must'     => 1,
                     'editable' => 1,
                     'default'  => 'demo,demo2',
-                    'match'    => MATCH_STRING_URL)
+                    'match'    => MATCH_STRING)
                 ),
             'action' => Array(
                 'action_type' => Array(
