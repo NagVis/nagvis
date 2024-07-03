@@ -131,7 +131,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 	}
 
         // Validate the hash
-        if ($cookieHash !== $hash) {
+        if (!hash_equals($hash, $cookieHash)) {
             throw new Exception();
         }
 

@@ -23,7 +23,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
@@ -74,6 +74,26 @@ function iso8859_1_to_utf8($s) {
     }
 
     return substr($s, 0, $j);
+}
+
+// This implements the function hash_equals which is needed for timing safe hash comparisons but
+// only available from PHP 5.6.0 on.
+if(!function_exists('hash_equals')) {
+    function hash_equals($str1, $str2)
+    {
+        if(strlen($str1) !== strlen($str2))
+            return false;
+
+        $xor_result = $str1 ^ $str2;
+        $diff = 0;
+
+        for($i =  0; $i < strlen($xor_result); $i++)
+        {
+            $diff |= ord($xor_result[$i]);
+        }
+
+        return $diff === 0;
+    }
 }
 
 ?>

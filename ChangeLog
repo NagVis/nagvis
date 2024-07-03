@@ -10,6 +10,7 @@ Security:
   * FIX: Prevent XSS in NagVis for service names and script outputs (CVSS score: 5.4)
          CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N
   * FIX: Leak of installation path in error message
+  * FIX: Make cookie hash comparison timing safe
 
 1.9.41
 Frontend:
