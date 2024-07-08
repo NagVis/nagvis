@@ -1,14 +1,11 @@
 1.9.42
 Security:
-  * FIX: Fix XSS in std_table.php gadget
-  * FIX: Fix XSS for malicious graph elements (CVSS core: 5.4)
-         CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N
+  * FIX: Fix various XSS issues (std_table.php gadget, malicious graph elements, service names and script outputs).
+         CVE is requested and will be added once available. (CVSS score 8.8)
+         CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
   * FIX: Fix potential RCE due to being able to upload and configure a malicious map as authorisation_multisite_file.
          You can no longer upload such maps and the maps path is excluded from the authorisation_multisite_file upload
-         path. (CVSS score 8.8)
-         CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
-  * FIX: Prevent XSS in NagVis for service names and script outputs (CVSS score: 5.4)
-         CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N
+         path.
   * FIX: Insecure password hashing algorithm for dedicated NagVis users (CVSS score: 5.1)
          CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N
   * FIX: Leak of installation path in error message
