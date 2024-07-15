@@ -190,7 +190,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * @throws BackendConnectionProblem
      * @throws BackendInvalidResponse
      */
-    private function getProcessIDs()
+    public function getProcessIDs()
     {
         $o = $this->getUrl('');
         return array_keys($o['business_processes']);
@@ -203,7 +203,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * @throws BackendConnectionProblem
      * @throws BackendInvalidResponse
      */
-    private function getProcessNames()
+    public function getProcessNames()
     {
         $o = $this->getUrl('');
         $names = [];
@@ -576,7 +576,6 @@ if (!function_exists('l')) {
 
     // TODO: what is $backendId? Seems to alternate between string and array
     $O = new GlobalBackendnagiosbp([]);
-    // todo: these methods are private
     print_r($O->getProcessIDs());
     print_r($O->getProcessNames());
 }
