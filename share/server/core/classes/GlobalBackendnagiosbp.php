@@ -36,82 +36,105 @@
  * - Können Services in Components auch den Status Output anzeigen?
  */
 
-if(!function_exists('l')) {
+if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('../defines/matches.php');
 }
 
-class GlobalBackendnagiosbp implements GlobalBackendInterface {
+class GlobalBackendnagiosbp implements GlobalBackendInterface
+{
+    /** @var string */
     private $backendId = '';
-    private $baseUrl   = '';
-    private $context   = '';
-    private $cache     = Array();
 
-    // These are the backend local configuration options
-    private static $validConfig = Array(
-        'base_url' => Array(
+    /** @var string */
+    private $baseUrl   = '';
+
+    /** @var false|resource|string */
+    private $context   = '';
+
+    /** @var array */
+    private $cache     = [];
+
+    /** @var array These are the backend local configuration options */
+    private static $validConfig = [
+        'base_url' => [
             'must'     => 1,
             'editable' => 1,
             'default'  => 'http://localhost/nagios/cgi-bin/nagios-bp.cgi',
             'match'    => MATCH_STRING_URL,
-        ),
-        'auth_user' => Array(
+        ],
+        'auth_user' => [
             'must'     => 0,
             'editable' => 1,
             'default'  => '',
             'match'    => MATCH_STRING,
-        ),
-        'auth_pass' => Array(
+        ],
+        'auth_pass' => [
             'must'     => 0,
             'editable' => 1,
             'default'  => '',
             'match'    => MATCH_STRING,
-        ),
-    );
+        ],
+    ];
 
     /**
      * Basic initialization happens here
+     *
+     * @param string $backendId
      */
-    public function __construct($backendId) {
+    public function __construct($backendId)
+    {
         $this->backendId = $backendId;
 
-        $this->baseUrl = cfg('backend_'.$backendId, 'base_url');
+        $this->baseUrl = cfg('backend_' . $backendId, 'base_url');
 
-        $httpContext = array( 
+        $httpContext = [
                 'method'     => 'GET',
                 'user_agent' => 'NagVis NagiosBP Backend',
                 'timeout'    => 5,
-        );
+        ];
 
-        $username = cfg('backend_'.$backendId, 'auth_user');
-        $password = cfg('backend_'.$backendId, 'auth_pass');
-        if($username && $password) {
-            $authCred = base64_encode($username.':'.$password);
-            $httpContext['header'] = 'Authorization: Basic '.$authCred."\r\n";
+        $username = cfg('backend_' . $backendId, 'auth_user');
+        $password = cfg('backend_' . $backendId, 'auth_pass');
+        if ($username && $password) {
+            $authCred = base64_encode($username . ':' . $password);
+            $httpContext['header'] = 'Authorization: Basic ' . $authCred . "\r\n";
         }
 
-        $this->context = stream_context_create(array('http' => $httpContext));
+        $this->context = stream_context_create(['http' => $httpContext]);
     }
 
     /**************************************************************************
      * HELPERS
      *************************************************************************/
 
-    private function bpUrl($key) {
+    /**
+     * @param string $key
+     * @return string
+     */
+    private function bpUrl($key)
+    {
         return $this->baseUrl . '?tree=' . $key;
     }
 
     /**
      * The real data fetching method. This performs the HTTP GET and cares
      * about parsing, validating and processing the response.
+     *
+     * @param string $params
+     * @return mixed
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
-    private function getUrl($params) {
+    private function getUrl($params)
+    {
         $url = $this->baseUrl . '?outformat=json&' . $params;
 
         // Is there some cache to use? The cache is not persisted. It is available
         // until the request has finished.
-        if(isset($this->cache[$url]))
+        if (isset($this->cache[$url])) {
             return $this->cache[$url];
+        }
 
         //DEBUG:
         //$fh = fopen('/tmp/bp', 'a');
@@ -119,9 +142,12 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         //fclose($fh);
 
         $s = @file_get_contents($url, false, $this->context);
-        if($s === false)
-            throw new BackendConnectionProblem(l('Unable to fetch data from URL [U]: [M]',
-                                                Array('U' => $url, 'M' => json_encode(error_get_last()))));
+        if ($s === false) {
+            throw new BackendConnectionProblem(l(
+                'Unable to fetch data from URL [U]: [M]',
+                ['U' => $url, 'M' => json_encode(error_get_last())]
+            ));
+        }
 
         //DEBUG:
         //$fh = fopen('/tmp/bp', 'a');
@@ -135,15 +161,21 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         // Decode the json response
         // json_decode returns null on syntax problems
         $obj = json_decode(iso8859_1_to_utf8($s), true);
-        if($obj === null || !isset($obj['json_created']))
-            throw new BackendInvalidResponse(l('The response has an invalid format in backend [BACKENDID].',
-                                                      Array('BACKENDID' => $this->backendId)));
+        if ($obj === null || !isset($obj['json_created'])) {
+            throw new BackendInvalidResponse(l(
+                'The response has an invalid format in backend [BACKENDID].',
+                ['BACKENDID' => $this->backendId]
+            ));
+        }
 
         // Check age of 'json_created'
         $created = strptime($obj['json_created'], '%Y-%m-%d %H:%M:%S');
-        if($created < strtotime('-60 seconds'))
-            throw new BackendInvalidResponse(l('Response data is too old (json_created: [C])', 
-                                                          Array('C' => $obj['json_created'])));
+        if ($created < strtotime('-60 seconds')) {
+            throw new BackendInvalidResponse(l(
+                'Response data is too old (json_created: [C])',
+                ['C' => $obj['json_created']]
+            ));
+        }
 
         // Cache the valid response
         $this->cache[$url] = $obj;
@@ -153,67 +185,89 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
     /**
      * Returns the identifiers of all business processes
+     *
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
-    private function getProcessIDs() {
+    public function getProcessIDs()
+    {
         $o = $this->getUrl('');
         return array_keys($o['business_processes']);
     }
 
     /**
      * Returns the identifiers and names of all business processes
+     *
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
-    private function getProcessNames() {
+    public function getProcessNames()
+    {
         $o = $this->getUrl('');
-        $names = Array();
-        foreach($o['business_processes'] AS $key => $bp) {
+        $names = [];
+        foreach ($o['business_processes'] as $key => $bp) {
             $names[$key] = $bp['display_name'];
         }
         ksort($names);
         return $names;
     }
 
-    private function getBPState($state) {
-        if($state == null)
+    /**
+     * @param string|null $state
+     * @return int|mixed
+     */
+    private function getBPState($state)
+    {
+        if ($state == null) {
             return UNKNOWN;
+        }
         return state_num($state);
     }
 
-    private function getBPCounts($bp) {
-        $c = Array(
-            PENDING => Array(
+    /**
+     * @param array $bp
+     * @return array|array[]
+     * @throws BackendException
+     */
+    private function getBPCounts($bp)
+    {
+        $c = [
+            PENDING => [
                 'normal'   => 0,
-            ),
-            OK => Array(
+            ],
+            OK => [
                 'normal'   => 0,
                 'stale'    => 0,
                 'downtime' => 0,
-            ),
-            WARNING => Array(
-                'normal'   => 0,
-                'stale'    => 0,
-                'ack'      => 0,
-                'downtime' => 0,
-            ),
-            CRITICAL => Array(
-                'normal'   => 0,
-                'stale'    => 0,
-                'ack'      => 0,
-                'downtime' => 0,
-            ),
-            UNKNOWN => Array(
+            ],
+            WARNING => [
                 'normal'   => 0,
                 'stale'    => 0,
                 'ack'      => 0,
                 'downtime' => 0,
-            ),
-        );
+            ],
+            CRITICAL => [
+                'normal'   => 0,
+                'stale'    => 0,
+                'ack'      => 0,
+                'downtime' => 0,
+            ],
+            UNKNOWN => [
+                'normal'   => 0,
+                'stale'    => 0,
+                'ack'      => 0,
+                'downtime' => 0,
+            ],
+        ];
 
         // Add the single component state counts
-        foreach($bp['components'] AS $component) {
+        foreach ($bp['components'] as $component) {
             $s = $this->getBPState($component['hardstate']);
-            if(!isset($c[$s]))
-                throw new BackendException(l('Invalid state: "[S]"',
-                          Array('S' => $s)));
+            if (!isset($c[$s])) {
+                throw new BackendException(l('Invalid state: "[S]"', ['S' => $s]));
+            }
             $c[$s]['normal']++;
         }
 
@@ -227,14 +281,23 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     /**
      * Used in WUI forms to populate the object lists when adding or modifying
      * objects in WUI.
+     *
+     * @param string $type
+     * @param string $name1Pattern
+     * @param string $name2Pattern
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
-    public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
-        if($type !== 'servicegroup')
-            return Array();
+    public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
+    {
+        if ($type !== 'servicegroup') {
+            return [];
+        }
 
-        $result = Array();
-        foreach($this->getProcessNames() AS $id => $name) {
-            $result[] = Array('name1' => $id, 'name2' => $name);
+        $result = [];
+        foreach ($this->getProcessNames() as $id => $name) {
+            $result[] = ['name1' => $id, 'name2' => $name];
         }
         return $result;
     }
@@ -245,35 +308,47 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
      *
      * This backend transforms all business processes to servicegroups. Each
      * business process component is used as a service.
+     *
+     * @param array<array<NagVisObject>> $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendException
+     * @throws BackendInvalidResponse
      */
-    public function getServicegroupStateCounts($objects, $options, $filters) {
+    public function getServicegroupStateCounts($objects, $options, $filters)
+    {
         $o = $this->getUrl('');
         $bps = $o['business_processes'];
 
-        $ret = Array();
-        foreach($objects AS $key => $OBJS) {
-            if(!isset($bps[$key]))
+        $ret = [];
+        foreach ($objects as $key => $OBJS) {
+            if (!isset($bps[$key])) {
                 continue;
+            }
             $bp = $bps[$key];
 
-            $ret[$key] = Array(
-                'details' => Array(
+            $ret[$key] = [
+                'details' => [
                     ALIAS => $bp['display_name'],
                     // This forces the BP state to be the summary state of the BP object
                     STATE => $this->getBPState($bp['hardstate']),
-                ),
+                ],
                 'counts'  => $this->getBPCounts($bp),
-            );
+            ];
 
             // Add optional outputs which replaces the NagVis summary_output
-            if(isset($bp['external_info']))
+            if (isset($bp['external_info'])) {
                 $ret[$key]['output'] = $bp['external_info'];
+            }
 
             // Forces the URL to point to nagios-bp if the current url does not point to a map
-            if(strpos($OBJS[0]->getUrl(), 'show=') === false)
-                $ret[$key]['attrs'] = array(
+            if (!str_contains($OBJS[0]->getUrl(), 'show=')) {
+                $ret[$key]['attrs'] = [
                     'url' => $this->bpUrl($key),
-                );
+                ];
+            }
         }
 
         return $ret;
@@ -282,37 +357,46 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     /**
      * Returns the state with detailed information of a list of services. Using
      * the given objects and filters.
+     *
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
-    public function getServiceState($objects, $options, $filters) {
+    public function getServiceState($objects, $options, $filters)
+    {
         $o = $this->getUrl('');
         $bps = $o['business_processes'];
 
-        $ret = Array();
-        foreach($objects AS $key => $OBJS) {
-            if(!isset($bps[$key]))
+        $ret = [];
+        foreach ($objects as $key => $OBJS) {
+            if (!isset($bps[$key])) {
                 continue;
+            }
             $bp = $bps[$key];
 
             // Initialize the service list
             // Add the aggregation summary state
-            if(!isset($ret[$key])) {
-                $ret[$key] = Array(
+            if (!isset($ret[$key])) {
+                $ret[$key] = [
                     #Array(
                     #    'host_name'           => '_BP_',
                     #    'service_description' => 'Summary',
                     #    'state'               => $this->getBPState($bp['hardstate']),
                     #    'output'              => '',
                     #),
-                );
+                ];
 
-                #if(isset($bp['external_info']))
+                #if (isset($bp['external_info']))
                 #    $ret[$key][0]['output'] = $bp['external_info'];
             }
 
             // Add the services
             // This can be real services or e.g. other business processes
-            foreach($bp['components'] AS $comp) {
-                if(isset($comp['service'])) {
+            foreach ($bp['components'] as $comp) {
+                if (isset($comp['service'])) {
                     // Service
                     //$ret[$key][] = Array(
                     //    STATE => $this->getBPState($comp['hardstate']),
@@ -320,7 +404,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                     //    ALIAS => $comp['host'],
                     //    DESCRIPTION => $comp['service'],
                     //);
-                    $ret[$key][] = array(
+                    $ret[$key][] = [
                         $this->getBPState($comp['hardstate']),
                         '',  // output
                         0,
@@ -345,10 +429,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                         null, // dt end
                         0, // staleness
                         $comp['service'] // descr
-                    );
+                    ];
                 } else {
                     // BP
-                    $childBP = array(
+                    $childBP = [
                         $this->getBPState($comp['hardstate']),
                         '',  // output
                         0,
@@ -373,10 +457,11 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                         null, // dt end
                         0, // staleness
                         $comp['display_name'] // descr
-                    );
+                    ];
 
-                    if(isset($bps[$comp['subprocess']]['external_info']))
+                    if (isset($bps[$comp['subprocess']]['external_info'])) {
                         $childBP[OUTPUT] = $bps[$comp['subprocess']]['external_info'];
+                    }
 
                     $ret[$key][] = $childBP;
                 }
@@ -387,10 +472,12 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     }
 
     /**
-     * PUBLIC Method getValidConfig
      * Returns the valid config for this backend
+     *
+     * @return array
      */
-    public static function getValidConfig() {
+    public static function getValidConfig()
+    {
         return self::$validConfig;
     }
 
@@ -398,55 +485,97 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
      * Not implemented methods
      **************************************************************************/
 
-    public function getHostState($objects, $options, $filters) {
-        return Array();
+    /**
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     */
+    public function getHostState($objects, $options, $filters)
+    {
+        return [];
     }
 
-    public function getHostMemberCounts($objects, $options, $filters) {
-        return Array();
+    /**
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     */
+    public function getHostMemberCounts($objects, $options, $filters)
+    {
+        return [];
     }
 
-    public function getHostgroupStateCounts($objects, $options, $filters) {
-        return Array();
+    /**
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     */
+    public function getHostgroupStateCounts($objects, $options, $filters)
+    {
+        return [];
     }
 
-    public function getHostNamesWithNoParent() {
-        return Array();
+    /**
+     * @return array
+     */
+    public function getHostNamesWithNoParent()
+    {
+        return [];
     }
 
-    public function getDirectChildNamesByHostName($hostName) {
-        return Array();
+    /**
+     * @return array
+     */
+    public function getDirectChildNamesByHostName($hostName)
+    {
+        return [];
     }
 
-    public function getDirectParentNamesByHostName($hostName) {
-        return Array();
+    /**
+     * @return array
+     */
+    public function getDirectParentNamesByHostName($hostName)
+    {
+        return [];
     }
 
-    public function getDirectChildDependenciesNamesByHostName($hostName) {
-        return Array();
+    /**
+     * @param string $hostName
+     * @return array
+     */
+    public function getDirectChildDependenciesNamesByHostName($hostName)
+    {
+        return [];
     }
 }
 
-if(!function_exists('l')) {
+if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('CoreExceptions.php');
 
-    function l($s, $a) {
+    function l($s, $a)
+    {
         return $s . ' ' . json_encode($a);
     }
 
-    function cfg($sec, $opt) {
-        if($opt == 'base_url')
+    function cfg($sec, $opt)
+    {
+        if ($opt == 'base_url') {
             return 'http://127.0.0.1/nagiosbp/cgi-bin/nagios-bp.cgi';
-        if($opt == 'auth_user')
+        }
+        if ($opt == 'auth_user') {
             return 'omdadmin';
-        if($opt == 'auth_pass')
+        }
+        if ($opt == 'auth_pass') {
             return 'omd';
+        }
     }
 
-    $O = new GlobalBackendnagiosbp(Array(), 't');
+    // TODO: what is $backendId? Seems to alternate between string and array
+    $O = new GlobalBackendnagiosbp([]);
     print_r($O->getProcessIDs());
     print_r($O->getProcessNames());
 }
-
-?>

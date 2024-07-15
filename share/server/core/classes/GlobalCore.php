@@ -27,24 +27,39 @@
  *
  * @author  Lars Michelsen <lm@larsmichelsen.com
  */
-class GlobalCore {
+class GlobalCore
+{
+    /** @var GlobalMainCfg */
     protected static $MAINCFG = null;
+
+    /** @var null */
     protected static $LANG = null;
+
+    /** @var CoreAuthHandler */
     protected static $AUTHENTICATION = null;
+
+    /** @var CoreAuthorisationHandler */
     protected static $AUTHORIZATION = null;
 
+    /** @var self */
     private static $instance = null;
-    protected $iconsetTypeCache = Array();
-    protected $selectable_sources = array();
 
-    public $statelessObjectTypes = Array(
+    /** @var array */
+    protected $iconsetTypeCache = [];
+
+    /** @var array */
+    protected $selectable_sources = [];
+
+    /** @var bool[] */
+    public $statelessObjectTypes = [
         'textbox'   => true,
         'shape'     => true,
         'line'      => true,
         'container' => true,
-    );
+    ];
 
-    public $demoMaps = Array(
+    /** @var string[] */
+    public $demoMaps = [
         'demo-germany',
         'demo-ham-racks',
         'demo-load',
@@ -52,21 +67,25 @@ class GlobalCore {
         'demo-overview',
         'demo-geomap',
         'demo-automap',
-    );
+    ];
 
     /**
      * Deny construct
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Deny clone
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * Getter function to initialize MAINCFG
@@ -74,7 +93,8 @@ class GlobalCore {
      * @author Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: Remove this wrapper
      */
-    public static function getMainCfg() {
+    public static function getMainCfg()
+    {
         global $_MAINCFG;
         return $_MAINCFG;
     }
@@ -83,13 +103,17 @@ class GlobalCore {
      * Getter function to initialize the user maincfg instance
      * Only needed in some rare cases when only the values from
      * the user (web) controllable nagvis.ini.php file are needed
+     *
+     * @return GlobalMainCfg
+     * @throws Exception
      */
-    public static function getUserMainCfg() {
+    public static function getUserMainCfg()
+    {
         global $_UMAINCFG;
-        if(!isset($_UMAINCFG)) {
+        if (!isset($_UMAINCFG)) {
             $_UMAINCFG = new GlobalMainCfg();
-            $_UMAINCFG->setConfigFiles(Array(CONST_MAINCFG));
-            $_UMAINCFG->init(True, '-user-only');
+            $_UMAINCFG->setConfigFiles([CONST_MAINCFG]);
+            $_UMAINCFG->init(true, '-user-only');
         }
         return $_UMAINCFG;
     }
@@ -97,9 +121,13 @@ class GlobalCore {
     /**
      * Setter for AA
      *
+     * @param CoreAuthHandler $A1
+     * @param CoreAuthorisationHandler $A2
+     * @return void
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function setAA(CoreAuthHandler $A1, CoreAuthorisationHandler $A2 = null) {
+    public static function setAA(CoreAuthHandler $A1, CoreAuthorisationHandler $A2 = null)
+    {
         self::$AUTHENTICATION = $A1;
         self::$AUTHORIZATION = $A2;
     }
@@ -107,29 +135,35 @@ class GlobalCore {
     /**
      * Getter function for AUTHORIZATION
      *
+     * @return CoreAuthorisationHandler
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getAuthorization() {
+    public static function getAuthorization()
+    {
         return self::$AUTHORIZATION;
     }
 
     /**
      * Getter function for AUTHENTICATION
      *
+     * @return CoreAuthHandler
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getAuthentication() {
+    public static function getAuthentication()
+    {
         return self::$AUTHENTICATION;
     }
 
     /**
      * Static method for getting the instance
      *
+     * @return self
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getInstance() {
-        if(self::$instance === null) {
-            self::$instance = new self;
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -141,35 +175,41 @@ class GlobalCore {
     /**
      * Check if GD-Libs installed, when GD-Libs are enabled
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkGd($printErr) {
-        if(!extension_loaded('gd')) {
-            if($printErr)
+    public function checkGd($printErr)
+    {
+        if (!extension_loaded('gd')) {
+            if ($printErr) {
                 throw new NagVisException(l('gdLibNotFound'));
-            return FALSE;
+            }
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
     /**
      * Reads all defined Backend-ids from the main configuration
      *
-     * @return	Array Backend-IDs
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $onlyUserCfg
+     * @return array Backend-IDs
+     * @throws Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDefinedBackends($onlyUserCfg = false) {
-        if($onlyUserCfg) {
+    public function getDefinedBackends($onlyUserCfg = false)
+    {
+        if ($onlyUserCfg) {
             $MAINCFG = self::getUserMainCfg();
         } else {
             $MAINCFG = self::getMainCfg();
         }
-        $ret = Array();
-        foreach($MAINCFG->getSections() AS $name) {
-            if(preg_match('/^backend_/i', $name)) {
+        $ret = [];
+        foreach ($MAINCFG->getSections() as $name) {
+            if (preg_match('/^backend_/i', $name)) {
                 $backend_id = $MAINCFG->getValue($name, 'backendid');
                 $ret[$backend_id] = $backend_id;
             }
@@ -181,13 +221,14 @@ class GlobalCore {
     /**
      * Gets all rotation pools
      *
-     * @return	Array pools
+     * @return array pools
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDefinedRotationPools() {
-        $ret = Array();
-        foreach(self::getMainCfg()->getSections() AS $name) {
-            if(preg_match('/^rotation_/i', $name)) {
+    public function getDefinedRotationPools()
+    {
+        $ret = [];
+        foreach (self::getMainCfg()->getSections() as $name) {
+            if (preg_match('/^rotation_/i', $name)) {
                 $id = self::getMainCfg()->getValue($name, 'rotationid');
                 $ret[$id] = $id;
             }
@@ -198,12 +239,15 @@ class GlobalCore {
 
     /**
      * Only returns rotations the users is permitted for
+     *
+     * @return array
      */
-    public function getPermittedRotationPools() {
+    public function getPermittedRotationPools()
+    {
         global $AUTHORISATION;
-        $list = array();
-        foreach($this->getDefinedRotationPools() AS $poolName) {
-            if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
+        $list = [];
+        foreach ($this->getDefinedRotationPools() as $poolName) {
+            if ($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
                 $list[$poolName] = $poolName;
             }
         }
@@ -212,11 +256,14 @@ class GlobalCore {
 
     /**
      * Gets all available custom actions
+     *
+     * @return array
      */
-    public function getDefinedCustomActions() {
-        $ret = Array();
-        foreach(self::getMainCfg()->getSections() AS $name) {
-            if(preg_match('/^action_/i', $name)) {
+    public function getDefinedCustomActions()
+    {
+        $ret = [];
+        foreach (self::getMainCfg()->getSections() as $name) {
+            if (preg_match('/^action_/i', $name)) {
                 $id = self::getMainCfg()->getValue($name, 'action_id');
                 $ret[$id] = $id;
             }
@@ -229,14 +276,16 @@ class GlobalCore {
      * Reads all languages which are available in NagVis and
      * are enabled by the configuration
      *
-     * @return	Array list
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableAndEnabledLanguages() {
-        $aRet = Array();
+    public function getAvailableAndEnabledLanguages()
+    {
+        $aRet = [];
 
-        foreach($this->getAvailableLanguages() AS $val) {
-            if(in_array($val, self::getMainCfg()->getValue('global', 'language_available'))) {
+        foreach ($this->getAvailableLanguages() as $val) {
+            if (in_array($val, self::getMainCfg()->getValue('global', 'language_available'))) {
                 $aRet[] = $val;
             }
         }
@@ -247,144 +296,209 @@ class GlobalCore {
     /**
      * Reads all languages
      *
-     * @return	Array list
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableLanguages() {
+    public function getAvailableLanguages()
+    {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'language'), MATCH_LANGUAGE_FILE);
     }
 
     /**
      * Returns languages of all available documentations
      *
-     * @return	Array list
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableDocs() {
+    public function getAvailableDocs()
+    {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'doc'), MATCH_DOC_DIR);
     }
 
     /**
      * Reads all available backends
      *
-     * @return	Array Html
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array Html
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableBackends() {
+    public function getAvailableBackends()
+    {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'class'), MATCH_BACKEND_FILE);
     }
 
     /**
      * Reads all hover templates
      *
-     * @return	Array hover templates
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array hover templates
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableHoverTemplates() {
+    public function getAvailableHoverTemplates()
+    {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'templates'), MATCH_HOVER_TEMPLATE_FILE),
-          self::listDirectory(path('sys', 'local',  'templates'), MATCH_HOVER_TEMPLATE_FILE, null, null, null, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'templates'),
+                MATCH_HOVER_TEMPLATE_FILE
+            ),
+            self::listDirectory(
+                path('sys', 'local', 'templates'),
+                MATCH_HOVER_TEMPLATE_FILE,
+                null,
+                null,
+                null,
+                null,
+                false
+            )
         );
     }
 
     /**
      * Reads all header templates
      *
-     * @return	Array list
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableHeaderTemplates() {
+    public function getAvailableHeaderTemplates()
+    {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'templates'), MATCH_HEADER_TEMPLATE_FILE),
-          self::listDirectory(path('sys', 'local',  'templates'), MATCH_HEADER_TEMPLATE_FILE, null, null, null, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'templates'),
+                MATCH_HEADER_TEMPLATE_FILE
+            ),
+            self::listDirectory(
+                path('sys', 'local', 'templates'),
+                MATCH_HEADER_TEMPLATE_FILE,
+                null,
+                null,
+                null,
+                null,
+                false
+            )
         );
     }
 
     /**
      * Reads all header templates
      *
-     * @return	Array list
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array list
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableContextTemplates() {
+    public function getAvailableContextTemplates()
+    {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'templates'), MATCH_CONTEXT_TEMPLATE_FILE),
-          self::listDirectory(path('sys', 'local',  'templates'), MATCH_CONTEXT_TEMPLATE_FILE, null, null, null, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'templates'),
+                MATCH_CONTEXT_TEMPLATE_FILE
+            ),
+            self::listDirectory(
+                path('sys', 'local', 'templates'),
+                MATCH_CONTEXT_TEMPLATE_FILE,
+                null,
+                null,
+                null,
+                null,
+                false
+            )
         );
     }
 
     /**
      * Reads all PNG images in shape path
      *
-     * @return	Array Shapes
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array Shapes
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableShapes() {
+    public function getAvailableShapes()
+    {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true),
-          self::listDirectory(path('sys', 'local',  'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true, false)
+            self::listDirectory(path('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true),
+            self::listDirectory(path('sys', 'local', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true, false)
         );
     }
 
     /**
      * Reads all iconsets in icon path
      *
-     * @return	Array iconsets
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array iconsets
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableIconsets() {
+    public function getAvailableIconsets()
+    {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'icons'), MATCH_ICONSET),
-          self::listDirectory(path('sys', 'local',  'icons'), MATCH_ICONSET, null, null, null, null, false)
+            self::listDirectory(path('sys', 'global', 'icons'), MATCH_ICONSET),
+            self::listDirectory(path('sys', 'local', 'icons'), MATCH_ICONSET, null, null, null, null, false)
         );
     }
 
     /**
      * Reads all available sources
      *
-     * @return	Array hover templates
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array hover templates
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableSources() {
+    public function getAvailableSources()
+    {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'sources'), MATCH_SOURCE_FILE),
-          self::listDirectory(path('sys', 'local',  'sources'), MATCH_SOURCE_FILE, null, null, null, null, false)
+            self::listDirectory(path('sys', 'global', 'sources'), MATCH_SOURCE_FILE),
+            self::listDirectory(path('sys', 'local', 'sources'), MATCH_SOURCE_FILE, null, null, null, null, false)
         );
     }
 
     /**
      * Returns the list of available custom action files
+     *
+     * @return array
+     * @throws NagVisException
      */
-    public function getAvailableCustomActions() {
+    public function getAvailableCustomActions()
+    {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'actions'), MATCH_PHP_FILE),
-          self::listDirectory(path('sys', 'local',  'actions'), MATCH_PHP_FILE, null, null, null, null, false)
+            self::listDirectory(path('sys', 'global', 'actions'), MATCH_PHP_FILE),
+            self::listDirectory(path('sys', 'local', 'actions'), MATCH_PHP_FILE, null, null, null, null, false)
         );
     }
 
     /**
      * Returns the filetype of an iconset
      *
-     * @param   String  Iconset name
-     * @return	String  Iconset file type
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $iconset Iconset name
+     * @return string Iconset file type
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getIconsetFiletype($iconset) {
+    public function getIconsetFiletype($iconset)
+    {
         $type = '';
 
-        if(isset($this->iconsetTypeCache[$iconset]))
+        if (isset($this->iconsetTypeCache[$iconset])) {
             $type = $this->iconsetTypeCache[$iconset];
-        else
-            foreach(Array(path('sys', 'local',  'icons'),
-                          path('sys', 'global', 'icons')) AS $path)
-                if(file_exists($path))
-                    foreach(Array('png', 'gif', 'jpg', 'svg') AS $ext)
-                        if(file_exists($path . $iconset . '_ok.'.$ext))
+        } else {
+            foreach ([
+                 path('sys', 'local', 'icons'),
+                 path('sys', 'global', 'icons')
+            ] as $path) {
+                if (file_exists($path)) {
+                    foreach (['png', 'gif', 'jpg', 'svg'] as $ext) {
+                        if (file_exists($path . $iconset . '_ok.' . $ext)) {
                             return $ext;
+                        }
+                    }
+                }
+            }
+        }
 
         // Catch error when iconset filetype could not be fetched
-        if($type === '')
-            throw new NagVisException(l('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
+        if ($type === '') {
+            throw new NagVisException(l('iconsetFiletypeUnknown', ['ICONSET' => $iconset]));
+        }
 
         $this->iconsetTypeCache[$iconset] = $type;
         return $type;
@@ -392,46 +506,76 @@ class GlobalCore {
 
     /**
      * Reads all source files for the geomap in the specified path
+     *
+     * @param string|null $strMatch
+     * @param bool|null $setKey
+     * @return array
+     * @throws NagVisException
      */
-    public function getAvailableGeomapSourceFiles($strMatch = null, $setKey = null) {
-        return self::listDirectory(self::getMainCfg()->getValue('paths', 'geomap'), MATCH_CSV_FILE, null, $strMatch, null, $setKey);
+    public function getAvailableGeomapSourceFiles($strMatch = null, $setKey = null)
+    {
+        return self::listDirectory(
+            self::getMainCfg()->getValue('paths', 'geomap'),
+            MATCH_CSV_FILE,
+            null,
+            $strMatch,
+            null,
+            $setKey
+        );
     }
 
     /**
      * Reads all maps in mapcfg path
      *
-     * @param   String  Regex to match the map name
-     * @return	Array   Array of maps
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string|null $strMatch Regex to match the map name
+     * @param bool|null $setKey
+     * @return array Array of maps
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableMaps($strMatch = null, $setKey = null) {
-        return self::listDirectory(self::getMainCfg()->getValue('paths', 'mapcfg'), MATCH_CFG_FILE, null, $strMatch, null, $setKey);
+    public function getAvailableMaps($strMatch = null, $setKey = null)
+    {
+        return self::listDirectory(
+            self::getMainCfg()->getValue('paths', 'mapcfg'),
+            MATCH_CFG_FILE,
+            null,
+            $strMatch,
+            null,
+            $setKey
+        );
     }
 
-    public function getPermittedMaps() {
+    /**
+     * @return array
+     * @throws NagVisException
+     */
+    public function getPermittedMaps()
+    {
         global $AUTHORISATION;
 
-        $list = array();
-        foreach ($this->getAvailableMaps() AS $mapName) {
+        $list = [];
+        foreach ($this->getAvailableMaps() as $mapName) {
             // Check if the user is permitted to view this
-            if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
+            if (!$AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
                 continue;
+            }
 
             // If the parameter filterUser is set, filter the maps by the username
             // given in this parameter. This is a mechanism to be authed as generic
             // user but see the maps of another user. This feature is disabled by
             // default but could be enabled if you need it.
-            if(cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
+            if (cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
                 $AUTHORISATION2 = new CoreAuthorisationHandler();
                 $AUTHORISATION2->parsePermissions($_GET['filterUser']);
-                if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName))
+                if (!$AUTHORISATION2->isPermitted('Map', 'view', $mapName)) {
                     continue;
+                }
 
                 // Switch the auth cookie to this user
                 global $SHANDLER;
                 $SHANDLER->aquire();
-                $SHANDLER->set('authCredentials', array('user' => $_GET['filterUser'], 'password' => ''));
-                $SHANDLER->set('authTrusted',     true);
+                $SHANDLER->set('authCredentials', ['user' => $_GET['filterUser'], 'password' => '']);
+                $SHANDLER->set('authTrusted', true);
                 $SHANDLER->commit();
             }
 
@@ -440,22 +584,29 @@ class GlobalCore {
         return $list;
     }
 
-    public function getListMaps() {
-        $list = array();
+    /**
+     * @return int[]|string[]
+     * @throws NagVisException
+     * @throws Exception
+     */
+    public function getListMaps()
+    {
+        $list = [];
         $maps = $this->getPermittedMaps();
-        foreach ($maps AS $mapName) {
+        foreach ($maps as $mapName) {
             $MAPCFG = new GlobalMapCfg($mapName);
             $MAPCFG->checkMapConfigExists(true);
             try {
                 $MAPCFG->readMapConfig(ONLY_GLOBAL);
-            } catch(MapCfgInvalid $e) {
+            } catch (MapCfgInvalid $e) {
                 continue; // skip configs with broken global sections
-            } catch(NagVisException $e) {
+            } catch (NagVisException $e) {
                 continue; // skip e.g. not read config files
             }
-            
-            if($MAPCFG->getValue(0, 'show_in_lists') == 1)
+
+            if ($MAPCFG->getValue(0, 'show_in_lists') == 1) {
                 $list[$mapName] = $MAPCFG->getAlias();
+            }
         }
         natcasesort($list);
         return array_keys($list);
@@ -464,68 +615,117 @@ class GlobalCore {
     /**
      * Reads all map images in map path
      *
-     * @return	Array map images
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array map images
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableBackgroundImages() {
+    public function getAvailableBackgroundImages()
+    {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
-          self::listDirectory(path('sys', 'local',  'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'backgrounds'),
+                MATCH_PNG_GIF_JPG_FILE,
+                null,
+                null,
+                0
+            ),
+            self::listDirectory(
+                path('sys', 'local', 'backgrounds'),
+                MATCH_PNG_GIF_JPG_FILE,
+                null,
+                null,
+                0,
+                null,
+                false
+            )
         );
     }
 
     /**
      * Reads all available gadgets
      *
-     * @return	Array   Array of gadgets
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return array Array of gadgets
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableGadgets() {
+    public function getAvailableGadgets()
+    {
         return array_merge(
-            self::listDirectory(path('sys', 'global', 'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, true),
-            self::listDirectory(path('sys', 'local',  'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'gadgets'),
+                MATCH_PHP_FILE,
+                ['gadgets_core.php' => true]
+            ),
+            self::listDirectory(
+                path('sys', 'local', 'gadgets'),
+                MATCH_PHP_FILE,
+                ['gadgets_core.php' => true],
+                null,
+                null,
+                null,
+                false
+            )
         );
     }
 
     /**
-   * Lists the contents of a directory with some checking, filtering and sorting
+     * Lists the contents of a directory with some checking, filtering and sorting
      *
-     * @param   String  Path to the directory
-     * @param   String  Regex the file(s) need to match
-     * @param   Array   Lists of filenames to ignore (The filenames need to be the keys)
-     * @param   Integer Match part to be returned
-     * @param   Boolean Print errors when dir does not exist
-     * @return	Array   Sorted list of file names/parts in this directory
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $dir Path to the directory
+     * @param string|null $allowRegex Regex the file(s) need to match
+     * @param array|null $ignoreList Lists of filenames to ignore (The filenames need to be the keys)
+     * @param int|null $allowPartRegex Match part to be returned
+     * @param bool|null $returnPart Print errors when dir does not exist
+     * @param bool|null $setKey
+     * @param bool|null $printErr
+     * @return array Sorted list of file names/parts in this directory
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
-        $files = Array();
+    public function listDirectory(
+        $dir,
+        $allowRegex = null,
+        $ignoreList = null,
+        $allowPartRegex = null,
+        $returnPart = null,
+        $setKey = null,
+        $printErr = true
+    ) {
+        $files = [];
 
-        if($returnPart === null)
+        if ($returnPart === null) {
             $returnPart = 1;
-        if($setKey === null)
+        }
+        if ($setKey === null) {
             $setKey = false;
+        }
 
-        if(!self::checkExisting($dir, $printErr) || !self::checkReadable($dir, $printErr))
+        if (!self::checkExisting($dir, $printErr) || !self::checkReadable($dir, $printErr)) {
             return $files;
+        }
 
-        if($handle = opendir($dir)) {
+        if ($handle = opendir($dir)) {
             while (false !== ($file = readdir($handle))) {
-                if($allowRegex && !preg_match($allowRegex, $file, $arrRet))
+                if ($allowRegex && !preg_match($allowRegex, $file, $arrRet)) {
                     continue;
-                if($ignoreList && isset($ignoreList[$file]))
+                }
+                if ($ignoreList && isset($ignoreList[$file])) {
                     continue;
-                if($allowPartRegex && !preg_match($allowPartRegex, $arrRet[1]))
+                }
+                if ($allowPartRegex && !preg_match($allowPartRegex, $arrRet[1])) {
                     continue;
+                }
 
-                if($setKey)
+                if ($setKey) {
                     $files[$arrRet[$returnPart]] = $arrRet[$returnPart];
-                else
+                } else {
                     $files[] = $arrRet[$returnPart];
+                }
             }
 
-            if($files)
+            if ($files) {
                 natcasesort($files);
+            }
 
             closedir($handle);
         }
@@ -534,42 +734,67 @@ class GlobalCore {
 
     }
 
-    public function checkExisting($path, $printErr = true) {
-        if($path != '' && file_exists($path))
+    /**
+     * @param string $path
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
+    public function checkExisting($path, $printErr = true)
+    {
+        if ($path != '' && file_exists($path)) {
             return true;
+        }
 
-        if($printErr) {
+        if ($printErr) {
             if (isset($_SERVER['OMD_ROOT'])) {
-                throw new NagVisException(l('The path "[PATH]" does not exist on your site.', Array('PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path))));
+                throw new NagVisException(l('The path "[PATH]" does not exist on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
             }
-            throw new NagVisException(l('The path "[PATH]" does not exist.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" does not exist.', ['PATH' => $path]));
         }
 
         return false;
     }
 
-    public function checkReadable($path, $printErr = true) {
-        if($path != '' && is_readable($path))
+    /**
+     * @param string $path
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
+    public function checkReadable($path, $printErr = true)
+    {
+        if ($path != '' && is_readable($path)) {
             return true;
+        }
 
-        if($printErr) {
+        if ($printErr) {
             if (isset($_SERVER['OMD_ROOT'])) {
-                throw new NagVisException(l('The path "[PATH]" is not readable on your site.', Array('PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path))));
+                throw new NagVisException(l('The path "[PATH]" is not readable on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
             }
-            throw new NagVisException(l('The path "[PATH]" is not readable.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" is not readable.', ['PATH' => $path]));
         }
 
         return false;
     }
-    public function checkWriteable($path, $printErr = true) {
-        if($path != '' && is_writeable($path))
-            return true;
 
-        if($printErr) {
+    /**
+     * @param string $path
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
+    public function checkWriteable($path, $printErr = true)
+    {
+        if ($path != '' && is_writeable($path)) {
+            return true;
+        }
+
+        if ($printErr) {
             if (isset($_SERVER['OMD_ROOT'])) {
-                throw new NagVisException(l('The path "[PATH]" is not writable on your site.', Array('PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path))));
+                throw new NagVisException(l('The path "[PATH]" is not writable on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
             }
-            throw new NagVisException(l('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" is not writeable.', ['PATH' => $path]));
         }
 
         return false;
@@ -578,62 +803,73 @@ class GlobalCore {
     /**
      * Checks for existing var folder
      *
-     * @param		Boolean 	$printErr
-     * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkVarFolderExists($printErr) {
-        return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1), $printErr);
+    public function checkVarFolderExists($printErr)
+    {
+        return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'var'), 0, -1), $printErr);
     }
 
     /**
      * Checks for writeable VarFolder
      *
-     * @param		Boolean 	$printErr
-     * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkVarFolderWriteable($printErr) {
-        return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1), $printErr);
+    public function checkVarFolderWriteable($printErr)
+    {
+        return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'var'), 0, -1), $printErr);
     }
 
     /**
      * Checks for existing shared var folder
      *
-     * @param		Boolean 	$printErr
-     * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkSharedVarFolderExists($printErr) {
-        return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
+    public function checkSharedVarFolderExists($printErr)
+    {
+        return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'sharedvar'), 0, -1), $printErr);
     }
 
     /**
      * Checks for writeable shared var folder
      *
-     * @param		Boolean 	$printErr
-     * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkSharedVarFolderWriteable($printErr) {
-        return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
+    public function checkSharedVarFolderWriteable($printErr)
+    {
+        return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'), 0, -1), $printErr);
     }
 
     /**
      * Tries to set correct permissions on files
      * Works completely silent - no error messages here
      *
+     * @param string $file
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setPerms($file) {
+    public function setPerms($file)
+    {
         try {
             $group = self::getMainCfg()->getValue('global', 'file_group');
             $old = error_reporting(0);
-            if($group !== '')
+            if ($group !== '') {
                 chgrp($file, $group);
+            }
             chmod($file, octdec(self::getMainCfg()->getValue('global', 'file_mode')));
             error_reporting($old);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             error_reporting($old);
         }
         return true;
@@ -643,22 +879,24 @@ class GlobalCore {
      * Transforms a NagVis version to integer which can be used
      * for comparing different versions.
      *
-     * @param	  String    Version string
-     * @return  Integer   Version as integer
+     * @param string $s Version string
+     * @return int Version as integer
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function versionToTag($s) {
+    public function versionToTag($s)
+    {
         $s = str_replace('a', '.0.0', str_replace('b', '.0.2', str_replace('rc', '.0.4', $s)));
         $parts = explode('.', $s);
-        if(count($parts) == 2) {
+        if (count($parts) == 2) {
             // e.g. 1.6   -> 106060
             // e.g. 1.5   -> 105060
-            array_push($parts, '0');
-            array_push($parts, '60');
+            $parts[] = '0';
+            $parts[] = '60';
         }
         $tag = '';
-        foreach($parts AS $part)
+        foreach ($parts as $part) {
             $tag .= sprintf("%02s", $part);
+        }
         return (int) sprintf("%-08s", $tag);
     }
 
@@ -666,27 +904,41 @@ class GlobalCore {
      * Returns the human readable upload error message
      * matching the given error code.
      *
-     * @param	  Integer   Error code from $_FILE
-     * @return  String    The error message
+     * @param int $id Error code from $_FILE
+     * @return string The error message
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getUploadErrorMsg($id) {
-        switch($id) {
-            case 1:  return l('File is too large (PHP limit)');
-            case 2:  return l('File is too large (FORM limit)');
-            case 3:  return l('Upload incomplete');
-            case 4:  return l('No file uploaded');
-            case 6:  return l('Missing a temporary folder');
-            case 7:  return l('Failed to write file to disk');
-            case 8:  return l('File upload stopped by extension');
-            default: return l('Unhandled error');
+    public function getUploadErrorMsg($id)
+    {
+        switch ($id) {
+            case 1:
+                return l('File is too large (PHP limit)');
+            case 2:
+                return l('File is too large (FORM limit)');
+            case 3:
+                return l('Upload incomplete');
+            case 4:
+                return l('No file uploaded');
+            case 6:
+                return l('Missing a temporary folder');
+            case 7:
+                return l('Failed to write file to disk');
+            case 8:
+                return l('File upload stopped by extension');
+            default:
+                return l('Unhandled error');
         }
     }
 
-    // Returns localalized strings which are used by different pages
-    // in the JS frontend and not only used on some specific pages.
-    public function getGeneralJSLocales() {
-        return array(
+    /**
+     * Returns localalized strings which are used by different pages
+     * in the JS frontend and not only used on some specific pages.
+     *
+     * @return array
+     */
+    public function getGeneralJSLocales()
+    {
+        return [
             'more items...'      => l('more items...'),
             'Create Object'      => l('Create Object'),
             // object types
@@ -707,33 +959,59 @@ class GlobalCore {
             'map'                => l('map'),
             'mapname'            => l('mapname'),
             'objectname'         => l('objectname'),
-        );
+        ];
     }
 
-    // Sort array of map arrays by alias
-    static function cmpAlias($a, $b) {
+    /**
+     * Sort array of map arrays by alias
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    public static function cmpAlias($a, $b)
+    {
         return strnatcasecmp($a['alias'], $b['alias']);
     }
 
-    // Sort array of map arrays by alias used for header menu
-    static function cmpMapAlias($a, $b) {
+    /**
+     * Sort array of map arrays by alias used for header menu
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    public static function cmpMapAlias($a, $b)
+    {
         return strnatcasecmp($a['mapAlias'], $b['mapAlias']);
     }
 
-    public function omdSite() {
-        if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
-            $site_parts = array_slice(explode('/' ,dirname($_SERVER["SCRIPT_FILENAME"])), 0, -3);
+    /**
+     * @return string|null
+     */
+    public function omdSite()
+    {
+        if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
+            $site_parts = array_slice(explode('/', dirname($_SERVER["SCRIPT_FILENAME"])), 0, -3);
             return $site_parts[count($site_parts) - 1];
         }
         return null;
     }
 
-    public function addSelectableSource($source_name) {
+    /**
+     * @param string $source_name
+     * @return void
+     */
+    public function addSelectableSource($source_name)
+    {
         $this->selectable_sources[$source_name] = $source_name;
     }
 
-    public function getSelectableSources() {
+    /**
+     * @return array
+     */
+    public function getSelectableSources()
+    {
         return $this->selectable_sources;
     }
 }
-?>

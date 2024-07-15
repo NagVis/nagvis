@@ -25,24 +25,37 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendTemplateSystem {
+class FrontendTemplateSystem
+{
+    /** @var Dwoo */
     private $TMPL;
 
-    public function __construct() {
+    public function __construct()
+    {
         // Load Dwoo. It is used as external library
-        require_once(cfg('paths','base')
-                     .HTDOCS_DIR.'/frontend/nagvis-js/ext/dwoo-1.1.0/dwooAutoload.php');
+        require_once(cfg('paths', 'base')
+            . HTDOCS_DIR . '/frontend/nagvis-js/ext/dwoo-1.1.0/dwooAutoload.php');
 
-        $this->TMPL = new Dwoo(cfg('paths','var')
-                               .'tmpl/compile', cfg('paths','var').'tmpl/cache');
+        $this->TMPL = new Dwoo(cfg('paths', 'var')
+            . 'tmpl/compile', cfg('paths', 'var') . 'tmpl/cache');
     }
 
-    public function getTmplSys() {
+    /**
+     * @return Dwoo
+     */
+    public function getTmplSys()
+    {
         return $this->TMPL;
     }
 
-    public function getTmplFile($sTheme, $sTmpl) {
-        $F = new Dwoo_Template_File(path('sys', '', 'templates', $sTheme.'.'.$sTmpl.'.html'));
+    /**
+     * @param string $sTheme
+     * @param string $sTmpl
+     * @return Dwoo_Template_File
+     */
+    public function getTmplFile($sTheme, $sTmpl)
+    {
+        $F = new Dwoo_Template_File(path('sys', '', 'templates', $sTheme . '.' . $sTmpl . '.html'));
         // Would rather set this to null to make the template system not call chmod at all to use
         // the system default, but this does not work because makeDirectory() uses 0777 in case
         // it is set to null.
@@ -52,5 +65,3 @@ class FrontendTemplateSystem {
         return $F;
     }
 }
-
-?>

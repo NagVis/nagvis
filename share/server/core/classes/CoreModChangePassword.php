@@ -26,35 +26,43 @@
 /**
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModChangePassword extends CoreModule {
-    public function __construct($CORE) {
+class CoreModChangePassword extends CoreModule
+{
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
         $this->sName = 'ChangePassword';
 
-        $this->aActions = Array(
+        $this->aActions = [
             'view'   => REQUIRES_AUTHORISATION,
-        );
+        ];
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
         global $AUTH;
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    // Check if user is already authenticated
-                    // Change password must be denied when using trusted mode
-                    if($AUTH->isAuthenticated() && !$AUTH->authedTrusted()) {
-                        $VIEW = new ViewChangePassword();
-                        $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                    } else {
-                        $sReturn = '';
-                    }
-                break;
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                // Check if user is already authenticated
+                // Change password must be denied when using trusted mode
+                if ($AUTH->isAuthenticated() && !$AUTH->authedTrusted()) {
+                    $VIEW = new ViewChangePassword();
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                } else {
+                    $sReturn = '';
+                }
             }
         }
 
         return $sReturn;
     }
 }
-?>

@@ -15,29 +15,29 @@ $filter_processed = false;
 
 // options to be modyfiable by the user(url)
 global $viewParams;
-$viewParams = array();
+$viewParams = [];
 
 // Config variables to be registered for this source
 global $configVars;
-$configVars = array(
-    'filter_group' => array(
+$configVars = [
+    'filter_group' => [
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_STRING_EMPTY,
         'field_type' => 'dropdown',
         'list'       => 'listHostgroupNames',
-    )
-);
+    ]
+];
 
 // Assign config variables to specific object types
 global $configVarMap;
-$configVarMap = array(
-    'global' => array(
-        'general' => array(
+$configVarMap = [
+    'global' => [
+        'general' => [
             'filter_group'  => null,
-        ),
-    ),
-);
+        ],
+    ],
+];
 
 /**
  * This filters the current map config by a given hostgroup.
@@ -46,10 +46,17 @@ $configVarMap = array(
  * In case of the automap it does filter the object tree before this
  * place is reached. Means in case of an automap this function should
  * not change anything.
+ *
+ * @param array $map_config
+ * @param array $p
+ * @return void
+ * @throws NagVisException
  */
-function filter_hostgroup(&$map_config, $p) {
-    if(!isset($p['filter_group']) || $p['filter_group'] == '')
+function filter_hostgroup(&$map_config, $p)
+{
+    if (!isset($p['filter_group']) || $p['filter_group'] == '') {
         return;
+    }
 
     // Initialize the backend
     global $_BACKEND;
@@ -60,23 +67,34 @@ function filter_hostgroup(&$map_config, $p) {
 
     // Remove all hosts not found in the hostgroup
     $hosts = array_flip($hosts);
-    foreach($map_config AS $object_id => $obj)
-        if(isset($obj['host_name']) && !isset($hosts[$obj['host_name']]))
+    foreach ($map_config as $object_id => $obj) {
+        if (isset($obj['host_name']) && !isset($hosts[$obj['host_name']])) {
             unset($map_config[$object_id]);
+        }
+    }
 }
 
-function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @param array $params
+ * @return true
+ * @throws NagVisException
+ */
+function process_filter($MAPCFG, $map_name, &$map_config, $params = null)
+{
     global $filter_processed;
     // Skip implicit calls if already processed explicit
-    if($params === null && $filter_processed)
+    if ($params === null && $filter_processed) {
         return true;
+    }
     $filter_processed = true;
 
-    if($params === null)
+    if ($params === null) {
         $params = $MAPCFG->getSourceParams();
+    }
 
     filter_hostgroup($map_config, $params);
     return true; // allow caching
 }
-
-?>

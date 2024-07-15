@@ -25,18 +25,29 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModuleHandler {
+class CoreModuleHandler
+{
+    /** @var GlobalCore */
     protected $CORE;
+
+    /** @var array */
     protected $aRegistered;
+
+    /** @var string */
     protected $sPrefix;
 
-    public function __construct($CORE = null) {
-      if($CORE === null)
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE = null)
+    {
+        if ($CORE === null) {
             $this->CORE = GlobalCore::getInstance();
-        else
+        } else {
             $this->CORE = $CORE;
+        }
 
-        $this->aRegistered = Array();
+        $this->aRegistered = [];
         $this->sPrefix = 'CoreMod';
     }
 
@@ -44,13 +55,19 @@ class CoreModuleHandler {
      * Loads an instance of the given module. The module needs to be registered
      * before loading.
      *
-     * @param  String  Name of the module to load
+     * @param string $sModule Name of the module to load
+     * @return CoreModule
+     * @throws NagVisException
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function loadModule($sModule) {
+    public function loadModule($sModule)
+    {
         // Check if module class is registered
-        if(isset($this->aRegistered[$this->sPrefix.$sModule]) && $this->aRegistered[$this->sPrefix.$sModule] === 'active') {
-            $className = $this->sPrefix.$sModule;
+        if (
+            isset($this->aRegistered[$this->sPrefix . $sModule])
+            && $this->aRegistered[$this->sPrefix . $sModule] === 'active'
+        ) {
+            $className = $this->sPrefix . $sModule;
 
             // create instance of module
             $MOD = new $className($this->CORE);
@@ -66,19 +83,20 @@ class CoreModuleHandler {
      * Registers a module by its name. After registering it is available
      * to be loaded.
      *
-     * @param  String  Name of the module to register
+     * @param string $sModule Name of the module to register
+     * @return true
+     * @throws NagVisException
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function regModule($sModule) {
+    public function regModule($sModule)
+    {
         // Check if module class exists
-        if(class_exists($this->sPrefix.$sModule)) {
+        if (class_exists($this->sPrefix . $sModule)) {
             // Register the module at the module handler
-            $this->aRegistered[$this->sPrefix.$sModule] = 'active';
+            $this->aRegistered[$this->sPrefix . $sModule] = 'active';
             return true;
         } else {
             throw new NagVisException(l('The module class does not exist'));
         }
     }
 }
-
-?>

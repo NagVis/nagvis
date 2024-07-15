@@ -22,15 +22,27 @@
  *
  *****************************************************************************/
 
-class ViewToNewMap {
+class ViewToNewMap
+{
+    /** @var string|null */
     private $error = null;
 
-    public function parse($orig_name) {
+    /**
+     * @param string $orig_name
+     * @return string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
+    public function parse($orig_name)
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
 
         ob_start();
 
-        $view_params = array();
+        $view_params = [];
         $params = ltrim(req('view_params'), '&');
         if ($params) {
             $parts = explode('&', $params);
@@ -43,27 +55,39 @@ class ViewToNewMap {
         if (is_action()) {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please provide a map name.'));
+                }
 
-                if (!preg_match(MATCH_MAP_NAME, $name))
-                    throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                if (!preg_match(MATCH_MAP_NAME, $name)) {
+                    throw new FieldInputError(
+                        'name',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0)
+                if (count($CORE->getAvailableMaps('/^' . $name . '$/')) > 0) {
                     throw new FieldInputError('name', l('A map with this name already exists.'));
+                }
 
-                if (!isset($view_params["worldmap_center"]))
-                    throw new FieldInputError('view_params', l('Please change your viewport before saving as new map.'));
+                if (!isset($view_params["worldmap_center"])) {
+                    throw new FieldInputError(
+                        'view_params',
+                        l('Please change your viewport before saving as new map.')
+                    );
+                }
 
-                if (!preg_match(MATCH_COORDS_MULTI, $view_params["worldmap_center"]))
+                if (!preg_match(MATCH_COORDS_MULTI, $view_params["worldmap_center"])) {
                     throw new FieldInputError('view_params', l('This is not a valid worldmap center'));
+                }
 
-                if (!isset($view_params["worldmap_zoom"]))
+                if (!isset($view_params["worldmap_zoom"])) {
                     throw new FieldInputError('view_params', l('Worldmap zoom parameter missing.'));
+                }
 
-                if (!preg_match(MATCH_INTEGER, $view_params["worldmap_zoom"]))
+                if (!preg_match(MATCH_INTEGER, $view_params["worldmap_zoom"])) {
                     throw new FieldInputError('view_params', l('This is not a valid worldmap zoom'));
+                }
 
                 // Read the old config
                 $MAPCFG = new GlobalMapCfg($orig_name);
@@ -72,7 +96,7 @@ class ViewToNewMap {
                 // Create a new map config
                 $NEW = new GlobalMapCfg($name);
                 $NEW->createMapConfig();
-                foreach ($MAPCFG->getMapObjects() AS $object_id => $cfg) {
+                foreach ($MAPCFG->getMapObjects() as $object_id => $cfg) {
                     $NEW->addElement($cfg['type'], $cfg, $perm = true, $object_id);
                 }
 
@@ -81,35 +105,35 @@ class ViewToNewMap {
                 $NEW->storeUpdateElement(0);
 
                 success(l('The map has been created.'));
-                reload(cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$name, 1);
+                reload(cfg('paths', 'htmlbase') . '/frontend/nagvis-js/index.php?mod=Map&show=' . $name, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
 
-        echo '<div class="simple_form">'.N;
+        echo '<div class="simple_form">' . N;
         js_form_start('to_new_map');
         input('name');
         submit(l('Save'));
         focus('name');
 
         // Keep the view parameters the users has set
-        foreach ($view_params AS $key => $val) {
+        foreach ($view_params as $key => $val) {
             hidden($key, $val);
         }
 
         form_end();
-        echo '</div>'.N;
+        echo '</div>' . N;
 
         return ob_get_clean();
     }
 }
-?>

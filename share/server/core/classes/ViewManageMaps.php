@@ -19,68 +19,89 @@
  *
  *****************************************************************************/
 
-class ViewManageMaps {
+class ViewManageMaps
+{
+    /** @var string|null */
     private $error = null;
 
-    private function createForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function createForm()
+    {
         global $CORE;
-        echo '<h2>'.l('Create Map').'</h2>';
+        echo '<h2>' . l('Create Map') . '</h2>';
 
-        $map_types = array(
+        $map_types = [
             'map'      => l('Regular map'),
             'worldmap' => l('Geographical map (interactive)'),
             'geomap'   => l('Geographical map (non interactive)'),
             'automap'  => l('Automap based on parent/child relations'),
             'dynmap'   => l('Dynamic map'),
-        );
+        ];
 
         if (is_action() && post('mode') == 'create') {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('You need to provide a unique map name (ID) for the map'));
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) > 0)
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) > 0) {
                     throw new FieldInputError('name', l('A map with this name already exists'));
+                }
 
-                if (!preg_match(MATCH_MAP_NAME, $name))
-                    throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                if (!preg_match(MATCH_MAP_NAME, $name)) {
+                    throw new FieldInputError(
+                        'name',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
+                }
 
                 $type = post('type');
-                if (!isset($map_types[$type]))
+                if (!isset($map_types[$type])) {
                     throw new FieldInputError('type', l('You provided an invalid type'));
+                }
 
                 $alias = post('alias');
-                if ($alias && !preg_match(MATCH_STRING, $alias))
-                    throw new FieldInputError('alias', l('This is not a valid map alias (need to match [M])',
-                                                                    array('M' => MATCH_STRING)));
+                if ($alias && !preg_match(MATCH_STRING, $alias)) {
+                    throw new FieldInputError(
+                        'alias',
+                        l('This is not a valid map alias (need to match [M])', ['M' => MATCH_STRING])
+                    );
+                }
 
                 $MAPCFG = new GlobalMapCfg($name);
-                if (!$MAPCFG->createMapConfig())
+                if (!$MAPCFG->createMapConfig()) {
                     throw new NagVisException(l('Failed to create the map'));
+                }
 
-                $global = array();
+                $global = [];
 
-                if ($alias)
+                if ($alias) {
                     $global['alias'] = $alias;
+                }
 
-                if ($type != 'map')
-                    $global['sources'] = array($type);
+                if ($type != 'map') {
+                    $global['sources'] = [$type];
+                }
 
                 $MAPCFG->addElement('global', $global, false, 0);
                 $MAPCFG->handleSources('init_map');
                 $MAPCFG->storeUpdateElement(0);
 
                 success(l('The map has been created. Changing to the new map...'));
-                reload('index.php?mod=Map&act=view&show='.$name, 1);
+                reload('index.php?mod=Map&act=view&show=' . $name, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -89,17 +110,17 @@ class ViewManageMaps {
         hidden('mode', 'create');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('ID (Internal Name)').'</td>';
+        echo '<tr><td class="tdlabel">' . l('ID (Internal Name)') . '</td>';
         echo '<td class="tdfield">';
         input('name');
         echo '</td></tr>';
 
-        echo '<tr><td class="tdlabel">'.l('Alias').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Alias') . '</td>';
         echo '<td class="tdfield">';
         input('alias');
         echo '</td></tr>';
 
-        echo '<tr><td class="tdlabel">'.l('Map Type').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map Type') . '</td>';
         echo '<td class="tdfield">';
         select('type', $map_types);
         echo '</td></tr>';
@@ -110,27 +131,38 @@ class ViewManageMaps {
         form_end();
     }
 
-    private function doRename($name, $new_name) {
+    /**
+     * @param string $name
+     * @param string $new_name
+     * @return void
+     * @throws NagVisException
+     */
+    private function doRename($name, $new_name)
+    {
+        /** @var GlobalCore $CORE */
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $CORE, $AUTHORISATION;
-        $files = Array();
+        $files = [];
 
         // loop all map configs to replace mapname in all map configs
-        foreach($CORE->getAvailableMaps() as $mapName) {
+        foreach ($CORE->getAvailableMaps() as $mapName) {
             try {
                 $MAPCFG1 = new GlobalMapCfg($mapName);
                 $MAPCFG1->readMapConfig();
 
                 $i = 0;
                 // loop definitions of type map
-                foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+                foreach ($MAPCFG1->getDefinitions('map') as $key => $obj) {
                     // check if old map name is linked...
-                    if($obj['map_name'] == $name) {
+                    if ($obj['map_name'] == $name) {
+                        // todo: this method only takes 3 parameters
                         $MAPCFG1->setValue('map', $i, 'map_name', $new_name);
-                        $MAPCFG1->writeElement('map',$i);
+                        // todo: this method doesn't exist?
+                        $MAPCFG1->writeElement('map', $i);
                     }
                     $i++;
                 }
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 // Do nothing. Siletly pass config errors here...
             }
         }
@@ -139,49 +171,67 @@ class ViewManageMaps {
         $AUTHORISATION->renameMapPermissions($name, $new_name);
 
         // rename config file
-        rename(cfg('paths', 'mapcfg').$name.'.cfg',
-               cfg('paths', 'mapcfg').$new_name.'.cfg');
+        rename(
+            cfg('paths', 'mapcfg') . $name . '.cfg',
+            cfg('paths', 'mapcfg') . $new_name . '.cfg'
+        );
     }
 
-    private function renameForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function renameForm()
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
-        echo '<h2>'.l('Rename Map').'</h2>';
+        echo '<h2>' . l('Rename Map') . '</h2>';
 
         if (is_action() && post('mode') == 'rename') {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please choose a map'));
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0)
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
                     throw new FieldInputError('name', l('The given map name is invalid'));
-            
-                $new_name = post('new_name');
-                if (!$new_name)
-                    throw new FieldInputError('new_name', l('Please provide a new name'));
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($new_name).'$/')) > 0)
+                $new_name = post('new_name');
+                if (!$new_name) {
+                    throw new FieldInputError('new_name', l('Please provide a new name'));
+                }
+
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($new_name) . '$/')) > 0) {
                     throw new FieldInputError('new_name', l('A map with this name already exists'));
-            
-                if (!preg_match(MATCH_MAP_NAME, $new_name))
-                    throw new FieldInputError('new_name', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                }
+
+                if (!preg_match(MATCH_MAP_NAME, $new_name)) {
+                    throw new FieldInputError(
+                        'new_name',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
+                }
 
                 $this->doRename($name, $new_name);
                 success(l('The map has been renamed.'));
 
                 $cur_map = post('cur_map');
-                if ($cur_map && $cur_map == $name)
-                    reload('index.php?mod=Map&act=view&show='.$new_name, 1);
-                else
+                if ($cur_map && $cur_map == $name) {
+                    reload('index.php?mod=Map&act=view&show=' . $new_name, 1);
+                } else {
                     reload(null, 1);
+                }
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -191,19 +241,20 @@ class ViewManageMaps {
 
         // eventual currently open map, needed for redirecting the user if the
         // renamed map is currently open
-        hidden('cur_map', '');
+        hidden('cur_map');
         js('document.getElementById(\'cur_map\').value = oPageProperties.map_name;');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Map').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
-        $maps = array('' => l('Choose a map'));
-        foreach ($CORE->getAvailableMaps() AS $map)
+        $maps = ['' => l('Choose a map')];
+        foreach ($CORE->getAvailableMaps() as $map) {
             $maps[$map] = $map;
+        }
         select('name', $maps);
         echo '</td></tr>';
 
-        echo '<tr><td class="tdlabel">'.l('New name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('New name') . '</td>';
         echo '<td class="tdfield">';
         input('new_name');
         echo '</td></tr>';
@@ -214,37 +265,50 @@ class ViewManageMaps {
         form_end();
     }
 
-    private function deleteForm() {
+    /**
+     * @return void
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
+    private function deleteForm()
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
-        echo '<h2>'.l('Delete Map').'</h2>';
+        echo '<h2>' . l('Delete Map') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please choose a map'));
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0)
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
                     throw new FieldInputError('name', l('The given map name is invalid'));
-            
+                }
+
                 $MAPCFG = new GlobalMapCfg($name);
                 try {
                     $MAPCFG->readMapConfig();
-                } catch(MapCfgInvalid $e) {}
+                } catch (MapCfgInvalid $e) {
+                }
                 $MAPCFG->deleteMapConfig();
 
                 success(l('The map has been deleted.'));
 
                 $cur_map = post('current_map');
-                if ($cur_map && $cur_map == $name)
-                    reload('index.php', 1); // change to overview page when current map has been deleted
+                if ($cur_map && $cur_map == $name) {
+                    reload('index.php', 1);
+                } // change to overview page when current map has been deleted
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -254,15 +318,16 @@ class ViewManageMaps {
 
         // eventual currently open map, needed for redirecting the user if the
         // renamed map is currently open
-        hidden('current_map', '');
+        hidden('current_map');
         js('document.getElementById(\'current_map\').value = oPageProperties.map_name;');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Map').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
-        $maps = array('' => l('Choose a map'));
-        foreach ($CORE->getAvailableMaps() AS $map)
+        $maps = ['' => l('Choose a map')];
+        foreach ($CORE->getAvailableMaps() as $map) {
             $maps[$map] = $map;
+        }
         select('name', $maps);
         echo '</td></tr>';
 
@@ -272,28 +337,38 @@ class ViewManageMaps {
         form_end();
     }
 
-    private function exportForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function exportForm()
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
-        echo '<h2>'.l('Export Map').'</h2>';
+        echo '<h2>' . l('Export Map') . '</h2>';
 
         if (is_action() && post('mode') == 'export') {
             try {
                 $name = post('map');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('map', l('Please choose a map'));
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0)
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
                     throw new FieldInputError('map', l('The given map name is invalid'));
+                }
 
-                reload('../../server/core/ajax_handler.php?mod=Map&act=doExportMap&show='.$name, 1);
+                reload('../../server/core/ajax_handler.php?mod=Map&act=doExportMap&show=' . $name, 1);
                 success(l('The map configuration has been exported.'));
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -302,11 +377,12 @@ class ViewManageMaps {
         hidden('mode', 'export');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Map').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
-        $maps = array('' => l('Choose a map'));
-        foreach ($CORE->getAvailableMaps() AS $map)
+        $maps = ['' => l('Choose a map')];
+        foreach ($CORE->getAvailableMaps() as $map) {
             $maps[$map] = $map;
+        }
         select('map', $maps);
         echo '</td></tr>';
 
@@ -316,30 +392,47 @@ class ViewManageMaps {
         form_end();
     }
 
-    private function importForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     */
+    private function importForm()
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
-        echo '<h2>'.l('Import Map').'</h2>';
+        echo '<h2>' . l('Import Map') . '</h2>';
 
         if (is_action() && post('mode') == 'import') {
             try {
-                if (!isset($_FILES['map_file']))
+                if (!isset($_FILES['map_file'])) {
                     throw new FieldInputError('map_file', l('You need to select a file to import.'));
+                }
 
                 $file = $_FILES['map_file'];
-                if (!is_uploaded_file($file['tmp_name']))
-                    throw new FieldInputError('map_file', l('The file could not be uploaded (Error: [ERROR]).',
-                      Array('ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error']))));
+                if (!is_uploaded_file($file['tmp_name'])) {
+                    throw new FieldInputError(
+                        'map_file',
+                        l(
+                            'The file could not be uploaded (Error: [ERROR]).',
+                            ['ERROR' => $file['error'] . ': ' . $CORE->getUploadErrorMsg($file['error'])]
+                        )
+                    );
+                }
 
                 $file_name = $file['name'];
-                $file_path = cfg('paths', 'mapcfg').$file_name;
+                $file_path = cfg('paths', 'mapcfg') . $file_name;
                 $map_name  = substr($file_name, 0, -4);
 
-                if (!preg_match(MATCH_CFG_FILE, $file_name))
+                if (!preg_match(MATCH_CFG_FILE, $file_name)) {
                     throw new FieldInputError('map_file', l('The uploaded file is no map configuration file.'));
+                }
 
-                if (!preg_match(MATCH_MAP_NAME, $map_name))
-                    throw new FieldInputError('map_file', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                if (!preg_match(MATCH_MAP_NAME, $map_name)) {
+                    throw new FieldInputError(
+                        'map_file',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
+                }
 
                 move_uploaded_file($file['tmp_name'], $file_path);
                 $CORE->setPerms($file_path);
@@ -356,14 +449,15 @@ class ViewManageMaps {
                 }
 
                 success(l('The map has been imported. Changing to the new map...'));
-                reload('index.php?mod=Map&act=view&show='.$map_name, 1);
+                reload('index.php?mod=Map&act=view&show=' . $map_name, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -373,7 +467,7 @@ class ViewManageMaps {
         echo '<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="1000000" />';
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Map file').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map file') . '</td>';
         echo '<td class="tdfield">';
         upload('map_file');
         echo '</td></tr>';
@@ -383,7 +477,15 @@ class ViewManageMaps {
         form_end();
     }
 
-    public function parse() {
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
+    public function parse()
+    {
         ob_start();
 
         $this->createForm();
@@ -395,4 +497,3 @@ class ViewManageMaps {
         return ob_get_clean();
     }
 }
-?>

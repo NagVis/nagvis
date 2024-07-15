@@ -25,33 +25,46 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModManageShapes extends CoreModule {
+class CoreModManageShapes extends CoreModule
+{
+    /** @var string|null */
     private $name = null;
+
+    /** @var GlobalCore */
     private $CORE;
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'ManageShapes';
         $this->CORE = $CORE;
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'view'      => 'manage',
-        );
+        ];
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    $VIEW = new ViewManageShapes();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                $VIEW = new ViewManageShapes();
+                $sReturn = json_encode(['code' => $VIEW->parse()]);
             }
         }
 
         return $sReturn;
     }
 }
-?>

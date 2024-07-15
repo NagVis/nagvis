@@ -26,22 +26,24 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisShape extends NagVisStatelessObject {
+class NagVisShape extends NagVisStatelessObject
+{
     protected $enable_refresh;
+    /** @var string */
     protected $icon;
     protected $icon_size;
 
     /**
      * Class constructor
      *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		String	 	Image of the shape
+     * @param string $icon
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($icon) {
-        if(self::$iconPath === null) {
-            self::$iconPath      = path('sys',  'global', 'shapes');
-            self::$iconPathLocal = path('sys',  'local', 'shapes');
+    public function __construct($icon)
+    {
+        if (self::$iconPath === null) {
+            self::$iconPath      = path('sys', 'global', 'shapes');
+            self::$iconPathLocal = path('sys', 'local', 'shapes');
         }
 
         $this->icon = $icon;
@@ -51,14 +53,13 @@ class NagVisShape extends NagVisStatelessObject {
     }
 
     /**
-     * PUBLIC parseJson()
-     *
      * Parses the object in json format
      *
-     * @return	String		JSON code of the object
+     * @return array JSON code of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseJson() {
+    public function parseJson()
+    {
         // Checks wether the shape exists or not
         $this->fetchIcon();
 
@@ -66,17 +67,19 @@ class NagVisShape extends NagVisStatelessObject {
     }
 
     /**
-     * PUBLIC fetchIcon()
-     *
      * Is executed to detect missing shape images. Is not doing anything
      * when the shape image is an URL.
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function fetchIcon() {
-        if($this->icon[0] != '[') {
-            if(!file_exists(self::$iconPath . $this->icon)
-               && !file_exists(self::$iconPathLocal . $this->icon)) {
+    public function fetchIcon()
+    {
+        if ($this->icon[0] != '[') {
+            if (
+                !file_exists(self::$iconPath . $this->icon)
+                && !file_exists(self::$iconPathLocal . $this->icon)
+            ) {
                 $this->icon = 'std_dummy.png';
             }
         }
@@ -85,4 +88,3 @@ class NagVisShape extends NagVisStatelessObject {
     # End public methods
     # #########################################################################
 }
-?>

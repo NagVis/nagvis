@@ -23,7 +23,9 @@
  *
  *****************************************************************************/
 
-class NagVisContainer extends NagVisStatelessObject {
+class NagVisContainer extends NagVisStatelessObject
+{
+    /** @var string */
     protected $type = 'container';
 
     protected $enable_refresh;
@@ -34,14 +36,16 @@ class NagVisContainer extends NagVisStatelessObject {
     protected $border_color;
 
     /**
-     * PUBLIC parseJson()
      * Parses the object in json format
+     *
+     * @return array
      */
-    public function parseJson() {
+    public function parseJson()
+    {
         // Prepare the URL attribute. If it is an absolute url, leave it as it is
         // If it is a simple filename add the url to the scripts path
         $parts = parse_url($this->url);
-        if(!isset($parts['scheme']) && $parts['path'][0] !== '/') {
+        if (!isset($parts['scheme']) && $parts['path'][0] !== '/') {
             $this->url = cfg('paths', 'htmlbase') . '/userfiles/scripts/' . $this->url;
         }
 
@@ -49,11 +53,12 @@ class NagVisContainer extends NagVisStatelessObject {
     }
 
     /**
-     * PUBLIC fetchIcon()
      * Just a dummy here (Container won't need an icon)
+     *
+     * @return void
      */
-    public function fetchIcon() {
+    public function fetchIcon()
+    {
         // Nothing to do here, icon is set in constructor
     }
 }
-?>

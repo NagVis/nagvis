@@ -25,35 +25,48 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModInfo extends FrontendModule {
+class FrontendModInfo extends FrontendModule
+{
+    /** @var GlobalCore */
     private $CORE;
 
-    public function __construct($CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
         $this->sName = 'Info';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('view' => !REQUIRES_AUTHORISATION);
+        $this->aActions = ['view' => !REQUIRES_AUTHORISATION];
 
         $this->FHANDLER = new FrontendRequestHandler($_POST);
     }
 
-    public function handleAction() {
+    /**
+     * @return string
+     * @throws Dwoo_Exception
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    $sReturn = $this->displayDialog();
-                break;
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                $sReturn = $this->displayDialog();
             }
         }
 
         return $sReturn;
     }
 
-    private function displayDialog() {
+    /**
+     * @return string
+     * @throws Dwoo_Exception
+     */
+    private function displayDialog()
+    {
         $VIEW = new NagVisInfoView($this->CORE);
         return $VIEW->parse();
     }
 }
-?>

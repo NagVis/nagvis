@@ -25,74 +25,122 @@
 /**
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModAuth extends CoreModule {
+class CoreModAuth extends CoreModule
+{
+    /** @var GlobalCore */
     protected $CORE;
+
+    /** @var CoreRequestHandler */
     protected $FHANDLER;
 
-    public function __construct($CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
         $this->sName = 'Auth';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('login'  => !REQUIRES_AUTHORISATION,
-                                'logout' => REQUIRES_AUTHORISATION);
+        $this->aActions = [
+            'login'  => !REQUIRES_AUTHORISATION,
+                                'logout' => REQUIRES_AUTHORISATION
+        ];
 
         $this->FHANDLER = new CoreRequestHandler($_POST);
     }
 
-    public function check($printErr) {
+    /**
+     * @param bool $printErr
+     * @return void
+     */
+    public function check($printErr)
+    {
 
     }
 
-    public function handleAction() {
+    /**
+     * @return true|void
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
         global $AUTH;
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'logout':
-                    if($AUTH->logout())
-                        return true;
-                    else
-                        throw new NagVisException(l('Unable to log you out. Maybe it is not supported by your authentication module.'),
-                                          null, 1, cfg('paths', 'htmlbase'));
-                break;
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'logout') {
+                if ($AUTH->logout()) {
+                    return true;
+                } else {
+                    throw new NagVisException(
+                        l('Unable to log you out. Maybe it is not supported by your authentication module.'),
+                        null,
+                        1,
+                        cfg('paths', 'htmlbase')
+                    );
+                }
             }
         }
     }
 
-    private function handleResponseAuth() {
-        $attr = Array('username' => MATCH_USER_NAME,
-                      'password' => null);
-        $this->verifyValuesSet($this->FHANDLER,   $attr);
+    /**
+     * @return array|false
+     * @throws UserInputError
+     */
+    private function handleResponseAuth()
+    {
+        $attr = [
+            'username' => MATCH_USER_NAME,
+            'password' => null
+        ];
+        $this->verifyValuesSet($this->FHANDLER, $attr);
         $this->verifyValuesMatch($this->FHANDLER, $attr);
 
         // Check length limits
         $bValid = true;
-        if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH))
+        if ($this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
             $bValid = false;
-        if($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH))
+        }
+        if ($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH)) {
             $bValid = false;
+        }
 
         //@todo Escape vars?
 
         // Store response data
-        if($bValid)
-          return Array('user'     => $this->FHANDLER->get('username'),
-                       'password' => $this->FHANDLER->get('password'));
-        else
+        if ($bValid) {
+            return [
+                'user' => $this->FHANDLER->get('username'),
+                'password' => $this->FHANDLER->get('password')
+            ];
+        } else {
             return false;
+        }
     }
 
-    public function msgAlreadyLoggedIn() {
-        throw new NagVisException(l('You are already logged in. You will be redirected.'),
-                          null, 1, cfg('paths', 'htmlbase'));
-        return '';
+    /**
+     * @return void
+     * @throws NagVisException
+     */
+    public function msgAlreadyLoggedIn()
+    {
+        throw new NagVisException(
+            l('You are already logged in. You will be redirected.'),
+            null,
+            1,
+            cfg('paths', 'htmlbase')
+        );
     }
 
-    public function msgInvalidCredentials() {
-        throw new NagVisException(l('You entered invalid credentials.'),
-                                  l('Authentication failed'),
-                                  1, CoreRequestHandler::getReferer(''));
-        return '';
+    /**
+     * @return void
+     * @throws NagVisException
+     */
+    public function msgInvalidCredentials()
+    {
+        throw new NagVisException(
+            l('You entered invalid credentials.'),
+            l('Authentication failed'),
+            1,
+            CoreRequestHandler::getReferer('')
+        );
     }
 }
-
-?>

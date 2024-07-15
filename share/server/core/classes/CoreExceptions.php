@@ -26,97 +26,165 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-class NagVisException extends Exception {
+class NagVisException extends Exception
+{
+    /** @var array */
     protected $e;
 
-    function __construct($msg, $title = null, $time = null, $url = null) {
-        if($title === null)
+    /**
+     * @param string $msg
+     * @param string $title
+     * @param string $time
+     * @param string $url
+     */
+    public function __construct($msg, $title = null, $time = null, $url = null)
+    {
+        if ($title === null) {
             $title = l('ERROR');
+        }
 
-        $this->e = Array(
+        $this->e = [
             'message' => $msg,
             'title'   => $title,
             'type'    => 'error',
-        );
+        ];
 
-        if($time !== null)
+        if ($time !== null) {
             $this->e['reloadTime'] = $time;
-        if($url !== null)
+        }
+        if ($url !== null) {
             $this->e['reloadUrl'] = $url;
+        }
 
         parent::__construct($msg);
     }
 
-    function __toString() {
+    /**
+     * @return false|string
+     */
+    public function __toString()
+    {
         return json_encode($this->e);
     }
 
-    function message() {
+    /**
+     * @return string
+     */
+    public function message()
+    {
         return $this->e['message'];
     }
 }
 
-class MapInMaintenance extends NagVisException {
-    function __construct($map) {
-        $this->e = Array(
+class MapInMaintenance extends NagVisException
+{
+    /**
+     * @param string $map
+     */
+    public function __construct($map)
+    {
+        $this->e = [
             'type'    => 'info',
-            'message' => l('mapInMaintenance', Array('MAP' => $map)),
+            'message' => l('mapInMaintenance', ['MAP' => $map]),
             'title'   => l('INFO'),
-        );
+        ];
     }
 }
 
-class Success extends NagVisException {
-    function __construct($msg, $title = null, $time = null, $url = null) {
+class Success extends NagVisException
+{
+    /**
+     * @param string $msg
+     * @param string $title
+     * @param string $time
+     * @param string $url
+     */
+    public function __construct($msg, $title = null, $time = null, $url = null)
+    {
         parent::__construct($msg, $title, $time, $url);
         $this->e['type'] = 'ok';
-        if($this->e['title'] == l('ERROR'))
+        if ($this->e['title'] == l('ERROR')) {
             $this->e['title'] = l('OK');
+        }
     }
 }
 
-class CoreAuthModNoSupport extends NagVisException {}
+class CoreAuthModNoSupport extends NagVisException
+{
+}
 
-class BackendException extends NagVisException {}
-class BackendConnectionProblem extends BackendException {}
-class BackendInvalidResponse extends BackendException {}
+class BackendException extends NagVisException
+{
+}
+class BackendConnectionProblem extends BackendException
+{
+}
+class BackendInvalidResponse extends BackendException
+{
+}
 
-class MapCfgInvalid extends NagVisException {}
-class MapCfgInvalidObject extends MapCfgInvalid {}
-class MapSourceError extends MapCfgInvalid {}
+class MapCfgInvalid extends NagVisException
+{
+}
+class MapCfgInvalidObject extends MapCfgInvalid
+{
+}
+class MapSourceError extends MapCfgInvalid
+{
+}
 
-class UserInputError extends NagVisException {}
+class UserInputError extends NagVisException
+{
+}
 
-class InputErrorRedirect extends NagVisException {}
+class InputErrorRedirect extends NagVisException
+{
+}
 
-class FieldInputError extends NagVisException {
+class FieldInputError extends NagVisException
+{
     public $field;
     public $msg;
 
-    function __construct($field, $msg) {
+    /**
+     * @param string $field
+     * @param string $msg
+     */
+    public function __construct($field, $msg)
+    {
         $this->field = $field;
         $this->msg   = $msg;
     }
 
-    function message() {
+    /**
+     * @return string
+     */
+    public function message()
+    {
         return $this->msg;
     }
 }
 
 // This exception is used to handle PHP errors
-class NagVisErrorException extends ErrorException {
-    function __toString() {
-        $msg = "Error: (".$this->getCode().") ".$this->getMessage()
-             . "<div class=\"details\">"
-             . "URL: ".$_SERVER['REQUEST_URI']."<br>\n"
-             . "File: ".$this->getFile()."<br>\n"
-             . "Line: ".$this->getLine()."<br>\n"
-             . "<code>".str_replace("\n", "<br>\n", $this->getTraceAsString())."</code>";
+class NagVisErrorException extends ErrorException
+{
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $msg = "Error: (" . $this->getCode() . ") " . $this->getMessage()
+            . "<div class=\"details\">"
+            . "URL: " . $_SERVER['REQUEST_URI'] . "<br>\n"
+            . "File: " . $this->getFile() . "<br>\n"
+            . "Line: " . $this->getLine() . "<br>\n"
+            . "<code>" . str_replace("\n", "<br>\n", $this->getTraceAsString()) . "</code>";
 
         if (ob_get_level() >= 1) {
             $buffer = ob_get_contents();
-            if ($buffer)
-                $msg .= 'Output: <pre>'.htmlentities($buffer, ENT_COMPAT, 'UTF-8').'</pre>';
+            if ($buffer) {
+                $msg .= 'Output: <pre>' . htmlentities($buffer, ENT_COMPAT, 'UTF-8') . '</pre>';
+            }
         }
         return $msg;
     }

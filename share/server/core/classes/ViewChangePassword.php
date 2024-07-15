@@ -22,41 +22,60 @@
  *
  *****************************************************************************/
 
-class ViewChangePassword {
+class ViewChangePassword
+{
+    /** @var string|null */
     private $error = null;
 
-    private function changeForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function changeForm()
+    {
+        /** @var GlobalCore $CORE */
+        /** @var CoreAuthHandler $AUTH */
         global $CORE, $AUTH;
         if (is_action()) {
             try {
                 $user = $AUTH->getUser();
 
                 $password_old = post('password_old');
-                if (!$password_old)
+                if (!$password_old) {
                     throw new FieldInputError('password_old', l('You need to specify the old password.'));
+                }
 
                 $password_new1 = post('password_new1');
-                if (!$password_new1)
+                if (!$password_new1) {
                     throw new FieldInputError('password_new1', l('You need to specify the new password.'));
+                }
 
                 $password_new2 = post('password_new2');
-                if (!$password_new2)
+                if (!$password_new2) {
                     throw new FieldInputError('password_new2', l('You need to specify to confirm the new password.'));
+                }
 
-                if ($password_new1 != $password_new2)
+                if ($password_new1 != $password_new2) {
                     throw new FieldInputError('password_new1', l('The new passwords do not match.'));
+                }
 
-                if ($password_old == $password_new1)
-                    throw new FieldInputError('password_new1', l('The new and old passwords are equal. Won\'t change anything.'));
+                if ($password_old == $password_new1) {
+                    throw new FieldInputError(
+                        'password_new1',
+                        l('The new and old passwords are equal. Won\'t change anything.')
+                    );
+                }
 
                 // Set new passwords in authentication module, then change it
-                $AUTH->passNewPassword(array(
+                $AUTH->passNewPassword([
                     'user'        => $user,
                     'password'    => $password_old,
                     'passwordNew' => $password_new1,
-                ));
-                if (!$AUTH->changePassword())
+                ]);
+                if (!$AUTH->changePassword()) {
                     throw new NagVisException(l('Your password could not be changed.'));
+                }
                 success(l('Your password has been changed.'));
                 js('setTimeout(popupWindowClose, 1000);'); // close window after 1 sec
             } catch (FieldInputError $e) {
@@ -64,39 +83,45 @@ class ViewChangePassword {
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
 
         js_form_start('change_password');
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Old password').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Old password') . '</td>';
         echo '<td class="tdfield">';
         password('password_old');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('New password').'</td>';
+        echo '<tr><td class="tdlabel">' . l('New password') . '</td>';
         echo '<td class="tdfield">';
         password('password_new1');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('New password (confirm)').'</td>';
+        echo '<tr><td class="tdlabel">' . l('New password (confirm)') . '</td>';
         echo '<td class="tdfield">';
         password('password_new2');
         echo '</td></tr>';
         echo '</table>';
-        js('try{document.getElementById(\'password_old\').focus();}catch(e){}');
+        js('try{document.getElementById(\'password_old\').focus();}catch (e){}');
 
         submit(l('Change password'));
         form_end();
     }
 
-    public function parse() {
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    public function parse()
+    {
         ob_start();
         $this->changeForm();
         return ob_get_clean();
     }
 }
-?>

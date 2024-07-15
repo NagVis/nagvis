@@ -22,53 +22,89 @@
  *
  ******************************************************************************/
 
-function _build_dsn_sqlite($params) {
+function _build_dsn_sqlite($params)
+{
     return $params['filename'];
 }
 
-function _build_dsn_common($params) {
-    $connData = array_filter(array(
-        "host" => $params['dbhost'],
-        "port" => $params['dbport'],
-        "dbname" => $params['dbname'],
-        ), function($v) { return isset($v) && strlen($v) > 0; });
+function _build_dsn_common($params)
+{
+    $connData = array_filter(
+        [
+            "host" => $params['dbhost'],
+            "port" => $params['dbport'],
+            "dbname" => $params['dbname'],
+        ],
+        function ($v) {
+            return isset($v) && strlen($v) > 0;
+        }
+    );
 
-    return implode(';', array_map(
-        function($k, $v) { return "$k=$v"; },
-        array_keys($connData),
-        $connData));
+    return implode(
+        ';',
+        array_map(
+            function ($k, $v) {
+                return "$k=$v";
+            },
+            array_keys($connData),
+            $connData
+        )
+    );
 }
 
-class CorePDOHandler {
+class CorePDOHandler
+{
+    /** @var PDO|null */
     private $DB = null;
+
+    /** @var string|null */
     private $file = null;
+
+    /** @var string|null */
     private $dsn = null;
 
+    /** @var string|null */
     private $driver = null;
+
+    /** @var array|null */
     private $data = null;
+
+    /** @var bool */
     private $updating = false;
+
+    /** @var string|null */
     private $lastErrorInfo = null;
+
+    /** @var bool */
     private $inTrans = false;
 
-    // needs to be initialized after class declaration because directly
-    // initializing it here is a syntax error in PHP 5.3
+    /**
+     * needs to be initialized after class declaration because directly
+     * initializing it here is a syntax error in PHP 5.3
+     *
+     * @var array|null
+     */
     private static $DRIVERS = null;
 
-    public static function initialize_static() {
-        self::$DRIVERS = array(
-            '_common' => array(
-                'queries' => array(
+    /**
+     * @return void
+     */
+    public static function initialize_static()
+    {
+        self::$DRIVERS = [
+            '_common' => [
+                'queries' => [
                     '-perm-add' => 'INSERT INTO perms ("mod", act, obj) VALUES (:mod, :act, :obj)',
                     '-perm-check' => 'SELECT COUNT(obj) AS num FROM perms WHERE "mod" = :mod AND act = :act AND obj = :obj',
                     '-perm-count' => 'SELECT COUNT(*) AS num FROM perms WHERE "mod"=:mod AND act=:act AND obj=:obj',
                     '-perm-delete-by-obj' => 'DELETE FROM perms WHERE "mod"=:mod AND obj=:obj',
                     '-perm-get-all' => 'SELECT "permId", "mod", act, obj FROM perms ORDER BY "mod",act,obj',
                     '-perm-get-by-user' => 'SELECT perms."mod" AS "mod", perms.act AS act, perms.obj AS obj '
-                        .'FROM users2roles '
-                        .'INNER JOIN roles2perms ON roles2perms."roleId" = users2roles."roleId" '
-                        .'INNER JOIN perms ON perms."permId" = roles2perms."permId" '
-                        .'WHERE users2roles."userId" = :id',
-                    '-perm-rename-map' => 'UPDATE perms SET obj=:new_name '.
+                        . 'FROM users2roles '
+                        . 'INNER JOIN roles2perms ON roles2perms."roleId" = users2roles."roleId" '
+                        . 'INNER JOIN perms ON perms."permId" = roles2perms."permId" '
+                        . 'WHERE users2roles."userId" = :id',
+                    '-perm-rename-map' => 'UPDATE perms SET obj=:new_name ' .
                         ' WHERE "mod"=\'Map\' AND obj=:old_name',
                     '-perm-change-act' => 'UPDATE perms SET act=:new_act WHERE mod=:mod and act=:old_act',
 
@@ -83,13 +119,13 @@ class CorePDOHandler {
                     '-role-delete-perm-by-obj' => 'DELETE FROM roles2perms WHERE "permId" IN (SELECT "permId" FROM perms WHERE "mod"=:mod AND obj=:obj)',
                     '-role-get-all' => 'SELECT "roleId", name FROM roles ORDER BY name',
                     '-role-get-by-name' => 'SELECT "roleId" FROM roles WHERE name=:name',
-                    '-role-get-by-user' => 'SELECT users2roles."roleId" AS "roleId", roles.name AS name '.
-                        'FROM users2roles '.
-                        'LEFT JOIN roles ON users2roles."roleId"=roles."roleId" '.
+                    '-role-get-by-user' => 'SELECT users2roles."roleId" AS "roleId", roles.name AS name ' .
+                        'FROM users2roles ' .
+                        'LEFT JOIN roles ON users2roles."roleId"=roles."roleId" ' .
                         'WHERE "userId"=:id',
                     '-role-get-perm-by-id' => 'SELECT "permId" FROM roles2perms WHERE "roleId"=:roleId',
-                    '-role-used-by' => 'SELECT users.name AS name FROM users2roles '.
-                        'LEFT JOIN users ON users2roles."userId"=users."userId" '.
+                    '-role-used-by' => 'SELECT users.name AS name FROM users2roles ' .
+                        'LEFT JOIN users ON users2roles."userId"=users."userId" ' .
                         'WHERE users2roles."roleId"=:roleId',
 
                     '-user-add' => 'INSERT INTO users (name,password) VALUES (:name, :password)',
@@ -104,105 +140,132 @@ class CorePDOHandler {
                     '-user-get-pw-hash' => 'SELECT "password" FROM users WHERE name=:name',
                     '-user-update-pass' => 'UPDATE users SET password=:password WHERE "userId"=:id',
 
-                    '-check-roles-perms' => 'SELECT COUNT(roles."name") AS num '.
-                        'FROM perms '.
-                        'INNER JOIN roles2perms ON roles2perms."permId" = perms."permId" '.
-                        'INNER JOIN roles ON roles."roleId" = roles2perms."roleId" '.
+                    '-check-roles-perms' => 'SELECT COUNT(roles."name") AS num ' .
+                        'FROM perms ' .
+                        'INNER JOIN roles2perms ON roles2perms."permId" = perms."permId" ' .
+                        'INNER JOIN roles ON roles."roleId" = roles2perms."roleId" ' .
                         'WHERE "mod" = :mod AND act = :act AND obj = :obj AND roles.name = :name',
 
-                    '-create-pop-roles-perms-1' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                        'SELECT r."roleId", p."permId" '.
-                        'FROM roles r, perms p '.
-                        'WHERE r.name = :r1 '.
+                    '-create-pop-roles-perms-1' => 'INSERT INTO roles2perms ("roleId", "permId") ' .
+                        'SELECT r."roleId", p."permId" ' .
+                        'FROM roles r, perms p ' .
+                        'WHERE r.name = :r1 ' .
                         '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                    '-create-pop-roles-perms-2' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                        'SELECT r."roleId", p."permId" '.
-                        'FROM roles r, perms p '.
-                        'WHERE r.name IN (:r1, :r2) '.
+                    '-create-pop-roles-perms-2' => 'INSERT INTO roles2perms ("roleId", "permId") ' .
+                        'SELECT r."roleId", p."permId" ' .
+                        'FROM roles r, perms p ' .
+                        'WHERE r.name IN (:r1, :r2) ' .
                         '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                    '-create-pop-roles-perms-3' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                        'SELECT r."roleId", p."permId" '.
-                        'FROM roles r, perms p '.
-                        'WHERE r.name IN (:r1, :r2, :r3) '.
+                    '-create-pop-roles-perms-3' => 'INSERT INTO roles2perms ("roleId", "permId") ' .
+                        'SELECT r."roleId", p."permId" ' .
+                        'FROM roles r, perms p ' .
+                        'WHERE r.name IN (:r1, :r2, :r3) ' .
                         '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                    '-create-pop-perms-from-perms' => 'INSERT INTO perms ("mod", act, obj) '.
-                        'SELECT :mod, :act, obj '.
-                        'FROM perms '.
+                    '-create-pop-perms-from-perms' => 'INSERT INTO perms ("mod", act, obj) ' .
+                        'SELECT :mod, :act, obj ' .
+                        'FROM perms ' .
                         'WHERE "mod" = :fmod AND act = :fact',
 
                     '-create-update-db-version' => 'UPDATE version SET version=:version',
-                ),
+                ],
 
-                'updates' => array(
-                    '1091500' => array(
-                        array('-perm-change-act', array('mod' => 'ChangePassword', 'old_act' => 'change', 'new_act' => '*'))
-                    ),
+                'updates' => [
+                    '1091500' => [
+                        ['-perm-change-act', ['mod' => 'ChangePassword', 'old_act' => 'change', 'new_act' => '*']]
+                    ],
 
-                    '1080600' => array(
-                        array('-perm-add', array('mod' => 'Url', 'act' => 'view', 'obj' => '*')),
-                        array('-create-pop-roles-perms-3', array(
+                    '1080600' => [
+                        ['-perm-add', ['mod' => 'Url', 'act' => 'view', 'obj' => '*']],
+                        [
+                            '-create-pop-roles-perms-3', [
                             'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
-                            'mod' => 'Url', 'act' => 'view', 'obj' => '*')),
-                    ),
+                            'mod' => 'Url', 'act' => 'view', 'obj' => '*'
+                        ]
+                        ],
+                    ],
 
-                    '1080500' => array(
-                        array('-perm-add', array('mod' => 'Action', 'act' => 'perform', 'obj' => '*')),
-                        array('-create-pop-roles-perms-2', array(
+                    '1080500' => [
+                        ['-perm-add', ['mod' => 'Action', 'act' => 'perform', 'obj' => '*']],
+                        [
+                            '-create-pop-roles-perms-2', [
                             'r1' => 'Managers', 'r2' => 'Users (read-only)',
-                            'mod' => 'Action', 'act' => 'perform', 'obj' => '*')),
-                    ),
+                            'mod' => 'Action', 'act' => 'perform', 'obj' => '*'
+                        ]
+                        ],
+                    ],
 
-                    '1060022' => array(
-                        array('-perm-add', array('mod' => 'User', 'act' => 'setOption', 'obj' => '*')),
-                        array('-create-pop-roles-perms-3', array(
+                    '1060022' => [
+                        ['-perm-add', ['mod' => 'User', 'act' => 'setOption', 'obj' => '*']],
+                        [
+                            '-create-pop-roles-perms-3', [
                             'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
-                            'mod' => 'User', 'act' => 'setOption', 'obj' => '*')),
-                    ),
+                            'mod' => 'User', 'act' => 'setOption', 'obj' => '*'
+                        ]
+                        ],
+                    ],
 
-                    '1050400' => array(
-                        array('-perm-add', array('mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*')),
-                        array('-create-pop-roles-perms-3', array(
+                    '1050400' => [
+                        ['-perm-add', ['mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']],
+                        [
+                            '-create-pop-roles-perms-3', [
                             'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
-                            'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*')),
-                    ),
+                            'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*'
+                        ]
+                        ],
+                    ],
 
-                    '1050300' => array(
-                        array('-perm-add', array('mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*')),
-                        array('-perm-add', array('mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*')),
-                        array('-perm-add', array('mod' => 'Map', 'act' => 'manage', 'obj' => '*')),
-                        array('-create-pop-roles-perms-1', array(
+                    '1050300' => [
+                        ['-perm-add', ['mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*']],
+                        ['-perm-add', ['mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*']],
+                        ['-perm-add', ['mod' => 'Map', 'act' => 'manage', 'obj' => '*']],
+                        [
+                            '-create-pop-roles-perms-1', [
                             'r1' => 'Managers',
-                            'mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*')),
-                        array('-create-pop-roles-perms-1', array(
+                            'mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*'
+                        ]
+                        ],
+                        [
+                            '-create-pop-roles-perms-1', [
                             'r1' => 'Managers',
-                            'mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*')),
-                        array('-create-pop-roles-perms-1', array(
+                            'mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*'
+                        ]
+                        ],
+                        [
+                            '-create-pop-roles-perms-1', [
                             'r1' => 'Managers',
-                            'mod' => 'Map', 'act' => 'manage', 'obj' => '*')),
-                    ),
+                            'mod' => 'Map', 'act' => 'manage', 'obj' => '*'
+                        ]
+                        ],
+                    ],
 
-                    '1050024' => array(
-                        array('-create-pop-perms-from-perms', array(
+                    '1050024' => [
+                        [
+                            '-create-pop-perms-from-perms', [
                             'mod' => 'Map', 'act' => 'addModify',
-                            'fmod' => 'Map', 'fact' => 'view')),
-                        array('-create-pop-roles-perms-1', array(
+                            'fmod' => 'Map', 'fact' => 'view'
+                        ]
+                        ],
+                        [
+                            '-create-pop-roles-perms-1', [
                             'r1' => 'Managers',
-                            'mod' => 'Map', 'act' => 'addModify', 'obj' => '*')),
-                    ),
-                ),
-            ),
+                            'mod' => 'Map', 'act' => 'addModify', 'obj' => '*'
+                        ]
+                        ],
+                    ],
+                ],
+            ],
 
-            'sqlite' => array(
+            'sqlite' => [
                 'build_dsn' => '_build_dsn_sqlite',
 
                 // Note that these require a '.load' of an appropriate regex() function module!
                 're_op' => 'REGEXP',
                 're_op_neg' => 'NOT REGEXP',
 
-                'queries' => array(
+                'queries' => [
                     '-create-auth-users' => 'CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))',
                     '-create-auth-roles' => 'CREATE TABLE roles (roleId INTEGER, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))',
                     '-create-auth-perms' => 'CREATE TABLE perms (permId INTEGER, mod VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY(permId), UNIQUE(mod,act,obj))',
@@ -214,21 +277,21 @@ class CorePDOHandler {
                     '-version-update' => 'UPDATE version SET version=:version',
 
                     '-table-exists' => "SELECT * FROM sqlite_master WHERE type='table' AND name=:name",
-                ),
+                ],
 
 
-                'init' => array(
+                'init' => [
                     'PRAGMA journal_mode = wal',
-                ),
-            ),
+                ],
+            ],
 
-            'mysql' => array(
+            'mysql' => [
                 'build_dsn' => '_build_dsn_common',
 
                 're_op' => 'REGEXP BINARY',
                 're_op_neg' => 'NOT REGEXP BINARY',
 
-                'queries' => array(
+                'queries' => [
                     '-create-auth-users' => 'CREATE TABLE users (userId INTEGER AUTO_INCREMENT, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))',
                     '-create-auth-roles' => 'CREATE TABLE roles ("roleId" INTEGER AUTO_INCREMENT, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))',
                     '-create-auth-perms' => 'CREATE TABLE perms ("permId" INTEGER AUTO_INCREMENT, "mod" VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY("permId"), UNIQUE("mod", act, obj))',
@@ -240,31 +303,41 @@ class CorePDOHandler {
                     '-version-update' => 'UPDATE version SET version=:version',
 
                     '-table-exists' => "SHOW TABLES LIKE :name",
-                ),
+                ],
 
-                'init' => array(
+                'init' => [
                     "SET SESSION sql_mode = 'PIPES_AS_CONCAT,ANSI_QUOTES,IGNORE_SPACE'",
-                ),
-            ),
+                ],
+            ],
 
-            'pgsql' => array(
+            'pgsql' => [
                 'build_dsn' => '_build_dsn_common',
 
                 're_op' => '~',
                 're_op_neg' => '!~',
 
-                'queries' => array(
-                    '-table-exists' => "SELECT table_name ".
-                        "FROM information_schema.tables ".
+                'queries' => [
+                    '-table-exists' => "SELECT table_name " .
+                        "FROM information_schema.tables " .
                         "WHERE table_schema='public' AND table_name = :name",
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
-    public function open($driver, $params, $username, $password) {
+    /**
+     * @param string $driver
+     * @param array $params
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    public function open($driver, $params, $username, $password)
+    {
         if ($driver == '_common') {
             error_log("Internal error: '_common' is not supposed to be used as a driver name");
             return false;
@@ -273,32 +346,30 @@ class CorePDOHandler {
             return false;
         }
         $drv_data = self::$DRIVERS[$driver];
-        $dsn = "$driver:".$drv_data['build_dsn']($params);
+        $dsn = "$driver:" . $drv_data['build_dsn']($params);
         $this->dsn = $dsn;
 
         try {
-            $this->DB = new PDO($dsn, $username, $password, array(
+            $this->DB = new PDO($dsn, $username, $password, [
                 // PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 // TODO: This should be loaded from the configuration (e.g. in cae of backends)
                 //PDO::ATTR_TIMEOUT => 1,
-            ));
-        } catch(PDOException $e) {
-            error_log('Could not initialize a database connection: '.$e->getMessage());
+            ]);
+        } catch (PDOException $e) {
+            error_log('Could not initialize a database connection: ' . $e->getMessage());
             $this->lastErrorInfo = $e->getMessage();
             return false;
         }
-        if($this->DB === false || $this->DB === null)
-            return false;
 
         $this->driver = $driver;
         $this->data = $drv_data;
         $this->updating = false;
         $this->lastErrorInfo = null;
 
-        if(isset($drv_data['init'])) {
-            foreach($drv_data['init'] as $q) {
+        if (isset($drv_data['init'])) {
+            foreach ($drv_data['init'] as $q) {
                 $res = $this->DB->exec($q);
-                if($res === false) {
+                if ($res === false) {
                     $this->DB = null;
                     $this->lastErrorInfo = "Initial DB query ($q) failed";
                     return false;
@@ -308,19 +379,36 @@ class CorePDOHandler {
         return true;
     }
 
-    public function getDSN() {
+    /**
+     * @return string|null
+     */
+    public function getDSN()
+    {
         return $this->dsn;
     }
 
-    public function getRegularExpressionOperator() {
+    /**
+     * @return string
+     */
+    public function getRegularExpressionOperator()
+    {
         return $this->data['re_op'];
     }
 
-    public function getNegatedRegularExpressionOperator() {
+    /**
+     * @return string
+     */
+    public function getNegatedRegularExpressionOperator()
+    {
         return $this->data['re_op_neg'];
     }
 
-    public function prep($q) {
+    /**
+     * @param string $q
+     * @return false|PDOStatement
+     */
+    public function prep($q)
+    {
         // TODO: some kind of LRU cache for the dynamically built queries
         if (array_key_exists($q, $this->data['queries'])) {
             $sql = $this->data['queries'][$q];
@@ -340,138 +428,214 @@ class CorePDOHandler {
         return $st;
     }
 
-    public function tableExist($table) {
-        $res = $this->query('-table-exists', array('name' => $table));
+    /**
+     * @param string $table
+     * @return bool
+     */
+    public function tableExist($table)
+    {
+        $res = $this->query('-table-exists', ['name' => $table]);
         /* rowCount() is not always available for SELECT statements, so try the next best thing... */
         return $res !== false && $res->fetch() !== false;
     }
 
-    public function query($query, $params = array()) {
+    /**
+     * @param string $query
+     * @param array $params
+     * @return false|PDOStatement
+     */
+    public function query($query, $params = [])
+    {
         $this->lastErrorInfo = null;
         $st = $this->prep($query);
-        if($st === false)
+        if ($st === false) {
             return false;
-        if($st->execute($params) === false) {
+        }
+        if ($st->execute($params) === false) {
             $this->lastErrorInfo = $st->errorInfo();
             return false;
         }
         return $st;
     }
 
-    public function queryFatal($s, $params = array()) {
+    /**
+     * @param string $s
+     * @param array $params
+     * @return PDOStatement|void
+     */
+    public function queryFatal($s, $params = [])
+    {
         $res = $this->query($s, $params);
-        if($res === FALSE)
-            die("Could not execute the $s query: ".$this->errorString());
-        else
+        if ($res === false) {
+            die("Could not execute the $s query: " . $this->errorString());
+        } else {
             return $res;
+        }
     }
 
-    public function count($query, $params) {
+    /**
+     * @param string $query
+     * @param array $params
+     * @return int
+     */
+    public function count($query, $params)
+    {
         $RET = $this->query($query, $params)->fetch();
         return intval($RET['num']);
     }
 
-    public function error() {
-        if (isset($this->lastErrorInfo))
+    /**
+     * @return array|string|null
+     */
+    public function error()
+    {
+        if (isset($this->lastErrorInfo)) {
             return $this->lastErrorInfo;
-        else
+        } else {
             return $this->DB ? $this->DB->errorInfo() : '';
+        }
     }
 
-    public function errorString() {
+    /**
+     * @return mixed|string
+     */
+    public function errorString()
+    {
         $err = $this->error();
         $msg = $err[0];
-        if (isset($err[1]))
-            $msg .= '( '.$err[1].')';
-        if (isset($err[2]))
-            $msg .= ': '.$err[2];
+        if (isset($err[1])) {
+            $msg .= '( ' . $err[1] . ')';
+        }
+        if (isset($err[2])) {
+            $msg .= ': ' . $err[2];
+        }
         return $msg;
     }
 
-    public function close() {
+    /**
+     * @return void
+     */
+    public function close()
+    {
         $this->DB = null;
     }
 
     /**
-     * PUBLIC is_nonnull_int()
-     *
      * Checks whether a value (a string or an integer) returned by a database query
      * represents a valid integer.
+     *
+     * @param int|string $v
+     * @return bool
      */
-    public function is_nonnull_int($v) {
+    public function is_nonnull_int($v)
+    {
         return isset($v) && preg_match('/^-? (?: 0 | [1-9][0-9]* ) $/x', $v);
     }
 
     /**
-     * PUBLIC eq_int()
-     *
      * Checks whether a value (a string or an integer) returned by a database query
      * is a valid integer and is equal to the specified one.
+     *
+     * @param int|string $v
+     * @param int|string $exp
+     * @return bool
      */
-    public function eq_int($v, $exp) {
+    public function eq_int($v, $exp)
+    {
         return $this->is_nonnull_int($v) && intval($v) == $exp;
     }
 
     /**
-     * PUBLIC eq_int()
-     *
      * Checks whether a value (a string or an integer) returned by a database query
      * is either null or a valid integer equal to the specified one.
      * Returns true for an empty string; the caller should take care to use this
      * function only on database fields that are supposed to be integers.
+     *
+     * @param int|string $v
+     * @param int|string $exp
+     * @return bool
      */
-    public function null_or_eq_int($v, $exp) {
+    public function null_or_eq_int($v, $exp)
+    {
         return !isset($v) || $v === '' || $this->eq_int($v, $exp);
     }
 
-    public function deletePermissions($mod, $name) {
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return void
+     */
+    public function deletePermissions($mod, $name)
+    {
         // Only create when not existing
-        if($this->count('-perm-count', array('mod' => $mod, 'act' => 'view', 'obj' => $name)) > 0) {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: delete permissions for '.$mod.' '.$name);
-            $this->query('-role-delete-perm-by-obj', array('mod' => $mod, 'obj' => $name));
-            $this->query('-perm-delete-by-obj', array('mod' => $mod, 'obj' => $name));
-        } else {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t delete '.$mod.' permissions '.$name);
+        if ($this->count('-perm-count', ['mod' => $mod, 'act' => 'view', 'obj' => $name]) > 0) {
+            if (DEBUG && DEBUGLEVEL & 2) {
+                debug('auth.db: delete permissions for ' . $mod . ' ' . $name);
+            }
+            $this->query('-role-delete-perm-by-obj', ['mod' => $mod, 'obj' => $name]);
+            $this->query('-perm-delete-by-obj', ['mod' => $mod, 'obj' => $name]);
+        } elseif (DEBUG && DEBUGLEVEL & 2) {
+            debug('auth.db: won\'t delete ' . $mod . ' permissions ' . $name);
         }
     }
 
-    public function createMapPermissions($name) {
+    /**
+     * @param string $name
+     * @return true
+     */
+    public function createMapPermissions($name)
+    {
         // Only create when not existing
-        if($this->count('-perm-count', array('mod' => 'Map', 'act' => 'view', 'obj' => $name)) <= 0) {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for map '.$name);
+        if ($this->count('-perm-count', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]) <= 0) {
+            if (DEBUG && DEBUGLEVEL & 2) {
+                debug('auth.db: create permissions for map ' . $name);
+            }
             if ($this->updating && !$this->inTrans) {
                 $this->DB->beginTransaction();
                 $this->inTrans = true;
             }
-            $this->query('-perm-add', array('mod' => 'Map', 'act' => 'view', 'obj' => $name));
-            $this->query('-perm-add', array('mod' => 'Map', 'act' => 'edit', 'obj' => $name));
-            $this->query('-perm-add', array('mod' => 'Map', 'act' => 'delete', 'obj' => $name));
-        } else {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for map '.$name);
+            $this->query('-perm-add', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]);
+            $this->query('-perm-add', ['mod' => 'Map', 'act' => 'edit', 'obj' => $name]);
+            $this->query('-perm-add', ['mod' => 'Map', 'act' => 'delete', 'obj' => $name]);
+        } elseif (DEBUG && DEBUGLEVEL & 2) {
+            debug('auth.db: won\'t create permissions for map ' . $name);
         }
 
         return true;
     }
 
-    public function createRotationPermissions($name) {
+    /**
+     * @param string $name
+     * @return true
+     */
+    public function createRotationPermissions($name)
+    {
         // Only create when not existing
-        if($this->count('-perm-count', array('mod' => 'Rotation', 'act' => 'view', 'obj' => $name)) <= 0) {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for rotation '.$name);
-            $this->query('-perm-add', array('mod' => 'Rotation', 'act' => 'view', 'obj' => $name));
-        } else {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for rotation '.$name);
+        if ($this->count('-perm-count', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]) <= 0) {
+            if (DEBUG && DEBUGLEVEL & 2) {
+                debug('auth.db: create permissions for rotation ' . $name);
+            }
+            $this->query('-perm-add', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]);
+        } elseif (DEBUG && DEBUGLEVEL & 2) {
+            debug('auth.db: won\'t create permissions for rotation ' . $name);
         }
 
         return true;
     }
 
-    public function updateDb() {
+    /**
+     * @return void
+     * @throws NagVisException
+     */
+    public function updateDb()
+    {
         // Read the current version from db
         $dbVersion = 0;
-        if(!$this->tableExist('version'))
+        if (!$this->tableExist('version')) {
             $this->createVersionTable();
-        else
+        } else {
             $dbVersion = GlobalCore::getInstance()->versionToTag($this->getDbVersion());
+        }
 
         $reason = 'Could not start a database transaction';
         $this->inTrans = false;
@@ -479,8 +643,9 @@ class CorePDOHandler {
         try {
             ksort(self::$DRIVERS['_common']['updates']);
             foreach (self::$DRIVERS['_common']['updates'] as $ver => $queries) {
-                if (intval($ver) < $dbVersion)
+                if (intval($ver) < $dbVersion) {
                     continue;
+                }
 
                 if (!$this->inTrans) {
                     $this->DB->beginTransaction();
@@ -492,21 +657,28 @@ class CorePDOHandler {
                 }
             }
 
-            foreach(GlobalCore::getInstance()->demoMaps AS $map) {
-                if(count(GlobalCore::getInstance()->getAvailableMaps('/^'.$map.'$/')) <= 0)
+            foreach (GlobalCore::getInstance()->demoMaps as $map) {
+                if (count(GlobalCore::getInstance()->getAvailableMaps('/^' . $map . '$/')) <= 0) {
                     continue;
+                }
 
                 $this->createMapPermissions($map);
 
                 // Ignore errors here; these may already have been set up
-                if ($this->count('-check-roles-perms', array('name' => 'Guests', 'mod' => 'map', 'act' => 'view', 'obj' => $map)) > 1)
-                {
+                if (
+                    $this->count(
+                        '-check-roles-perms',
+                        ['name' => 'Guests', 'mod' => 'map', 'act' => 'view', 'obj' => $map]
+                    ) > 1
+                ) {
                     if (!$this->inTrans) {
                         $this->DB->beginTransaction();
                         $this->inTrans = true;
                     }
-                    $this->query('-create-pop-roles-perms-1',
-                        array('r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map));
+                    $this->query(
+                        '-create-pop-roles-perms-1',
+                        ['r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map]
+                    );
                 }
             }
 
@@ -515,18 +687,18 @@ class CorePDOHandler {
                     $this->DB->beginTransaction();
                     $this->inTrans = true;
                 }
-                $reason = 'Could not update the NagVis version in the database to '.CONST_VERSION;
-                $this->query('-create-update-db-version', array('version' => CONST_VERSION));
+                $reason = 'Could not update the NagVis version in the database to ' . CONST_VERSION;
+                $this->query('-create-update-db-version', ['version' => CONST_VERSION]);
             }
 
             $reason = 'Could not commit the transaction for updating the database schema';
-        } catch(PDOException $e) {
-            error_log($reason.': '.$e->getMessage());
+        } catch (PDOException $e) {
+            error_log($reason . ': ' . $e->getMessage());
             if ($this->inTrans) {
                 try {
                     $this->DB->rollBack();
                 } catch (PDOException $e) {
-                    error_log('Could not roll back the database update transaction: '.$e->getMessage());
+                    error_log('Could not roll back the database update transaction: ' . $e->getMessage());
                 }
                 $this->inTrans = false;
             }
@@ -535,28 +707,44 @@ class CorePDOHandler {
             try {
                 $this->DB->commit();
             } catch (PDOException $e) {
-                error_log("Could not commit the database transaction: ".$e->getMessage());
+                error_log("Could not commit the database transaction: " . $e->getMessage());
             }
             $this->inTrans = false;
         }
         $this->updating = false;
     }
 
-    public function getDbVersion() {
+    /**
+     * @return string
+     */
+    public function getDbVersion()
+    {
         $data = $this->query('SELECT version FROM version')->fetch();
         return $data['version'];
     }
 
-    public function updateDbVersion() {
-        $this->query('-version-update', array('version' => CONST_VERSION));
+    /**
+     * @return void
+     */
+    public function updateDbVersion()
+    {
+        $this->query('-version-update', ['version' => CONST_VERSION]);
     }
 
-    public function createVersionTable() {
+    /**
+     * @return void
+     */
+    public function createVersionTable()
+    {
         $this->query('-create-auth-version');
-        $this->query('-version-insert', array('version' => CONST_VERSION));
+        $this->query('-version-insert', ['version' => CONST_VERSION]);
     }
 
-    public function createInitialDb() {
+    /**
+     * @return void
+     */
+    public function createInitialDb()
+    {
         $this->queryFatal('-create-auth-users');
         $this->queryFatal('-create-auth-roles');
         $this->queryFatal('-create-auth-perms');
@@ -566,32 +754,41 @@ class CorePDOHandler {
         $this->createVersionTable();
 
         // If running in OMD create the 'omdadmin' user instead of 'admin'
-        if(GlobalCore::getInstance()->omdSite() !== null) {
-            $this->queryFatal('-user-add-with-id', array('userId' => 1, 'name' => 'omdadmin', 'password' => '051e0bbcfb79ea2a3ce5c487cc111051aac51ae8'));
+        if (GlobalCore::getInstance()->omdSite() !== null) {
+            $this->queryFatal(
+                '-user-add-with-id',
+                ['userId' => 1, 'name' => 'omdadmin', 'password' => '051e0bbcfb79ea2a3ce5c487cc111051aac51ae8']
+            );
         } else {
-            $this->queryFatal('-user-add-with-id', array('userId' => 1, 'name' => 'admin', 'password' => '868103841a2244768b2dbead5dbea2b533940e20'));
+            $this->queryFatal(
+                '-user-add-with-id',
+                ['userId' => 1, 'name' => 'admin', 'password' => '868103841a2244768b2dbead5dbea2b533940e20']
+            );
         }
 
-        $this->queryFatal('-user-add-with-id', array('userId' => 2, 'name' => 'guest', 'password' => 'a4e74a1d28ec981c945310d87f8d7b535d794cd2'));
-        $this->queryFatal('-role-add-with-id', array('roleId' => 1, 'name' => 'Administrators'));
-        $this->queryFatal('-role-add-with-id', array('roleId' => 2, 'name' => 'Users (read-only)'));
-        $this->queryFatal('-role-add-with-id', array('roleId' => 3, 'name' => 'Guests'));
-        $this->queryFatal('-role-add-with-id', array('roleId' => 4, 'name' => 'Managers'));
+        $this->queryFatal(
+            '-user-add-with-id',
+            ['userId' => 2, 'name' => 'guest', 'password' => 'a4e74a1d28ec981c945310d87f8d7b535d794cd2']
+        );
+        $this->queryFatal('-role-add-with-id', ['roleId' => 1, 'name' => 'Administrators']);
+        $this->queryFatal('-role-add-with-id', ['roleId' => 2, 'name' => 'Users (read-only)']);
+        $this->queryFatal('-role-add-with-id', ['roleId' => 3, 'name' => 'Guests']);
+        $this->queryFatal('-role-add-with-id', ['roleId' => 4, 'name' => 'Managers']);
 
         // Access controll: Full access to everything
-        $this->queryFatal('-perm-add', array('mod' => '*', 'act' => '*', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => '*', 'act' => '*', 'obj' => '*']);
 
         // Access controll: Overview module levels
-        $this->queryFatal('-perm-add', array('mod' => 'Overview', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'Overview', 'act' => 'view', 'obj' => '*']);
 
         // Access controll: Access to all General actions
-        $this->queryFatal('-perm-add', array('mod' => 'General', 'act' => '*', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'General', 'act' => '*', 'obj' => '*']);
 
-	// Create permissions for Action/peform/*
-        $this->queryFatal('-perm-add', array('mod' => 'Action', 'act' => 'perform', 'obj' => '*'));
+        // Create permissions for Action/peform/*
+        $this->queryFatal('-perm-add', ['mod' => 'Action', 'act' => 'perform', 'obj' => '*']);
 
         // Access controll: Map module levels for the demo maps
-        foreach(GlobalCore::getInstance()->demoMaps AS $map) {
+        foreach (GlobalCore::getInstance()->demoMaps as $map) {
             $this->createMapPermissions($map);
         }
 
@@ -599,180 +796,287 @@ class CorePDOHandler {
         $this->createRotationPermissions('demo');
 
         // Access controll: Change user options
-        $this->queryFatal('-perm-add', array('mod' => 'User', 'act' => 'setOption', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'User', 'act' => 'setOption', 'obj' => '*']);
 
         // Access controll: Change own password
-        $this->queryFatal('-perm-add', array('mod' => 'ChangePassword', 'act' => '*', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'ChangePassword', 'act' => '*', 'obj' => '*']);
 
         // Access controll: View maps via multisite
-        $this->queryFatal('-perm-add', array('mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']);
 
         // Access controll: Search objects on maps
-        $this->queryFatal('-perm-add', array('mod' => 'Search', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'Search', 'act' => 'view', 'obj' => '*']);
 
         // Access controll: Authentication: Logout
-        $this->queryFatal('-perm-add', array('mod' => 'Auth', 'act' => 'logout', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'Auth', 'act' => 'logout', 'obj' => '*']);
 
         // Access controll: Summary permissions for viewing/editing/deleting all maps
         $this->createMapPermissions('*');
 
         // Access controll: Rotation module levels for viewing all rotations
-        $this->queryFatal('-perm-add', array('mod' => 'Rotation', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'Rotation', 'act' => 'view', 'obj' => '*']);
 
         // Access controll: Manage users
-        $this->queryFatal('-perm-add', array('mod' => 'UserMgmt', 'act' => 'manage', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'UserMgmt', 'act' => 'manage', 'obj' => '*']);
 
         // Access controll: Manage roles
-        $this->queryFatal('-perm-add', array('mod' => 'RoleMgmt', 'act' => 'manage', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'RoleMgmt', 'act' => 'manage', 'obj' => '*']);
 
         // Access control: WUI Management pages
-        $this->queryFatal('-perm-add', array('mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*'));
-        $this->queryFatal('-perm-add', array('mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*']);
+        $this->queryFatal('-perm-add', ['mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*']);
 
         // Access controll: Edit/Delete maps
-        $this->queryFatal('-perm-add', array('mod' => 'Map', 'act' => 'manage', 'obj' => '*'));
-        $this->queryFatal('-perm-add', array('mod' => 'Map', 'act' => 'add', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'Map', 'act' => 'manage', 'obj' => '*']);
+        $this->queryFatal('-perm-add', ['mod' => 'Map', 'act' => 'add', 'obj' => '*']);
 
-        $this->queryFatal('-perm-add', array('mod' => 'MainCfg', 'act' => 'edit', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'MainCfg', 'act' => 'edit', 'obj' => '*']);
 
         // Access control: View URLs e.g. in rotation pools
-        $this->queryFatal('-perm-add', array('mod' => 'Url', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal('-perm-add', ['mod' => 'Url', 'act' => 'view', 'obj' => '*']);
 
         // Assign the new permission to the managers, users, guests
-        $this->queryFatal('-create-pop-roles-perms-3', array(
+        $this->queryFatal('-create-pop-roles-perms-3', [
             'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
-            'mod' => 'Url', 'act' => 'view', 'obj' => '*'));
+            'mod' => 'Url', 'act' => 'view', 'obj' => '*'
+        ]);
 
         /*
          * Administrators handling
          */
 
-        $data = $this->queryFatal('-role-get-by-name', array('name' => 'Administrators'))->fetch();
-        $this->queryFatal('-role-add-user-by-id', array('userId' => 1, 'roleId' => $data['roleId']));
+        $data = $this->queryFatal('-role-get-by-name', ['name' => 'Administrators'])->fetch();
+        $this->queryFatal('-role-add-user-by-id', ['userId' => 1, 'roleId' => $data['roleId']]);
 
         // Access assignment: Administrators => * * *
-        $this->queryFatal('-create-pop-roles-perms-1', array(
+        $this->queryFatal('-create-pop-roles-perms-1', [
             'r1' => 'Administrators',
-            'mod' => '*', 'act' => '*', 'obj' => '*'));
+            'mod' => '*',
+            'act' => '*',
+            'obj' => '*'
+        ]);
 
         /*
          * Managers handling
          */
 
         // Permit all actions in General module
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'General', 'act' => '*', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'General', 'act' => '*', 'obj' => '*']
+        );
 
         // Managers are allowed to perform actions
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Action', 'act' => 'perform', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Action', 'act' => 'perform', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to update user options
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to edit/delete all maps
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Map', 'act' => 'manage', 'obj' => '*'));
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Map', 'act' => 'delete', 'obj' => '*'));
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Map', 'act' => 'edit', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'manage', 'obj' => '*']
+        );
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'delete', 'obj' => '*']
+        );
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'edit', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to create maps
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Map', 'act' => 'add', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'add', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to manage backgrounds and shapes
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*'));
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*']
+        );
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to view the overview
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to view all maps
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Map', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to view all rotations
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Rotation', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Rotation', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to change their passwords
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to view their maps via multisite
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to search objects
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Search', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to logout
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Managers', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']
+        );
 
         /*
          * Users handling
          */
 
         // Users are allowed to perform actions
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'Action', 'act' => 'perform', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Action', 'act' => 'perform', 'obj' => '*']
+        );
 
         // Permit all actions in General module
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'General', 'act' => '*', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'General', 'act' => '*', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to update user options
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to view the overview
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to view all maps
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'Map', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Map', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to view all rotations
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'Rotation', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Rotation', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to change their passwords
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to view their maps via multisite
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to search objects
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'Search', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to logout
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Users (read-only)', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']
+        );
 
         /*
          * Guest handling
          */
 
-        $data = $this->queryFatal('-role-get-by-name', array('name' => 'Guests'))->fetch();
-        $this->queryFatal('-role-add-user-by-id', array('userId' => 2, 'roleId' => $data['roleId']));
+        $data = $this->queryFatal('-role-get-by-name', ['name' => 'Guests'])->fetch();
+        $this->queryFatal('-role-add-user-by-id', ['userId' => 2, 'roleId' => $data['roleId']]);
 
         // Permit all actions in General module
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'General', 'act' => '*', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'General', 'act' => '*', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to update user options
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to view the overview
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to view their maps via multisite
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to view the demo maps
-        foreach(GlobalCore::getInstance()->demoMaps AS $map) {
-            $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map));
+        foreach (GlobalCore::getInstance()->demoMaps as $map) {
+            $this->queryFatal(
+                '-create-pop-roles-perms-1',
+                ['r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map]
+            );
         }
 
         // Access assignment: Guests => Allowed to view the demo rotation
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'Rotation', 'act' => 'view', 'obj' => 'demo'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Rotation', 'act' => 'view', 'obj' => 'demo']
+        );
 
         // Access assignment: Guests => Allowed to change their passwords
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to search objects
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'Search', 'act' => 'view', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to logout
-        $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*'));
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']
+        );
     }
 }
 
 CorePDOHandler::initialize_static();
-
-?>

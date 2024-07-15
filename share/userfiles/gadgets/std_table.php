@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 // Set colors
-$table_colors = Array();
+$table_colors = [];
 $table_colors['WARNING'] = "#FFFF00";
 $table_colors['UNKNOWN'] = "#FFCC66";
 $table_colors['UP']      = "#00FF00";
@@ -54,20 +54,30 @@ $show_host_states = $_GET['type'] == 'hostgroup'
                     || ($_GET['type'] == 'dyngroup' && $_GET['object_types'] == 'host');
 
 // Get parameters from gadget_opts
-if (isset($_GET['opts']) && ($_GET['opts'] != '')){
+if (isset($_GET['opts']) && ($_GET['opts'] != '')) {
     preg_match_all('/(\w+)=(\w+)/', $_GET['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
-        if ($matches[$i][1] == 'show_header') { $show_header = $matches[$i][2]; }
-        if ($matches[$i][1] == 'show_subheader') { $show_subheader = $matches[$i][2]; }
-        if ($matches[$i][1] == 'show_all') { $show_all = $matches[$i][2]; }
-        if ($matches[$i][1] == 'group_states') { $group_states = $matches[$i][2]; }
-        if ($matches[$i][1] == 'show_service_states') { $show_service_states = $matches[$i][2]; }
+        if ($matches[$i][1] == 'show_header') {
+            $show_header = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'show_subheader') {
+            $show_subheader = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'show_all') {
+            $show_all = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'group_states') {
+            $group_states = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'show_service_states') {
+            $show_service_states = $matches[$i][2];
+        }
     }
 }
 
 // Determine scale from POST request
-$size = $_GET['scale']/100;
-if ($size < 0) { 
+$size = $_GET['scale'] / 100;
+if ($size < 0) {
     $size = 1;
 }
 
@@ -75,20 +85,22 @@ if ($size < 0) {
 $current_state = $_GET['state'];
 
 // Get members of this element (Servicegroup, ...)
-$members = json_decode($_POST['members'], True);
+$members = json_decode($_POST['members'], true);
 
-$show_states = Array();
-if ($show_service_states)
-    $show_states = array_merge($show_states, array('OK', 'WARNING', 'CRITICAL', 'UNKNOWN', 'ERROR'));
-if ($show_host_states)
-    $show_states = array_merge($show_states, array('UP', 'DOWN', 'UNREACHABLE', 'ERROR'));
+$show_states = [];
+if ($show_service_states) {
+    $show_states = array_merge($show_states, ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN', 'ERROR']);
+}
+if ($show_host_states) {
+    $show_states = array_merge($show_states, ['UP', 'DOWN', 'UNREACHABLE', 'ERROR']);
+}
 
 // Init statistic array
-$stats = Array();
-foreach ($show_states AS $state) {
-    $stats['S_'.$state] = 0;
-    $stats['D_'.$state] = 0;
-    $stats['A_'.$state] = 0;
+$stats = [];
+foreach ($show_states as $state) {
+    $stats['S_' . $state] = 0;
+    $stats['D_' . $state] = 0;
+    $stats['A_' . $state] = 0;
 }
 
 // Count statistic for all members
@@ -96,17 +108,17 @@ foreach ($members as $member) {
     // Downtime
     if ($member['summary_in_downtime'] == 1 && $group_states == 0) {
         // FIXME: Check that the key exists
-        $stats['D_'.$member['summary_state']] += 1;
+        $stats['D_' . $member['summary_state']] += 1;
     }
     // Acknowledged
     elseif ($member['summary_problem_has_been_acknowledged'] == 1 && $group_states == 0) {
         // FIXME: Check that the key exists
-        $stats['A_'.$member['summary_state']] += 1;
+        $stats['A_' . $member['summary_state']] += 1;
     }
     // Standard state or all states if $group_states == 1
     else {
         // FIXME: Check that the key exists
-        $stats['S_'.$member['summary_state']] += 1;
+        $stats['S_' . $member['summary_state']] += 1;
     }
 }
 // Determine sizes with scale
@@ -114,8 +126,7 @@ $padding = $size;
 $font_size = 6 + $size * 2;
 if ($show_subheader == "1") {
     $width = 21 + 6 * $size;
-}
-else {
+} else {
     $width = 18 + 2 * $size;
 }
 
@@ -202,12 +213,12 @@ table[name=\"$ident\"] th.OK,
 table[name=\"$ident\"] th.UP,
 table[name=\"$ident\"] td.OK,
 table[name=\"$ident\"] td.UP {
-    background: ". $table_colors['UP']. ";
+    background: " . $table_colors['UP'] . ";
     color: #000000;
 }
 table[name=\"$ident\"] th.WARNING,
 table[name=\"$ident\"] td.WARNING {
-    background: ". $table_colors['WARNING']. ";
+    background: " . $table_colors['WARNING'] . ";
     color: #000000;
     font-weight: bold;
 }
@@ -218,27 +229,27 @@ table[name=\"$ident\"] th.UNREACHABLE,
 table[name=\"$ident\"] td.CRITICAL,
 table[name=\"$ident\"] td.DOWN,
 table[name=\"$ident\"] td.UNREACHABLE {
-    background: ". $table_colors['DOWN']. ";
+    background: " . $table_colors['DOWN'] . ";
     color: #000000;
     font-weight: bold;
 }
 
 table[name=\"$ident\"] th.UNKNOWN,
 table[name=\"$ident\"] td.UNKNOWN {
-    background: ". $table_colors['UNKNOWN']. ";
+    background: " . $table_colors['UNKNOWN'] . ";
     color: #000000;
     font-weight: bold;
 }
 
 table[name=\"$ident\"] th.ERROR,
 table[name=\"$ident\"] td.ERROR {
-    background: ". $table_colors['ERROR']. ";
+    background: " . $table_colors['ERROR'] . ";
     color: #000000;
     font-weight: bold;
 }
 
 table[name=\"$ident\"] td.EMPTY {
-    background: ". $table_colors['EMPTY']. ";
+    background: " . $table_colors['EMPTY'] . ";
     color: #666B85;
 }
 ";
@@ -263,29 +274,29 @@ echo "</style>";
 // END of CSS
 
 // Write Table
-echo '<table name="'. $ident .'" class="table-gadget">';
+echo '<table name="' . $ident . '" class="table-gadget">';
 if ($show_header == 1) {
     // Write Header
     echo "<thead>";
     echo "<tr>";
-    $header1 = Array();
+    $header1 = [];
     $header1['S'] = "STATUS";
-    if ($group_states == 0){
+    if ($group_states == 0) {
         $header1['D'] = "DOWNTIME";
         $header1['A'] = "ACKNOWLEDGED";
     }
-    foreach ($header1 as $prefix => $title){
+    foreach ($header1 as $prefix => $title) {
         $current_header = $prefix;
         $colspan = 0;
-        foreach ($stats as $stat => $value){
-            if (strpos($stat, $prefix . "_") === 0) {
+        foreach ($stats as $stat => $value) {
+            if (str_starts_with($stat, $prefix . "_")) {
                 if ($value > 0 || $show_all == 1) {
-                    $colspan ++;
+                    $colspan++;
                 }
             }
         }
         if ($colspan > 0) {
-            echo '<th colspan="'. $colspan .'">';
+            echo '<th colspan="' . $colspan . '">';
             echo $title;
             echo "</th>";
         }
@@ -295,11 +306,11 @@ if ($show_header == 1) {
     echo "<tr>";
     if ($show_subheader == 1) {
         // Write Sub Header
-        foreach ($stats as $stat => $value){
-            if ($group_states == 0 || strpos($stat, "S_") === 0) {
+        foreach ($stats as $stat => $value) {
+            if ($group_states == 0 || str_starts_with($stat, "S_")) {
                 if ($value > 0 || $show_all == 1) {
                     $global_cls = (substr($stat, 2) == $current_state) ? $current_state : '';
-                    echo '<th class="'.$global_cls.'">';
+                    echo '<th class="' . $global_cls . '">';
                     echo htmlspecialchars(substr(substr(strchr($stat, "_"), 1), 0, 4));
                     echo "</th>";
                 }
@@ -314,17 +325,16 @@ if ($show_header == 1) {
 // Write table body
 echo "<tbody>";
 echo '<tr>';
-foreach ($stats as $stat => $value){
-    if ($group_states == 0 || strpos($stat, "S_") === 0) {
+foreach ($stats as $stat => $value) {
+    if ($group_states == 0 || str_starts_with($stat, "S_")) {
         if ($value > 0 || $show_all == 1) {
             if ($value > 0) {
                 $class = htmlspecialchars(substr(strchr($stat, "_"), 1));
-            }
-            else {
+            } else {
                 $class = 'EMPTY';
             }
-            echo '<td class="'. $class .' table_stat">';
-                echo $value;
+            echo '<td class="' . $class . ' table_stat">';
+            echo $value;
             echo "</td>";
         }
     }
@@ -334,4 +344,3 @@ echo "</tbody>";
 // END of Write table body
 echo "</table>";
 exit(0);
-?>

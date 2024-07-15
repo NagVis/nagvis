@@ -25,37 +25,45 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModLogonDialog extends FrontendModule {
-    protected $CORE;
+class FrontendModLogonDialog extends FrontendModule
+{
+    /** @var GlobalCore */
+    private $CORE;
 
-    public function __construct($CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
         $this->sName = 'LogonDialog';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('view' => !REQUIRES_AUTHORISATION);
+        $this->aActions = ['view' => !REQUIRES_AUTHORISATION];
     }
 
-    public function handleAction() {
+    /**
+     * @return string
+     * @throws Dwoo_Exception
+     */
+    public function handleAction()
+    {
+        /** @var CoreAuthHandler $AUTH */
         global $AUTH;
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    // Check if user is already authenticated
-                    if(!$AUTH->isAuthenticated()) {
-                        $VIEW = new NagVisLoginView($this->CORE);
-                        $sReturn = $VIEW->parse();
-                    } else {
-                        // When the user is already authenticated redirect to start page (overview)
-                        Header('Location:'.CoreRequestHandler::getRequestUri(cfg('paths', 'htmlbase')));
-                    }
-                break;
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                // Check if user is already authenticated
+                if (!$AUTH->isAuthenticated()) {
+                    $VIEW = new NagVisLoginView($this->CORE);
+                    $sReturn = $VIEW->parse();
+                } else {
+                    // When the user is already authenticated redirect to start page (overview)
+                    header('Location:' . CoreRequestHandler::getRequestUri(cfg('paths', 'htmlbase')));
+                }
             }
         }
 
         return $sReturn;
     }
 }
-
-?>

@@ -25,22 +25,39 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModRotation extends FrontendModule {
+class FrontendModRotation extends FrontendModule
+{
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var string */
     private $name   = '';
+
+    /** @var string */
     private $type   = '';
+
+    /** @var string */
     private $step   = '';
+
+    /** @var string */
     private $stepId = '';
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     * @throws NagVisException
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Rotation';
         $this->CORE = $CORE;
 
         // Parse the view specific options
-        $aOpts = Array('show' => MATCH_ROTATION_NAME,
-                       'type' => MATCH_ROTATION_STEP_TYPES_EMPTY,
-                       'step' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'stepId' => MATCH_INTEGER_EMPTY);
+        $aOpts = [
+            'show' => MATCH_ROTATION_NAME,
+            'type' => MATCH_ROTATION_STEP_TYPES_EMPTY,
+            'step' => MATCH_STRING_NO_SPACE_EMPTY,
+            'stepId' => MATCH_INTEGER_EMPTY
+        ];
 
         $aVals = $this->getCustomOptions($aOpts);
         $this->name   = $aVals['show'];
@@ -49,9 +66,9 @@ class FrontendModRotation extends FrontendModule {
         $this->stepId = $aVals['stepId'];
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'view' => REQUIRES_AUTHORISATION
-        );
+        ];
 
         // Register valid objects
         $this->aObjects = $this->CORE->getDefinedRotationPools();
@@ -60,39 +77,47 @@ class FrontendModRotation extends FrontendModule {
         $this->setObject($this->name);
     }
 
-    public function handleAction() {
+    /**
+     * @return string
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    // Show the view dialog to the user
-                    $sReturn = $this->showViewDialog();
-                break;
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                // Show the view dialog to the user
+                $this->showViewDialog();
             }
         }
 
         return $sReturn;
     }
 
-    private function showViewDialog() {
+    /**
+     * @return void
+     * @throws NagVisException
+     */
+    private function showViewDialog()
+    {
         // Initialize rotation/refresh
         $ROTATION = new FrontendRotation($this->name);
 
         // Set the requested step
-        if($this->type != '' && $this->step != '')
+        if ($this->type != '' && $this->step != '') {
             $ROTATION->setStep($this->type, $this->step, $this->stepId);
+        }
 
-        switch($this->type) {
+        switch ($this->type) {
             case '':
                 // If no step given redirect to first step
                 header('Location: ' . $ROTATION->getStepUrlById(0));
-            break;
+                break;
             case 'map':
             case 'url':
                 header('Location: ' . $ROTATION->getCurrentStepUrl());
-            break;
+                break;
         }
     }
 }
-?>
