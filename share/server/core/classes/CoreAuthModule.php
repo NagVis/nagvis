@@ -72,6 +72,12 @@ abstract class CoreAuthModule
     abstract public function isAuthenticated();
 
     /**
+     * @param string $username
+     * @return bool
+     */
+    abstract public function usesBcrypt($username);
+
+    /**
      * @return string
      */
     abstract public function getUser();

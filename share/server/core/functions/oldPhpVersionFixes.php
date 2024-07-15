@@ -107,3 +107,23 @@ if (!function_exists('str_ends_with')) {
         return empty($needle) || substr($haystack, strlen($needle) * -1) === $needle;
     }
 }
+
+// This implements the function hash_equals which is needed for timing safe hash comparisons but
+// only available from PHP 5.6.0 on.
+if(!function_exists('hash_equals')) {
+    function hash_equals($str1, $str2)
+    {
+        if(strlen($str1) !== strlen($str2))
+            return false;
+
+        $xor_result = $str1 ^ $str2;
+        $diff = 0;
+
+        for($i =  0; $i < strlen($xor_result); $i++)
+        {
+            $diff |= ord($xor_result[$i]);
+        }
+
+        return $diff === 0;
+    }
+}

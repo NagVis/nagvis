@@ -36,9 +36,12 @@ const MATCH_STRING_NO_SPACE = '/^[0-9a-zа-яё\p{L}:+[\]()_.,\-\*?!#@=\/\\\\*]+
 const MATCH_STRING_NO_SPACE_EMPTY = '/^[0-9a-zа-яё\p{L}:+[\]()_.,\-\*?!#@=\/\\\]*$/iu';
 const MATCH_CONDITION = '/^[0-9a-zа-яё\p{L}\s_\-~=]*$/iu';
 
+const DISALLOWED_AUTHORISATION_PATHS = '(.*etc\/nagvis\/maps\/.*)';
 const MATCH_STRING_PATH = '/^[0-9a-z\s_.\-\/\\\]+$/i';
-const MATCH_STRING_URL = '/^[0-9a-z\s:;|+[\]()=%?&_,.\-#@=\/\\\~\{\}]+$/i';
-const MATCH_STRING_URL_EMPTY = '/^[0-9a-z\s:;|+[\]()=%?&_,.\-#@=\/\\\~]*$/i';
+const MATCH_STRING_PATH_AUTHORISATION = '/^(?!' . DISALLOWED_AUTHORISATION_PATHS . ')[0-9a-z\s_.\-\/\\\]+$/i';
+const MATCH_ALLOWED_URL_SCHEMES = '(http|https)';
+const MATCH_STRING_URL = '/^(?:' . MATCH_ALLOWED_URL_SCHEMES . ':)?[0-9a-z\s;|+[\]()=%?&_,.\-#@=\/\\\~\{\}]+$/i';
+const MATCH_STRING_URL_EMPTY = '/^(?:' . MATCH_ALLOWED_URL_SCHEMES . ':)?[0-9a-z\s;|+[\]()=%?&_,.\-#@=\/\\\~]*$/i';
 const MATCH_GADGET_OPT = '/^[0-9a-z\s:+[\]()_.,\-&?!#@=\/\\\%]+$/i';
 const MATCH_STRING_STYLE = '/^[0-9a-z:;\-+%#(),.]*$/i';
 const MATCH_COORDS = '/^(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))$/';

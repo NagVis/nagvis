@@ -137,6 +137,7 @@ class CorePDOHandler
                     '-user-get-all' => 'SELECT "userId", name FROM users ORDER BY name',
                     '-user-get-by-name' => 'SELECT "userId" FROM users WHERE name=:name',
                     '-user-get-by-pass' => 'SELECT "userId" FROM users WHERE name=:name AND password=:password',
+                    '-user-get-pw-hash' => 'SELECT "password" FROM users WHERE name=:name',
                     '-user-update-pass' => 'UPDATE users SET password=:password WHERE "userId"=:id',
 
                     '-check-roles-perms' => 'SELECT COUNT(roles."name") AS num ' .

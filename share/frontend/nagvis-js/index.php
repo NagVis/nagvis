@@ -32,6 +32,7 @@ require('defines/nagvis-js.php');
 // Include functions
 require('../../server/core/classes/CoreExceptions.php');
 require('../../server/core/functions/autoload.php');
+require('../../server/core/functions/passwordCompatibility.php');
 
 if (PROFILE) {
     profilingStart();

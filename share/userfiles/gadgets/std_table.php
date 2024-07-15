@@ -311,7 +311,7 @@ if ($show_header == 1) {
                 if ($value > 0 || $show_all == 1) {
                     $global_cls = (substr($stat, 2) == $current_state) ? $current_state : '';
                     echo '<th class="' . $global_cls . '">';
-                    echo substr(substr(strchr($stat, "_"), 1), 0, 4);
+                    echo htmlspecialchars(substr(substr(strchr($stat, "_"), 1), 0, 4));
                     echo "</th>";
                 }
             }
@@ -329,7 +329,7 @@ foreach ($stats as $stat => $value) {
     if ($group_states == 0 || str_starts_with($stat, "S_")) {
         if ($value > 0 || $show_all == 1) {
             if ($value > 0) {
-                $class = substr(strchr($stat, "_"), 1);
+                $class = htmlspecialchars(substr(strchr($stat, "_"), 1));
             } else {
                 $class = 'EMPTY';
             }

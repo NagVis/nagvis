@@ -747,6 +747,9 @@ class GlobalCore
         }
 
         if ($printErr) {
+            if (isset($_SERVER['OMD_ROOT'])) {
+                throw new NagVisException(l('The path "[PATH]" does not exist on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
+            }
             throw new NagVisException(l('The path "[PATH]" does not exist.', ['PATH' => $path]));
         }
 
@@ -766,6 +769,9 @@ class GlobalCore
         }
 
         if ($printErr) {
+            if (isset($_SERVER['OMD_ROOT'])) {
+                throw new NagVisException(l('The path "[PATH]" is not readable on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
+            }
             throw new NagVisException(l('The path "[PATH]" is not readable.', ['PATH' => $path]));
         }
 
@@ -785,6 +791,9 @@ class GlobalCore
         }
 
         if ($printErr) {
+            if (isset($_SERVER['OMD_ROOT'])) {
+                throw new NagVisException(l('The path "[PATH]" is not writable on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
+            }
             throw new NagVisException(l('The path "[PATH]" is not writeable.', ['PATH' => $path]));
         }
 

@@ -496,7 +496,7 @@ var ElementHover = Element.extend({
 
         // Replace all normal macros
         template_html = template_html.replace(/\[(\w*)\]/g, function() {
-            return oMacros[ arguments[1] ] || "";
+            return htmlspecialchars(oMacros[ arguments[1] ] || "");
         });
         return template_html;
     },

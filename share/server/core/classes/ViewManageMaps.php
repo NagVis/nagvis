@@ -434,10 +434,19 @@ class ViewManageMaps
                     );
                 }
 
-                // FIXME: We really should validate the contents of the file
-
                 move_uploaded_file($file['tmp_name'], $file_path);
                 $CORE->setPerms($file_path);
+                $MAPCFG = new GlobalMapCfg($map_name);
+                try {
+                    $MAPCFG->readMapConfig();
+                } catch(MapCfgInvalid $e) {
+                    unlink($file_path);
+                    throw new FieldInputError('map_file', l('The uploaded map configuration is invalid.'));
+                } catch(Exception $e) {
+                    unlink($file_path);
+                    throw new FieldInputError('map_file', l('The uploaded map configuration caused a crash: [ERROR].',
+                      Array('ERROR' => $e->getMessage())));
+                }
 
                 success(l('The map has been imported. Changing to the new map...'));
                 reload('index.php?mod=Map&act=view&show=' . $map_name, 1);

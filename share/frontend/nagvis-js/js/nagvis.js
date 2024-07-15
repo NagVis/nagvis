@@ -687,6 +687,24 @@ function escapeUrlValues(sStr) {
     return sStr;
 }
 
+
+/**
+ * Function to map html special characters into their html entities before
+ * printing them to the screen
+ */
+
+function htmlspecialchars(sStr) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    };
+    return sStr.replace(/[&<>"']/g, match => map[match]);
+}
+
+
 /**
  * Function to dumping arrays/objects in javascript for debugging purposes
  * Taken from http://refactormycode.com/codes/226-recursively-dump-an-object
@@ -1024,8 +1042,21 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
         aStyle = null;
     }
 
-    oLabelSpan.innerHTML = text;
-    executeJS(oLabelSpan);
+    let a_regex = /<a href="([^"]*)".*>.*<\/a>/g;
+    let a_match = a_regex.exec(text);
+    let a_schema = a_match ? a_match[1].split(':')[0] : null;
+    const allowed_url_schemas = ['http', 'https'];
+    if (!a_schema || allowed_url_schemas.includes(a_schema)) {
+        oLabelSpan.innerHTML = text;
+        executeJS(oLabelSpan);
+    }
+    else {
+        eventlog(
+            "renderNagVisTextbox",
+            "critical",
+            "Disallowed link schema in textbox: " + a_match[1]
+        );
+    }
 
     oLabelDiv.appendChild(oLabelSpan);
 

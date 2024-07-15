@@ -184,7 +184,7 @@ class CoreLogonMultisite extends CoreLogonModule
         }
 
         // Validate the hash
-        if ($cookieHash !== $hash) {
+        if (!hash_equals($hash, $cookieHash)) {
             throw new Exception();
         }
 
@@ -266,6 +266,13 @@ class CoreLogonMultisite extends CoreLogonModule
         $AUTH->setTrustUsername(true);
         $AUTH->setLogoutPossible(false);
         $AUTH->passCredentials(['user' => $username]);
-        return $AUTH->isAuthenticated();
+
+        $authenticated = $AUTH->isAuthenticated();
+
+        if (!$AUTH->usesBcrypt()) {
+            $AUTH->resetPassword($AUTH->getUserId(),  (time() * rand(1, 10)));
+        }
+
+        return $authenticated;
     }
 }
