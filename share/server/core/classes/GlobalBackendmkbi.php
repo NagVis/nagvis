@@ -280,7 +280,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * @throws BackendConnectionProblem
      * @throws BackendInvalidResponse
      */
-    private function getAggregationNames()
+    public function getAggregationNames()
     {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=0');
         $names = [];
@@ -702,6 +702,5 @@ if (!function_exists('l')) {
     }
 
     $O = new GlobalBackendmkbi('bi');
-    // todo: this method is private
     print_r($O->getAggregationNames());
 }
