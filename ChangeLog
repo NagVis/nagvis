@@ -1,4 +1,9 @@
 1.9.43
+Core:
+  * FIX: Fix error when entering correct proxy URLs with ports and proxy schemas.
+         Entering correct proxy URLS with ports and one of the following schemas
+         (tcp, udp, unix, udg, ssl, tls) would cause an error (Invalid format given)
+         even though these proxies are correct.
 
 1.9.42
 Security:
