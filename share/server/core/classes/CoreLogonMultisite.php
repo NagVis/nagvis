@@ -135,6 +135,31 @@ class CoreLogonMultisite extends CoreLogonModule {
             throw new Exception();
         }
 
+        // Check session periods validity
+        $site = cfg('defaults', 'backend')[0];
+        $baseUrl = cfg('backend_' . $site . '_bi', 'base_url');
+        $headers = [
+            'Content-type: application/json',
+            'Accept: application/json',
+            "Cookie: $cookieName=$cookieValue",
+        ];
+
+        $url = $baseUrl . 'api/1.0/version';
+
+        $contextOptions = [
+            'http' => [
+                'method' => 'GET',
+                'header' => implode("\r\n", $headers),
+            ]
+        ];
+
+        $context = stream_context_create($contextOptions);
+        $result = file_get_contents($url, false, $context);
+        if ($result === false) {
+            throw new Exception();
+        }
+        
+
         return $username;
     }
 
