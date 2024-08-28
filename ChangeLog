@@ -5,6 +5,9 @@ Core:
          (tcp, udp, unix, udg, ssl, tls) would cause an error (Invalid format given)
          even though these proxies are correct.
 
+Security
+  * Added cookie session timestamps validation when Nagvis is run within Checkmk
+
 1.9.42
 Security:
   * FIX: Fix various XSS issues (std_table.php gadget, malicious graph elements, service names and script outputs).
