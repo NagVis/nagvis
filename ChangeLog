@@ -4,8 +4,12 @@ Core:
          Entering correct proxy URLS with ports and one of the following schemas
          (tcp, udp, unix, udg, ssl, tls) would cause an error (Invalid format given)
          even though these proxies are correct.
+
+Frontend:
   * FIX: URLs still pointing to mathias-kettner.de documentation are now pointing to
          the Checkmk documentation (docs.checkmk.com).
+  * FIX: Support forum links to no longer existing forum (monitoring-portal.org) are
+         now pointing to the Checkmk forum (forum.checkmk.com).
 
 Security
   * Added cookie session timestamps validation when Nagvis is run within Checkmk
