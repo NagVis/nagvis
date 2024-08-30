@@ -1,3 +1,5 @@
+1.9.44
+
 1.9.43
 Core:
   * FIX: Fix error when entering correct proxy URLs with ports and proxy schemas.
