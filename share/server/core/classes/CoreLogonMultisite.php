@@ -136,15 +136,15 @@ class CoreLogonMultisite extends CoreLogonModule {
         }
 
         // Check session periods validity
-        $site = cfg('defaults', 'backend')[0];
-        $baseUrl = cfg('backend_' . $site . '_bi', 'base_url');
+        $site = getenv('OMD_SITE');
+        $port = $_SERVER['SERVER_PORT'];
+        $url = "http://localhost:$port/$site/check_mk/api/1.0/version";
+        
         $headers = [
             'Content-type: application/json',
             'Accept: application/json',
             "Cookie: $cookieName=$cookieValue",
         ];
-
-        $url = $baseUrl . 'api/1.0/version';
 
         $contextOptions = [
             'http' => [
@@ -158,7 +158,6 @@ class CoreLogonMultisite extends CoreLogonModule {
         if ($result === false) {
             throw new Exception();
         }
-        
 
         return $username;
     }
