@@ -1,4 +1,6 @@
 1.9.44
+  * FIX: Fix not working cookie session timestamps validation introduced with 1.9.43 in
+         some HTTPS scenarios
 
 1.9.43
 Core:
