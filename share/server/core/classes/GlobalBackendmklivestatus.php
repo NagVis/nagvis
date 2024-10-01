@@ -5,7 +5,7 @@
  *
  * Backend class for handling object and state information using the
  * livestatus NEB module. For mor information about CheckMK's Livestatus
- * Module please visit: http://mathias-kettner.de/checkmk_livestatus.html
+ * Module please visit: https://docs.checkmk.com/latest/en/livestatus.html
  *
  * Copyright (c) 2010 NagVis Project  (Contact: info@nagvis.org),
  *                    Mathias Kettner (Contact: mk@mathias-kettner.de)
@@ -32,7 +32,7 @@
  * @author  Lars Michelsen  <lm@larsmichelsen.com>
  *
  * For mor information about CheckMK's Livestatus Module
- * please visit: http://mathias-kettner.de/checkmk_livestatus.html
+ * please visit: https://docs.checkmk.com/latest/en/livestatus.html
  */
 class GlobalBackendmklivestatus implements GlobalBackendInterface
 {

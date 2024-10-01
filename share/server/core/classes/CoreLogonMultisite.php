@@ -188,6 +188,30 @@ class CoreLogonMultisite extends CoreLogonModule
             throw new Exception();
         }
 
+        // Check session periods validity
+        $site = getenv('OMD_SITE');
+        $port = $_SERVER['SERVER_PORT'];
+        $url = "http://localhost:$port/$site/check_mk/api/1.0/version";
+        
+        $headers = [
+            'Content-type: application/json',
+            'Accept: application/json',
+            "Cookie: $cookieName=$cookieValue",
+        ];
+
+        $contextOptions = [
+            'http' => [
+                'method' => 'GET',
+                'header' => implode("\r\n", $headers),
+            ]
+        ];
+
+        $context = stream_context_create($contextOptions);
+        $result = file_get_contents($url, false, $context);
+        if ($result === false) {
+            throw new Exception();
+        }
+
         return $username;
     }
 

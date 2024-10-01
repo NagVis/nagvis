@@ -215,7 +215,7 @@ class GlobalMainCfg
                 'http_proxy' => [
                     'must'    => 0,
                     'default' => null,
-                    'match'   => MATCH_STRING_URL,
+                    'match'   => MATCH_STRING_PROXY,
                 ],
                 'http_proxy_auth' => [
                     'must'    => 0,
