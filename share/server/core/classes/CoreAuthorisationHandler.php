@@ -28,20 +28,29 @@
  *
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreAuthorisationHandler {
+class CoreAuthorisationHandler
+{
+    /** @var string */
     private $sModuleName = '';
-    private $aPermissions = Array();
 
+    /** @var array */
+    private $aPermissions = [];
+
+    /** @var CoreAuthorisationModule */
     private $MOD;
 
-    // FIXME: This is not really used anymore. It is only needed to hide the "hidden"
-    // permissions from the user. Those hidden permissions are not used anymore. So
-    // cleanup the auth DB and then remove this list.
-    private $summarizePerms = Array(
-        'MainCfg' => Array(
+    /**
+     * FIXME: This is not really used anymore. It is only needed to hide the "hidden"
+     * permissions from the user. Those hidden permissions are not used anymore. So
+     * cleanup the auth DB and then remove this list.
+     *
+     * @var array[]
+     */
+    private $summarizePerms = [
+        'MainCfg' => [
             'doEdit' => 'edit'
-        ),
-        'Map' => Array(
+        ],
+        'Map' => [
             'getMapProperties' => 'view',
             'getMapObjects' => 'view',
             'getObjectStates' => 'view',
@@ -53,14 +62,14 @@ class CoreAuthorisationHandler {
             'createObject' => 'edit',
             'deleteObject' => 'edit',
             'addModify' => 'edit',
-        ),
-        'Overview' => Array(
+        ],
+        'Overview' => [
             'getOverviewRotations' => 'view',
             'getOverviewProperties' => 'view',
             'getOverviewMaps' => 'view',
             'getOverviewAutomaps' => 'view',
-        ),
-        'AutoMap' => Array(
+        ],
+        'AutoMap' => [
             'getAutomapProperties' => 'view',
             'getAutomapObjects' => 'view',
             'parseAutomap' => 'view',
@@ -72,212 +81,340 @@ class CoreAuthorisationHandler {
             'modifyObject' => 'edit',
             'createObject' => 'edit',
             'deleteObject' => 'edit',
-        ),
-        'ManageShapes' => Array(
+        ],
+        'ManageShapes' => [
             'view'                 => 'manage',
             'doUpload'             => 'manage',
             'doDelete'             => 'manage',
-        ),
-        'ManageBackgrounds' => Array(
+        ],
+        'ManageBackgrounds' => [
             'view'                 => 'manage',
             'doUpload'             => 'manage',
             'doCreate'             => 'manage',
             'doDelete'             => 'manage',
-        ),
-        'ChangePassword' => Array(
+        ],
+        'ChangePassword' => [
             'view' => 'change',
-        ),
-        'UserMgmt' => Array(
+        ],
+        'UserMgmt' => [
             'view' => 'manage',
             'getUserRoles' => 'manage',
             'getAllRoles' => 'manage',
             'doAdd' => 'manage',
             'doEdit' => 'manage',
             'doDelete' => 'manage',
-        ),
-        'RoleMgmt' => Array(
+        ],
+        'RoleMgmt' => [
             'view' => 'manage',
             'getRolePerms' => 'manage',
             'doAdd' => 'manage',
             'doEdit' => 'manage',
             'doDelete' => 'manage',
-        ));
+        ]
+    ];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->sModuleName = cfg('global', 'authorisationmodule');
         $this->MOD = new $this->sModuleName();
     }
 
-    public function renameMapPermissions($old_name, $new_name) {
+    /**
+     * @param string $old_name
+     * @param string $new_name
+     * @return bool
+     */
+    public function renameMapPermissions($old_name, $new_name)
+    {
         return $this->MOD->renameMapPermissions($old_name, $new_name);
     }
 
-    public function createPermission($mod, $name) {
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return bool
+     */
+    public function createPermission($mod, $name)
+    {
         return $this->MOD->createPermission($mod, $name);
     }
 
-    public function deletePermission($mod, $name) {
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return bool
+     */
+    public function deletePermission($mod, $name)
+    {
         return $this->MOD->deletePermission($mod, $name);
     }
 
-    public function getModule() {
+    /**
+     * @return string
+     */
+    public function getModule()
+    {
         return $this->sModuleName;
     }
 
-    public function rolesConfigurable() {
+    /**
+     * @return bool
+     */
+    public function rolesConfigurable()
+    {
         return $this->MOD->rolesConfigurable;
     }
 
-    public function deleteRole($roleId) {
+    /**
+     * @param int $roleId
+     * @return bool
+     */
+    public function deleteRole($roleId)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->deleteRole($roleId);
     }
 
-    public function roleUsedBy($roleId) {
+    /**
+     * @param int $roleId
+     * @return array|false
+     */
+    public function roleUsedBy($roleId)
+    {
         return $this->MOD->roleUsedBy($roleId);
     }
 
-    public function deleteUser($userId) {
+    /**
+     * @param int $userId
+     * @return bool
+     */
+    public function deleteUser($userId)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->deleteUser($userId);
     }
 
-    public function updateUserRoles($userId, $roles) {
+    /**
+     * @param int $userId
+     * @param array $roles
+     * @return bool
+     */
+    public function updateUserRoles($userId, $roles)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->updateUserRoles($userId, $roles);
     }
 
-    public function getUserRoles($userId) {
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function getUserRoles($userId)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->getUserRoles($userId);
     }
 
-    public function getAllRoles() {
+    /**
+     * @return array
+     */
+    public function getAllRoles()
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->getAllRoles();
     }
 
-    private function sortPerms($a, $b) {
-        return strcmp($a['mod'].$a['obj'].$a['act'], $b['mod'].$b['obj'].$b['act']);
+    /**
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    private function sortPerms($a, $b)
+    {
+        return strcmp($a['mod'] . $a['obj'] . $a['act'], $b['mod'] . $b['obj'] . $b['act']);
     }
 
-    public function cleanupPermissions() {
+    /**
+     * @return void
+     * @throws NagVisException
+     */
+    public function cleanupPermissions()
+    {
         global $CORE;
 
         // loop all map related permissions and check whether or not the map
         // is still available
-        foreach ($this->getAllVisiblePerms() AS $perm) {
+        foreach ($this->getAllVisiblePerms() as $perm) {
             if ($perm['mod'] == 'Map' && $perm['obj'] != '*') {
-                if(count($CORE->getAvailableMaps('/^'.$perm['obj'].'$/')) <= 0) {
+                if (count($CORE->getAvailableMaps('/^' . $perm['obj'] . '$/')) <= 0) {
                     $this->deletePermission('Map', $perm['obj']);
                 }
             }
         }
     }
 
-    public function getAllVisiblePerms() {
-        $aReturn = Array();
+    /**
+     * @return array
+     */
+    public function getAllVisiblePerms()
+    {
+        $aReturn = [];
         // FIXME: First check if this is supported
 
         $aPerms = $this->MOD->getAllPerms();
 
         // Filter perms to only display the visible ones
-        foreach($aPerms AS $perm) {
-            if(!isset($this->summarizePerms[$perm['mod']]) || (isset($this->summarizePerms[$perm['mod']]) && !isset($this->summarizePerms[$perm['mod']][$perm['act']]))) {
+        foreach ($aPerms as $perm) {
+            if (
+                !isset($this->summarizePerms[$perm['mod']])
+                || (
+                    isset($this->summarizePerms[$perm['mod']])
+                    && !isset($this->summarizePerms[$perm['mod']][$perm['act']])
+                )
+            ) {
                 $aReturn[] = $perm;
             }
         }
 
-        usort($aReturn, Array($this, 'sortPerms'));
+        usort($aReturn, [$this, 'sortPerms']);
 
         return $aReturn;
     }
 
-    public function checkRoleExists($name) {
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function checkRoleExists($name)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->checkRoleExists($name);
     }
 
-    public function createRole($name) {
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function createRole($name)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->createRole($name);
     }
 
-    public function getRolePerms($roleId) {
+    /**
+     * @param int $roleId
+     * @return array
+     */
+    public function getRolePerms($roleId)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->getRolePerms($roleId);
     }
 
-    public function getUserId($sName) {
+    /**
+     * @param string $sName
+     * @return int|string
+     */
+    public function getUserId($sName)
+    {
         // FIXME: First check if this is supported
         return $this->MOD->getUserId($sName);
     }
 
-    public function getRoleId($sName) {
+    /**
+     * @param string $sName
+     * @return int|false
+     */
+    public function getRoleId($sName)
+    {
         // FIXME: First check if this is supported
         return $this->MOD->getRoleId($sName);
     }
 
-    public function updateRolePerms($roleId, $perms) {
+    /**
+     * @param int $roleId
+     * @param array $perms
+     * @return bool
+     */
+    public function updateRolePerms($roleId, $perms)
+    {
         // FIXME: First check if this is supported
         return $this->MOD->updateRolePerms($roleId, $perms);
     }
 
-    public function parsePermissions($sUsername = null) {
+    /**
+     * @param string $sUsername
+     * @return array
+     */
+    public function parsePermissions($sUsername = null)
+    {
         $this->aPermissions = $this->MOD->parsePermissions($sUsername);
         return $this->aPermissions;
     }
 
-    public function isPermitted($sModule, $sAction, $sObj = null) {
+    /**
+     * @param string $sModule
+     * @param string $sAction
+     * @param string $sObj
+     * @return bool
+     */
+    public function isPermitted($sModule, $sAction, $sObj = null)
+    {
         // Module access?
-        $access = Array();
-        if(isset($this->aPermissions[$sModule]))
-            $access[$sModule] = Array();
-        if(isset($this->aPermissions[AUTH_PERMISSION_WILDCARD]))
-            $access[AUTH_PERMISSION_WILDCARD] = Array();
+        $access = [];
+        if (isset($this->aPermissions[$sModule])) {
+            $access[$sModule] = [];
+        }
+        if (isset($this->aPermissions[AUTH_PERMISSION_WILDCARD])) {
+            $access[AUTH_PERMISSION_WILDCARD] = [];
+        }
 
-        if(count($access) > 0) {
+        if (count($access) > 0) {
             // Action access?
-            foreach($access AS $mod => $acts) {
-                if(isset($this->aPermissions[$mod][$sAction]))
-                    $access[$mod][$sAction] = Array();
-                if(isset($this->aPermissions[$mod][AUTH_PERMISSION_WILDCARD]))
-                    $access[$mod][AUTH_PERMISSION_WILDCARD] = Array();
+            foreach ($access as $mod => $acts) {
+                if (isset($this->aPermissions[$mod][$sAction])) {
+                    $access[$mod][$sAction] = [];
+                }
+                if (isset($this->aPermissions[$mod][AUTH_PERMISSION_WILDCARD])) {
+                    $access[$mod][AUTH_PERMISSION_WILDCARD] = [];
+                }
             }
 
-            if(count($access[$mod]) > 0) {
+            if (count($access[$mod]) > 0) {
                 // Don't check object permissions
-                if($sObj === null)
+                if ($sObj === null) {
                     return true;
+                }
 
                 // Object access?
-                foreach($access AS $mod => $acts) {
-                    foreach($acts AS $act => $objs) {
-                        if(isset($this->aPermissions[$mod][$act][$sObj]))
+                foreach ($access as $mod => $acts) {
+                    foreach ($acts as $act => $objs) {
+                        if (isset($this->aPermissions[$mod][$act][$sObj])) {
                             return true;
-                        elseif(isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD]))
+                        } elseif (isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
                             return true;
-                        else
-                            if(DEBUG&&DEBUGLEVEL&2)
-                                debug('Object access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
+                        } elseif (DEBUG && DEBUGLEVEL & 2) {
+                            debug(
+                                'Object access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj
+                            );
+                        }
                     }
                 }
-            } else
-                if(DEBUG&&DEBUGLEVEL&2)
-                    debug('Action access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
-        } else
-            if(DEBUG&&DEBUGLEVEL&2)
-                debug('Module access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
+            } elseif (DEBUG && DEBUGLEVEL & 2) {
+                debug('Action access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
+            }
+        } elseif (DEBUG && DEBUGLEVEL & 2) {
+            debug('Module access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
+        }
 
         return false;
     }
 }
-?>

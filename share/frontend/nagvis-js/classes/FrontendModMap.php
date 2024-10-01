@@ -25,30 +25,49 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModMap extends FrontendModule {
+class FrontendModMap extends FrontendModule
+{
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var NagVisMapView */
     private $VIEW;
+
+    /** @var string */
     private $name = '';
+
+    /** @var string */
     private $search = '';
+
+    /** @var string */
     private $rotation = '';
+
+    /** @var string */
     private $rotationStep = '';
+
+    /** @var string */
     private $perm = '';
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     * @throws NagVisException
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Map';
         $this->CORE  = $CORE;
 
         // Parse the view specific options
-        $aOpts = Array(
+        $aOpts = [
             'show'          => MATCH_MAP_NAME_EMPTY,
             'search'        => MATCH_STRING_NO_SPACE_EMPTY,
             'rotation'      => MATCH_ROTATION_NAME_EMPTY,
             'rotationStep'  => MATCH_INTEGER_EMPTY,
             'perm'          => MATCH_BOOLEAN_EMPTY,
-        );
+        ];
 
         // There might be a default map when none is given
-        $aDefaults = Array('show' => cfg('global', 'startshow'));
+        $aDefaults = ['show' => cfg('global', 'startshow')];
 
         // getCustomOptions fetches and validates the values
         $aVals = $this->getCustomOptions($aOpts, $aDefaults);
@@ -59,10 +78,10 @@ class FrontendModMap extends FrontendModule {
         $this->perm         = $aVals['perm'];
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'view' => REQUIRES_AUTHORISATION,
             'edit' => REQUIRES_AUTHORISATION,
-        );
+        ];
 
         // Register valid objects
         $this->aObjects = $this->CORE->getAvailableMaps(null, SET_KEYS);
@@ -71,23 +90,40 @@ class FrontendModMap extends FrontendModule {
         $this->setObject($this->name);
     }
 
-    public function handleAction() {
+    /**
+     * @return string
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     * @throws Dwoo_Exception
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'edit':
                 case 'view':
                     // Show the view dialog to the user
                     $sReturn = $this->showViewDialog();
-                break;
+                    break;
             }
         }
 
         return $sReturn;
     }
 
-    private function showViewDialog() {
+    /**
+     * @return string
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     * @throws Dwoo_Exception
+     */
+    private function showViewDialog()
+    {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         // Initialize map configuration
         $MAPCFG = new GlobalMapCfg($this->name);
@@ -103,17 +139,18 @@ class FrontendModMap extends FrontendModule {
 
         // Need to load the custom stylesheet?
         $customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
-        if($customStylesheet !== '')
+        if ($customStylesheet !== '') {
             $INDEX->setCustomStylesheet(path('html', 'global', 'styles', $customStylesheet));
+        }
 
         // Need to parse the header menu by config or url value?
-        if(isset($opts['header_menu']) && $opts['header_menu']) {
+        if (isset($opts['header_menu']) && $opts['header_menu']) {
             // Parse the header menu
-            $HEADER = new NagVisHeaderMenu($MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
+            $HEADER = new NagVisHeaderMenu($MAPCFG->getValue(0, 'header_template'), $MAPCFG);
 
             // Put rotation information to header menu
-            if($this->rotation != '') {
-            	$HEADER->setRotationEnabled();
+            if ($this->rotation != '') {
+                $HEADER->setRotationEnabled();
             }
 
             $INDEX->setHeaderMenu($HEADER->__toString());
@@ -127,13 +164,14 @@ class FrontendModMap extends FrontendModule {
         $this->VIEW->setSearch($this->search);
 
         // Enable edit mode for all objects
-        if($this->sAction == 'edit')
+        if ($this->sAction == 'edit') {
             $this->VIEW->setEditMode();
+        }
 
         // Maybe it is needed to handle the requested rotation
-        if($this->rotation != '') {
+        if ($this->rotation != '') {
             // Only allow the rotation if the user is permitted to use it
-            if($AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
+            if ($AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
                 $ROTATION = new FrontendRotation($this->rotation);
                 $ROTATION->setStep('map', $this->name, $this->rotationStep);
                 $this->VIEW->setRotation($ROTATION->getRotationProperties());
@@ -144,4 +182,3 @@ class FrontendModMap extends FrontendModule {
         return $INDEX->parse();
     }
 }
-?>

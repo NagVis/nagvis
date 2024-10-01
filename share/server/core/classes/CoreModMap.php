@@ -25,18 +25,29 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModMap extends CoreModule {
+class CoreModMap extends CoreModule
+{
+    /** @var string|null */
     private $name = null;
+
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var string */
     private $htmlBase;
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     * @throws NagVisException
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Map';
         $this->CORE = $CORE;
         $this->htmlBase = cfg('paths', 'htmlbase');
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'getMapProperties'  => 'view',
             'getMapObjects'     => 'view',
             'getObjectStates'   => 'view',
@@ -52,14 +63,19 @@ class CoreModMap extends CoreModule {
             // Worldmap related
             'getWorldmapBounds' => 'view',
             'viewToNewMap'      => 'edit',
-        );
+        ];
 
         // Register valid objects
         $this->aObjects = $this->CORE->getAvailableMaps(null, SET_KEYS);
     }
 
-    public function initObject() {
-        switch($this->sAction) {
+    /**
+     * @return void
+     * @throws NagVisException
+     */
+    public function initObject()
+    {
+        switch ($this->sAction) {
             // These have the object in GET var "show"
             case 'getMapProperties':
             case 'getMapObjects':
@@ -69,188 +85,251 @@ class CoreModMap extends CoreModule {
             case 'doExportMap':
             case 'getWorldmapBounds':
                 // When e.g. submitting the addModify form the show parameter is a POST variable
-                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
+                $aVals = $this->getCustomOptions(['show' => MATCH_MAP_NAME_EMPTY], [], true);
                 $this->name = $aVals['show'];
-            break;
+                break;
             case 'toStaticMap':
             case 'viewToNewMap':
-                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
+                $aVals = $this->getCustomOptions(['show' => MATCH_MAP_NAME_EMPTY], [], true);
                 $this->name = $aVals['show'];
-            break;
-            // And those have the objecs in the POST var "map"
+                break;
+                // And those have the objecs in the POST var "map"
             case 'modifyObject':
             case 'deleteObject':
                 $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
-                if($FHANDLER->match('map', MATCH_MAP_NAME))
+                if ($FHANDLER->match('map', MATCH_MAP_NAME)) {
                     $this->name = $FHANDLER->get('map');
-                else
-                    throw new NagVisException(l('Invalid query. The parameter [NAME] is missing or has an invalid format.',
-                                                Array('NAME' => 'map')));
-            break;
+                } else {
+                    throw new NagVisException(
+                        l(
+                            'Invalid query. The parameter [NAME] is missing or has an invalid format.',
+                            ['NAME' => 'map']
+                        )
+                    );
+                }
+                break;
         }
 
         // Set the requested object for later authorisation
         $this->setObject($this->name);
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string|void
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     * @throws Success
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'getMapProperties':
                     $MAPCFG = new GlobalMapCfg($this->name);
                     $MAPCFG->readMapConfig(ONLY_GLOBAL);
                     $sReturn = json_encode($MAPCFG->getMapProperties());
-                break;
+                    break;
                 case 'getMapObjects':
                     $sReturn = $this->getMapObjects();
-                break;
+                    break;
                 case 'getObjectStates':
                     $sReturn = $this->getObjectStates();
-                break;
+                    break;
                 case 'manage':
                     $VIEW = new ViewManageMaps();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                    break;
                 case 'modifyObject':
-                    $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
-                                                     null, l('The object could not be modified.'));
-                break;
+                    $sReturn = $this->handleResponse(
+                        'handleResponseModifyObject',
+                        'doModifyObject',
+                        null,
+                        l('The object could not be modified.')
+                    );
+                    break;
                 case 'deleteObject':
                     $aReturn = $this->handleResponseDeleteObject();
 
-                    if($aReturn !== false) {
-                        if($this->doDeleteObject($aReturn)) {
-                            $sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
+                    if ($aReturn !== false) {
+                        if ($this->doDeleteObject($aReturn)) {
+                            $sReturn = json_encode(['status' => 'OK', 'message' => '']);
                         } else {
                             throw new NagVisException(l('The object could not be deleted.'));
                         }
                     } else {
                         throw new NagVisException(l('You entered invalid information.'));
                     }
-                break;
+                    break;
                 case 'addModify':
                     $VIEW = new ViewMapAddModify();
-                    $sReturn = json_encode(Array(
+                    $sReturn = json_encode([
                         'code' => $VIEW->parse(),
                         'object_type' => $VIEW->object_type()
-                    ));
-                break;
+                    ]);
+                    break;
                 case 'manageTmpl':
                     $VIEW = new ViewMapManageTmpl();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                    break;
                 case 'doExportMap':
                     $this->doExportMap($this->name);
                     exit(0);
                     //header('Location:'.$_SERVER['HTTP_REFERER']);
-                break;
                 case 'toStaticMap':
                     $VIEW = new ViewToStaticMap();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse($this->name)));
-                break;
+                    $sReturn = json_encode(['code' => $VIEW->parse($this->name)]);
+                    break;
                 case 'viewToNewMap':
                     $VIEW = new ViewToNewMap();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse($this->name)));
-                break;
+                    $sReturn = json_encode(['code' => $VIEW->parse($this->name)]);
+                    break;
                 case 'getWorldmapBounds':
                     $sReturn = $this->getWorldmapBounds();
-                break;
+                    break;
             }
         }
 
         return $sReturn;
     }
 
-    protected function getWorldmapBounds() {
+    /**
+     * @return false|string
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     * @throws Exception
+     */
+    protected function getWorldmapBounds()
+    {
         $MAPCFG = new GlobalMapCfg($this->name);
         $MAPCFG->readMapConfig();
         return json_encode($MAPCFG->handleSources('get_bounds'));
     }
 
-    protected function doExportMap($name) {
+    /**
+     * @param string $name
+     * @return bool
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    protected function doExportMap($name)
+    {
         global $CORE;
-        if (!$name)
+        if (!$name) {
             throw new FieldInputError(null, l('Please choose a map'));
+        }
 
-        if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0)
+        if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
             throw new FieldInputError(null, l('The given map name is invalid'));
+        }
 
         $MAPCFG = new GlobalMapCfg($name);
         return $MAPCFG->exportMap();
     }
 
-    protected function doDeleteObject($a) {
+    /**
+     * @param array $a
+     * @return true
+     * @throws NagVisException
+     * @throws Exception
+     */
+    protected function doDeleteObject($a)
+    {
         // initialize map and read map config
         $MAPCFG = new GlobalMapCfg($a['map']);
         // Ignore map configurations with errors in it.
         // the problems may get resolved by deleting the object
         try {
             $MAPCFG->readMapConfig();
-        } catch(MapCfgInvalid $e) {}
+        } catch (MapCfgInvalid $e) {
+        }
 
         // Give the sources the chance to load the object
         $MAPCFG->handleSources('load_obj', $a['id']);
 
-        if(!$MAPCFG->objExists($a['id']))
+        if (!$MAPCFG->objExists($a['id'])) {
             throw new NagVisException(l('The object does not exist.'));
+        }
 
         // first delete element from array
         $MAPCFG->deleteElement($a['id'], true);
 
         // delete map lock
-        if(!$MAPCFG->deleteMapLock())
+        if (!$MAPCFG->deleteMapLock()) {
             throw new NagVisException(l('mapLockNotDeleted'));
+        }
 
         return true;
     }
 
-    protected function handleResponseDeleteObject() {
+    /**
+     * @return array|false
+     * @throws NagVisException
+     */
+    protected function handleResponseDeleteObject()
+    {
         $bValid = true;
         // Validate the response
 
         $FHANDLER = new CoreRequestHandler($_GET);
 
         // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
+        if (!$FHANDLER->isSetAndNotEmpty('map')) {
             $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
+        }
+        if ($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
             $bValid = false;
+        }
 
         // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+        if ($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME)) {
             $bValid = false;
-        if($bValid && !$FHANDLER->match('id', MATCH_OBJECTID))
+        }
+        if ($bValid && !$FHANDLER->match('id', MATCH_OBJECTID)) {
             $bValid = false;
+        }
 
-        if($bValid)
+        if ($bValid) {
             $this->verifyMapExists($FHANDLER->get('map'));
+        }
 
         // Store response data
-        if($bValid === true) {
+        if ($bValid === true) {
             // Return the data
-            return Array('map' => $FHANDLER->get('map'),
-                         'id' => $FHANDLER->get('id'));
+            return [
+                'map' => $FHANDLER->get('map'),
+                'id' => $FHANDLER->get('id')
+            ];
         } else {
             return false;
         }
     }
 
-    protected function doModifyObject($a) {
+    /**
+     * @param $a
+     * @return false|string
+     * @throws NagVisException
+     * @throws Exception
+     */
+    protected function doModifyObject($a)
+    {
         $MAPCFG = new GlobalMapCfg($a['map']);
         try {
             $MAPCFG->readMapConfig();
-        } catch(MapCfgInvalid $e) {}
+        } catch (MapCfgInvalid $e) {
+        }
 
         // Give the sources the chance to load the object
         $MAPCFG->handleSources('load_obj', $a['id']);
 
-        if(!$MAPCFG->objExists($a['id']))
+        if (!$MAPCFG->objExists($a['id'])) {
             throw new NagVisException(l('The object does not exist.'));
+        }
 
         // set options in the array
-        foreach($a['opts'] AS $key => $val) {
+        foreach ($a['opts'] as $key => $val) {
             $MAPCFG->setValue($a['id'], $key, $val);
         }
 
@@ -258,14 +337,19 @@ class CoreModMap extends CoreModule {
         $MAPCFG->storeUpdateElement($a['id']);
 
         // delete map lock
-        if(!$MAPCFG->deleteMapLock()) {
+        if (!$MAPCFG->deleteMapLock()) {
             throw new NagVisException(l('mapLockNotDeleted'));
         }
 
-        return json_encode(Array('status' => 'OK', 'message' => ''));
+        return json_encode(['status' => 'OK', 'message' => '']);
     }
 
-    protected function handleResponseModifyObject() {
+    /**
+     * @return array|false
+     * @throws NagVisException
+     */
+    protected function handleResponseModifyObject()
+    {
         $bValid = true;
         // Validate the response
 
@@ -275,19 +359,24 @@ class CoreModMap extends CoreModule {
         $FHANDLER = new CoreRequestHandler($aResponse);
 
         // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
+        if (!$FHANDLER->isSetAndNotEmpty('map')) {
             $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
+        }
+        if ($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
             $bValid = false;
+        }
 
         // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+        if ($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME)) {
             $bValid = false;
-        if($bValid && $FHANDLER->isSetAndNotEmpty('id') && !$FHANDLER->match('id', MATCH_OBJECTID))
+        }
+        if ($bValid && $FHANDLER->isSetAndNotEmpty('id') && !$FHANDLER->match('id', MATCH_OBJECTID)) {
             $bValid = false;
+        }
 
-        if($bValid)
+        if ($bValid) {
             $this->verifyMapExists($FHANDLER->get('map'));
+        }
 
         // FIXME: Recode to FHANDLER
         $aOpts = $aResponse;
@@ -300,26 +389,34 @@ class CoreModMap extends CoreModule {
         unset($aOpts['lang']);
 
         // Also remove all "helper fields" which begin with a _
-        foreach($aOpts AS $key => $val) {
-            if(strpos($key, '_') === 0) {
+        foreach ($aOpts as $key => $val) {
+            if (str_starts_with($key, '_')) {
                 unset($aOpts[$key]);
             }
         }
 
         // Store response data
-        if($bValid === true) {
+        if ($bValid === true) {
             $id = $FHANDLER->get('id') === "0" ? 0 : $FHANDLER->get('id');
             // Return the data
-            return Array('map'     => $FHANDLER->get('map'),
-                         'id'      => $id,
-                         'refresh' => $FHANDLER->get('ref'),
-                         'opts'    => $aOpts);
+            return [
+                'map'     => $FHANDLER->get('map'),
+                'id'      => $id,
+                'refresh' => $FHANDLER->get('ref'),
+                'opts'    => $aOpts
+            ];
         } else {
             return false;
         }
     }
 
-    private function getMapObjects() {
+    /**
+     * @return string
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
+    private function getMapObjects()
+    {
         $MAPCFG = new GlobalMapCfg($this->name);
         $MAPCFG->readMapConfig();
 
@@ -327,19 +424,26 @@ class CoreModMap extends CoreModule {
         return $MAP->parseObjectsJson();
     }
 
-    private function getObjectStates() {
-        $aOpts = Array(
+    /**
+     * @return false|string
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
+    private function getObjectStates()
+    {
+        $aOpts = [
             'ty' => MATCH_GET_OBJECT_TYPE,
             'i'  => MATCH_STRING_NO_SPACE_EMPTY,
             'f'  => MATCH_STRING_NO_SPACE_EMPTY
-        );
-        $aVals = $this->getCustomOptions($aOpts, array(), true);
+        ];
+        $aVals = $this->getCustomOptions($aOpts, [], true);
 
         // Is this request asked to check file ages?
-        if(isset($aVals['f']) && isset($aVals['f'][0]) && $aVals['f'] != '') {
+        if (isset($aVals['f'][0])) {
             $result = $this->checkFilesChanged($aVals['f']);
-            if($result !== null)
+            if ($result !== null) {
                 return $result;
+            }
         }
 
         // Initialize map configuration (Needed in getMapObjConf)
@@ -348,24 +452,30 @@ class CoreModMap extends CoreModule {
 
         // i might not be set when all map objects should be fetched or when only
         // the summary of the map is called
-        if(isset($aVals['i']) && $aVals['i'] != '')
+        if (isset($aVals['i']) && $aVals['i'] != '') {
             $MAPCFG->filterMapObjects($aVals['i']);
+        }
 
         $MAP = new NagVisMap($MAPCFG, GET_STATE, IS_VIEW);
         return $MAP->parseObjectsJson($aVals['ty']);
     }
 
-    // Check if the map exists
-    private function verifyMapExists($map, $negate = false) {
-        if(!$negate) {
-            if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) <= 0) {
+    /**
+     * Check if the map exists
+     *
+     * @param string $map
+     * @param bool $negate
+     * @return void
+     * @throws NagVisException
+     */
+    private function verifyMapExists($map, $negate = false)
+    {
+        if (!$negate) {
+            if (count($this->CORE->getAvailableMaps('/^' . $map . '$/')) <= 0) {
                 throw new NagVisException(l('The map does not exist.'));
             }
-        } else {
-            if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) > 0) {
-                throw new NagVisException(l('The map does already exist.'));
-            }
+        } elseif (count($this->CORE->getAvailableMaps('/^' . $map . '$/')) > 0) {
+            throw new NagVisException(l('The map does already exist.'));
         }
     }
 }
-?>

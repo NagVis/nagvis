@@ -22,39 +22,52 @@
  *
  ******************************************************************************/
 
-class CoreModAction extends CoreModule {
-    public function __construct(GlobalCore $CORE) {
+class CoreModAction extends CoreModule
+{
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Action';
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'acknowledge'       => 'perform',
             'custom_action'     => 'perform',
-        );
+        ];
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
         global $CORE;
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'custom_action':
-                    $aOpts = Array(
+                    $aOpts = [
                         'map'       => MATCH_MAP_NAME,
                         'object_id' => MATCH_OBJECTID,
                         'cmd'       => MATCH_STRING_NO_SPACE,
-                    );
-                    $attrs = $this->getCustomOptions($aOpts, Array());
+                    ];
+                    $attrs = $this->getCustomOptions($aOpts);
 
                     // Input validations
                     // - Valid custom action?
                     $actions = $CORE->getDefinedCustomActions();
-                    if(!isset($actions[$attrs['cmd']]))
+                    if (!isset($actions[$attrs['cmd']])) {
                         throw new NagVisException(l('The given custom action is not defined.'));
+                    }
 
                     // - does the map exist?
-                    if(count($CORE->getAvailableMaps('/^'.$attrs['map'].'$/')) <= 0) {
+                    if (count($CORE->getAvailableMaps('/^' . $attrs['map'] . '$/')) <= 0) {
                         throw new NagVisException(l('The map does not exist.'));
                     }
 
@@ -63,29 +76,31 @@ class CoreModAction extends CoreModule {
                     $MAPCFG->skipSourceErrors();
                     $MAPCFG->readMapConfig();
 
-                    if(!isset($attrs['object_id']) && $attrs['object_id'] == '')
+                    if (!isset($attrs['object_id']) && $attrs['object_id'] == '') {
                         throw new NagVisException(l('The object_id value is missing.'));
-                    
-                    if(!$MAPCFG->objExists($attrs['object_id']))
+                    }
+
+                    if (!$MAPCFG->objExists($attrs['object_id'])) {
                         throw new NagVisException(l('The object does not exist.'));
+                    }
                     $objId = $attrs['object_id'];
 
-                    $func = 'handle_action_'.$attrs['cmd'];
-                    if(!function_exists($func))
+                    $func = 'handle_action_' . $attrs['cmd'];
+                    if (!function_exists($func)) {
                         throw new NagVisException(l('Action handler not implemented.'));
+                    }
 
                     $func($MAPCFG, $objId);
 
-                break;
-                
+                    break;
+
                 case 'acknowledge':
                     $VIEW = new ViewAck();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                    break;
             }
         }
 
         return $sReturn;
     }
 }
-?>

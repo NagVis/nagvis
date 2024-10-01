@@ -26,5 +26,6 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-abstract class FrontendModule extends CoreModule {}
-?>
+abstract class FrontendModule extends CoreModule
+{
+}

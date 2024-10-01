@@ -22,56 +22,77 @@
  *
  *****************************************************************************/
 
-class ViewManageUsers {
+class ViewManageUsers
+{
+    /** @var string|null */
     private $error = null;
 
-    private function addForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function addForm()
+    {
+        /** @var CoreAuthHandler $AUTH */
         global $AUTH;
-        echo '<h2>'.l('Create User').'</h2>';
+        echo '<h2>' . l('Create User') . '</h2>';
 
         if (is_action() && post('mode') == 'create') {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please specify a name.'));
+                }
 
-                if (strlen($name) > AUTH_MAX_USERNAME_LENGTH)
+                if (strlen($name) > AUTH_MAX_USERNAME_LENGTH) {
                     throw new FieldInputError('name', l('This name is too long.'));
+                }
 
-                if (!preg_match(MATCH_USER_NAME, $name))
-                    throw new FieldInputError('name', l('Invalid value provided. Needs to match: [P].',
-                                                                          array('P' => MATCH_USER_NAME)));
+                if (!preg_match(MATCH_USER_NAME, $name)) {
+                    throw new FieldInputError(
+                        'name',
+                        l('Invalid value provided. Needs to match: [P].', ['P' => MATCH_USER_NAME])
+                    );
+                }
 
-                if ($AUTH->checkUserExists($name))
+                if ($AUTH->checkUserExists($name)) {
                     throw new FieldInputError('name', l('A user with this name already exists.'));
+                }
 
                 $password1 = post('password1');
-                if (!$password1)
+                if (!$password1) {
                     throw new FieldInputError('password1', l('Please specify a password.'));
+                }
 
-                if (strlen($password1) > AUTH_MAX_PASSWORD_LENGTH)
+                if (strlen($password1) > AUTH_MAX_PASSWORD_LENGTH) {
                     throw new FieldInputError('password1', l('This password is too long.'));
+                }
 
                 $password2 = post('password2');
-                if (!$password2)
+                if (!$password2) {
                     throw new FieldInputError('password2', l('Please confirm your password.'));
+                }
 
-                if ($password1 != $password2)
+                if ($password1 != $password2) {
                     throw new FieldInputError('password2', l('The two passwords are not equal.'));
+                }
 
-                if ($AUTH->createUser($name, $password1))
+                if ($AUTH->createUser($name, $password1)) {
                     success(l('The user has been created.'));
-                else
+                } else {
                     throw new NagVisException('Failed to create the user.');
+                }
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -80,15 +101,15 @@ class ViewManageUsers {
         hidden('mode', 'create');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Username').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Username') . '</td>';
         echo '<td class="tdfield">';
         input('name');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Password').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Password') . '</td>';
         echo '<td class="tdfield">';
         password('password1');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Password Confirm').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Password Confirm') . '</td>';
         echo '<td class="tdfield">';
         password('password2');
         echo '</td></tr>';
@@ -98,40 +119,54 @@ class ViewManageUsers {
         form_end(false);
     }
 
-    private function editForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function editForm()
+    {
+        /** @var CoreAuthHandler $AUTH */
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTH, $AUTHORISATION;
-        if (!$AUTHORISATION->rolesConfigurable())
+        if (!$AUTHORISATION->rolesConfigurable()) {
             return;
-        echo '<h2>'.l('Modify User').'</h2>';
+        }
+        echo '<h2>' . l('Modify User') . '</h2>';
 
         $user_id = submitted('edit') ? post('user_id') : null;
 
         if (is_action() && post('mode') == 'edit') {
             try {
-                if ($user_id === null || $user_id === '')
+                if ($user_id === null || $user_id === '') {
                     throw new FieldInputError('user_id', l('Please choose a user to edit.'));
-                if (!is_numeric($user_id))
+                }
+                if (!is_numeric($user_id)) {
                     throw new FieldInputError('user_id', l('Invalid value provided.'));
+                }
                 $user_id = intval($user_id);
 
-                if (post('user_roles') !== "")
+                if (post('user_roles') !== "") {
                     $roles = explode(',', post('user_roles'));
-                else
-                    $roles = array();
+                } else {
+                    $roles = [];
+                }
 
-                if ($AUTHORISATION->updateUserRoles($user_id, $roles))
+                if ($AUTHORISATION->updateUserRoles($user_id, $roles)) {
                     success(l('The roles for this user have been updated.'));
-                else
+                } else {
                     throw new NagVisException(l('Problem while updating user roles.'));
-        } catch (FieldInputError $e) {
+                }
+            } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -139,33 +174,36 @@ class ViewManageUsers {
         js_form_start('edit');
         hidden('mode', 'edit');
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
-        foreach ($AUTH->getAllUsers() AS $user)
+        $choices = ['' => l('Please choose')];
+        foreach ($AUTH->getAllUsers() as $user) {
             $choices[$user['userId']] = $user['name'];
+        }
         select('user_id', $choices, '', 'updateForm(this.form)');
         echo '</td></tr>';
         echo '</table>';
 
         if ($user_id) {
-            $user_roles = array();
+            $user_roles = [];
             foreach ($AUTHORISATION->getUserRoles($user_id) as $role) {
                 if ($role['name'] !== null) {
                     $user_roles[$role['roleId']] = $role['name'];
                 }
             }
 
-            $available_roles = array();
-            foreach ($AUTHORISATION->getAllRoles() AS $role)
-                if (!isset($user_roles[$role['roleId']]))
+            $available_roles = [];
+            foreach ($AUTHORISATION->getAllRoles() as $role) {
+                if (!isset($user_roles[$role['roleId']])) {
                     $available_roles[$role['roleId']] = $role['name'];
+                }
+            }
 
             hidden('user_roles', implode(',', array_keys($user_roles)));
             echo '<table class="mytable">';
-            echo '<tr><td>'.l('Available Roles').'</td>';
+            echo '<tr><td>' . l('Available Roles') . '</td>';
             echo '<td style="width:30px"></td>';
-            echo '<td>'.l('Selected Roles').'</td></tr>';
+            echo '<td>' . l('Selected Roles') . '</td></tr>';
             echo '<tr><td>';
             select('roles_available', $available_roles, '', '', 'width:100%', 5);
             echo '</td><td style="vertical-align:middle">';
@@ -180,36 +218,49 @@ class ViewManageUsers {
         form_end(false);
     }
 
-    private function deleteForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function deleteForm()
+    {
+        /** @var CoreAuthHandler $AUTH */
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTH, $AUTHORISATION;
-        echo '<h2>'.l('Delete User').'</h2>';
+        echo '<h2>' . l('Delete User') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
                 $user_id = post('user_id');
-                if ($user_id === null || $user_id === '')
+                if ($user_id === null || $user_id === '') {
                     throw new FieldInputError('user_id', l('Please choose a user to delete.'));
-                if (!is_numeric($user_id))
+                }
+                if (!is_numeric($user_id)) {
                     throw new FieldInputError('user_id', l('Invalid value provided.'));
+                }
                 $user_id = intval($user_id);
 
                 // Don't delete own user
-                if ($AUTH->getUserId() == $user_id)
+                if ($AUTH->getUserId() == $user_id) {
                     throw new FieldInputError('user_id', l('Unable to delete your own user.'));
+                }
 
-                if ($AUTHORISATION->deleteUser($user_id))
+                if ($AUTHORISATION->deleteUser($user_id)) {
                     success(l('The user has been deleted.'));
-                else
+                } else {
                     throw new NagVisException(l('Problem while deleting the user.'));
+                }
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -218,11 +269,12 @@ class ViewManageUsers {
         hidden('mode', 'delete');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
-        foreach ($AUTH->getAllUsers() AS $user)
+        $choices = ['' => l('Please choose')];
+        foreach ($AUTH->getAllUsers() as $user) {
             $choices[$user['userId']] = $user['name'];
+        }
         select('user_id', $choices);
         echo '</td></tr>';
         echo '</table>';
@@ -231,53 +283,71 @@ class ViewManageUsers {
         form_end(false);
     }
 
-    private function resetPwForm() {
+    /**
+     * @return void
+     * @throws CoreAuthModNoSupport
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function resetPwForm()
+    {
+        /** @var CoreAuthHandler $AUTH */
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTH, $AUTHORISATION;
-        if (!$AUTH->checkFeature('changePassword') || $AUTH->authedTrusted())
-            return; // reset not supported
+        if (!$AUTH->checkFeature('changePassword') || $AUTH->authedTrusted()) {
+            return;
+        } // reset not supported
 
-        echo '<h2>'.l('Reset Password').'</h2>';
+        echo '<h2>' . l('Reset Password') . '</h2>';
 
         if (is_action() && post('mode') == 'reset_pw') {
             try {
                 $user_id = post('user_id');
-                if ($user_id === null || $user_id === '')
+                if ($user_id === null || $user_id === '') {
                     throw new FieldInputError('user_id', l('Please choose a user.'));
-                if (!is_numeric($user_id))
+                }
+                if (!is_numeric($user_id)) {
                     throw new FieldInputError('user_id', l('Invalid value provided.'));
+                }
                 $user_id = intval($user_id);
 
                 //if ($AUTH->getUserId() == $user_id)
                 //    throw new FieldInputError('user_id', l('Unable to delete your own user.'));
 
                 $password1 = post('password1');
-                if (!$password1)
+                if (!$password1) {
                     throw new FieldInputError('password1', l('Please specify a password.'));
+                }
 
-                if (strlen($password1) > AUTH_MAX_PASSWORD_LENGTH)
+                if (strlen($password1) > AUTH_MAX_PASSWORD_LENGTH) {
                     throw new FieldInputError('password1', l('This password is too long.'));
+                }
 
                 $password2 = post('password2');
-                if (!$password2)
+                if (!$password2) {
                     throw new FieldInputError('password2', l('Please confirm your password.'));
+                }
 
-                if ($password1 != $password2)
+                if ($password1 != $password2) {
                     throw new FieldInputError('password2', l('The two passwords are not equal.'));
+                }
 
-                if ($AUTH->resetPassword($user_id, $password2))
+                if ($AUTH->resetPassword($user_id, $password2)) {
                     success(l('The password has been reset.'));
-                else
+                } else {
                     throw new NagVisException('Failed to reset the password.');
+                }
 
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -286,18 +356,19 @@ class ViewManageUsers {
         hidden('mode', 'reset_pw');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
-        foreach ($AUTH->getAllUsers() AS $user)
+        $choices = ['' => l('Please choose')];
+        foreach ($AUTH->getAllUsers() as $user) {
             $choices[$user['userId']] = $user['name'];
+        }
         select('user_id', $choices);
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Password').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Password') . '</td>';
         echo '<td class="tdfield">';
         password('password1');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Password Confirm').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Password Confirm') . '</td>';
         echo '<td class="tdfield">';
         password('password2');
         echo '</td></tr>';
@@ -307,7 +378,14 @@ class ViewManageUsers {
         form_end(false);
     }
 
-    public function parse() {
+    /**
+     * @return string
+     * @throws CoreAuthModNoSupport
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    public function parse()
+    {
         ob_start();
         $this->addForm();
         $this->editForm();
@@ -316,5 +394,3 @@ class ViewManageUsers {
         return ob_get_clean();
     }
 }
-
-?>

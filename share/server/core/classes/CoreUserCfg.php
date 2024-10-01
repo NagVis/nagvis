@@ -25,45 +25,60 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreUserCfg {
+class CoreUserCfg
+{
+    /** @var string|null */
     private $profilesDir;
 
-    // Optional list of value types to be fixed
-    private $types = Array(
-      'sidebar'  => 'i',
-      'header'   => 'b',
-      'eventlog' => 'b',
-    );
+    /** @var string[] Optional list of value types to be fixed */
+    private $types = [
+        'sidebar'  => 'i',
+        'header'   => 'b',
+        'eventlog' => 'b',
+    ];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->profilesDir = cfg('paths', 'profiles');
     }
 
-    public function doGet($onlyUserCfg = false) {
+    /**
+     * @param bool $onlyUserCfg
+     * @return array
+     * @throws NagVisException
+     */
+    public function doGet($onlyUserCfg = false)
+    {
         global $AUTH, $AUTHORISATION;
-        $opts = Array();
-        if(!isset($AUTH) || !$AUTH->isAuthenticated())
+        $opts = [];
+        if (!isset($AUTH) || !$AUTH->isAuthenticated()) {
             return $opts;
+        }
 
-        if(!file_exists($this->profilesDir))
+        if (!file_exists($this->profilesDir)) {
             return $opts;
+        }
 
         // Fetch all profile files to load
-        $files = Array();
-        if(!$onlyUserCfg && isset($AUTHORISATION))
-            foreach($AUTHORISATION->getUserRoles($AUTH->getUserId()) AS $role)
-                $files[] = $role['name'].'.profile';
-        $files[] = $AUTH->getUser().'.profile';
+        $files = [];
+        if (!$onlyUserCfg && isset($AUTHORISATION)) {
+            foreach ($AUTHORISATION->getUserRoles($AUTH->getUserId()) as $role) {
+                $files[] = $role['name'] . '.profile';
+            }
+        }
+        $files[] = $AUTH->getUser() . '.profile';
 
         // Read all configurations and append to the option array
-        foreach($files AS $file) {
-            $f = $this->profilesDir.'/'.$file;
-            if(!file_exists($f))
+        foreach ($files as $file) {
+            $f = $this->profilesDir . '/' . $file;
+            if (!file_exists($f)) {
                 continue;
+            }
 
             $a = json_decode(file_get_contents($f), true);
-            if(!is_array($a))
-                throw new NagVisException(l('Invalid data in "[FILE]".', Array('FILE' => $f)));
+            if (!is_array($a)) {
+                throw new NagVisException(l('Invalid data in "[FILE]".', ['FILE' => $f]));
+            }
 
             $opts = array_merge($opts, $a);
         }
@@ -71,22 +86,36 @@ class CoreUserCfg {
         return $opts;
     }
 
-    public function doGetAsJson($onlyUserCfg = false) {
+    /**
+     * @param bool $onlyUserCfg
+     * @return false|string
+     * @throws NagVisException
+     */
+    public function doGetAsJson($onlyUserCfg = false)
+    {
         return json_encode($this->doGet($onlyUserCfg));
     }
 
-    public function doSet($opts) {
+    /**
+     * @param array $opts
+     * @return bool
+     * @throws NagVisException
+     */
+    public function doSet($opts)
+    {
         global $CORE, $AUTH;
-        $file = $this->profilesDir.'/'.$AUTH->getUser().'.profile';
+        $file = $this->profilesDir . '/' . $AUTH->getUser() . '.profile';
 
-        if(!$CORE->checkExisting(dirname($file), true) || !$CORE->checkWriteable(dirname($file), true))
+        if (!$CORE->checkExisting(dirname($file)) || !$CORE->checkWriteable(dirname($file))) {
             return false;
+        }
 
         $cfg = $this->doGet(true);
 
-        foreach($opts AS $key => $value) {
-            if(isset($this->types[$key]))
+        foreach ($opts as $key => $value) {
+            if (isset($this->types[$key])) {
                 $value = $this->fixType($value, $this->types[$key]);
+            }
             $cfg[$key] = $value;
         }
 
@@ -95,20 +124,35 @@ class CoreUserCfg {
         return $ret;
     }
 
-    public function getValue($key, $default = null) {
+    /**
+     * @param string $key
+     * @param string $default
+     * @return mixed|null
+     * @throws NagVisException
+     */
+    public function getValue($key, $default = null)
+    {
         $opts = $this->doGet();
         return isset($opts[$key]) ? $opts[$key] : $default;
     }
 
-    private function fixType($val, $type) {
-        if($type == 'i')
-            return (int) $val;
-        elseif($type == 'b') {
-            if($val == '1' || $val === 'true')
+    /**
+     * @param mixed $val
+     * @param string $type
+     * @return bool|int|mixed
+     */
+    private function fixType($val, $type)
+    {
+        if ($type == 'i') {
+            return (int)$val;
+        } elseif ($type == 'b') {
+            if ($val == '1' || $val === 'true') {
                 return true;
-            else
+            } else {
                 return false;
-        } else
+            }
+        } else {
             return $val;
+        }
     }
 }

@@ -26,7 +26,8 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-interface GlobalBackendInterface {
+interface GlobalBackendInterface
+{
     public function __construct($backendId);
 
     /**
@@ -86,12 +87,11 @@ interface GlobalBackendInterface {
      */
     public function getDirectParentNamesByHostName($hostName);
 
-# Deprecated:
-#  public function getHostsByHostgroupName($hostgroupName);
-#  public function getServicesByServicegroupName($servicegroupName);
-#  public function getServicegroupInformations($servicegroupName);
-#  public function getHostgroupInformations($hostgroupName);
-#  public function getHostgroupState($hostgroupName, $onlyHardstates);
-#  public function getServicegroupState($servicegroupName, $onlyHardstates);
+    # Deprecated:
+    #  public function getHostsByHostgroupName($hostgroupName);
+    #  public function getServicesByServicegroupName($servicegroupName);
+    #  public function getServicegroupInformations($servicegroupName);
+    #  public function getHostgroupInformations($hostgroupName);
+    #  public function getHostgroupState($hostgroupName, $onlyHardstates);
+    #  public function getServicegroupState($servicegroupName, $onlyHardstates);
 }
-?>

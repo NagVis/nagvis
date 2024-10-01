@@ -22,25 +22,42 @@
  *
  *****************************************************************************/
 
-class ViewToStaticMap {
+class ViewToStaticMap
+{
+    /** @var string|null */
     private $error = null;
 
-    public function parse($orig_name) {
+    /**
+     * @param $orig_name
+     * @return false|string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
+    public function parse($orig_name)
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
 
         ob_start();
         if (is_action()) {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please provide a map name.'));
+                }
 
-                if (!preg_match(MATCH_MAP_NAME, $name))
-                    throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                if (!preg_match(MATCH_MAP_NAME, $name)) {
+                    throw new FieldInputError(
+                        'name',
+                        l('This is not a valid map name (need to match [M])', ['M' => MATCH_MAP_NAME])
+                    );
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0)
+                if (count($CORE->getAvailableMaps('/^' . $name . '$/')) > 0) {
                     throw new FieldInputError('name', l('A map with this name already exists.'));
+                }
 
                 // Read the old config
                 $MAPCFG = new GlobalMapCfg($orig_name);
@@ -49,30 +66,31 @@ class ViewToStaticMap {
                 // Create a new map config
                 $NEW = new GlobalMapCfg($name);
                 $NEW->createMapConfig();
-                foreach($MAPCFG->getMapObjects() AS $object_id => $cfg) {
+                foreach ($MAPCFG->getMapObjects() as $object_id => $cfg) {
                     // Remove "sources" from the global section. Cause this makes the maps dynamic
-                    if($cfg['type'] == 'global') {
+                    if ($cfg['type'] == 'global') {
                         unset($cfg['sources']);
                     }
                     $NEW->addElement($cfg['type'], $cfg, $perm = true, $object_id);
                 }
 
                 success(l('The map has been created.'));
-                reload(cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$name, 1);
+                reload(cfg('paths', 'htmlbase') . '/frontend/nagvis-js/index.php?mod=Map&show=' . $name, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
 
-        echo '<div class="simple_form">'.N;
+        echo '<div class="simple_form">' . N;
         js_form_start('to_static_map');
         input('name');
         submit(l('Save'));
@@ -89,9 +107,8 @@ class ViewToStaticMap {
         }
 
         form_end();
-        echo '</div>'.N;
+        echo '</div>' . N;
 
         return ob_get_clean();
     }
 }
-?>

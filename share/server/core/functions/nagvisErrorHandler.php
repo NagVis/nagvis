@@ -27,37 +27,51 @@
  * This is a custom error handling function for submitting PHP errors to the
  * ajax requesting frontend
  *
+ * @param Exception $OBJ
+ * @return void
  * @author     Lars Michelsen <lm@larsmichelsen.com>
  */
 
-function nagvisException($OBJ) {
+function nagvisException($OBJ)
+{
     try {
-        if(get_class($OBJ) == 'NagVisException'
-           || get_class($OBJ) == 'NagVisErrorException') {
+        if (
+            get_class($OBJ) == 'NagVisException'
+            || get_class($OBJ) == 'NagVisErrorException'
+        ) {
             echo $OBJ;
         } else {
-            echo "Error (".get_class($OBJ)."): ".$OBJ->getMessage();
+            echo "Error (" . get_class($OBJ) . "): " . $OBJ->getMessage();
             var_dump(debug_backtrace());
         }
 
         die();
-    } catch(Exception $e) {
-        echo "Error: Unexpected Problem in Exception Handler!: ". $e->getMessage();        
+    } catch (Exception $e) {
+        echo "Error: Unexpected Problem in Exception Handler!: " . $e->getMessage();
         die();
     }
 }
 
-function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
+/**
+ * @param int $errno
+ * @param string $errstr
+ * @param string $errfile
+ * @param int $errline
+ * @return false
+ * @throws NagVisErrorException
+ */
+function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline)
+{
     // Use current error_reporting settings to skip unwanted errors
-    if(!(error_reporting() & $errno))
+    if (!(error_reporting() & $errno)) {
         return false;
-    
+    }
+
     throw new NagVisErrorException($errstr, 0, $errno, $errfile, $errline);
 }
 set_error_handler("nagvisExceptionErrorHandler");
 
 // Enable custom error handling
-if(function_exists('set_exception_handler')) {
+if (function_exists('set_exception_handler')) {
     set_exception_handler('nagvisException');
 }
-?>

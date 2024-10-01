@@ -22,54 +22,91 @@
  *
  *****************************************************************************/
 
-class ViewManageBackends {
+class ViewManageBackends
+{
+    /** @var string|null */
     private $error = null;
+
+    /** @var array */
     private $editable_backends;
+
+    /** @var array */
     private $defined_backends;
+
+    /** @var array */
     private $available_backends;
 
-    public function __construct() {
+    /**
+     * @throws NagVisException
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
         $this->editable_backends  = $CORE->getDefinedBackends(ONLY_USERCFG);
         $this->defined_backends   = $CORE->getDefinedBackends();
         $this->available_backends = $CORE->getAvailableBackends();
     }
 
-    private function backend_attributes($type) {
+    /**
+     * @param string $type
+     * @return mixed
+     */
+    private function backend_attributes($type)
+    {
+        /** @var GlobalMainCfg $_MAINCFG */
         global $_MAINCFG;
         // Loop all options for this backend type
         $backend_opts = $_MAINCFG->getValidObjectType('backend');
 
         // Merge global backend options with type specific options
         $opts = $backend_opts['options'][$type];
-        foreach ($backend_opts AS $key => $opt)
-            if ($key !== 'backendid' && $key !== 'options')
+        foreach ($backend_opts as $key => $opt) {
+            if ($key !== 'backendid' && $key !== 'options') {
                 $opts[$key] = $opt;
+            }
+        }
         return $opts;
     }
 
-    private function backend_options($backend_id) {
-        $ret = Array();
-        $backend_type = cfg('backend_'.$backend_id, 'backendtype');
+    /**
+     * @param string $backend_id
+     * @return array
+     */
+    private function backend_options($backend_id)
+    {
+        $ret = [];
+        $backend_type = cfg('backend_' . $backend_id, 'backendtype');
 
-        foreach ($this->backend_attributes($backend_type) AS $key => $opt)
-            if (cfg('backend_'.$backend_id, $key, true) !== false)
-                $ret[$key] = cfg('backend_'.$backend_id, $key, true);
-            else
+        foreach ($this->backend_attributes($backend_type) as $key => $opt) {
+            if (cfg('backend_' . $backend_id, $key, true) !== false) {
+                $ret[$key] = cfg('backend_' . $backend_id, $key, true);
+            } else {
                 $ret[$key] = '';
+            }
+        }
 
         return $ret;
     }
 
-    private function defaultForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function defaultForm()
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
-        echo '<h2>'.l('Default Backend').'</h2>';
+        echo '<h2>' . l('Default Backend') . '</h2>';
 
         if (is_action() && post('mode') == 'default') {
             try {
                 $default = post('default');
-                if (!$default || !isset($this->defined_backends[$default]))
+                if (!$default || !isset($this->defined_backends[$default])) {
                     throw new FieldInputError('default', l('You need to choose a default backend.'));
+                }
 
                 $CORE->getUserMainCfg()->setValue('defaults', 'backend', $default);
                 $CORE->getUserMainCfg()->writeConfig();
@@ -78,10 +115,11 @@ class ViewManageBackends {
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -89,11 +127,12 @@ class ViewManageBackends {
         js_form_start('default');
         hidden('mode', 'default');
         echo '<table name="mytable" class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Default Backend').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Default Backend') . '</td>';
         echo '<td class="tdfield">';
-        $backends = array('' => l('Please choose'));
-        foreach ($this->defined_backends AS $backend)
+        $backends = ['' => l('Please choose')];
+        foreach ($this->defined_backends as $backend) {
             $backends[$backend] = $backend;
+        }
         $default_backends = cfg('defaults', 'backend', true);
         select('default', $backends, $default_backends[0]);
         echo '</td></tr>';
@@ -101,74 +140,92 @@ class ViewManageBackends {
         submit(l('Save'));
         form_end();
 
-        if ($this->editable_backends != $this->defined_backends)
-            echo '<p>'.l('Some backends are not editable by using the web gui. They can only be '
-                         .'configured by modifying the file in the NagVis conf.d directory.').'</p>';
+        if ($this->editable_backends != $this->defined_backends) {
+            echo '<p>' . l('Some backends are not editable by using the web gui. They can only be '
+                    . 'configured by modifying the file in the NagVis conf.d directory.') . '</p>';
+        }
     }
 
-    private function editForm($mode = 'add') {
+    /**
+     * @param string $mode
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function editForm($mode = 'add')
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
 
-        if ($mode == 'add')
-            echo '<h2>'.l('Add Backend').'</h2>';
-        else
-            echo '<h2>'.l('Edit Backend').'</h2>';
+        if ($mode == 'add') {
+            echo '<h2>' . l('Add Backend') . '</h2>';
+        } else {
+            echo '<h2>' . l('Edit Backend') . '</h2>';
+        }
 
         $backend_type = submitted($mode) ? post('backend_type') : null;
         $backend_id   = submitted($mode) ? post('backend_id') : null;
         if (is_action() && post('mode') == $mode) {
             try {
-                if ($mode == 'add' && (!$backend_type || !in_array($backend_type, $this->available_backends)))
+                if ($mode == 'add' && (!$backend_type || !in_array($backend_type, $this->available_backends))) {
                     throw new FieldInputError('backend_type', l('You need to choose a backend type.'));
+                }
 
-                if (!$backend_id || !preg_match(MATCH_BACKEND_ID, $backend_id))
+                if (!$backend_id || !preg_match(MATCH_BACKEND_ID, $backend_id)) {
                     throw new FieldInputError('backend_id', l('You need to specify a identifier for the backend.'));
+                }
 
-                if ($mode == 'add' && isset($this->defined_backends[$backend_id]))
+                if ($mode == 'add' && isset($this->defined_backends[$backend_id])) {
                     throw new FieldInputError('backend_id', l('This ID is already used by another backend.'));
-                elseif ($mode == 'edit' && !isset($this->editable_backends[$backend_id]))
+                } elseif ($mode == 'edit' && !isset($this->editable_backends[$backend_id])) {
                     throw new FieldInputError('backend_id', l('The choosen backend does not exist.'));
+                }
 
                 if ($mode == 'add') {
                     // Set standard values
-                    $CORE->getUserMainCfg()->setSection('backend_'.$backend_id);
-                    $CORE->getUserMainCfg()->setValue('backend_'.$backend_id, 'backendtype', $backend_type);
+                    $CORE->getUserMainCfg()->setSection('backend_' . $backend_id);
+                    $CORE->getUserMainCfg()->setValue('backend_' . $backend_id, 'backendtype', $backend_type);
                 } else {
-                    $backend_type = cfg('backend_'.$backend_id, 'backendtype');
+                    $backend_type = cfg('backend_' . $backend_id, 'backendtype');
                 }
 
                 $found_option = false;
                 foreach ($this->backend_attributes($backend_type) as $key => $opt) {
-                    if ($key == 'backendtype')
+                    if ($key == 'backendtype') {
                         continue;
+                    }
 
                     // If there is a value for this option, set it
                     $val = post($key);
-                    if ($opt['must'] && !$val)
+                    if ($opt['must'] && !$val) {
                         throw new FieldInputError($key, l('You need to configure this option.'));
-
-                    elseif ($val != null) {
-                        if (!preg_match($opt['match'], $val))
-                            throw new FieldInputError($key, l('Invalid value provided. Needs to match: [P].',
-                                                                            array('P' => $opt['match'])));
-                        $CORE->getUserMainCfg()->setValue('backend_'.$backend_id, $key, $val);
+                    } elseif ($val != null) {
+                        if (!preg_match($opt['match'], $val)) {
+                            throw new FieldInputError($key, l(
+                                'Invalid value provided. Needs to match: [P].',
+                                ['P' => $opt['match']]
+                            ));
+                        }
+                        $CORE->getUserMainCfg()->setValue('backend_' . $backend_id, $key, $val);
                     }
                 }
 
                 // Persist the changes
                 $CORE->getUserMainCfg()->writeConfig();
 
-                if ($mode == 'add')
+                if ($mode == 'add') {
                     success(l('The new backend has been added.'));
-                else
+                } else {
                     success(l('The changes have been saved.'));
+                }
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -177,22 +234,24 @@ class ViewManageBackends {
         hidden('mode', $mode);
         echo '<table name="mytable" class="mytable">';
         if ($mode == 'add') {
-            echo '<tr><td class="tdlabel">'.l('Backend ID').'</td>';
+            echo '<tr><td class="tdlabel">' . l('Backend ID') . '</td>';
             echo '<td class="tdfield">';
             input('backend_id');
             echo '</td></tr>';
-            echo '<tr><td class="tdlabel">'.l('Backend Type').'</td>';
+            echo '<tr><td class="tdlabel">' . l('Backend Type') . '</td>';
             echo '<td class="tdfield">';
-            $choices = array('' => l('Please choose'));
-            foreach ($this->available_backends as $choice)
+            $choices = ['' => l('Please choose')];
+            foreach ($this->available_backends as $choice) {
                 $choices[$choice] = $choice;
+            }
             select('backend_type', $choices, '', 'updateForm(this.form)');
         } else {
-            echo '<tr><td class="tdlabel">'.l('Backend ID').'</td>';
+            echo '<tr><td class="tdlabel">' . l('Backend ID') . '</td>';
             echo '<td class="tdfield">';
-            $choices = array('' => l('Please choose'));
-            foreach ($this->editable_backends as $choice)
+            $choices = ['' => l('Please choose')];
+            foreach ($this->editable_backends as $choice) {
                 $choices[$choice] = $choice;
+            }
             select('backend_id', $choices, '', 'updateForm(this.form)');
             echo '</td></tr>';
         }
@@ -202,14 +261,15 @@ class ViewManageBackends {
                 $opts = $this->backend_options($backend_id);
                 $backend_type = $opts['backendtype'];
             } else {
-                $opts = array();
+                $opts = [];
             }
 
             foreach ($this->backend_attributes($backend_type) as $key => $opt) {
-                if ($key == 'backendtype')
+                if ($key == 'backendtype') {
                     continue;
+                }
                 $val = isset($opts[$key]) ? $opts[$key] : null;
-                echo '<tr><td class="tdlabel">'.$key.'</td>';
+                echo '<tr><td class="tdlabel">' . $key . '</td>';
                 // FIXME: Add checkbox for selecting the option, show default values
                 echo '<td class="tdfield">';
                 input($key, $val);
@@ -223,29 +283,38 @@ class ViewManageBackends {
         form_end();
     }
 
-    private function delForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function delForm()
+    {
+        /** @var GlobalCore $CORE */
         global $CORE;
-        echo '<h2>'.l('Delete Backend').'</h2>';
+        echo '<h2>' . l('Delete Backend') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
                 $backend_id = post('backend_id');
-                if (!isset($this->editable_backends[$backend_id]))
+                if (!isset($this->editable_backends[$backend_id])) {
                     throw new FieldInputError('backend_id', l('The choosen backend does not exist.'));
+                }
 
                 // FIXME: Check whether or not the backend is used anywhere
 
-                $CORE->getUserMainCfg()->delSection('backend_'.$backend_id);
+                $CORE->getUserMainCfg()->delSection('backend_' . $backend_id);
                 $CORE->getUserMainCfg()->writeConfig();
 
                 success(l('The backend has been deleted.'));
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -254,11 +323,12 @@ class ViewManageBackends {
         hidden('mode', 'delete');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Backend ID').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Backend ID') . '</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
-        foreach ($this->editable_backends AS $choice)
+        $choices = ['' => l('Please choose')];
+        foreach ($this->editable_backends as $choice) {
             $choices[$choice] = $choice;
+        }
         select('backend_id', $choices);
         echo '</td></tr>';
 
@@ -268,13 +338,18 @@ class ViewManageBackends {
         form_end();
     }
 
-    public function parse() {
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    public function parse()
+    {
         ob_start();
         $this->defaultForm();
-        $this->editForm('add');
+        $this->editForm();
         $this->editForm('edit');
         $this->delForm();
         return ob_get_clean();
     }
 }
-?>

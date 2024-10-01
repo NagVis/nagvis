@@ -22,40 +22,53 @@
  *
  ******************************************************************************/
 
-class CoreModMainCfg extends CoreModule {
+class CoreModMainCfg extends CoreModule
+{
+    /** @var string|null */
     private $name = null;
+
+    /** @var GlobalCore */
     private $CORE;
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'MainCfg';
         $this->CORE = $CORE;
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'edit'              => REQUIRES_AUTHORISATION,
             'manageBackends'    => 'edit',
             'doBackendEdit'     => 'edit',
-        );
+        ];
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'edit':
                     $VIEW = new ViewEditMainCfg();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                    break;
 
                 case 'manageBackends':
                     $VIEW = new ViewManageBackends();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                    break;
             }
         }
 
         return $sReturn;
     }
 }
-?>

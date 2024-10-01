@@ -39,10 +39,10 @@
  *
  *****************************************************************************/
 
-/** 
+/**
  * Dummy perfdata for WUI
  *
- * This string needs to be set in every gadget to have some sample data in the 
+ * This string needs to be set in every gadget to have some sample data in the
  * WUI to be able to place the gadget easily on the map
  ******************************************************************************/
 $sDummyPerfdata = 'config=20%;80;90;0;100';
@@ -54,12 +54,13 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
 $_MODE          = 'html';
 
 // Include the gadgets core. Also handle OMD default and local paths
-if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
     $core = dirname($_SERVER["SCRIPT_FILENAME"]) . '/gadgets_core.php';
-    if(file_exists($core))
+    if (file_exists($core)) {
         require($core);
-    else
+    } else {
         require(str_replace('local/share/', 'share/', $core));
+    }
 } else {
     require('./gadgets_core.php');
 }
@@ -74,21 +75,25 @@ if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
 
 $min = 0;
 $max = -1;
-$default = 0; 
+$default = 0;
 
 // Set default parameters values
 $border                      = 1; // Border
 $perfdata                    = 0; // Perfdata
 
 // Get parameters from gadget_opts
-if (isset($_GET['opts']) && ($_GET['opts'] != '')){
+if (isset($_GET['opts']) && ($_GET['opts'] != '')) {
     preg_match_all('/(\w+)=(\d+)/', $_GET['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
-        if ($matches[$i][1] == 'border') { $border = $matches[$i][2]; }
-        if ($matches[$i][1] == 'perfdata') { $perfdata = $matches[$i][2]; }
+        if ($matches[$i][1] == 'border') {
+            $border = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'perfdata') {
+            $perfdata = $matches[$i][2];
+        }
     }
 }
- 
+
 /* Now read the parameters */
 
 // Read dataset of performance data from parameters
@@ -104,26 +109,32 @@ $max   = $aPerfdata[$perfdata]['max'];
 // Normalize / Fix value and max
 //================
 
-if($value == null) {
+if ($value == null) {
     $value = $default;
-} else {
-    if($max != '' && $value < $min) {
+} elseif ($max != '' && $value < $min) {
     $value = $min;
-    } elseif($max != '' && $max != -1 && $value > $max) {
+} elseif ($max != '' && $max != -1 && $value > $max) {
     $value = $max;
-    }
 }
 
 // If there is no max value given set it critical or warning value
-if(intval($max) == 0 || $max == '')
-    if(intval($crit) == 0 || $crit != '')
+if (intval($max) == 0 || $max == '') {
+    if (intval($crit) == 0 || $crit != '') {
         $max = $crit + 1;
-    else
-    $max = $warn + 1;
+    } else {
+        $max = $warn + 1;
+    }
+}
 
 $width = (int) $value * 100 / $max;
 
-echo "<div style='position:absolute;left:0;width:100px;height:30px;text-align:center;line-height:30px;'>".$value.$uom."</div>";
-echo "<table style='width:100px;border:".$border."px solid #000;height:30px;'><tr><td style='text-align:center;background-color:#dfdfdf;width:".$width."px'></td><td></td></tr></table>";
+echo "<div style='position:absolute;left:0;width:100px;height:30px;text-align:center;line-height:30px;'>"
+    . $value
+    . $uom
+    . "</div>";
+echo "<table style='width:100px;border:"
+    . $border
+    . "px solid #000;height:30px;'><tr><td style='text-align:center;background-color:#dfdfdf;width:"
+    . $width
+    . "px'></td><td></td></tr></table>";
 exit(0);
-?>

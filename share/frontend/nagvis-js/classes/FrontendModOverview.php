@@ -25,54 +25,79 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModOverview extends FrontendModule {
+class FrontendModOverview extends FrontendModule
+{
+    /** @var string */
     private $rotation = '';
+
+    /** @var string */
     private $rotationStep = '';
+
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var NagVisOverviewView */
     private $VIEW;
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     * @throws NagVisException
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Overview';
         $this->CORE = $CORE;
 
         // Parse the view specific options
-        $aOpts = Array('rotation' => MATCH_ROTATION_NAME_EMPTY,
-                       'rotationStep' => MATCH_INTEGER_EMPTY);
+        $aOpts = [
+            'rotation' => MATCH_ROTATION_NAME_EMPTY,
+            'rotationStep' => MATCH_INTEGER_EMPTY
+        ];
         $aVals = $this->getCustomOptions($aOpts);
         $this->rotation = $aVals['rotation'];
         $this->rotationStep = $aVals['rotationStep'];
 
-        $this->aActions = Array(
+        $this->aActions = [
             'view' => REQUIRES_AUTHORISATION
-        );
+        ];
     }
 
-    public function handleAction() {
+    /**
+     * @return string
+     * @throws NagVisException
+     * @throws Dwoo_Exception
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    // Show the view dialog to the user
-                    $sReturn = $this->showViewDialog();
-                break;
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                // Show the view dialog to the user
+                $sReturn = $this->showViewDialog();
             }
         }
 
         return $sReturn;
     }
 
-    private function showViewDialog() {
+    /**
+     * @return string
+     * @throws NagVisException
+     * @throws Dwoo_Exception
+     */
+    private function showViewDialog()
+    {
         // Build index template
         $INDEX = new NagVisIndexView($this->CORE);
 
         // Need to parse the header menu?
-        if(cfg('index','headermenu')) {
+        if (cfg('index', 'headermenu')) {
             // Parse the header menu
             $HEADER = new NagVisHeaderMenu(cfg('index', 'headertemplate'));
 
             // Put rotation information to header menu
-            if($this->rotation != '') {
+            if ($this->rotation != '') {
                 $HEADER->setRotationEnabled();
             }
 
@@ -83,9 +108,10 @@ class FrontendModOverview extends FrontendModule {
         $this->VIEW = new NagVisOverviewView($this->CORE);
 
         // Maybe it is needed to handle the requested rotation
-        if($this->rotation != '') {
+        if ($this->rotation != '') {
             $ROTATION = new FrontendRotation($this->rotation);
             $ROTATION->setStep('overview', '', $this->rotationStep);
+            // todo: this method doesn't exist?
             $this->VIEW->setRotation($ROTATION->getRotationProperties());
         }
 
@@ -93,4 +119,3 @@ class FrontendModOverview extends FrontendModule {
         return $INDEX->parse();
     }
 }
-?>

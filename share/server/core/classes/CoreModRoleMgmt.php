@@ -25,27 +25,37 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModRoleMgmt extends CoreModule {
+class CoreModRoleMgmt extends CoreModule
+{
+    /** @var GlobalCore */
     protected $CORE;
 
-    public function __construct($CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
         $this->sName = 'RoleMgmt';
 
-        $this->aActions = Array(
+        $this->aActions = [
             'view'         => 'manage',
-        );
+        ];
     }
 
-    public function handleAction() {
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
-                case 'view':
-                    $VIEW = new ViewManageRoles();
-                    return json_encode(Array('code' => $VIEW->parse()));
-                break;
+    /**
+     * @return false|string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
+        if ($this->offersAction($this->sAction)) {
+            if ($this->sAction == 'view') {
+                $VIEW = new ViewManageRoles();
+
+                return json_encode(['code' => $VIEW->parse()]);
             }
         }
         return '';
     }
 }
-?>

@@ -25,55 +25,75 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisHoverMenu {
+class NagVisHoverMenu
+{
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var mixed|null */
     private $OBJPAGE;
+
+    /** @var GlobalFileCache */
     private $CACHE;
 
+    /** @var string */
     private $templateName;
+
+    /** @var string */
     private $pathHtmlBase;
+
+    /** @var string */
     private $pathTemplateFile;
 
+    /** @var mixed */
     private $code;
 
     /**
      * Class Constructor
      *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param GlobalCore $CORE
+     * @param string $templateName
+     * @param $OBJ
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($CORE, $templateName, $OBJ = NULL) {
+    public function __construct($CORE, $templateName, $OBJ = null)
+    {
         $this->CORE = $CORE;
         $this->OBJPAGE = $OBJ;
 
         $this->templateName = $templateName;
 
-        $this->pathHtmlBase     = cfg('paths','htmlbase');
-        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.hover.html');
+        $this->pathHtmlBase     = cfg('paths', 'htmlbase');
+        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.hover.html');
 
         // Simply skip processing with an invalid template file name
-        if($this->pathTemplateFile === '')
+        if ($this->pathTemplateFile === '') {
             return;
+        }
 
-        $this->CACHE = new GlobalFileCache($this->pathTemplateFile, cfg('paths','var').'hover-'.$this->templateName.'-'.curLang().'.cache');
+        $this->CACHE = new GlobalFileCache(
+            $this->pathTemplateFile,
+            cfg('paths', 'var') . 'hover-' . $this->templateName . '-' . curLang() . '.cache'
+        );
 
         // Only use cache when there is
         // a) Some valid cache file
         // b) Some valid main configuration cache file
         // c) This cache file newer than main configuration cache file
-        if($this->CACHE->isCached() !== -1
-          && $this->CORE->getMainCfg()->isCached() !== -1
-          && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
+        if (
+            $this->CACHE->isCached() !== -1
+            && $this->CORE->getMainCfg()->isCached() !== -1
+            && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()
+        ) {
             $this->code = $this->CACHE->getCache();
-        } else {
+        } elseif ($this->readTemplate()) {
             // Read the contents of the template file
-            if($this->readTemplate()) {
-                // The static macros should be replaced before caching
-                $this->replaceStaticMacros();
+            // The static macros should be replaced before caching
+            $this->replaceStaticMacros();
 
-                // Build cache for the template
-                $this->CACHE->writeCache($this->code, 1);
-            }
+            // Build cache for the template
+            $this->CACHE->writeCache($this->code);
         }
     }
 
@@ -82,15 +102,17 @@ class NagVisHoverMenu {
      *
      * Reads the contents of the hover template file
      *
-     * @return	String		HTML Code for the hover menu
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return bool HTML Code for the hover menu
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readTemplate() {
-        if($this->checkTemplateReadable(1)) {
+    private function readTemplate()
+    {
+        if ($this->checkTemplateReadable(1)) {
             $this->code =  file_get_contents($this->pathTemplateFile);
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -99,105 +121,109 @@ class NagVisHoverMenu {
      *
      * Replaces static macros like paths and language strings in template code
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function replaceStaticMacros() {
+    private function replaceStaticMacros()
+    {
         // Replace the static macros (language, paths)
-        if(strpos($this->code,'[lang_alias]') !== FALSE) {
-            $this->code = str_replace('[lang_alias]',l('alias'),$this->code);
+        if (str_contains($this->code, '[lang_alias]')) {
+            $this->code = str_replace('[lang_alias]', l('alias'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_address]') !== FALSE) {
-            $this->code = str_replace('[lang_address]',l('address'),$this->code);
+        if (str_contains($this->code, '[lang_address]')) {
+            $this->code = str_replace('[lang_address]', l('address'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_state]') !== FALSE) {
-            $this->code = str_replace('[lang_state]',l('state'),$this->code);
+        if (str_contains($this->code, '[lang_state]')) {
+            $this->code = str_replace('[lang_state]', l('state'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_summary_state]') !== FALSE) {
-            $this->code = str_replace('[lang_summary_state]',l('summaryState'),$this->code);
+        if (str_contains($this->code, '[lang_summary_state]')) {
+            $this->code = str_replace('[lang_summary_state]', l('summaryState'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_output]') !== FALSE) {
-            $this->code = str_replace('[lang_output]',l('output'),$this->code);
+        if (str_contains($this->code, '[lang_output]')) {
+            $this->code = str_replace('[lang_output]', l('output'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_perfdata]') !== FALSE) {
-            $this->code = str_replace('[lang_perfdata]',l('perfdata'),$this->code);
+        if (str_contains($this->code, '[lang_perfdata]')) {
+            $this->code = str_replace('[lang_perfdata]', l('perfdata'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_summary_output]') !== FALSE) {
-            $this->code = str_replace('[lang_summary_output]',l('summaryOutput'),$this->code);
+        if (str_contains($this->code, '[lang_summary_output]')) {
+            $this->code = str_replace('[lang_summary_output]', l('summaryOutput'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_overview]') !== FALSE) {
-            $this->code = str_replace('[lang_overview]',l('overview'),$this->code);
+        if (str_contains($this->code, '[lang_overview]')) {
+            $this->code = str_replace('[lang_overview]', l('overview'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_instance]') !== FALSE) {
-            $this->code = str_replace('[lang_instance]',l('instance'),$this->code);
+        if (str_contains($this->code, '[lang_instance]')) {
+            $this->code = str_replace('[lang_instance]', l('instance'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_next_check]') !== FALSE) {
-        $this->code = str_replace('[lang_next_check]',l('nextCheck'),$this->code);
+        if (str_contains($this->code, '[lang_next_check]')) {
+            $this->code = str_replace('[lang_next_check]', l('nextCheck'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_last_check]') !== FALSE) {
-            $this->code = str_replace('[lang_last_check]',l('lastCheck'),$this->code);
+        if (str_contains($this->code, '[lang_last_check]')) {
+            $this->code = str_replace('[lang_last_check]', l('lastCheck'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_state_type]') !== FALSE) {
-            $this->code = str_replace('[lang_state_type]',l('stateType'),$this->code);
+        if (str_contains($this->code, '[lang_state_type]')) {
+            $this->code = str_replace('[lang_state_type]', l('stateType'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_current_attempt]') !== FALSE) {
-            $this->code = str_replace('[lang_current_attempt]',l('currentAttempt'),$this->code);
+        if (str_contains($this->code, '[lang_current_attempt]')) {
+            $this->code = str_replace('[lang_current_attempt]', l('currentAttempt'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_last_state_change]') !== FALSE) {
-            $this->code = str_replace('[lang_last_state_change]',l('lastStateChange'),$this->code);
+        if (str_contains($this->code, '[lang_last_state_change]')) {
+            $this->code = str_replace('[lang_last_state_change]', l('lastStateChange'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_state_duration]') !== FALSE) {
-            $this->code = str_replace('[lang_state_duration]',l('stateDuration'),$this->code);
+        if (str_contains($this->code, '[lang_state_duration]')) {
+            $this->code = str_replace('[lang_state_duration]', l('stateDuration'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_service_description]') !== FALSE) {
-            $this->code = str_replace('[lang_service_description]',l('servicename'),$this->code);
+        if (str_contains($this->code, '[lang_service_description]')) {
+            $this->code = str_replace('[lang_service_description]', l('servicename'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_notes]') !== FALSE) {
+        if (str_contains($this->code, '[lang_notes]')) {
             $this->code = str_replace('[lang_notes]', l('notes'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_last_status_refresh]') !== FALSE) {
+        if (str_contains($this->code, '[lang_last_status_refresh]')) {
             $this->code = str_replace('[lang_last_status_refresh]', l('lastStatusRefresh'), $this->code);
         }
 
-        if(strpos($this->code,'[lang_tags]') !== FALSE) {
+        if (str_contains($this->code, '[lang_tags]')) {
             $this->code = str_replace('[lang_tags]', l('Tags'), $this->code);
         }
 
-        if(strpos($this->code,'[html_base]') !== FALSE) {
-            $this->code = str_replace('[html_base]',cfg('paths','htmlbase'),$this->code);
+        if (str_contains($this->code, '[html_base]')) {
+            $this->code = str_replace('[html_base]', cfg('paths', 'htmlbase'), $this->code);
         }
 
-        if(strpos($this->code,'[html_templates]') !== FALSE) {
-            $this->code = str_replace('[html_templates]', path('sys', 'global', 'templates'),$this->code);
+        if (str_contains($this->code, '[html_templates]')) {
+            $this->code = str_replace('[html_templates]', path('sys', 'global', 'templates'), $this->code);
         }
 
-        if(strpos($this->code,'[html_template_images]') !== FALSE)
+        if (str_contains($this->code, '[html_template_images]')) {
             $this->code = str_replace('[html_template_images]', path('html', 'global', 'templateimages'), $this->code);
+        }
     }
 
     /**
      * Print the HTML code
      *
-     * return   String  HTML Code
+     * @return string HTML Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __toString () {
+    public function __toString()
+    {
         return $this->code;
     }
 
@@ -206,11 +232,13 @@ class NagVisHoverMenu {
      *
      * Checks if the requested hover template file is readable
      *
-     * @param		Boolean		Switch for enabling/disabling error messages
-     * @return	Boolean		Check Result
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr Switch for enabling/disabling error messages
+     * @return bool Check Result
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkTemplateReadable($printErr) {
+    private function checkTemplateReadable($printErr)
+    {
         return GlobalCore::getInstance()->checkReadable($this->pathTemplateFile, $printErr);
     }
 
@@ -219,16 +247,21 @@ class NagVisHoverMenu {
      *
      * Checks if the requested hover template file exists
      *
-     * @param		Boolean		Switch for enabling/disabling error messages
-     * @return	Boolean		Check Result
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr Switch for enabling/disabling error messages
+     * @return bool Check Result
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkTemplateExists($printErr) {
+    private function checkTemplateExists($printErr)
+    {
         return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);
     }
 
-    public function getCssFile() {
-        return path('html', 'global', 'templates', $this->templateName.'.hover.css');
+    /**
+     * @return string|null
+     */
+    public function getCssFile()
+    {
+        return path('html', 'global', 'templates', $this->templateName . '.hover.css');
     }
 }
-?>

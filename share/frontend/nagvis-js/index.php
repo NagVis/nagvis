@@ -34,32 +34,33 @@ require('../../server/core/classes/CoreExceptions.php');
 require('../../server/core/functions/autoload.php');
 require('../../server/core/functions/passwordCompatibility.php');
 
-if (PROFILE) profilingStart();
+if (PROFILE) {
+    profilingStart();
+}
 
-define('CONST_AJAX' , FALSE);
+const CONST_AJAX = false;
 
 try {
     require('../../server/core/functions/core.php');
     $MHANDLER = new FrontendModuleHandler();
     $_name    = 'nagvis-js';
-    $_modules = Array(
+    $_modules = [
         'Info',
         'Map',
         'Url',
         'Overview',
         'Rotation',
         'LogonDialog',
-    );
-    
+    ];
+
     require('../../server/core/functions/index.php');
     exit(0);
-} catch(NagVisException $e) {
+} catch (NagVisException $e) {
     $VIEW = new ViewError();
 
-    if (isset($MODULE) && is_a($MODULE, "FrontendModMap"))
+    if (isset($MODULE) && is_a($MODULE, "FrontendModMap")) {
         echo $VIEW->parseWithMap($e, $MODULE->getObject());
-    else
+    } else {
         echo $VIEW->parse($e);
+    }
 }
-
-?>

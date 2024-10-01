@@ -28,28 +28,62 @@
  *
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-abstract class CoreAuthModule {
+abstract class CoreAuthModule
+{
+    /** @var array */
     protected static $aFeatures;
 
     /**
-     * PUBLIC Method getSupportedFeatures
-     *
      * Returns a list of supported features
      *
-     * @return	Array
+     * @return	array
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getSupportedFeatures() {
+    public function getSupportedFeatures()
+    {
         return self::$aFeatures;
     }
 
+    /**
+     * @param array $aData
+     * @return void
+     */
     abstract public function passCredentials($aData);
+
+    /**
+     * @param array $aData
+     * @return void
+     */
     abstract public function passNewPassword($aData);
+
+    /**
+     * @return bool
+     */
     abstract public function changePassword();
+
+    /**
+     * @return array
+     */
     abstract public function getCredentials();
+
+    /**
+     * @return bool
+     */
     abstract public function isAuthenticated();
+
+    /**
+     * @param string $username
+     * @return bool
+     */
     abstract public function usesBcrypt($username);
+
+    /**
+     * @return string
+     */
     abstract public function getUser();
+
+    /**
+     * @return int
+     */
     abstract public function getUserId();
 }
-?>

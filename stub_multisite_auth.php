@@ -3,9 +3,9 @@
 // created by Checkmk in real environments to hand over user, group and role information to NagVis.
 
 global $mk_users, $mk_roles, $mk_groups;
-$mk_users   = array();
-$mk_roles   = array();
-$mk_groups  = array();
+$mk_users   = [];
+$mk_roles   = [];
+$mk_groups  = [];
 
 function all_users() {
     global $mk_users;
@@ -15,7 +15,7 @@ function all_users() {
 function user_roles($username) {
     global $mk_users;
     if(!isset($mk_users[$username]))
-        return array();
+        return [];
     else
         return $mk_users[$username]['roles'];
 }
@@ -23,14 +23,14 @@ function user_roles($username) {
 function user_groups($username) {
     global $mk_users;
     if(!isset($mk_users[$username]) || !isset($mk_users[$username]['contactgroups']))
-        return array();
+        return [];
     else
         return $mk_users[$username]['contactgroups'];
 }
 
 function user_permissions($username) {
     global $mk_roles;
-    $permissions = array();
+    $permissions = [];
 
     foreach(user_roles($username) AS $role)
         $permissions = array_merge($permissions, $mk_roles[$role]);
@@ -44,7 +44,7 @@ function user_permissions($username) {
 
 function users_with_role($want_role) {
     global $mk_users, $mk_roles;
-    $result = array();
+    $result = [];
     foreach($mk_users AS $username => $user) {
         foreach($user['roles'] AS $role) {
             if($want_role == $role) {
@@ -57,7 +57,7 @@ function users_with_role($want_role) {
 
 function roles_with_permission($want_permission) {
     global $mk_roles;
-    $result = array();
+    $result = [];
     foreach($mk_roles AS $rolename => $role) {
         foreach($role AS $permission) {
             if($permission == $want_permission) {
@@ -71,7 +71,7 @@ function roles_with_permission($want_permission) {
 
 function users_with_permission($need_permission) {
     global $mk_users;
-    $result = array();
+    $result = [];
     foreach(roles_with_permission($need_permission) AS $rolename) {
         $result = array_merge($result, users_with_role($rolename));
     }
@@ -92,7 +92,7 @@ function may($username, $need_permission) {
 
 function permitted_maps($username) {
     global $mk_groups;
-    $maps = array();
+    $maps = [];
     foreach (user_groups($username) AS $groupname) {
         if (isset($mk_groups[$groupname])) {
             foreach ($mk_groups[$groupname] AS $mapname) {
@@ -102,5 +102,3 @@ function permitted_maps($username) {
     }
     return array_keys($maps);
 }
-
-?>

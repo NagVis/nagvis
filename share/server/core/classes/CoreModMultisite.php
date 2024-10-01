@@ -25,92 +25,129 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModMultisite extends CoreModule {
+class CoreModMultisite extends CoreModule
+{
+    /** @var GlobalCore */
     private $CORE;
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Multisite';
         $this->CORE = $CORE;
 
-        $this->aActions = Array(
+        $this->aActions = [
             'getMaps' => REQUIRES_AUTHORISATION,
-        );
+        ];
     }
 
-    public function handleAction() {
-        if(!$this->offersAction($this->sAction))
+    /**
+     * @return false|string
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
+        if (!$this->offersAction($this->sAction)) {
             return '';
+        }
 
-        $maps = array();
+        $maps = [];
 
-        switch($this->sAction) {
-            case 'getMaps':
-                if (cfg('global', 'multisite_snapin_layout') == 'tree') {
-                    $maps = array(
-                        "type" => "tree",
-                        "maps" => $this->renderTree(),
-                    );
-                } else {
-                    $maps = array(
-                        "type" => "table",
-                        "maps" => $this->renderTable(),
-                    );
-                }
-            break;
+        if ($this->sAction == 'getMaps') {
+            if (cfg('global', 'multisite_snapin_layout') == 'tree') {
+                $maps = [
+                    "type" => "tree",
+                    "maps" => $this->renderTree(),
+                ];
+            } else {
+                $maps = [
+                    "type" => "table",
+                    "maps" => $this->renderTable(),
+                ];
+            }
         }
 
         return json_encode($maps);
     }
 
-    private function renderTree() {
-        $maps = array();
-        $childs = array();
+    /**
+     * @return array[]
+     * @throws NagVisException
+     */
+    private function renderTree()
+    {
+        $maps = [];
+        $childs = [];
         foreach ($this->getMapsCached() as $map) {
-            if($map['parent_map'] === '')
+            if ($map['parent_map'] === '') {
                 $maps[$map['name']] = $this->getMapForMultisite($map);
-            else {
-                if(!isset($childs[$map['parent_map']]))
-                    $childs[$map['parent_map']] = Array();
+            } else {
+                if (!isset($childs[$map['parent_map']])) {
+                    $childs[$map['parent_map']] = [];
+                }
                 $childs[$map['parent_map']][$map['name']] = $this->getMapForMultisite($map);
             }
         }
-        return array(
+        return [
             "maps" => $maps,
             "childs" => $childs,
-        );
+        ];
     }
 
-    private function renderTable() {
-        $maps = array();
+    /**
+     * @return array
+     * @throws NagVisException
+     */
+    private function renderTable()
+    {
+        $maps = [];
         foreach ($this->getMapsCached() as $map) {
             $maps[] = $this->getMapForMultisite($map);
         }
         return $maps;
     }
 
-    private function getMapForMultisite($map) {
-        return array(
+    /**
+     * @param $map
+     * @return array
+     */
+    private function getMapForMultisite($map)
+    {
+        return [
             "name" => $map["name"],
             "title" => $map['summary_state'],
             "alias" => $map['alias'],
-            "url" => cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'],
+            "url" => cfg('paths', 'htmlbase') . '/index.php?mod=Map&act=view&show=' . $map['name'],
             "summary_state" => $map["summary_state"],
             "summary_output" => $map["summary_output"],
             "summary_in_downtime" => $map['summary_in_downtime'],
             "summary_problem_has_been_acknowledged" => $map['summary_problem_has_been_acknowledged'],
             "summary_stale" => $map['summary_stale'],
-        );
+        ];
     }
 
-    // Wraps the getMaps() function by applying a short livetime cache based
-    // on the maps a user can access. This respects the map access permissions.
-    // The cache optimizes the case where a lot of users having the Check_MK
-    // NagVis maps snapin open at the same time while most of the users have
-    // equal permissions.
-    private function getMapsCached() {
+    /**
+     * Wraps the getMaps() function by applying a short livetime cache based
+     * on the maps a user can access. This respects the map access permissions.
+     * The cache optimizes the case where a lot of users having the Check_MK
+     * NagVis maps snapin open at the same time while most of the users have
+     * equal permissions.
+     *
+     * @return array
+     * @throws NagVisException
+     */
+    private function getMapsCached()
+    {
         $maps = $this->CORE->getPermittedMaps();
-        $cache_file = cfg('paths','var').'snapin-'.md5(json_encode(array_keys($maps))).'-'.CONST_VERSION.'.cache';
-        $CACHE = new GlobalFileCache(array(), $cache_file);
+        $cache_file = cfg('paths', 'var')
+            . 'snapin-'
+            . md5(json_encode(array_keys($maps)))
+            . '-'
+            . CONST_VERSION
+            . '.cache';
+        $CACHE = new GlobalFileCache([], $cache_file);
         $cached = $CACHE->isCached();
 
         if ($cached != -1 && time() - $cached < 15) {
@@ -122,31 +159,40 @@ class CoreModMultisite extends CoreModule {
         }
     }
 
-    // Gathers an array of maps and their states to be shown to the user
-    // in the multisite snapin
-    private function getMaps($maps) {
+    /**
+     * Gathers an array of maps and their states to be shown to the user
+     * in the multisite snapin
+     *
+     * @param string[] $maps
+     * @return array
+     * @throws MapInMaintenance
+     * @throws NagVisException
+     */
+    private function getMaps($maps)
+    {
         global $_BACKEND, $AUTHORISATION;
-        $aObjs = Array();
-        foreach($maps AS $object_id => $mapName) {
+        $aObjs = [];
+        foreach ($maps as $object_id => $mapName) {
             $MAPCFG = new GlobalMapCfg($mapName);
 
             $config_error = null;
             $error = null;
             try {
                 $MAPCFG->readMapConfig();
-            } catch(MapCfgInvalid $e) {
+            } catch (MapCfgInvalid $e) {
                 $config_error = $e->getMessage();
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
-            if($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1)
+            if ($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1) {
                 continue;
+            }
 
             $MAP = new NagVisMap($MAPCFG, GET_STATE, !IS_VIEW);
 
             // Apply mulitsite snapin related configuration to object
-            $objConf = array(
+            $objConf = [
                 'type'              => 'map',
                 'map_name'          => $MAPCFG->getName(),
                 'object_id'         => $object_id,
@@ -157,31 +203,31 @@ class CoreModMultisite extends CoreModule {
                 'parent_map'        => $MAPCFG->getValue(0, 'parent_map'),
                 // Enforce std_big iconset - don't use map default iconset
                 'iconset'           => 'std_big',
-                'icon_size'         => array(22),
-            );
+                'icon_size'         => [22],
+            ];
             $MAP->MAPOBJ->setConfiguration($objConf);
 
-            $sources = $MAPCFG->getValue(0, 'sources') !== false ? $MAPCFG->getValue(0, 'sources') : array();
+            $sources = $MAPCFG->getValue(0, 'sources') !== false ? $MAPCFG->getValue(0, 'sources') : [];
             $is_worldmap = in_array('worldmap', $sources);
 
             $state = null;
-            if($config_error !== null) {
-                $state = array(
+            if ($config_error !== null) {
+                $state = [
                     ERROR,
-                    l('Map Configuration Error: ').$config_error,
+                    l('Map Configuration Error: ') . $config_error,
                     null,
                     null,
                     null,
-                );
-            } elseif($error !== null) {
-                $state = array(
+                ];
+            } elseif ($error !== null) {
+                $state = [
                     ERROR,
-                    l('Error: ').$error,
+                    l('Error: ') . $error,
                     null,
                     null,
                     null,
-                );
-            } elseif($is_worldmap) {
+                ];
+            } elseif ($is_worldmap) {
                 // To give the correct state aggregation for the area of the
                 // worldmap the user would see when opening the worldmap, we would
                 // need this:
@@ -198,32 +244,32 @@ class CoreModMultisite extends CoreModule {
                 // The NagVis internal overview page needs something similar, but
                 // there we have everything we need. See the function addMap() in
                 // share/frontend/nagvis-js/js/ViewOverview.js.
-                $state = array(
+                $state = [
                     PENDING,
                     l('Worldmaps do not support state preview'),
                     null,
                     null,
                     null,
-                );
-            } elseif(!$MAP->MAPOBJ->checkMaintenance(0)) {
-                $state = array(
+                ];
+            } elseif (!$MAP->MAPOBJ->checkMaintenance(0)) {
+                $state = [
                     PENDING,
                     l('mapInMaintenance'),
                     null,
                     null,
                     null
-                );
+                ];
             } else {
                 $MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
             }
 
-            $aObjs[] = array($MAP->MAPOBJ, $state);
+            $aObjs[] = [$MAP->MAPOBJ, $state];
         }
 
         $_BACKEND->execute();
 
-        $aMaps = Array();
-        foreach($aObjs AS $aObj) {
+        $aMaps = [];
+        foreach ($aObjs as $aObj) {
             $MAP = $aObj[0];
             $state = $aObj[1];
             if ($state !== null) {
@@ -239,8 +285,7 @@ class CoreModMultisite extends CoreModule {
             $aMaps[] = $MAP->getObjectInformation();
         }
 
-        usort($aMaps, Array('GlobalCore', 'cmpAlias'));
+        usort($aMaps, ['GlobalCore', 'cmpAlias']);
         return $aMaps;
     }
 }
-?>

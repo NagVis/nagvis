@@ -23,29 +23,46 @@
  *
  *****************************************************************************/
 
-class CoreLogonModule {
-    // Create user when not existing yet
-    // Important to add a random password here. When someone
-    // changes the logon mechanism to e.g. LogonDialog it
-    // would be possible to logon with a hardcoded password
-    protected function createUser($username, $role) {
+class CoreLogonModule
+{
+    /**
+     * Create user when not existing yet
+     * Important to add a random password here. When someone
+     * changes the logon mechanism to e.g. LogonDialog it
+     * would be possible to logon with a hardcoded password
+     *
+     * @param string $username
+     * @param string $role
+     * @return void
+     */
+    protected function createUser($username, $role)
+    {
         global $AUTH;
         $AUTH->createUser($username, (time() * rand(1, 10)));
-        if($role !== '') {
+        if ($role !== '') {
             $A = new CoreAuthorisationHandler();
             $A->parsePermissions();
-            $A->updateUserRoles($A->getUserId($username), Array($A->getRoleId($role)));
+            $A->updateUserRoles($A->getUserId($username), [$A->getRoleId($role)]);
         }
     }
 
-    protected function verifyUserExists($username, $createUser, $createRole, $printErr) {
+    /**
+     * @param string $username
+     * @param bool $createUser
+     * @param bool $createRole
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
+    protected function verifyUserExists($username, $createUser, $createRole, $printErr)
+    {
         global $AUTH;
-        if(!$AUTH->checkUserExists($username)) {
+        if (!$AUTH->checkUserExists($username)) {
             settype($createUser, 'boolean');
-            if($createUser === true) {
+            if ($createUser === true) {
                 $this->createUser($username, $createRole);
             } else {
-                if($printErr) {
+                if ($printErr) {
                     throw new NagVisException(l('Unable to authenticate user. User does not exist.'));
                 }
                 return false;
@@ -54,4 +71,3 @@ class CoreLogonModule {
         return true;
     }
 }
-?>

@@ -25,95 +25,123 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModOverview extends CoreModule {
+class CoreModOverview extends CoreModule
+{
+    /** @var string */
     private $htmlBase;
 
-    public function __construct(GlobalCore $CORE) {
-        $this->htmlBase = cfg('paths','htmlbase');
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct(GlobalCore $CORE)
+    {
+        $this->htmlBase = cfg('paths', 'htmlbase');
         $this->sName = 'Overview';
 
-        $this->aActions = Array(
+        $this->aActions = [
             'getOverviewMaps'       => 'view',
             'getOverviewRotations'  => 'view',
             'getObjectStates'       => 'view',
-        );
+        ];
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'getOverviewRotations':
                     $sReturn = $this->parseRotationsJson();
-                break;
+                    break;
                 case 'getObjectStates':
-                    $aOpts = Array(
+                    $aOpts = [
                         'i' => MATCH_STRING_NO_SPACE,
                         'f' => MATCH_STRING_NO_SPACE_EMPTY,
-                    );
-                    $aVals = $this->getCustomOptions($aOpts, array(), true);
+                    ];
+                    $aVals = $this->getCustomOptions($aOpts, [], true);
 
                     // Is this request asked to check file ages?
-                    if(isset($aVals['f']) && isset($aVals['f'][0])) {
+                    if (isset($aVals['f'][0])) {
                         $result = $this->checkFilesChanged($aVals['f']);
-                        if($result !== null)
+                        if ($result !== null) {
                             return $result;
+                        }
                     }
 
                     $sReturn = $this->parseMapsJson(COMPLETE, $aVals['i']);
-                break;
+                    break;
             }
         }
 
         return $sReturn;
     }
 
-    private function parseMapJson($objectId, $mapName, $what) {
+    /**
+     * @param int $objectId
+     * @param string $mapName
+     * @param bool $what
+     * @return array|null
+     * @throws MapCfgInvalid
+     * @throws MapInMaintenance
+     * @throws NagVisException
+     */
+    private function parseMapJson($objectId, $mapName, $what)
+    {
         global $AUTHORISATION;
         // Check if the user is permitted to view this
-        if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
+        if (!$AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
             return null;
+        }
 
         // If the parameter filterUser is set, filter the maps by the username
         // given in this parameter. This is a mechanism to be authed as generic
         // user but see the maps of another user. This feature is disabled by
         // default but could be enabled if you need it.
-        if(cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
+        if (cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
             $AUTHORISATION2 = new CoreAuthorisationHandler();
             $AUTHORISATION2->parsePermissions($_GET['filterUser']);
-            if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName))
+            if (!$AUTHORISATION2->isPermitted('Map', 'view', $mapName)) {
                 return null;
+            }
 
             // Switch the auth cookie to this user
             global $SHANDLER;
             $SHANDLER->aquire();
-            $SHANDLER->set('authCredentials', array('user' => $_GET['filterUser'], 'password' => ''));
-            $SHANDLER->set('authTrusted',     true);
+            $SHANDLER->set('authCredentials', ['user' => $_GET['filterUser'], 'password' => '']);
+            $SHANDLER->set('authTrusted', true);
             $SHANDLER->commit();
         }
 
-        $map = Array('object_id' => $objectId);
+        $map = ['object_id' => $objectId];
 
         $MAPCFG = new GlobalMapCfg($mapName);
         $MAPCFG->checkMapConfigExists(true);
         $MAPCFG->readMapConfig();
 
         // Only perform this check with a valid config
-        if($MAPCFG->getValue(0, 'show_in_lists') != 1)
+        if ($MAPCFG->getValue(0, 'show_in_lists') != 1) {
             return null;
+        }
 
         $MAP = new NagVisMap($MAPCFG, GET_STATE, !IS_VIEW);
 
         // Apply overview related configuration to object
         $MAP->MAPOBJ->setConfiguration($this->getMapDefaultOpts($mapName, $MAPCFG->getAlias()));
 
-        if($MAP->MAPOBJ->checkMaintenance(0)) {
-            $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
+        if ($MAP->MAPOBJ->checkMaintenance(0)) {
+            $map['overview_url']    = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $mapName;
             $map['overview_class']  = '';
         } else {
             $map['overview_class']  = 'disabled';
-            $map['overview_url']    = 'javascript:alert(\''.l('The map is in maintenance mode. Please be patient.').'\');';
+            $map['overview_url']    = 'javascript:alert(\''
+                . l('The map is in maintenance mode. Please be patient.')
+                . '\');';
             $map['summary_output']  = l('The map is in maintenance mode. Please be patient.');
 
             $MAP->MAPOBJ->clearMembers();
@@ -121,10 +149,11 @@ class CoreModOverview extends CoreModule {
             $MAP->MAPOBJ->fetchIcon();
         }
 
-        if(cfg('index','showmapthumbs') == 1)
+        if (cfg('index', 'showmapthumbs') == 1) {
             $map['overview_image'] = $this->renderMapThumb($MAPCFG);
+        }
 
-        return array($MAP->MAPOBJ, $map);
+        return [$MAP->MAPOBJ, $map];
     }
 
     /**
@@ -132,90 +161,115 @@ class CoreModOverview extends CoreModule {
      * Then it is called for a list of maps to return the current state
      * for the listed objects.
      *
-     * @return	String  Json Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $what
+     * @param string[] $objects
+     * @return    string  Json Code
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: More cleanups, compacting and extraction of single parts
      */
-    public function parseMapsJson($what = COMPLETE, $objects = Array()) {
+    public function parseMapsJson($what = COMPLETE, $objects = [])
+    {
         global $_BACKEND, $CORE;
         $mapList = $objects;
 
-        $aMaps = Array();
-        $aObjs = Array();
+        $aMaps = [];
+        $aObjs = [];
         log_mem('pre');
-        foreach($mapList AS $objectId) {
+        foreach ($mapList as $objectId) {
             $a = explode('-', $objectId, 2);
-            if(!isset($a[1]))
+            if (!isset($a[1])) {
                 continue;
+            }
             $mapName = $a[1];
             // list mode: Skip processing when this type of object should not be shown
-            if(cfg('index', 'showmaps') != 1)
+            if (cfg('index', 'showmaps') != 1) {
                 continue;
+            }
 
             try {
                 $ret = $this->parseMapJson($objectId, $mapName, $what);
-                if($ret === null) {
+                if ($ret === null) {
                     // Skip maps which shal not be shown to the user
                     continue;
                 }
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $aMaps[] = $this->mapError($mapName, $e->getMessage());
                 continue;
             }
 
             $aObjs[] = $ret;
-            log_mem('post '. $mapName);
+            log_mem('post ' . $mapName);
         }
 
         // Now fetch and apply data from backend
         $_BACKEND->execute();
-        foreach($aObjs AS $aObj) {
+        foreach ($aObjs as $aObj) {
             $aObj[0]->applyState();
             $aObj[0]->fetchIcon();
 
-            if($what === ONLY_STATE)
+            if ($what === ONLY_STATE) {
                 $aMaps[] = array_merge($aObj[0]->getObjectStateInformations(), $aObj[1]);
-            else
+            } else {
                 $aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
+            }
         }
         log_mem('post backend');
         return json_encode($aMaps);
     }
 
-    private function getMapDefaultOpts($name, $alias) {
-        return Array(
-          'type'              => 'map',
-          'map_name'          => $name,
-          'object_id'         => 'map-'.$name,
-          'hover_menu'        => 1,
-          'hover_childs_show' => 1,
-          'hover_template'    => 'default',
-          'context_menu'      => 1,
-          'context_template'  => 'default',
-          'label_show'        => 0,
-          // Enforce std_big iconset - don't use map default iconset
-          'iconset'           => 'std_big',
-          'icon_size'         => array(22),
-          'alias'             => $alias
-        );
+    /**
+     * @param string $name
+     * @param string $alias
+     * @return array
+     */
+    private function getMapDefaultOpts($name, $alias)
+    {
+        return [
+            'type'              => 'map',
+            'map_name'          => $name,
+            'object_id'         => 'map-' . $name,
+            'hover_menu'        => 1,
+            'hover_childs_show' => 1,
+            'hover_template'    => 'default',
+            'context_menu'      => 1,
+            'context_template'  => 'default',
+            'label_show'        => 0,
+            // Enforce std_big iconset - don't use map default iconset
+            'iconset'           => 'std_big',
+            'icon_size'         => [22],
+            'alias'             => $alias
+        ];
     }
 
-    private function mapError($name, $msg) {
+    /**
+     * @param string $name
+     * @param string $msg
+     * @return array
+     */
+    private function mapError($name, $msg)
+    {
         $map = $this->getMapDefaultOpts($name, $name);
         $map['name']            = $map['map_name'];
         unset($map['map_name']);
         $map['state']           = 'ERROR';
         $map['summary_state']   = 'ERROR';
         $map['icon']            = 'std_big_error.png';
-        $map['members']         = Array();
+        $map['members']         = [];
         $map['num_members']     = 0;
         $map['overview_class']  = 'error';
-        $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$map['name'];
-        $map['summary_output']  = l('Map Error: [ERR]', Array('ERR' => $msg));
+        $map['overview_url']    = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $map['name'];
+        $map['summary_output']  = l('Map Error: [ERR]', ['ERR' => $msg]);
         return $map;
     }
 
-    private function renderMapThumb($MAPCFG) {
+    /**
+     * @param GlobalMapCfg $MAPCFG
+     * @return string
+     * @throws NagVisException
+     */
+    private function renderMapThumb($MAPCFG)
+    {
         global $CORE;
         $imgPath     = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
 
@@ -224,8 +278,9 @@ class CoreModOverview extends CoreModule {
         // b) The image is a local one
         // c) The image exists
         // When one is not OK, then use the large map image
-        if(!$CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath))
+        if (!$CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath)) {
             return $MAPCFG->BACKGROUND->getFile();
+        }
 
         $sThumbFile     = $MAPCFG->getName() . '-thumb.' . $this->getFileType($imgPath);
         $sThumbPath     = cfg('paths', 'sharedvar') . $sThumbFile;
@@ -233,8 +288,9 @@ class CoreModOverview extends CoreModule {
 
         // Only create a new thumb when there is no cached one
         $FCACHE = new GlobalFileCache($imgPath, $sThumbPath);
-        if($FCACHE->isCached() === -1)
+        if ($FCACHE->isCached() === -1) {
             $image = $this->createThumbnail($imgPath, $sThumbPath);
+        }
 
         return $sThumbPathHtml;
     }
@@ -242,29 +298,36 @@ class CoreModOverview extends CoreModule {
     /**
      * Parses the rotations for the overview page
      *
-     * @return	String  Json Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return    string  Json Code
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseRotationsJson() {
+    public function parseRotationsJson()
+    {
         global $AUTHORISATION, $CORE;
         // Only display the rotation list when enabled
-        if(cfg('index','showrotations') != 1)
-            return json_encode(Array());
+        if (cfg('index', 'showrotations') != 1) {
+            return json_encode([]);
+        }
 
-        $aRotations = Array();
-        foreach($CORE->getPermittedRotationPools() AS $poolName) {
+        $aRotations = [];
+        foreach ($CORE->getPermittedRotationPools() as $poolName) {
             $ROTATION = new CoreRotation($poolName);
             $iNum = $ROTATION->getNumSteps();
-            $aSteps = Array();
-            for($i = 0; $i < $iNum; $i++) {
-                $aSteps[] = Array('name' => $ROTATION->getStepLabelById($i),
-                                  'url'  => $ROTATION->getStepUrlById($i));
+            $aSteps = [];
+            for ($i = 0; $i < $iNum; $i++) {
+                $aSteps[] = [
+                    'name' => $ROTATION->getStepLabelById($i),
+                    'url'  => $ROTATION->getStepUrlById($i)
+                ];
             }
 
-            $aRotations[] = Array('name'      => $poolName,
-                                  'url'       => $ROTATION->getStepUrlById(0),
-                                  'num_steps' => $ROTATION->getNumSteps(),
-                                  'steps'     => $aSteps);
+            $aRotations[] = [
+                'name'      => $poolName,
+                'url'       => $ROTATION->getStepUrlById(0),
+                'num_steps' => $ROTATION->getNumSteps(),
+                'steps'     => $aSteps
+            ];
         }
 
         return json_encode($aRotations);
@@ -273,23 +336,26 @@ class CoreModOverview extends CoreModule {
     /**
      * Returns the filetype
      *
+     * @param string $imgPath
+     * @return string
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getFileType($imgPath) {
+    public function getFileType($imgPath)
+    {
         $imgSize = getimagesize($imgPath);
-        switch($imgSize[2]) {
+        switch ($imgSize[2]) {
             case 1:
                 $strFileType = 'gif';
-            break;
+                break;
             case 2:
                 $strFileType = 'jpg';
-            break;
+                break;
             case 3:
                 $strFileType = 'png';
-            break;
+                break;
             default:
                 $strFileType = '';
-            break;
+                break;
         }
 
         return $strFileType;
@@ -298,31 +364,35 @@ class CoreModOverview extends CoreModule {
     /**
      * Creates thumbnail images for the index map
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $imgPath
+     * @param string $thumbPath
+     * @return string
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function createThumbnail($imgPath, $thumbPath) {
+    private function createThumbnail($imgPath, $thumbPath)
+    {
         global $CORE;
-        if($CORE->checkVarFolderWriteable(TRUE) && $CORE->checkExisting($imgPath, TRUE)) {
+        if ($CORE->checkVarFolderWriteable(true) && $CORE->checkExisting($imgPath)) {
             // 0: width, 1:height, 2:type
             $imgSize = getimagesize($imgPath);
             $strFileType = '';
 
-            switch($imgSize[2]) {
+            switch ($imgSize[2]) {
                 case 1:
                     $image = imagecreatefromgif($imgPath);
                     $strFileType = 'gif';
-                break;
+                    break;
                 case 2:
                     $image = imagecreatefromjpeg($imgPath);
                     $strFileType = 'jpg';
-                break;
+                    break;
                 case 3:
                     $image = imagecreatefrompng($imgPath);
                     $strFileType = 'png';
-                break;
+                    break;
                 default:
                     throw new NagVisException(l('onlyPngOrJpgImages'));
-                break;
             }
 
             // Size of source images
@@ -332,7 +402,7 @@ class CoreModOverview extends CoreModule {
             $thumbResWidth = 200;
             $thumbResHeight = 150;
 
-            if($bgWidth > $bgHeight) {
+            if ($bgWidth > $bgHeight) {
                 // Calculate size
                 $thumbWidth = $thumbResWidth;
                 $thumbHeight = $bgHeight / ($bgWidth / $thumbWidth);
@@ -340,7 +410,7 @@ class CoreModOverview extends CoreModule {
                 // Calculate offset
                 $thumbX = 0;
                 $thumbY = ($thumbResHeight - $thumbHeight) / 2;
-            } elseif($bgHeight > $bgWidth) {
+            } elseif ($bgHeight > $bgWidth) {
                 // Calculate size
                 $thumbHeight = $thumbResHeight;
                 $thumbWidth = $bgWidth / ($bgHeight / $thumbResHeight);
@@ -350,15 +420,15 @@ class CoreModOverview extends CoreModule {
                 $thumbY = 0;
             } else {
                 // Calculate size
-                if($thumbResWidth > $thumbResHeight) {
-                        $thumbHeight = $thumbResHeight;
-                        $thumbWidth = $thumbResHeight;
-                } elseif($thumbResHeight > $thumbResWidth) {
-                        $thumbHeight = $thumbResWidth;
-                        $thumbWidth = $thumbResWidth;
+                if ($thumbResWidth > $thumbResHeight) {
+                    $thumbHeight = $thumbResHeight;
+                    $thumbWidth = $thumbResHeight;
+                } elseif ($thumbResHeight > $thumbResWidth) {
+                    $thumbHeight = $thumbResWidth;
+                    $thumbWidth = $thumbResWidth;
                 } else {
-                        $thumbHeight = $thumbResHeight;
-                        $thumbWidth = $thumbResHeight;
+                    $thumbHeight = $thumbResHeight;
+                    $thumbWidth = $thumbResHeight;
                 }
 
                 // Calculate offset
@@ -371,21 +441,31 @@ class CoreModOverview extends CoreModule {
             imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 254));
             imagecolortransparent($thumb, imagecolorallocate($thumb, 255, 255, 254));
 
-            imagecopyresampled($thumb, $image, (int)$thumbX, (int)$thumbY, 0, 0, (int)$thumbWidth, (int)$thumbHeight, (int)$bgWidth, (int)$bgHeight);
+            imagecopyresampled(
+                $thumb,
+                $image,
+                (int)$thumbX,
+                (int)$thumbY,
+                0,
+                0,
+                (int)$thumbWidth,
+                (int)$thumbHeight,
+                (int)$bgWidth,
+                (int)$bgHeight
+            );
 
-            switch($imgSize[2]) {
+            switch ($imgSize[2]) {
                 case 1:
                     imagegif($thumb, $thumbPath);
-                break;
+                    break;
                 case 2:
                     imagejpeg($thumb, $thumbPath);
-                break;
+                    break;
                 case 3:
                     imagepng($thumb, $thumbPath);
-                break;
+                    break;
                 default:
                     throw new NagVisException(l('onlyPngOrJpgImages'));
-                break;
             }
 
             return $thumbPath;
@@ -394,4 +474,3 @@ class CoreModOverview extends CoreModule {
         }
     }
 }
-?>

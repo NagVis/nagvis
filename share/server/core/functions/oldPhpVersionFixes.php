@@ -34,11 +34,12 @@
  *
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
-if(!function_exists('date_default_timezone_set')) {
-	function date_default_timezone_set($timezone_identifier) {
-		putenv("TZ=".$timezone_identifier);
-		return TRUE;
-	}
+if (!function_exists('date_default_timezone_set')) {
+    function date_default_timezone_set($timezone_identifier)
+    {
+        putenv("TZ=" . $timezone_identifier);
+        return true;
+    }
 }
 
 // To prevent the annoying and in most cases useless message:
@@ -51,13 +52,15 @@ if(!function_exists('date_default_timezone_set')) {
 //
 // Workaround the problem by setting the systems timezone as PHP default
 // timezone. Don't let PHP know about that hack - it would cry again ;-).
-if(function_exists("date_default_timezone_get"))
+if (function_exists("date_default_timezone_get")) {
     date_default_timezone_set(@date_default_timezone_get());
+}
 
 // PHP 8.2 deprecates utf8_encode. To stay compatible with older installations
 // and installations not providing the mbstring extension, we implement an approach
 // which defaults to mbstring and falls back to a polyfill.
-function iso8859_1_to_utf8($s) {
+function iso8859_1_to_utf8($s)
+{
     if (function_exists("mb_convert_encoding")) {
         return mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
     }
@@ -67,13 +70,42 @@ function iso8859_1_to_utf8($s) {
 
     for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
         switch (true) {
-            case $s[$i] < "\x80": $s[$j] = $s[$i]; break;
-            case $s[$i] < "\xC0": $s[$j] = "\xC2"; $s[++$j] = $s[$i]; break;
-            default: $s[$j] = "\xC3"; $s[++$j] = \chr(\ord($s[$i]) - 64); break;
+            case $s[$i] < "\x80":
+                $s[$j] = $s[$i];
+                break;
+            case $s[$i] < "\xC0":
+                $s[$j] = "\xC2";
+                $s[++$j] = $s[$i];
+                break;
+            default:
+                $s[$j] = "\xC3";
+                $s[++$j] = \chr(\ord($s[$i]) - 64);
+                break;
         }
     }
 
     return substr($s, 0, $j);
+}
+
+if (!function_exists('str_starts_with')) {
+    function str_starts_with($haystack, $needle)
+    {
+        return empty($needle) || strpos($haystack, $needle) === 0;
+    }
+}
+
+if (!function_exists('str_contains')) {
+    function str_contains($haystack, $needle)
+    {
+        return empty($needle) || strpos($haystack, $needle) !== false;
+    }
+}
+
+if (!function_exists('str_ends_with')) {
+    function str_ends_with($haystack, $needle)
+    {
+        return empty($needle) || substr($haystack, strlen($needle) * -1) === $needle;
+    }
 }
 
 // This implements the function hash_equals which is needed for timing safe hash comparisons but
@@ -95,5 +127,3 @@ if(!function_exists('hash_equals')) {
         return $diff === 0;
     }
 }
-
-?>

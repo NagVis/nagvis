@@ -21,36 +21,38 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 // NagVis Version
-define('CONST_VERSION', '1.9.45');
+
+const CONST_VERSION = '1.9.45';
 
 // Set PHP error handling to standard level
 // Different levels for php versions below 5.1 because PHP 5.1 reports
 // some annoying strict messages which are OK for us. From version 5.2
 // everything is OK when using E_STRICT.
-if(version_compare(PHP_VERSION, '5.2') >= 0)
-	error_reporting(E_ALL ^ E_STRICT);
-else
-	error_reporting(E_ALL);
+if (version_compare(PHP_VERSION, '5.2') >= 0) {
+    error_reporting(E_ALL ^ E_STRICT);
+} else {
+    error_reporting(E_ALL);
+}
 
 /**
  * Set the search path for included files
  */
 set_include_path(
-	get_include_path()
-	.PATH_SEPARATOR.'../../server/core/classes'
-	.PATH_SEPARATOR.'../../server/core/classes/objects'
-	.PATH_SEPARATOR.'../../server/core/ext/php-gettext-1.0.12'
+    get_include_path()
+     . PATH_SEPARATOR . '../../server/core/classes'
+     . PATH_SEPARATOR . '../../server/core/classes/objects'
+     . PATH_SEPARATOR . '../../server/core/ext/php-gettext-1.0.12'
 );
 
 // Enable/Disable profiling of NagVis using xhprof.  To make use of this the
 // xhprof php module needs to be loaded and the xhprof_lib directory needs
 // to be available in /var/www.
-define('PROFILE', false);
+const PROFILE = false;
 
 // enable/disable the debug mode
-define('DEBUG', false);
+const DEBUG = false;
 
 /**
  * For desired debug output add these possible values:
@@ -58,10 +60,10 @@ define('DEBUG', false);
  * 2: progress information in the functions
  * 4: render time
  */
-define('DEBUGLEVEL', 6);
+const DEBUGLEVEL = 6;
 
 // Path to the debug file
-define('DEBUGFILE', '../../../var/nagvis-debug.log');
+const DEBUGFILE = '../../../var/nagvis-debug.log';
 
 // It is possible to define a conf.d directory for splitting the main
 // configuration in several files. Only the values defined in the CONST_MAINCFG
@@ -75,42 +77,42 @@ define('DEBUGFILE', '../../../var/nagvis-debug.log');
 // The last value wins.
 //
 // Path to the main configuration file
-define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
-define('CONST_MAINCFG_CACHE', '../../../var/nagvis-conf');
+const CONST_MAINCFG = '../../../etc/nagvis.ini.php';
+const CONST_MAINCFG_CACHE = '../../../var/nagvis-conf';
 
 // Path to the main configuration conf.d directory
-define('CONST_MAINCFG_DIR', '../../../etc/conf.d');
+const CONST_MAINCFG_DIR = '../../../etc/conf.d';
 
 // The directory below the NagVis root which is shared by the webserver
-define('HTDOCS_DIR', 'share');
+const HTDOCS_DIR = 'share';
 
 // Needed minimal PHP version
-define('CONST_NEEDED_PHP_VERSION', '5.0');
+const CONST_NEEDED_PHP_VERSION = '5.0';
 
 // NagVis session name
-define('SESSION_NAME', 'nagvis_session');
+const SESSION_NAME = 'nagvis_session';
 
 // Other basic constants
-define('REQUIRES_AUTHORISATION', true);
-define('GET_STATE', true);
-define('GET_PHYSICAL_PATH', false);
-define('DONT_GET_OBJECT_STATE', false);
-define('DONT_GET_SINGLE_MEMBER_STATES', false);
-define('GET_SINGLE_MEMBER_STATES', true);
-define('HANDLE_USERCFG', true);
-define('ONLY_USERCFG', true);
+const REQUIRES_AUTHORISATION = true;
+const GET_STATE = true;
+const GET_PHYSICAL_PATH = false;
+const DONT_GET_OBJECT_STATE = false;
+const DONT_GET_SINGLE_MEMBER_STATES = false;
+const GET_SINGLE_MEMBER_STATES = true;
+const HANDLE_USERCFG = true;
+const ONLY_USERCFG = true;
 
-define('ONLY_STATE', true);
-define('COMPLETE', false);
+const ONLY_STATE = true;
+const COMPLETE = false;
 
-define('IS_VIEW', true);
-define('ONLY_GLOBAL', true);
-define('GET_CHILDS', true);
-define('SET_KEYS', true);
-define('SUMMARY_STATE', true);
-define('COUNT_QUERY', true);
-define('MEMBER_QUERY', true);
-define('HOST_QUERY', true);
+const IS_VIEW = true;
+const ONLY_GLOBAL = true;
+const GET_CHILDS = true;
+const SET_KEYS = true;
+const SUMMARY_STATE = true;
+const COUNT_QUERY = true;
+const MEMBER_QUERY = true;
+const HOST_QUERY = true;
 
 // Field definitions - fields in state constructs. There is one
 // basic state construct which is used wherever an object is only
@@ -119,65 +121,64 @@ define('HOST_QUERY', true);
 // more details from those objects
 //
 // basic state
-define('STATE',     0);
-define('OUTPUT',    1);
-define('ACK',       2);
-define('DOWNTIME',  3);
-define('STALE',     4);
+const STATE = 0;
+const OUTPUT = 1;
+const ACK = 2;
+const DOWNTIME = 3;
+const STALE = 4;
 // extended generic
-define('STATE_TYPE',              5);
-define('CURRENT_ATTEMPT',         6);
-define('MAX_CHECK_ATTEMPTS',      7);
-define('LAST_CHECK',              8);
-define('NEXT_CHECK',              9);
-define('LAST_HARD_STATE_CHANGE', 10);
-define('LAST_STATE_CHANGE',      11);
-define('PERFDATA',               12);
-define('DISPLAY_NAME',           13);
-define('ALIAS',                  14);
-define('ADDRESS',                15);
-define('NOTES',                  16);
-define('CHECK_COMMAND',          17);
-define('CUSTOM_VARS',            18);
-define('DOWNTIME_AUTHOR',        19);
-define('DOWNTIME_DATA',          20);
-define('DOWNTIME_START',         21);
-define('DOWNTIME_END',           22);
+const STATE_TYPE = 5;
+const CURRENT_ATTEMPT = 6;
+const MAX_CHECK_ATTEMPTS = 7;
+const LAST_CHECK = 8;
+const NEXT_CHECK = 9;
+const LAST_HARD_STATE_CHANGE = 10;
+const LAST_STATE_CHANGE = 11;
+const PERFDATA = 12;
+const DISPLAY_NAME = 13;
+const ALIAS = 14;
+const ADDRESS = 15;
+const NOTES = 16;
+const CHECK_COMMAND = 17;
+const CUSTOM_VARS = 18;
+const DOWNTIME_AUTHOR = 19;
+const DOWNTIME_DATA = 20;
+const DOWNTIME_START = 21;
+const DOWNTIME_END = 22;
 // extended service
-define('DESCRIPTION',            23);
+const DESCRIPTION = 23;
 
 // Number of fields in extended state structures
-define('EXT_STATE_SIZE', 24);
+const EXT_STATE_SIZE = 24;
 
 // State definitions - internal numbers representing the states
 // hosts
-define('UNCHECKED',   14);
-define('UNREACHABLE', 12);
-define('DOWN',        11);
-define('UP',          10);
+const UNCHECKED = 14;
+const UNREACHABLE = 12;
+const DOWN = 11;
+const UP = 10;
 // services
-define('PENDING',      4);
-define('UNKNOWN',      3);
-define('CRITICAL',     2);
-define('WARNING',      1);
-define('OK',           0);
+const PENDING = 4;
+const UNKNOWN = 3;
+const CRITICAL = 2;
+const WARNING = 1;
+const OK = 0;
 // generic
-define('ERROR',       -1);
+const ERROR = -1;
 
 // Maximum length for usernames/passwords
-define('AUTH_MAX_PASSWORD_LENGTH', 30);
-define('AUTH_MAX_USERNAME_LENGTH', 30);
-define('AUTH_MAX_ROLENAME_LENGTH', 30);
+const AUTH_MAX_PASSWORD_LENGTH = 30;
+const AUTH_MAX_USERNAME_LENGTH = 30;
+const AUTH_MAX_ROLENAME_LENGTH = 30;
 
 // Permission wildcard
-define('AUTH_PERMISSION_WILDCARD', '*');
+const AUTH_PERMISSION_WILDCARD = '*';
 
 // This is being used when logging in using LogonEnv for trusting the given user
-define('AUTH_TRUST_USERNAME', true);
-define('AUTH_NOT_TRUST_USERNAME', false);
+const AUTH_TRUST_USERNAME = true;
+const AUTH_NOT_TRUST_USERNAME = false;
 
 // Salt for the password hashes
-// Note: If you change this you will need to rehash all saved 
+// Note: If you change this you will need to rehash all saved
 //       password hashes
-define('AUTH_PASSWORD_SALT', '29d58ead6a65f5c00342ae03cdc6d26565e20954');
-?>
+const AUTH_PASSWORD_SALT = '29d58ead6a65f5c00342ae03cdc6d26565e20954';

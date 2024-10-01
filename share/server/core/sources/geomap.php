@@ -1,43 +1,60 @@
 <?php
 
-class GeomapError extends MapSourceError {}
+class GeomapError extends MapSourceError
+{
+}
 
 //
 // CSV source file handling
 //
 
-function geomap_source_file($p) {
+/**
+ * @param array $p
+ * @return string
+ */
+function geomap_source_file($p)
+{
     return cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
 }
 
-function geomap_read_csv($p) {
-    $locations = array();
+/**
+ * @param array $p
+ * @return array
+ * @throws GeomapError
+ */
+function geomap_read_csv($p)
+{
+    $locations = [];
     $f = geomap_source_file($p);
 
-    if($p['source_file'] == '')
+    if ($p['source_file'] == '') {
         throw new GeomapError(l('No location source file given. Terminate rendering geomap.'));
+    }
 
-    if(!file_exists($f))
-        throw new GeomapError(l('Location source file "[F]" does not exist.', Array('F' => $f)));
+    if (!file_exists($f)) {
+        throw new GeomapError(l('Location source file "[F]" does not exist.', ['F' => $f]));
+    }
 
     $i = 0;
-    foreach(file($f) AS $line) {
+    foreach (file($f) as $line) {
         $i++;
 
         // skip lines beginning with any of the usual comment characters
-        if(preg_match('/^[;#\/]/',$line))
+        if (preg_match('/^[;#\/]/', $line)) {
             continue;
+        }
         $parts = explode(';', $line);
-        if (count($parts) < 4)
+        if (count($parts) < 4) {
             throw new GeomapError(l('Invalid source file line found: Line "[NR]" in "[F]" '
-                                   .'has less than 4 fields', Array('NR' => $i, 'F' => $f)));
+                . 'has less than 4 fields', ['NR' => $i, 'F' => $f]));
+        }
 
-        $locations[] = array(
+        $locations[] = [
             'name'  => $parts[0],
             'alias' => $parts[1],
             'lat'   => (float) $parts[2],
             'long'  => (float) $parts[3],
-        );
+        ];
     }
 
     return $locations;
@@ -47,10 +64,17 @@ function geomap_read_csv($p) {
 // Backend source handling
 //
 
-function geomap_backend_locations($p) {
+/**
+ * @param array $p
+ * @return array
+ * @throws NagVisException
+ */
+function geomap_backend_locations($p)
+{
+    /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
-    $hosts = array();
-    foreach ($p['backend_id'] AS $backend_id) {
+    $hosts = [];
+    foreach ($p['backend_id'] as $backend_id) {
         $_BACKEND->checkBackendExists($backend_id, true);
         $_BACKEND->checkBackendFeature($backend_id, 'getGeomapHosts', true);
 
@@ -59,16 +83,24 @@ function geomap_backend_locations($p) {
     return $hosts;
 }
 
-function geomap_backend_program_start($p) {
+/**
+ * @param array $p
+ * @return null
+ * @throws NagVisException
+ */
+function geomap_backend_program_start($p)
+{
+    /** @var CoreBackendMgmt $_BACKEND */
     global $_BACKEND;
     $t = null;
-    foreach ($p['backend_id'] AS $backend_id) {
+    foreach ($p['backend_id'] as $backend_id) {
         $_BACKEND->checkBackendExists($backend_id, true);
         $_BACKEND->checkBackendFeature($backend_id, 'getProgramStart', true);
 
         $this_t = $_BACKEND->getBackend($backend_id)->getProgramStart();
-        if ($t === null || $this_t > $t)
+        if ($t === null || $this_t > $t) {
             $t = $this_t;
+        }
     }
     return $t;
 }
@@ -77,22 +109,26 @@ function geomap_backend_program_start($p) {
 // General source handling code
 //
 
-function geomap_get_locations($p) {
-    switch($p['source_type']) {
+/**
+ * @param array $p
+ * @return array
+ * @throws GeomapError
+ * @throws NagVisException
+ */
+function geomap_get_locations($p)
+{
+    switch ($p['source_type']) {
         case 'csv':
             return geomap_read_csv($p);
-        break;
         case 'backend':
             return geomap_backend_locations($p);
-        break;
         default:
-            throw new GeomapError(l('Unhandled source type "[S]"', Array('S' => $p['source_type'])));
-        break;
+            throw new GeomapError(l('Unhandled source type "[S]"', ['S' => $p['source_type']]));
     }
 }
 
 //function geomap_backend_cache_file($p) {
-//    if(isset($p['filter_group']) && $p['filter_group'] != '') {
+//    if (isset($p['filter_group']) && $p['filter_group'] != '') {
 //        $fname = '-'.$p['filter_group'];
 //    } else {
 //        $fname = '';
@@ -100,65 +136,91 @@ function geomap_get_locations($p) {
 //    return cfg('paths', 'var') . '/source-geomap-locations' . $fname . '.cache';
 //}
 
-function geomap_source_age($p) {
-    switch($p['source_type']) {
+/**
+ * @param array $p
+ * @return false|int|null
+ * @throws GeomapError
+ * @throws NagVisException
+ */
+function geomap_source_age($p)
+{
+    switch ($p['source_type']) {
         case 'csv':
-    	    return filemtime(geomap_source_file($p));
-        break;
+            return filemtime(geomap_source_file($p));
         case 'backend':
             return geomap_backend_program_start($p);
-        break;
         default:
-            throw new GeomapError(l('Unhandled source type "[S]"', Array('S' => $p['source_type'])));
-        break;
+            throw new GeomapError(l('Unhandled source type "[S]"', ['S' => $p['source_type']]));
     }
 }
 
-function geomap_get_contents($url) {
+/**
+ * @param string $url
+ * @return false|string
+ * @throws GeomapError
+ */
+function geomap_get_contents($url)
+{
     try {
-        $opts = array(
-            'http' => array(
+        $opts = [
+            'http' => [
                 'timeout'    => cfg('global', 'http_timeout'),
-                'user_agent' => 'NagVis '.CONST_VERSION.' geomap',
+                'user_agent' => 'NagVis ' . CONST_VERSION . ' geomap',
                 'max_redirects' => 0,
-            )
-        );
+            ]
+        ];
 
         $proxy = cfg('global', 'http_proxy');
-        if($proxy != null) {
+        if ($proxy != null) {
             $opts['http']['proxy'] = $proxy;
             $opts['http']['request_fulluri'] = true;
             $proxy_auth = cfg('global', 'http_proxy_auth');
-            if($proxy_auth != null) {
+            if ($proxy_auth != null) {
                 $opts['http']['header'] = 'Proxy-Authorization: Basic ' . base64_encode("$proxy_auth");
             }
         }
-        
+
         $context = stream_context_create($opts);
 
         return file_get_contents($url, false, $context);
-    } catch(Exception $e) {
-        throw new GeomapError(l('Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
-                                   .'some data from the internet via webservice API. Please take a look '
-                                   .'at the docs for more details.<br /><br /><small>[E]</small>',
-                                    Array('U' => $url, 'E' => $e->getMessage())));
+    } catch (Exception $e) {
+        throw new GeomapError(l(
+            'Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
+            . 'some data from the internet via webservice API. Please take a look '
+            . 'at the docs for more details.<br /><br /><small>[E]</small>',
+            ['U' => $url, 'E' => $e->getMessage()]
+        ));
     }
 }
 
-function list_geomap_types() {
-    return array(
+/**
+ * @return string[]
+ */
+function list_geomap_types()
+{
+    return [
         'mapnik'     => 'Mapnik',
-    );
+    ];
 }
 
-function list_geomap_source_types() {
-    return array(
+/**
+ * @return array
+ */
+function list_geomap_source_types()
+{
+    return [
         'csv'     => l('CSV-File'),
         'backend' => l('NagVis Backend'),
-    );
+    ];
 }
 
-function list_geomap_source_files() {
+/**
+ * @return array
+ * @throws NagVisException
+ */
+function list_geomap_source_files()
+{
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableGeomapSourceFiles();
 }
@@ -169,8 +231,8 @@ $selectable = true;
 
 // options to be modifiable by the user(url)
 global $viewParams;
-$viewParams = array(
-    'geomap' => array(
+$viewParams = [
+    'geomap' => [
         'backend_id',
         'geomap_type',
         'geomap_zoom',
@@ -182,32 +244,32 @@ $viewParams = array(
         'iconset',
         'label_show',
         'filter_group',
-    )
-);
+    ]
+];
 
 // Config variables to be registered for this source
 global $configVars;
-$configVars = array(
-    'geomap_type' => array(
+$configVars = [
+    'geomap_type' => [
         'must'       => false,
         'default'    => 'mapnik',
         'match'      => '/^(mapnik)$/i',
         'field_type' => 'dropdown',
         'list'       => 'list_geomap_types',
-    ),
-    'geomap_zoom' => Array(
+    ],
+    'geomap_zoom' => [
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_INTEGER,
-    ),
-    'source_type' => array(
+    ],
+    'source_type' => [
         'must'       => false,
         'default'    => 'csv',
         'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
         'list'       => 'list_geomap_source_types',
-    ),
-    'source_file' => array(
+    ],
+    'source_file' => [
         'must'          => false,
         'default'       => '',
         'match'         => MATCH_STRING_EMPTY,
@@ -215,88 +277,104 @@ $configVars = array(
         'list'          => 'list_geomap_source_files',
         'depends_on'    => 'source_type',
         'depends_value' => 'csv',
-    ),
-    'geomap_border' => Array(
+    ],
+    'geomap_border' => [
         'must'       => false,
         'default'    => 0.25,
         'match'      => MATCH_FLOAT,
-    ),
-);
+    ],
+];
 
 // Assign config variables to specific object types
 global $configVarMap;
-$configVarMap = array(
-    'global' => array(
-        'geomap' => array(
+$configVarMap = [
+    'global' => [
+        'geomap' => [
             'geomap_type'   => null,
             'geomap_zoom'   => null,
             'source_type'   => null,
             'source_file'   => null,
             'geomap_border' => null,
-        ),
-    ),
-);
+        ],
+    ],
+];
 
 // Global config vars not to show for geomaps
-$hiddenConfigVars = array(
+$hiddenConfigVars = [
     'map_image',
-);
+];
 
 // Alter some global vars with automap specific things
-$updateConfigVars = array(
-    'width' => array(
+$updateConfigVars = [
+    'width' => [
         'default' => 1000,
-    ),
-    'height' => array(
+    ],
+    'height' => [
         'default' => 600,
-    ),
-);
+    ],
+];
 
-function geomap_files($params) {
+/**
+ * @param array $params
+ * @return string[]
+ */
+function geomap_files($params)
+{
     // The source_file parameter was filtered here in previous versions. Users
     // reported that this is not very useful. So I removed it. Hope it works
     // for most users.
     // FIXME: the following two "unset" statements fix an "array to string conversion" error
-    unset ($params['filter_group']);
-    unset ($params['sources']);
-    unset ($params['backend_id']);
+    unset($params['filter_group']);
+    unset($params['sources']);
+    unset($params['backend_id']);
 
-    $image_name  = 'geomap-'.implode('_', array_values($params)).'.png';
-    return array(
+    $image_name  = 'geomap-' . implode('_', array_values($params)) . '.png';
+    return [
         $image_name,
-        path('sys', '', 'backgrounds').'/'.$image_name,
-        cfg('paths', 'var').$image_name.'.data',
-    );
+        path('sys', '', 'backgrounds') . '/' . $image_name,
+        cfg('paths', 'var') . $image_name . '.data',
+    ];
 }
 
-function validate_geomap_server_base_url($url) {
+/**
+ * @param string $url
+ * @return void
+ * @throws GeomapError
+ */
+function validate_geomap_server_base_url($url)
+{
     # If the given url contains non standard URL characters, throw an error
     $sanitized_url = filter_var($url, FILTER_SANITIZE_URL);
     if ($sanitized_url !== $url) {
-        throw new GeomapError(l('Geomap server URL contains not allowed characters. Url: "[U]"',
-            array('U' => $url)));
+        throw new GeomapError(l('Geomap server URL contains not allowed characters. Url: "[U]"', ['U' => $url]));
     }
 
     $url_scheme = parse_url($url, PHP_URL_SCHEME);
     if (!$url_scheme || !in_array(strtolower($url_scheme), ["http", "https"])) {
-        throw new GeomapError(l('Invalid scheme in Geomap server URL: "[U]"',
-            array('U' => $url)));
+        throw new GeomapError(l('Invalid scheme in Geomap server URL: "[U]"', ['U' => $url]));
     }
 
     $url_query = parse_url($url, PHP_URL_QUERY);
     if (!empty($url_query)) {
-        throw new GeomapError(l('Geomap server cannot contain query parameters. URL: "[U]"',
-            array('U' => $url)));
+        throw new GeomapError(l('Geomap server cannot contain query parameters. URL: "[U]"', ['U' => $url]));
     }
 
     $url_fragment = parse_url($url, PHP_URL_FRAGMENT);
     if (!empty($url_fragment)) {
-        throw new GeomapError(l('Geomap server cannot contain anchors. URL: "[U]"',
-            array('U' => $url)));
+        throw new GeomapError(l('Geomap server cannot contain anchors. URL: "[U]"', ['U' => $url]));
     }
 }
 
-function process_geomap($MAPCFG, $map_name, &$map_config) {
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $map_name
+ * @param array $map_config
+ * @return true
+ * @throws GeomapError
+ * @throws NagVisException
+ */
+function process_geomap($MAPCFG, $map_name, &$map_config)
+{
     $params = $MAPCFG->getSourceParams();
     list($image_name, $image_path, $data_path) = geomap_files($params);
 
@@ -308,20 +386,20 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     // The existing map config must not create new objects. The truth about the
     // existing objects comes only from this source.
     $saved_config = $map_config;
-    $map_config = array();
+    $map_config = [];
 
     $iconset = $params['iconset'];
     list($icon_w, $icon_h) = iconset_size($iconset);
 
     // Adapt the global section
     $map_config[0] = $saved_config[0];
-    $map_config[0]['map_image'] = $image_name.'?'.time().'.png';
+    $map_config[0]['map_image'] = $image_name . '?' . time() . '.png';
     $map_config[0]['iconset']   = $iconset;
 
     // Now add the objects to the map
-    foreach($locations AS $loc) {
+    foreach ($locations as $loc) {
         $object_id = $MAPCFG->genObjId($loc['name']);
-        $map_config[$object_id] = array(
+        $map_config[$object_id] = [
             'type'      => 'host',
             'host_name' => $loc['name'],
             'iconset'   => $iconset,
@@ -329,10 +407,10 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             'alias'     => $loc['alias'],
             'lat'       => $loc['lat'],
             'long'      => $loc['long'],
-        );
+        ];
 
         if (isset($loc['backend_id'])) {
-            $map_config[$object_id]['backend_id'] = array($loc['backend_id']);
+            $map_config[$object_id]['backend_id'] = [$loc['backend_id']];
         }
     }
     unset($locations);
@@ -341,8 +419,9 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     process_filter($MAPCFG, $map_name, $map_config, $params);
 
     // Terminate empty views
-    if(count($map_config) <= 1)
+    if (count($map_config) <= 1) {
         throw new GeomapError(l('Got empty map after filtering. Terminate rendering geomap.'));
+    }
 
     // Now detect the upper and lower bounds of the locations to display
     // Left/upper and right/bottom
@@ -352,19 +431,24 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     // east/west
     $min_long = 180;
     $max_long = -180;
-    foreach($map_config AS $obj) {
-        if($obj['type'] == 'global')
+    foreach ($map_config as $obj) {
+        if ($obj['type'] == 'global') {
             continue;
+        }
 
-        if($obj['lat'] < $min_lat)
+        if ($obj['lat'] < $min_lat) {
             $min_lat = $obj['lat'];
-        if($obj['lat'] > $max_lat)
+        }
+        if ($obj['lat'] > $max_lat) {
             $max_lat = $obj['lat'];
+        }
 
-        if($obj['long'] < $min_long)
+        if ($obj['long'] < $min_long) {
             $min_long = $obj['long'];
-        if($obj['long'] > $max_long)
+        }
+        if ($obj['long'] > $max_long) {
             $max_long = $obj['long'];
+        }
     }
 
     // Fix equal coordinates (Simply add some space on all sides)
@@ -378,39 +462,39 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
 
-    if (!$params['width'] || !$params['height'])
+    if (!$params['width'] || !$params['height']) {
         throw new GeomapError(l('Missing mandatory "width" and "height" parameters."'));
+    }
 
     // Using this API: http://pafciu17.dev.openstreetmap.org/
     $geomap_server_base_url = cfg('global', 'geomap_server');
     validate_geomap_server_base_url($geomap_server_base_url);
     $url = $geomap_server_base_url
-          .'?module=map'
-          .'&width='.$params['width'].'&height='.$params['height']
-          .'&type='.$params['geomap_type'];
+        . '?module=map'
+        . '&width=' . $params['width'] . '&height=' . $params['height']
+        . '&type=' . $params['geomap_type'];
 
     // The geomap zoom seems to be something different than the nagvis zoom. Use
     // the dedicated geomap_zoom parameter
-    if(isset($params['geomap_zoom']) && $params['geomap_zoom'] != '') {
+    if (isset($params['geomap_zoom']) && $params['geomap_zoom'] != '') {
         $mid_lat  = ($min_lat + $max_lat) / 2;
         $mid_long = ($min_long + $max_long) / 2;
-        $url .= '&zoom='.$params['geomap_zoom']
-               .'&center='.$mid_long.','.$mid_lat;
-    }
-    else {
-        $url .= '&bbox='.$min_long.','.$max_lat.','.$max_long.','.$min_lat;
+        $url .= '&zoom=' . $params['geomap_zoom']
+            . '&center=' . $mid_long . ',' . $mid_lat;
+    } else {
+        $url .= '&bbox=' . $min_long . ',' . $max_lat . ',' . $max_long . ',' . $min_lat;
     }
     //file_put_contents('/tmp/123', $url);
 
     // Fetch the background image when needed
-    if(!file_exists($image_path) || geomap_source_age($params) > filemtime($image_path)) {
+    if (!file_exists($image_path) || geomap_source_age($params) > filemtime($image_path)) {
         // Allow/enable proxy
         $contents = geomap_get_contents($url);
         file_put_contents($image_path, $contents);
     }
 
     // Fetch the map bounds when needed
-    if(!file_exists($data_path) || geomap_source_age($params) > filemtime($data_path)) {
+    if (!file_exists($data_path) || geomap_source_age($params) > filemtime($data_path)) {
         // Get the lat/long of the image bounds. The api adds a border area to the
         // generated image. This is good since this makes the outer nodes not touch
         // the border of the image. But this makes calculation of the x/y coords
@@ -421,17 +505,21 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         $data_url = $url . '&bboxReturnFormat=csv';
         $contents = geomap_get_contents($data_url);
 
-        if(!$contents ||
-            (ord($contents[0]) == 137 &&
-             ord($contents[1]) == 80 &&
-             ord($contents[2]) == 78)) {
+        if (
+            !$contents
+            || str_starts_with($contents, chr(137) . chr(80) . chr(78))
+        ) {
             // Got an png image as answer - catch this!
-            throw new GeomapError(l('Got invalid response from "[U]". This is mostly caused by an unhandled request.',
-                                            array('U' => $data_url)));
+            throw new GeomapError(
+                l('Got invalid response from "[U]". This is mostly caused by an unhandled request.', ['U' => $data_url])
+            );
         }
 
-        if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents))
-            throw new GeomapError(l('Got invalid data from "[U]": "[C]"', array('U' => $data_url, 'C' => json_encode($contents))));
+        if (!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents)) {
+            throw new GeomapError(l('Got invalid data from "[U]": "[C]"', [
+                'U' => $data_url, 'C' => json_encode($contents)
+            ]));
+        }
 
         file_put_contents($data_path, $contents);
         $parts = explode(',', $contents);
@@ -452,19 +540,22 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $lat_mult  = $params['height'] / (ProjectF($img_top) - ProjectF($img_down));
 
     // Now add the coordinates to the map objects
-    foreach($map_config AS &$obj) {
-        if(!isset($obj['lat']))
+    foreach ($map_config as &$obj) {
+        if (!isset($obj['lat'])) {
             continue;
+        }
 
         // Calculate the lat (y) coords
         $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * $lat_mult - ($icon_h / 2));
-        if($obj['y'] < 0)
+        if ($obj['y'] < 0) {
             $obj['y'] = 0;
+        }
 
         // Calculate the long (x) coords
         $obj['x'] = round(($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2));
-        if($obj['x'] < 0)
+        if ($obj['x'] < 0) {
             $obj['x'] = 0;
+        }
 
         unset($obj['lat']);
         unset($obj['long']);
@@ -478,38 +569,51 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
  * a) either the image file or the data file do not exist
  * b) or when the source file is newer than the compare_time
  * c) or when the image/data files are older than the source file
+ *
+ * @param GlobalMapCfg $MAPCFG
+ * @param int $compare_time
+ * @return bool
+ * @throws GeomapError
+ * @throws NagVisException
  */
-function changed_geomap($MAPCFG, $compare_time) {
+function changed_geomap($MAPCFG, $compare_time)
+{
     $params = $MAPCFG->getSourceParams();
 
     list($image_name, $image_path, $data_path) = geomap_files($params);
 
     // a)
-    if(!file_exists($image_path) || !file_exists($data_path))
+    if (!file_exists($image_path) || !file_exists($data_path)) {
         return true;
+    }
 
     // b)
     $t = geomap_source_age($params);
-    if($t > $compare_time)
+    if ($t > $compare_time) {
         return true;
+    }
 
     // c)
-    if($t > filemtime($image_path) || $t > filemtime($data_path))
+    if ($t > filemtime($image_path) || $t > filemtime($data_path)) {
         return true;
+    }
 
     return false;
 }
 
-# calculate lat on Mercator based map
-# for details see:
-#    http://wiki.openstreetmap.org/wiki/Slippy_map_tilesnames#X_and_Y
-# function copied from
-#    http://almien.co.uk/OSM/Tools/Coord/source.php
-
-function ProjectF($Lat){
-  $Lat = deg2rad($Lat);
-  $Y = log(tan($Lat) + (1/cos($Lat)));
-  return($Y);
+/**
+ * calculate lat on Mercator based map
+ * for details see:
+ *    http://wiki.openstreetmap.org/wiki/Slippy_map_tilesnames#X_and_Y
+ * function copied from
+ *    http://almien.co.uk/OSM/Tools/Coord/source.php
+ *
+ * @param int|float $Lat
+ * @return float
+ */
+function ProjectF($Lat)
+{
+    $Lat = deg2rad($Lat);
+    $Y = log(tan($Lat) + (1 / cos($Lat)));
+    return($Y);
 }
-
-?>

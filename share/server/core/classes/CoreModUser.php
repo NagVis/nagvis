@@ -25,54 +25,82 @@
 /**
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModUser extends CoreModule {
+class CoreModUser extends CoreModule
+{
+    /** @var GlobalCore */
     protected $CORE;
+
+    /** @var CoreRequestHandler */
     protected $FHANDLER;
+
+    /** @var CoreSessionHandler */
     protected $SHANDLER;
 
-    public function __construct($CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct($CORE)
+    {
         $this->sName = 'User';
         $this->CORE = $CORE;
 
-        $this->aActions = Array(
+        $this->aActions = [
             'getOptions' => REQUIRES_AUTHORISATION,
             'setOption'  => REQUIRES_AUTHORISATION,
-        );
+        ];
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string
+     * @throws NagVisException
+     * @throws Success
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'getOptions':
                     $CFG = new CoreUserCfg();
                     $sReturn = json_encode($CFG->doGet());
-                break;
+                    break;
                 case 'setOption':
                     $this->handleResponse('handleResponseSet', 'doSet');
-                break;
+                    break;
             }
         }
 
         return $sReturn;
     }
 
-    protected function doSet($a) {
+    /**
+     * @param array $a
+     * @return bool
+     * @throws NagVisException
+     */
+    protected function doSet($a)
+    {
         $CFG = new CoreUserCfg();
         return $CFG->doSet($a['opts']);
     }
 
-    protected function handleResponseSet() {
+    /**
+     * @return array
+     * @throws UserInputError
+     */
+    protected function handleResponseSet()
+    {
         $FHANDLER = new CoreRequestHandler($_GET);
-        $this->verifyValuesSet($FHANDLER, Array('opts'));
+        $this->verifyValuesSet($FHANDLER, ['opts']);
         $opts = $FHANDLER->get('opts');
 
-        foreach($opts as $key => $val)
-            if (substr($val, 0, 1) == '{')
+        foreach ($opts as $key => $val) {
+            if (str_starts_with($val, '{')) {
                 $opts[$key] = json_decode($val);
+            }
+        }
 
-        return Array('opts' => $opts);
+        return ['opts' => $opts];
     }
 }
-?>

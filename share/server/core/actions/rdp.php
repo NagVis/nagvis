@@ -27,27 +27,28 @@
 
 // Config variables to be registered for custom actions of this name
 global $configVars;
-$configVars = array(
-    'domain' => Array(
+$configVars = [
+    'domain' => [
         'must'     => 1,
         'editable' => 1,
         'default'  => '',
         'match'    => MATCH_STRING_NO_SPACE_EMPTY
-    ),
-    'username' => Array(
+    ],
+    'username' => [
         'must'     => 1,
         'editable' => 1,
         'default'  => '',
         'match'    => MATCH_STRING_NO_SPACE_EMPTY
-    ),
-);
+    ],
+];
 
 if (!function_exists('handle_action_rdp')) {
-    function handle_action_rdp($MAPCFG, $objId) {
+    function handle_action_rdp($MAPCFG, $objId)
+    {
         $host_name = $MAPCFG->getValue($objId, 'host_name');
         $domain    = $MAPCFG->getValue($objId, 'domain');
         $username  = $MAPCFG->getValue($objId, 'username');
-    
+
         // Get the host address! erm ... looks a little complicated...
         global $_BACKEND;
         $backendIds = $MAPCFG->getValue($objId, 'backend_id');
@@ -57,18 +58,18 @@ if (!function_exists('handle_action_rdp')) {
         $_BACKEND->execute();
         $OBJ->applyState();
         $host_address = $OBJ->getStateAttr(ADDRESS);
-    
+
         // Now generate the .rdp file for the user which is then (hopefully) handled
         // correctly by the users browser.
         header('Content-Type: application/rdp; charset=utf-8');
-        header('Content-Disposition: attachment; filename='.$host_name.'.rdp');
-    
-        echo 'full address:s:'.$host_address."\n";
-        if($domain)
-            echo 'domain:s:'.$domain."\n";
-        if($username)
-            echo 'username:s:'.$username."\n";
+        header('Content-Disposition: attachment; filename=' . $host_name . '.rdp');
+
+        echo 'full address:s:' . $host_address . "\n";
+        if ($domain) {
+            echo 'domain:s:' . $domain . "\n";
+        }
+        if ($username) {
+            echo 'username:s:' . $username . "\n";
+        }
     }
 }
-
-?>

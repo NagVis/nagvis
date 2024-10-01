@@ -23,22 +23,42 @@
  *
  *****************************************************************************/
 
-class NagVisObject {
-    protected $conf = array();
+class NagVisObject
+{
+    /** @var array */
+    protected $conf = [];
 
+    /** @var string */
     protected $type;
+
+    /** @var string */
     protected $object_id;
+
+    /** @var int */
     protected $x;
+
+    /** @var int */
     protected $y;
+
+    /** @var int */
     protected $z;
+
+    /** @var string */
     protected $icon;
+
+    /** @var string */
     protected $url_target;
+
     protected $context_menu;
+
     protected $context_template;
     protected $use;
 
-    protected $url; // Not supported by Textbox
-    protected $view_type; // Not supported by Textbox, Shape
+    /** @var string Not supported by Textbox */
+    protected $url;
+
+    /** @var string Not supported by Textbox, Shape */
+    protected $view_type;
 
     protected $hover_menu;
     protected $hover_delay;
@@ -57,59 +77,70 @@ class NagVisObject {
     protected $min_zoom;
     protected $max_zoom;
 
+    /** @var string */
     protected static $sSortOrder = 'asc';
     protected static $stateWeight = null;
+
+    /** @var array|null */
     private static $arrDenyKeys = null;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Get method for all options
      *
-     * @return	Value  Value of the given option
+     * @param string $option
+     * @return mixed Value of the given option
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function get($option) {
+    public function get($option)
+    {
         return $this->{$option};
     }
 
     /**
      * Get method for x coordinate of the object
      *
-     * @return	Integer		x coordinate on the map
+     * @return int x coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getX() {
+    public function getX()
+    {
         return $this->x;
     }
 
     /**
      * Get method for y coordinate of the object
      *
-     * @return	Integer		y coordinate on the map
+     * @return int y coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getY() {
+    public function getY()
+    {
         return $this->y;
     }
 
     /**
      * Get method for z coordinate of the object
      *
-     * @return	Integer		z coordinate on the map
+     * @return int z coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getZ() {
+    public function getZ()
+    {
         return $this->z;
     }
 
     /**
      * Get method for type of the object
      *
-     * @return	String		Type of the object
+     * @return string Type of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
@@ -118,10 +149,11 @@ class NagVisObject {
      *
      * Get method for the object id
      *
-     * @return	Integer		Object ID
+     * @return int Object ID
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObjectId() {
+    public function getObjectId()
+    {
         return $this->object_id;
     }
 
@@ -130,97 +162,118 @@ class NagVisObject {
      *
      * Set method for the object id
      *
-     * @param   Integer    Object id to set for the object
+     * @param int $id Object id to set for the object
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setObjectId($id) {
+    public function setObjectId($id)
+    {
         $this->object_id = $id;
     }
 
     /**
      * Get method for the name of the object
+     *
+     * @return string
      */
-    public function getName() {
-        return $this->{$this->type.'_name'};
+    public function getName()
+    {
+        return $this->{$this->type . '_name'};
     }
 
-    // Returns the display_name of an object, if available, otherwise
-    // the alias of an object, if available, otherwise the name
-    public function getDisplayName() {
+    /**
+     * Returns the display_name of an object, if available, otherwise
+     * the alias of an object, if available, otherwise the name
+     *
+     * @return string
+     */
+    public function getDisplayName()
+    {
         return $this->getName();
     }
 
     /**
      * Get method for the hover template of the object
      *
-     * @return	String		Hover template of the object
+     * @return string Hover template of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getHoverTemplate() {
+    public function getHoverTemplate()
+    {
         return $this->hover_template;
     }
 
     /**
      * Set method for the object coords
+     *
+     * @return void
      */
-    public function setMapCoords($arrCoords) {
+    public function setMapCoords($arrCoords)
+    {
         $this->setConfiguration($arrCoords);
     }
 
     /**
-     * PUBLIC setConfiguration()
-     *
      * Sets options of the object
      *
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setConfiguration($obj) {
-        foreach($obj AS $key => $val) {
+    public function setConfiguration($obj)
+    {
+        foreach ($obj as $key => $val) {
             $this->{$key} = $val;
         }
     }
 
     /**
-     * PUBLIC setObjectInformation()
-     *
      * Sets extended information of the object
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @param array $obj
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setObjectInformation($obj) {
-        foreach($obj AS $key => $val) {
+    public function setObjectInformation($obj)
+    {
+        foreach ($obj as $key => $val) {
             $this->{$key} = $val;
         }
     }
 
     /**
      * Gets all necessary information of the object as array
+     *
+     * @return array
      */
-    public function getObjectInformation() {
-        $arr = Array();
+    public function getObjectInformation()
+    {
+        $arr = [];
 
         // Need to remove some options which are not relevant
         // FIXME: Would be much better to name the needed vars explicit
-        if(self::$arrDenyKeys == null)
-            self::$arrDenyKeys = Array(
-                'MAPCFG' => '', 'MAP'  => '',
+        if (self::$arrDenyKeys == null) {
+            self::$arrDenyKeys = [
+                'MAPCFG' => '', 'MAP' => '',
                 'conf' => '', 'services' => '', 'fetchedChildObjects' => '', 'childObjects' => '',
                 'parentObjects' => '', 'members' => '', 'objects' => '', 'linkedMaps' => '',
                 'isSummaryObject' => '', 'isView' => '', 'dateFormat' => '', 'arrDenyKeys' => '',
-                'aStateCounts' => '',	'iconDetails' => '', 'problem_msg' => '', 'isLoopingBacklink' => ''
-            );
+                'aStateCounts' => '', 'iconDetails' => '', 'problem_msg' => '', 'isLoopingBacklink' => ''
+            ];
+        }
 
-        foreach($this AS $key => $val)
-            if(!isset(self::$arrDenyKeys[$key]) && $val !== null)
+        foreach ($this as $key => $val) {
+            if (!isset(self::$arrDenyKeys[$key]) && $val !== null) {
                 $arr[$key] = $val;
+            }
+        }
 
         // I want only "name" in js
         $arr['name'] = $this->getName();
 
-        if($this->type == 'service' && isset($arr['host_name'])) {
+        if ($this->type == 'service' && isset($arr['host_name'])) {
             unset($arr['host_name']);
         } else {
-            unset($arr[$this->type.'_name']);
+            unset($arr[$this->type . '_name']);
         }
 
         return $arr;
@@ -228,14 +281,14 @@ class NagVisObject {
 
 
     /**
-     * PUBLIC getObjectConfiguration()
-     *
      * Gets the configuration of the object
      *
-     * @return	Array		Object configuration
+     * @param bool $abstract
+     * @return array Object configuration
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObjectConfiguration($abstract = true) {
+    public function getObjectConfiguration($abstract = true)
+    {
         // Some options have to be removed which are only for this object
         $arr = $this->conf;
         unset($arr['id']);
@@ -244,9 +297,9 @@ class NagVisObject {
 
         // Only remove these options when the configuration should be
         // completely independent from this object
-        if($abstract == true) {
+        if ($abstract) {
             unset($arr['host_name']);
-            unset($arr[$this->type.'_name']);
+            unset($arr[$this->type . '_name']);
             unset($arr['service_description']);
         }
 
@@ -254,35 +307,34 @@ class NagVisObject {
     }
 
     /**
-     * PUBLIC parseJson()
-     *
      * Parses the object in json format
      *
-     * @return	String  JSON code of the object
+     * @return array the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseJson() {
+    public function parseJson()
+    {
         return $this->getObjectInformation();
     }
 
     /**
-     * PUBLIC parseMapCfg()
-     *
      * Parses the object in map configuration format
      *
-     * @param   Array   Array of global map options
-     * @return	String  This object in map config format
+     * @param array $globalOpts Array of global map options
+     * @return string This object in map config format
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseMapCfg($globalOpts = Array()) {
-        $ret = 'define '.$this->type." {\n";
-        if($this->type === 'host' && $this instanceof NagVisHost)
-            $ret .= '  host_name='.$this->host_name."\n";
-        $ret .= '  object_id='.$this->object_id."\n";
-        foreach($this->getObjectConfiguration(false) AS $key => $val) {
+    public function parseMapCfg($globalOpts = [])
+    {
+        $ret = 'define ' . $this->type . " {\n";
+        if ($this->type === 'host' && $this instanceof NagVisHost) {
+            $ret .= '  host_name=' . $this->host_name . "\n";
+        }
+        $ret .= '  object_id=' . $this->object_id . "\n";
+        foreach ($this->getObjectConfiguration(false) as $key => $val) {
             // Only set options which are different to global option
-            if((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {
-                $ret .= '  '.$key.'='.$val."\n";
+            if ((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {
+                $ret .= '  ' . $key . '=' . $val . "\n";
             }
         }
         $ret .= "}\n\n";
@@ -291,11 +343,13 @@ class NagVisObject {
     }
 
     /**
-     * PUBLIC getUrl()
      * Returns the url for the object link
+     *
+     * @return string
      */
-    public function getUrl() {
-        if(isset($this->url)) {
+    public function getUrl()
+    {
+        if (isset($this->url)) {
             return $this->url;
         } else {
             return '';
@@ -306,68 +360,65 @@ class NagVisObject {
     # #########################################################################
 
     /**
-     * PROTECTED getUrlTarget()
-     *
      * Returns the target frame for the object link
      *
-     * @return	String	Target
+     * @return string Target
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function getUrlTarget() {
+    protected function getUrlTarget()
+    {
         return $this->url_target;
     }
 
     /**
-     * PRIVATE STATIC sortObjectsAlphabetical()
-     *
      * Sorts both objects alphabetically by name
      *
-     * @param	OBJ		First object to sort
-     * @param	OBJ		Second object to sort
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param NagVisStatefulObject $OBJ1 First object to sort
+     * @param NagVisStatefulObject $OBJ2 Second object to sort
+     * @return int
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
-        if($OBJ1->type == 'service') {
-            $name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
+    public static function sortObjectsAlphabetical($OBJ1, $OBJ2)
+    {
+        if ($OBJ1->type == 'service') {
+            $name1 = strtolower($OBJ1->getName() . $OBJ1->getServiceDescription());
         } else {
             $name1 = strtolower($OBJ1->getName());
         }
 
-        if($OBJ2->type == 'service') {
-            $name2 = strtolower($OBJ2->getName().$OBJ2->getServiceDescription());
+        if ($OBJ2->type == 'service') {
+            $name2 = strtolower($OBJ2->getName() . $OBJ2->getServiceDescription());
         } else {
             $name2 = strtolower($OBJ2->getName());
         }
 
         if ($name1 == $name2) {
             return 0;
-        } elseif($name1 > $name2) {
+        } elseif ($name1 > $name2) {
             // Sort depending on configured direction
-            if(self::$sSortOrder === 'asc') {
+            if (self::$sSortOrder === 'asc') {
                 return +1;
             } else {
                 return -1;
             }
+        } elseif (self::$sSortOrder === 'asc') {
+            // Sort depending on configured direction
+            return -1;
         } else {
-            // Sort depending on configured direction
-            if(self::$sSortOrder === 'asc') {
-                return -1;
-            } else {
-                return +1;
-            }
+            return +1;
         }
     }
 
     /**
-     * PRIVATE STATIC sortObjectsByState()
-     *
      * Sorts both by state of the object
      *
-     * @param	OBJ		First object to sort
-     * @param	OBJ		Second object to sort
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param NagVisStatefulObject $OBJ1 First object to sort
+     * @param NagVisStatefulObject $OBJ2 Second object to sort
+     * @return int
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function sortObjectsByState($OBJ1, $OBJ2) {
+    public static function sortObjectsByState($OBJ1, $OBJ2)
+    {
         $state1 = $OBJ1->sum[STATE];
         $subState1 = $OBJ1->getSubState(SUMMARY_STATE);
 
@@ -379,35 +430,40 @@ class NagVisObject {
 
     /**
      * Helper to sort states independent of objects
+     *
+     * @param string|null $state1
+     * @param string $subState1
+     * @param string|null $state2
+     * @param string $subState2
+     * @param string $sortOrder
+     * @return int
      */
-    public static function sortStatesByStateValues($state1, $subState1, $state2, $subState2, $sortOrder) {
+    public static function sortStatesByStateValues($state1, $subState1, $state2, $subState2, $sortOrder)
+    {
         global $_MAINCFG;
 
         // Quit when nothing to compare
-        if($state1 === null || $state2 === null) {
+        if ($state1 === null || $state2 === null) {
             return 0;
         }
 
         $stateWeight = $_MAINCFG->getStateWeight();
 
         // Handle normal/ack/downtime states
-        if($stateWeight[$state1][$subState1] == $stateWeight[$state2][$subState2]) {
+        if ($stateWeight[$state1][$subState1] == $stateWeight[$state2][$subState2]) {
             return 0;
-        } elseif($stateWeight[$state1][$subState1] < $stateWeight[$state2][$subState2]) {
+        } elseif ($stateWeight[$state1][$subState1] < $stateWeight[$state2][$subState2]) {
             // Sort depending on configured direction
-            if($sortOrder === 'asc') {
-                return +1;
+            if ($sortOrder === 'asc') {
+                return + 1;
             } else {
                 return -1;
             }
+        } elseif ($sortOrder === 'asc') {
+            // Sort depending on configured direction
+            return -1;
         } else {
-            // Sort depending on configured direction
-            if($sortOrder === 'asc') {
-                return -1;
-            } else {
-                return +1;
-            }
+            return + 1;
         }
     }
 }
-?>

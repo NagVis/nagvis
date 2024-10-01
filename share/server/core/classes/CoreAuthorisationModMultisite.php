@@ -23,41 +23,61 @@
  *
  ******************************************************************************/
 
-class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
+class CoreAuthorisationModMultisite extends CoreAuthorisationModule
+{
+    /** @var bool */
     public $rolesConfigurable = false;
+
+    /** @var string */
     private $file;
+
+    /** @var array */
     private $permissions;
 
-    public function __construct() {
+    /**
+     * @throws NagVisException
+     */
+    public function __construct()
+    {
         $this->file = cfg('global', 'authorisation_multisite_file');
 
-        if($this->file == '')
-            throw new NagVisException(l('No auth file configured. Please specify the option authorisation_multisite_file in main configuration'));
+        if ($this->file == '') {
+            throw new NagVisException(
+                l(
+                    'No auth file configured. Please specify the option authorisation_multisite_file in main configuration'
+                )
+            );
+        }
 
-        if(!file_exists($this->file))
-            throw new NagVisException(l('Unable to open auth file ([FILE]).',
-                                                Array('FILE' => $this->file)));
+        if (!file_exists($this->file)) {
+            throw new NagVisException(l('Unable to open auth file ([FILE]).', ['FILE' => $this->file]));
+        }
 
         $this->readFile();
     }
 
-    private function getPermissions($username) {
+    /**
+     * @param string $username
+     * @return array[]
+     */
+    private function getPermissions($username)
+    {
         # Add implicit permissions. These are basic permissions
         # which are needed for most users.
-        $perms =  array(
-            array('Overview',  'view',               '*'),
-            array('General',   'getContextTemplate', '*'),
-            array('General',   'getHoverTemplate',   '*'),
-            array('User',      'setOption',          '*'),
-            array('Multisite', 'getMaps',            '*'),
-        );
+        $perms =  [
+            ['Overview',  'view',               '*'],
+            ['General',   'getContextTemplate', '*'],
+            ['General',   'getHoverTemplate',   '*'],
+            ['User',      'setOption',          '*'],
+            ['Multisite', 'getMaps',            '*'],
+        ];
 
         # Gather NagVis related permissions
-        $nagvis_permissions = array();
+        $nagvis_permissions = [];
         global $mk_roles;
-        foreach ($mk_roles AS $role_id => $permissions) {
-            foreach ($permissions AS $perm_id) {
-                if (strpos($perm_id, 'nagvis.') === 0) {
+        foreach ($mk_roles as $role_id => $permissions) {
+            foreach ($permissions as $perm_id) {
+                if (str_starts_with($perm_id, 'nagvis.')) {
                     $key = substr($perm_id, 7);
                     if (!isset($nagvis_permissions[$key])) {
                         $nagvis_permissions[$key] = null;
@@ -67,8 +87,8 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         }
 
         # Loop the multisite NagVis related permissions and add them
-        foreach($nagvis_permissions AS $p => $_unused) {
-            if(may($username, 'nagvis.'.$p)) {
+        foreach ($nagvis_permissions as $p => $_unused) {
+            if (may($username, 'nagvis.' . $p)) {
                 $parts = explode('_', $p);
                 if (count($parts) == 3) {
                     // Add native multisite permissions
@@ -77,8 +97,8 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
                     // Special permissions with two parts are controlling the permissions
                     // on the maps the user is explicitly permitted for by its contactgroup
                     // memberships
-                    foreach (permitted_maps($username) AS $map_name) {
-                        $perms[] = array_merge($parts, array($map_name));
+                    foreach (permitted_maps($username) as $map_name) {
+                        $perms[] = array_merge($parts, [$map_name]);
                     }
                 }
             }
@@ -87,71 +107,119 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         return $perms;
     }
 
-    private function readFile() {
+    /**
+     * @return void
+     */
+    private function readFile()
+    {
         require_once($this->file);
-        $this->permissions = array();
-        foreach(all_users() AS $username => $user) {
-            $this->permissions[$username] = array(
+        $this->permissions = [];
+        foreach (all_users() as $username => $user) {
+            $this->permissions[$username] = [
                 'permissions' => $this->getPermissions($username),
                 'language'    => $user['language'],
-            );
+            ];
         }
     }
 
-    public function getUserRoles($userId) {
-        return Array();
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function getUserRoles($userId)
+    {
+        return [];
     }
 
-    public function getAllRoles() {
-        return Array();
+    /**
+     * @return array
+     */
+    public function getAllRoles()
+    {
+        return [];
     }
 
-    public function getRoleId($sRole) {
+    /**
+     * @param string $sRole
+     * @return false
+     */
+    public function getRoleId($sRole)
+    {
         return false;
     }
 
-    public function getAllPerms() {
-        return array();
+    /**
+     * @return array
+     */
+    public function getAllPerms()
+    {
+        return [];
     }
 
-    public function getRolePerms($roleId) {
-        return array();
+    /**
+     * @param int $roleId
+     * @return array
+     */
+    public function getRolePerms($roleId)
+    {
+        return [];
     }
 
-    public function checkRoleExists($name) {
+    /**
+     * @param string $name
+     * @return false
+     */
+    public function checkRoleExists($name)
+    {
         return false;
     }
 
-    public function parsePermissions($sUsername = null) {
+    /**
+     * @param string $sUsername
+     * @return array
+     */
+    public function parsePermissions($sUsername = null)
+    {
         global $AUTH;
-        if($sUsername === null) {
+        if ($sUsername === null) {
             $username = $AUTH->getUser();
         } else {
             $username = $sUsername;
         }
 
-        if(!isset($this->permissions[$username])
-           || !isset($this->permissions[$username]['permissions']))
-            return array();
-    
+        if (
+            !isset($this->permissions[$username])
+            || !isset($this->permissions[$username]['permissions'])
+        ) {
+            return [];
+        }
+
         # Array ( [0] => Overview [1] => view [2] => * )
-        $perms = Array();
-        foreach($this->permissions[$username]['permissions'] AS $value) {
+        $perms = [];
+        foreach ($this->permissions[$username]['permissions'] as $value) {
             // Module entry
-            if(!isset($perms[$value[0]]))
-                $perms[$value[0]] = array();
-            
-            if(!isset($perms[$value[0]][$value[1]]))
-                $perms[$value[0]][$value[1]] = array();
-            
-            if(!isset($perms[$value[0]][$value[1]][$value[2]]))
-                $perms[$value[0]][$value[1]][$value[2]] = array();
+            if (!isset($perms[$value[0]])) {
+                $perms[$value[0]] = [];
+            }
+
+            if (!isset($perms[$value[0]][$value[1]])) {
+                $perms[$value[0]][$value[1]] = [];
+            }
+
+            if (!isset($perms[$value[0]][$value[1]][$value[2]])) {
+                $perms[$value[0]][$value[1]][$value[2]] = [];
+            }
         }
 
         return $perms;
     }
 
-    public function getUserId($username) {
+    /**
+     * @param string $username
+     * @return string
+     */
+    public function getUserId($username)
+    {
         return $username;
     }
 
@@ -160,40 +228,89 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
      * It is simply read-only.
      */
 
-    public function renameMapPermissions($old_name, $new_name) {
+    /**
+     * @param string $old_name
+     * @param string $new_name
+     * @return false
+     */
+    public function renameMapPermissions($old_name, $new_name)
+    {
         return false;
     }
 
-    public function deletePermission($mod, $name) {
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return false
+     */
+    public function deletePermission($mod, $name)
+    {
         return false;
     }
 
-    public function createPermission($mod, $name) {
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return false
+     */
+    public function createPermission($mod, $name)
+    {
         return false;
     }
 
-    public function roleUsedBy($roleId) {
+    /**
+     * @param int $roleId
+     * @return false
+     */
+    public function roleUsedBy($roleId)
+    {
         return false;
     }
 
-    public function deleteRole($roleId) {
+    /**
+     * @param int $roleId
+     * @return false
+     */
+    public function deleteRole($roleId)
+    {
         return false;
     }
 
-    public function deleteUser($userId) {
+    /**
+     * @param int $userId
+     * @return false
+     */
+    public function deleteUser($userId)
+    {
         return false;
     }
 
-    public function updateUserRoles($userId, $roles) {
+    /**
+     * @param int $userId
+     * @param array $roles
+     * @return false
+     */
+    public function updateUserRoles($userId, $roles)
+    {
         return false;
     }
 
-    public function updateRolePerms($roleId, $perms) {
+    /**
+     * @param int $roleId
+     * @param array $perms
+     * @return false
+     */
+    public function updateRolePerms($roleId, $perms)
+    {
         return false;
     }
 
-    public function createRole($name) {
+    /**
+     * @param string $name
+     * @return false
+     */
+    public function createRole($name)
+    {
         return false;
     }
 }
-?>

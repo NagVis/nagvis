@@ -23,14 +23,28 @@
  *
  *****************************************************************************/
 
-class CoreLogonMultisite extends CoreLogonModule {
+class CoreLogonMultisite extends CoreLogonModule
+{
+    /** @var string|null */
     private $htpasswdPath;
+
+    /** @var string|null */
     private $serialsPath;
+
+    /** @var string|null */
     private $secretPath;
+
+    /** @var int */
     private $cookieVersion;
+
+    /** @var string */
     private $authFile;
 
-    public function __construct() {
+    /**
+     * @throws NagVisException
+     */
+    public function __construct()
+    {
         $this->htpasswdPath  = cfg('global', 'logon_multisite_htpasswd');
         $this->serialsPath   = cfg('global', 'logon_multisite_serials');
         $this->secretPath    = cfg('global', 'logon_multisite_secret');
@@ -39,27 +53,34 @@ class CoreLogonMultisite extends CoreLogonModule {
         // When the auth.serial file exists, use this instead of the htpasswd
         // for validating the cookie. The structure of the file is equal, so
         // the same code can be used.
-        if(file_exists($this->serialsPath)) {
+        if (file_exists($this->serialsPath)) {
             $this->authFile = 'serial';
 
-        } elseif(file_exists($this->htpasswdPath)) {
+        } elseif (file_exists($this->htpasswdPath)) {
             $this->authFile = 'htpasswd';
 
         } else {
-            throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
-                                       .'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
-                          array('HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath)));
+            throw new NagVisException(l(
+                'LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
+                    . 'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
+                ['HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath]
+            ));
         }
 
-        if(!file_exists($this->secretPath)) {
+        if (!file_exists($this->secretPath)) {
             $this->redirectToLogin();
         }
     }
 
-    private function loadAuthFile($path) {
-        $creds = array();
-        foreach(file($path) AS $line) {
-            if(strpos($line, ':') !== false) {
+    /**
+     * @param string $path
+     * @return array
+     */
+    private function loadAuthFile($path)
+    {
+        $creds = [];
+        foreach (file($path) as $line) {
+            if (str_contains($line, ':')) {
                 list($username, $secret) = explode(':', $line, 2);
                 $creds[$username] = rtrim($secret);
             }
@@ -67,27 +88,59 @@ class CoreLogonMultisite extends CoreLogonModule {
         return $creds;
     }
 
-    private function loadSecret() {
+    /**
+     * @return false|string
+     */
+    private function loadSecret()
+    {
         return file_get_contents($this->secretPath);
     }
 
-    private function generateHash($username, $session_id, $user_secret) {
+    /**
+     * @param string $username
+     * @param string $session_id
+     * @param string $user_secret
+     * @return string
+     */
+    private function generateHash($username, $session_id, $user_secret)
+    {
         $secret = $this->loadSecret();
-        return hash_hmac("sha256", $username . $session_id. $user_secret, $secret);
+        return hash_hmac("sha256", $username . $session_id . $user_secret, $secret);
     }
 
-    private function generatePre22Hash($username, $session_id, $user_secret) {
+    /**
+     * @param string $username
+     * @param string $session_id
+     * @param string $user_secret
+     * @return string
+     */
+    private function generatePre22Hash($username, $session_id, $user_secret)
+    {
         $secret = $this->loadSecret();
-        return hash("sha256", $username . $session_id. $user_secret . $secret);
+        return hash("sha256", $username . $session_id . $user_secret . $secret);
     }
 
-    private function generatePre20Hash($username, $issue_time, $user_secret) {
+    /**
+     * @param string $username
+     * @param string $issue_time
+     * @param string $user_secret
+     * @return string
+     */
+    private function generatePre20Hash($username, $issue_time, $user_secret)
+    {
         $secret = $this->loadSecret();
         return md5($username . $issue_time . $user_secret . $secret);
     }
 
-    private function checkAuthCookie($cookieName) {
-        if(!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
+    /**
+     * @param string $cookieName
+     * @return mixed|string
+     * @throws NagVisException
+     * @throws Exception
+     */
+    private function checkAuthCookie($cookieName)
+    {
+        if (!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
             throw new Exception();
         }
 
@@ -98,18 +151,19 @@ class CoreLogonMultisite extends CoreLogonModule {
         // 2nd field is "issue time" in pre 2.0 cookies. Now it's the session ID
         list($username, $sessionId, $cookieHash) = explode(':', $cookieValue, 3);
 
-        if($this->authFile == 'htpasswd')
+        if ($this->authFile == 'htpasswd') {
             $users = $this->loadAuthFile($this->htpasswdPath);
-        else
+        } else {
             $users = $this->loadAuthFile($this->serialsPath);
+        }
 
-        if(!isset($users[$username])) {
+        if (!isset($users[$username])) {
             throw new Exception();
         }
         $user_secret = $users[$username];
 
-	if ($this->cookieVersion < 1) {
-	    // Older Checkmk versions do not set the cookieVersion, therefore we guess based on the length.
+        if ($this->cookieVersion < 1) {
+            // Older Checkmk versions do not set the cookieVersion, therefore we guess based on the length.
 
             // Checkmk 2.0 changed the following:
             // a) 2nd field from "issue time" to session ID
@@ -118,17 +172,16 @@ class CoreLogonMultisite extends CoreLogonModule {
             // to both cookie formats.
             $is_pre_20_cookie = strlen($cookieHash) == 32;
 
-            if ($is_pre_20_cookie)
-                $hash = $this->generatePre20Hash($username, $sessionId, (string) $user_secret);
-            else
-                $hash = $this->generatePre22Hash($username, $sessionId, (string) $user_secret);
-	}
-	elseif ($this->cookieVersion == 1) {
+            if ($is_pre_20_cookie) {
+                $hash = $this->generatePre20Hash($username, $sessionId, (string)$user_secret);
+            } else {
+                $hash = $this->generatePre22Hash($username, $sessionId, (string)$user_secret);
+            }
+        } elseif ($this->cookieVersion == 1) {
             $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
-	}
-	else {
+        } else {
             throw new NagVisException(l('The Multisite Cookie version is not supported'));
-	}
+        }
 
         // Validate the hash
         if (!hash_equals($hash, $cookieHash)) {
@@ -162,11 +215,15 @@ class CoreLogonMultisite extends CoreLogonModule {
         return $username;
     }
 
-    private function checkAuth() {
+    /**
+     * @return string
+     */
+    private function checkAuth()
+    {
         // Loop all cookies trying to fetch a valid authentication
         // cookie for this installation
-        foreach(array_keys($_COOKIE) AS $cookieName) {
-            if(substr($cookieName, 0, 5) != 'auth_') {
+        foreach (array_keys($_COOKIE) as $cookieName) {
+            if (!str_starts_with($cookieName, 'auth_')) {
                 continue;
             }
             try {
@@ -177,46 +234,62 @@ class CoreLogonMultisite extends CoreLogonModule {
                 session_write_close();
 
                 return $name;
-            } catch(Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
         return '';
     }
 
-    private function redirectToLogin() {
+    /**
+     * @return void
+     * @throws NagVisException
+     */
+    private function redirectToLogin()
+    {
         // Do not redirect on ajax calls. Print out errors instead
-        if(CONST_AJAX) {
+        if (CONST_AJAX) {
             throw new NagVisException(l('LogonMultisite: Not authenticated.'));
         }
         // FIXME: Get the real path to multisite
         header('Location:../../../check_mk/login.py?_origtarget=' . urlencode($_SERVER['REQUEST_URI']));
     }
 
-    public function check($printErr = true) {
+    /**
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
+    public function check($printErr = true)
+    {
         global $AUTH, $CORE;
 
         // Try to auth using the environment auth
-        $ENV= new CoreLogonEnv();
-        if($ENV->check(false) === true) {
+        $ENV = new CoreLogonEnv();
+        if ($ENV->check(false) === true) {
             return true;
         }
 
         $username = $this->checkAuth();
-        if($username === '') {
+        if ($username === '') {
             $this->redirectToLogin();
             return false;
         }
 
         // Check if the user exists
-        if($this->verifyUserExists($username,
-                        cfg('global', 'logon_multisite_createuser'),
-                        cfg('global', 'logon_multisite_createrole'),
-                        $printErr) === false) {
+        if (
+            $this->verifyUserExists(
+                $username,
+                cfg('global', 'logon_multisite_createuser'),
+                cfg('global', 'logon_multisite_createrole'),
+                $printErr
+            ) === false
+        ) {
             return false;
         }
 
         $AUTH->setTrustUsername(true);
         $AUTH->setLogoutPossible(false);
-        $AUTH->passCredentials(Array('user' => $username));
+        $AUTH->passCredentials(['user' => $username]);
 
         $authenticated = $AUTH->isAuthenticated();
 
@@ -227,5 +300,3 @@ class CoreLogonMultisite extends CoreLogonModule {
         return $authenticated;
     }
 }
-
-?>

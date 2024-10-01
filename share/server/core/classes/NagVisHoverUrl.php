@@ -25,19 +25,27 @@
 /**
  * @author    Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisHoverUrl {
+class NagVisHoverUrl
+{
+    /** @var GlobalCore */
     private $CORE;
 
+    /** @var string */
     private $url;
+
+    /** @var string */
     private $code;
 
     /**
      * Class Constructor
      *
-     * @param     GlobalCore     $CORE
+     * @param GlobalCore $CORE
+     * @param string $url
+     * @throws NagVisException
      * @author     Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($CORE, $url) {
+    public function __construct($CORE, $url)
+    {
         $this->CORE = $CORE;
         $this->url = $url;
         $this->code = '';
@@ -48,13 +56,13 @@ class NagVisHoverUrl {
     }
 
     /**
-     * PUBLIC __toString()
-     *
      * "Magic method" returns the contents of the hover url
      *
+     * @return string
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->code;
     }
 
@@ -63,9 +71,12 @@ class NagVisHoverUrl {
      *
      * Reads the given hover url form an object and forms it to a readable format for the hover box
      *
+     * @return void
+     * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readHoverUrl() {
+    private function readHoverUrl()
+    {
         /* Context is supported in php >= 5.0
         * This could be usefull someday...
         * $http_opts = array(
@@ -84,33 +95,57 @@ class NagVisHoverUrl {
         // Only allow urls not paths for security reasons
         // Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
         $aUrl = parse_url($this->url);
-        if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '' || ($aUrl['scheme'] != 'http' && $aUrl['scheme'] != 'https'))
-            throw new NagVisException(l('problemReadingUrl', Array('URL' => $this->url,
-                                                                   'MSG' => l('Not allowed url'))));
+        if (
+            !isset($aUrl['scheme'])
+            || ($aUrl['scheme'] != 'http' && $aUrl['scheme'] != 'https')
+        ) {
+            throw new NagVisException(l('problemReadingUrl', [
+                'URL' => $this->url,
+                'MSG' => l('Not allowed url')
+            ]));
+        }
 
 
-        if(!$content = file_get_contents($this->url)) {
-            throw new NagVisException(l('couldNotGetHoverUrl', Array('URL' => $this->url)));
+        if (!$content = file_get_contents($this->url)) {
+            throw new NagVisException(l('couldNotGetHoverUrl', ['URL' => $this->url]));
         }
 
         // Try to recode non utf-8 encoded responses to utf-8. Later used
         // json_encode() needs utf-8 encoded code
-        $content = mb_convert_encoding($content, 'UTF-8',
-            mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true)); 
+        $content = mb_convert_encoding(
+            $content,
+            'UTF-8',
+            mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true)
+        );
 
         $this->code = $content;
     }
 
 
     /**
-     * PRIVATE cleanCode()
-     *
      * Replace unwanted things from the code
      *
+     * @return void
      * @author     Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function cleanCode() {
-        $this->code = str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$this->code)))));
+    private function cleanCode()
+    {
+        $this->code = str_replace(
+            '"',
+            '\\\'',
+            str_replace(
+                '\'',
+                '\\\'',
+                str_replace(
+                    "\t",
+                    '',
+                    str_replace(
+                        "\n",
+                        '',
+                        str_replace("\r\n", '', $this->code)
+                    )
+                )
+            )
+        );
     }
 }
-?>

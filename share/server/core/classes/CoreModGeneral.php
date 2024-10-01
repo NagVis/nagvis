@@ -25,76 +25,103 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModGeneral extends CoreModule {
+class CoreModGeneral extends CoreModule
+{
+    /** @var GlobalCore */
     private $CORE;
 
-    public function __construct(GlobalCore $CORE) {
+    /**
+     * @param GlobalCore $CORE
+     */
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'General';
         $this->CORE = $CORE;
 
-        $this->aActions = Array(
+        $this->aActions = [
             'getHoverTemplate'   => REQUIRES_AUTHORISATION,
             'getContextTemplate' => REQUIRES_AUTHORISATION,
             'getHoverUrl'        => REQUIRES_AUTHORISATION,
-        );
+        ];
     }
 
-    public function handleAction() {
+    /**
+     * @return false|string
+     * @throws NagVisException
+     */
+    public function handleAction()
+    {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'getHoverTemplate':
                     $sReturn = $this->getTemplate('hover');
-                break;
+                    break;
                 case 'getContextTemplate':
                     $sReturn = $this->getTemplate('context');
-                break;
+                    break;
                 case 'getHoverUrl':
                     $sReturn = $this->getHoverUrl();
-                break;
+                    break;
             }
         }
 
         return $sReturn;
     }
 
-    private function getTemplate($type) {
-        $arrReturn = Array();
+    /**
+     * @param string $type
+     * @return false|string
+     * @throws NagVisException
+     */
+    private function getTemplate($type)
+    {
+        $arrReturn = [];
 
         // Parse view specific uri params
-        $aOpts = $this->getCustomOptions(Array('name' => MATCH_STRING_NO_SPACE));
+        $aOpts = $this->getCustomOptions(['name' => MATCH_STRING_NO_SPACE]);
 
-        foreach($aOpts['name'] AS $sName) {
-            if($type == 'hover')
+        foreach ($aOpts['name'] as $sName) {
+            if ($type == 'hover') {
                 $OBJ = new NagVisHoverMenu($this->CORE, $sName);
-            else
+            } else {
                 $OBJ = new NagVisContextMenu($this->CORE, $sName);
+            }
 
-            $arrReturn[] = Array('name'     => $sName,
-                                 'css_file' => $OBJ->getCssFile(),
-                                 'code'     => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString())));
+            $arrReturn[] = [
+                'name'     => $sName,
+                'css_file' => $OBJ->getCssFile(),
+                'code'     => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString()))
+            ];
         }
 
         return json_encode($arrReturn);
     }
 
-    private function getHoverUrl() {
-        $arrReturn = Array();
+    /**
+     * @return string
+     * @throws NagVisException
+     */
+    private function getHoverUrl()
+    {
+        $arrReturn = [];
 
         // Parse view specific uri params
-        $aOpts = $this->getCustomOptions(Array('url' => MATCH_STRING_URL));
+        $aOpts = $this->getCustomOptions(['url' => MATCH_STRING_URL]);
 
-        foreach($aOpts['url'] AS $sUrl) {
+        foreach ($aOpts['url'] as $sUrl) {
             $OBJ = new NagVisHoverUrl($this->CORE, $sUrl);
-            $arrReturn[] = Array('url' => $sUrl, 'code' => $OBJ->__toString());
+            $arrReturn[] = ['url' => $sUrl, 'code' => $OBJ->__toString()];
         }
 
         $result = json_encode($arrReturn);
-        if ($result === false)
-            throw new NagVisException(l('Data not parsable: [URL] ([MSG])',
-                array('URL' => htmlentities($sUrl, ENT_COMPAT, 'UTF-8'), 'MSG' => json_last_error_msg())));
+        if ($result === false) {
+            throw new NagVisException(l(
+                'Data not parsable: [URL] ([MSG])',
+                ['URL' => htmlentities($sUrl, ENT_COMPAT, 'UTF-8'), 'MSG' => json_last_error_msg()]
+            ));
+        }
         return $result;
     }
 }
-?>

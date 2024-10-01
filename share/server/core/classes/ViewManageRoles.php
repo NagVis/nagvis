@@ -22,42 +22,59 @@
  *
  *****************************************************************************/
 
-class ViewManageRoles {
+class ViewManageRoles
+{
+    /** @var string|null */
     private $error = null;
 
-    private function addForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function addForm()
+    {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
-        echo '<h2>'.l('Create Role').'</h2>';
+        echo '<h2>' . l('Create Role') . '</h2>';
 
         if (is_action() && post('mode') == 'create') {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please specify a name'));
+                }
 
-                if (strlen($name) > AUTH_MAX_ROLENAME_LENGTH)
+                if (strlen($name) > AUTH_MAX_ROLENAME_LENGTH) {
                     throw new FieldInputError('name', l('This name is too long'));
+                }
 
-                if (!preg_match(MATCH_ROLE_NAME, $name))
-                    throw new FieldInputError('name', l('Invalid value provided. Needs to match: [P].',
-                                                                          array('P' => MATCH_ROLE_NAME)));
+                if (!preg_match(MATCH_ROLE_NAME, $name)) {
+                    throw new FieldInputError(
+                        'name',
+                        l('Invalid value provided. Needs to match: [P].', ['P' => MATCH_ROLE_NAME])
+                    );
+                }
 
-                if ($AUTHORISATION->checkRoleExists($name))
+                if ($AUTHORISATION->checkRoleExists($name)) {
                     throw new FieldInputError('name', l('A role with this name already exists.'));
+                }
 
-                if ($AUTHORISATION->createRole($name))
+                if ($AUTHORISATION->createRole($name)) {
                     success(l('The role has been created.'));
-                else
+                } else {
                     throw new NagVisException('Failed to create the role');
+                }
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -66,7 +83,7 @@ class ViewManageRoles {
         hidden('mode', 'create');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         input('name');
         echo '</td></tr>';
@@ -76,31 +93,43 @@ class ViewManageRoles {
         form_end();
     }
 
-    private function modifyForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function modifyForm()
+    {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
-        echo '<h2>'.l('Modify Role').'</h2>';
+        echo '<h2>' . l('Modify Role') . '</h2>';
 
         $role_id = submitted('edit') ? post('role_id') : null;
 
         if (is_action() && post('mode') == 'edit') {
             try {
-                if ($role_id === null || $role_id === '')
+                if ($role_id === null || $role_id === '') {
                     throw new FieldInputError('role_id', l('Please choose a role to edit.'));
-                if (!is_numeric($role_id))
+                }
+                if (!is_numeric($role_id)) {
                     throw new FieldInputError('role_id', l('Invalid value provided.'));
+                }
                 $role_id = intval($role_id);
 
                 $found = false;
-                foreach ($AUTHORISATION->getAllRoles() AS $role)
-                    if ($role['roleId'] == $role_id)
+                foreach ($AUTHORISATION->getAllRoles() as $role) {
+                    if ($role['roleId'] == $role_id) {
                         $found = true;
-                if (!$found)
+                    }
+                }
+                if (!$found) {
                     throw new NagVisException('Invalid role id provided');
+                }
 
                 // Load permissions from parameters
-                $perms = Array();
-                foreach (array_keys($_POST) AS $key) {
-                    if(strpos($key, 'perm_') !== false) {
+                $perms = [];
+                foreach (array_keys($_POST) as $key) {
+                    if (str_contains($key, 'perm_')) {
                         $key_parts = explode('_', $key);
                         $perm_id = $key_parts[1];
                         $perms[$perm_id] = get_checkbox($key);
@@ -109,19 +138,21 @@ class ViewManageRoles {
 
                 scroll_up(); // On success, always scroll to top of page
 
-                if ($AUTHORISATION->updateRolePerms($role_id, $perms))
+                if ($AUTHORISATION->updateRolePerms($role_id, $perms)) {
                     success(l('The permissions for this role have been updated.'));
-                else
+                } else {
                     throw new NagVisException(l('Problem while updating role permissions.'));
+                }
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -130,11 +161,12 @@ class ViewManageRoles {
         hidden('mode', 'edit');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Select Role').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Select Role') . '</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
-        foreach ($AUTHORISATION->getAllRoles() AS $role)
+        $choices = ['' => l('Please choose')];
+        foreach ($AUTHORISATION->getAllRoles() as $role) {
             $choices[$role['roleId']] = $role['name'];
+        }
         select('role_id', $choices, '', 'updateForm(this.form)');
         echo '</td></tr>';
         echo '</table>';
@@ -144,31 +176,39 @@ class ViewManageRoles {
         form_end();
     }
 
-    private function renderPermissions($role_id) {
+    /**
+     * @param string $role_id
+     * @return void
+     */
+    private function renderPermissions($role_id)
+    {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
-        if (!$role_id)
+        if (!$role_id) {
             return;
+        }
 
-        $sections = array(
+        $sections = [
             'general'   => l('General'),
             'maps'      => l('Maps'),
             'rotations' => l('Rotations'),
-        );
+        ];
 
-        echo '<h3>'.l('Permissions').'</h3>';
+        echo '<h3>' . l('Permissions') . '</h3>';
         $open = get_open_section('general');
         render_section_navigation($open, $sections);
 
-        $permissions_by_section = array(
-            'general'   => array(),
-            'maps'      => array(),
-            'rotations' => array(),
-        );
-        foreach ($AUTHORISATION->getAllVisiblePerms() AS $perm) {
+        $permissions_by_section = [
+            'general'   => [],
+            'maps'      => [],
+            'rotations' => [],
+        ];
+        foreach ($AUTHORISATION->getAllVisiblePerms() as $perm) {
             if ($perm['mod'] == 'Map' && $perm['act'] != 'add' && $perm['act'] != 'manage') {
                 $map_name = $perm['obj'];
-                if (!isset($permissions_by_section['maps'][$map_name]))
-                    $permissions_by_section['maps'][$map_name] = array();
+                if (!isset($permissions_by_section['maps'][$map_name])) {
+                    $permissions_by_section['maps'][$map_name] = [];
+                }
                 $permissions_by_section['maps'][$map_name][$perm['act']] = $perm;
             } elseif ($perm['mod'] == 'Rotation') {
                 $permissions_by_section['rotations'][] = $perm;
@@ -178,33 +218,35 @@ class ViewManageRoles {
         }
 
         $permitted = $AUTHORISATION->getRolePerms($role_id);
-        foreach ($permissions_by_section AS $sec => $permissions) {
+        foreach ($permissions_by_section as $sec => $permissions) {
             render_section_start($sec, $open);
-            if ($sec == 'maps')
+            if ($sec == 'maps') {
                 $this->renderMapsSection($permissions, $permitted);
-            else
+            } else {
                 $this->renderOtherSection($permissions, $permitted);
+            }
             render_section_end();
         }
     }
 
-    function renderMapsSection($permissions, $permitted) {
+    public function renderMapsSection($permissions, $permitted)
+    {
         echo '<table class="mytable perms">';
         echo '<tr>';
-        echo '<th>'.l('Map').'</th>';
-        echo '<th>'.l('View').'</th>';
-        echo '<th>'.l('Edit').'</th>';
-        echo '<th>'.l('Delete').'</th>';
+        echo '<th>' . l('Map') . '</th>';
+        echo '<th>' . l('View') . '</th>';
+        echo '<th>' . l('Edit') . '</th>';
+        echo '<th>' . l('Delete') . '</th>';
         echo '</tr>';
-        foreach ($permissions AS $map_name => $map_perms) {
+        foreach ($permissions as $map_name => $map_perms) {
             echo '<tr>';
-            echo '<td>'.$map_name.'</td>';
-            $levels = array("view", "edit", "delete");
+            echo '<td>' . $map_name . '</td>';
+            $levels = ["view", "edit", "delete"];
             foreach ($levels as $level) {
                 $perm = $map_perms[$level];
-                unset($_REQUEST['perm_'.$perm['permId']]);
+                unset($_REQUEST['perm_' . $perm['permId']]);
                 echo '<td class=perm>';
-                checkbox('perm_'.$perm['permId'], isset($permitted[$perm['permId']]));
+                checkbox('perm_' . $perm['permId'], isset($permitted[$perm['permId']]));
                 echo '</td>';
             }
             echo '</tr>';
@@ -212,60 +254,80 @@ class ViewManageRoles {
         echo '</table>';
     }
 
-    function renderOtherSection($permissions, $permitted) {
+    /**
+     * @param array $permissions
+     * @param array$permitted
+     * @return void
+     */
+    public function renderOtherSection($permissions, $permitted)
+    {
         echo '<table class="mytable perms">';
         echo '<tr>';
-        echo '<th>'.l('Module').'</th>';
-        echo '<th>'.l('Action').'</th>';
-        echo '<th>'.l('Object').'</th>';
-        echo '<th>'.l('Permitted').'</th>';
+        echo '<th>' . l('Module') . '</th>';
+        echo '<th>' . l('Action') . '</th>';
+        echo '<th>' . l('Object') . '</th>';
+        echo '<th>' . l('Permitted') . '</th>';
         echo '</tr>';
-        foreach ($permissions AS $perm) {
-            unset($_REQUEST['perm_'.$perm['permId']]);
+        foreach ($permissions as $perm) {
+            unset($_REQUEST['perm_' . $perm['permId']]);
             echo '<tr>';
-            echo '<td>'.$perm['mod'].'</td>';
-            echo '<td>'.$perm['act'].'</td>';
-            echo '<td>'.$perm['obj'].'</td>';
+            echo '<td>' . $perm['mod'] . '</td>';
+            echo '<td>' . $perm['act'] . '</td>';
+            echo '<td>' . $perm['obj'] . '</td>';
             echo '<td class=perm>';
-            checkbox('perm_'.$perm['permId'], isset($permitted[$perm['permId']]));
+            checkbox('perm_' . $perm['permId'], isset($permitted[$perm['permId']]));
             echo '</td>';
             echo '</tr>';
         }
         echo '</table>';
     }
 
-    private function deleteForm() {
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    private function deleteForm()
+    {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
-        echo '<h2>'.l('Delete Role').'</h2>';
+        echo '<h2>' . l('Delete Role') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
                 $role_id = post('role_id');
-                if ($role_id === null || $role_id === '')
+                if ($role_id === null || $role_id === '') {
                     throw new FieldInputError('role_id', l('Please choose a role to delete.'));
-                if (!is_numeric($role_id))
+                }
+                if (!is_numeric($role_id)) {
                     throw new FieldInputError('role_id', l('Invalid value provided.'));
+                }
                 $role_id = intval($role_id);
 
                 // Check not to delete any referenced role
                 $used_by = $AUTHORISATION->roleUsedBy($role_id);
-                if(count($used_by) > 0)
-                    throw new NagVisException(l('Not deleting this role, the role is in use by the users [U].',
-                                            array('U' => implode(', ', $used_by))));
+                if (count($used_by) > 0) {
+                    throw new NagVisException(l(
+                        'Not deleting this role, the role is in use by the users [U].',
+                        ['U' => implode(', ', $used_by)]
+                    ));
+                }
 
-                if ($AUTHORISATION->deleteRole($role_id))
+                if ($AUTHORISATION->deleteRole($role_id)) {
                     success(l('The role has been deleted.'));
-                else
+                } else {
                     throw new NagVisException(l('Problem while deleting the role.'));
+                }
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                } else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -274,11 +336,12 @@ class ViewManageRoles {
         hidden('mode', 'delete');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
-        foreach ($AUTHORISATION->getAllRoles() AS $role)
+        $choices = ['' => l('Please choose')];
+        foreach ($AUTHORISATION->getAllRoles() as $role) {
             $choices[$role['roleId']] = $role['name'];
+        }
         select('role_id', $choices);
         echo '</td></tr>';
 
@@ -288,7 +351,14 @@ class ViewManageRoles {
         form_end();
     }
 
-    public function parse() {
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
+    public function parse()
+    {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         ob_start();
 
@@ -303,4 +373,3 @@ class ViewManageRoles {
         return ob_get_clean();
     }
 }
-?>
