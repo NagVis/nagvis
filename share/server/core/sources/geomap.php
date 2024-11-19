@@ -163,6 +163,14 @@ function list_geomap_source_files() {
     return $CORE->getAvailableGeomapSourceFiles();
 }
 
+function list_geomap_object_types() {
+    return Array(
+        'host'         => l('Hosts'),
+        'hostgroup'    => l('Hostgroup'),
+        'servicegroup' => l('Servicegroup'),
+    );
+}
+
 // Register this source as being selectable by the user
 global $selectable;
 $selectable = true;
@@ -173,6 +181,7 @@ $viewParams = array(
     'geomap' => array(
         'backend_id',
         'geomap_type',
+        'geomap_object_types',
         'geomap_zoom',
         'geomap_border',
         'source_type',
@@ -221,6 +230,13 @@ $configVars = array(
         'default'    => 0.25,
         'match'      => MATCH_FLOAT,
     ),
+    'geomap_object_types' => Array(
+        'must'       => false,
+        'default'    => 'host',
+        'field_type' => 'dropdown',
+        'match'      => MATCH_GEO_OBJECT_TYPES,
+        'list'       => 'list_geomap_object_types',
+    ),
 );
 
 // Assign config variables to specific object types
@@ -228,11 +244,12 @@ global $configVarMap;
 $configVarMap = array(
     'global' => array(
         'geomap' => array(
-            'geomap_type'   => null,
-            'geomap_zoom'   => null,
-            'source_type'   => null,
-            'source_file'   => null,
-            'geomap_border' => null,
+            'geomap_type'         => null,
+            'geomap_zoom'         => null,
+            'source_type'         => null,
+            'source_file'         => null,
+            'geomap_border'       => null,
+            'geomap_object_types' => null,
         ),
     ),
 );
@@ -299,6 +316,7 @@ function validate_geomap_server_base_url($url) {
 function process_geomap($MAPCFG, $map_name, &$map_config) {
     $params = $MAPCFG->getSourceParams();
     list($image_name, $image_path, $data_path) = geomap_files($params);
+    $type = $params['geomap_object_types'];
 
     // Load the list of locations
     $locations = geomap_get_locations($params);
@@ -320,15 +338,19 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     // Now add the objects to the map
     foreach($locations AS $loc) {
-        $object_id = $MAPCFG->genObjId($loc['name']);
+        if (isset($loc['backend_id'])) {
+            $object_id = $MAPCFG->genObjId($loc['backend_id'].'~~'.$loc['name']);
+        } else {
+            $object_id = $MAPCFG->genObjId($loc['name']);
+        }
         $map_config[$object_id] = array(
-            'type'      => 'host',
-            'host_name' => $loc['name'],
-            'iconset'   => $iconset,
-            'object_id' => $object_id,
-            'alias'     => $loc['alias'],
-            'lat'       => $loc['lat'],
-            'long'      => $loc['long'],
+            'type'        => $type,
+            $type.'_name' => $loc['name'],
+            'iconset'     => $iconset,
+            'object_id'   => $object_id,
+            'alias'       => $loc['alias'],
+            'lat'         => $loc['lat'],
+            'long'        => $loc['long'],
         );
 
         if (isset($loc['backend_id'])) {
