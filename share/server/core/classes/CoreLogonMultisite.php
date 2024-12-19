@@ -138,7 +138,7 @@ class CoreLogonMultisite extends CoreLogonModule {
         // Check session periods validity
         $site = getenv('OMD_SITE');
         $port = $_SERVER['SERVER_PORT'];
-        $url = "http://localhost:$port/$site/check_mk/api/1.0/version";
+        $url = "http://127.0.0.1:$port/$site/check_mk/api/1.0/version";
         
         $headers = [
             'Content-type: application/json',
