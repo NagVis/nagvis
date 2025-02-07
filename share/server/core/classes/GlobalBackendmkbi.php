@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * GlobalBackendmkbi.php - backend class for connecting NagVis directly
- *                             to Check_MK Business Intelligence via JSON
+ *                             to Checkmk Business Intelligence via JSON
  *
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
@@ -254,7 +254,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             return $this->getAggrElementsFromString($aggr["aggr_treestate"]);
     }
 
-    // Be compatible to Check_MK <1.2.9
+    // Be compatible to Checkmk <1.2.9
     private function getAggrElementsFromString($aggr_treestate) {
         // remove leading/trailing newlines
         $raw_states = trim($aggr_treestate);
@@ -277,7 +277,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             $element = array(
                 "title"             => $title,
                 "state"             => $bi_state,
-                // unknown infos in old Check_MK versions:
+                // unknown infos in old Checkmk versions:
                 "assumed"           => false,
                 "acknowledged"      => false,
                 "in_downtime"       => false,

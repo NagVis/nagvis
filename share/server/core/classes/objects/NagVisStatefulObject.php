@@ -395,13 +395,13 @@ class NagVisStatefulObject extends NagVisObject {
         if($this->type == 'host' || $this->type == 'service') {
             $arr['custom_variables'] = val($this->state, CUSTOM_VARS);
 
-            // Add (Check_MK) tags as array of tags (when available)
+            // Add (Checkmk) tags as array of tags (when available)
             if (isset($arr['custom_variables']['TAGS']))
                 $arr['tags'] = explode(' ', $arr['custom_variables']['TAGS']);
             else
                 $arr['tags'] = array();
 
-            // Now, to be very user friendly, we now try to use the Check_MK WATO php-api to gather
+            // Now, to be very user friendly, we now try to use the Checkmk WATO php-api to gather
             // titles and grouping information of the tags. These can, for example, be used in the hover
             // templates. This has been implemented to only work in OMD environments.
             $arr['taggroups'] = array();

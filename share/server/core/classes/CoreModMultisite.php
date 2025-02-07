@@ -104,7 +104,7 @@ class CoreModMultisite extends CoreModule {
 
     // Wraps the getMaps() function by applying a short livetime cache based
     // on the maps a user can access. This respects the map access permissions.
-    // The cache optimizes the case where a lot of users having the Check_MK
+    // The cache optimizes the case where a lot of users having the Checkmk
     // NagVis maps snapin open at the same time while most of the users have
     // equal permissions.
     private function getMapsCached() {
