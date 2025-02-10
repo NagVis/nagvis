@@ -63,7 +63,7 @@ class NagVisInfoView {
             'phpMaxExecTime' => ini_get('max_execution_time'),
             'phpMemoryLimit' => ini_get('memory_limit'),
             'phpLoadedExtensions' => implode(", ",get_loaded_extensions()),
-            'userAgent' => $_SERVER['HTTP_USER_AGENT'],
+            'userAgent' => htmlspecialchars($_SERVER['HTTP_USER_AGENT']),
             // Auth details
             'logonModule'         => cfg('global', 'logonmodule'),
             'authModule'          => cfg('global', 'authmodule'),
