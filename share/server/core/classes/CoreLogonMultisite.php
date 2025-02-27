@@ -29,12 +29,15 @@ class CoreLogonMultisite extends CoreLogonModule {
     private $secretPath;
     private $cookieVersion;
     private $authFile;
+    private $omdSiteConf;
 
     public function __construct() {
         $this->htpasswdPath  = cfg('global', 'logon_multisite_htpasswd');
         $this->serialsPath   = cfg('global', 'logon_multisite_serials');
         $this->secretPath    = cfg('global', 'logon_multisite_secret');
         $this->cookieVersion = intval(cfg('global', 'logon_multisite_cookie_version'));
+        // Path to the apache configuration
+        $this->omdSiteConf = $_SERVER['OMD_ROOT'] . '/etc/omd/site.conf';
 
         // When the auth.serial file exists, use this instead of the htpasswd
         // for validating the cookie. The structure of the file is equal, so
@@ -134,11 +137,18 @@ class CoreLogonMultisite extends CoreLogonModule {
         if (!hash_equals($hash, $cookieHash)) {
             throw new Exception();
         }
-
         // Check session periods validity
+        if (file_exists($this->omdSiteConf)) {
+            $site_conf = file_get_contents($this->omdSiteConf);
+            preg_match('/^CONFIG_APACHE_TCP_PORT=\'(\d+)\'$/m', $site_conf, $matches);
+            $port = $matches[1];
+        }
+        else {
+            $port = $_SERVER['SERVER_PORT'];
+        }
         $site = getenv('OMD_SITE');
-        $port = $_SERVER['SERVER_PORT'];
-        $url = "http://localhost:$port/$site/check_mk/api/1.0/version";
+        $host = $_SERVER['SERVER_ADDR'];
+        $url = "http://$host:$port/$site/check_mk/api/1.0/version";
         
         $headers = [
             'Content-type: application/json',
