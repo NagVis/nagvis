@@ -1,4 +1,5 @@
 1.9.45
+  * FIX: Fix XSS on support info page (Thanks to jmacario24)
 
 1.9.44
   * FIX: Fix not working cookie session timestamps validation introduced with 1.9.43 in
