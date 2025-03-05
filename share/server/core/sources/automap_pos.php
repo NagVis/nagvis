@@ -14,7 +14,10 @@ function automap_check_graphviz($binary) {
     $bFound = false;
     foreach(Array(cfg('automap','graphvizpath').$binary, $binary) AS $path) {
         // Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
-        exec('which '.$path.' 2>/dev/null', $arrReturn, $exitCode);
+        // Thanks @NicolasGoeddel for the fix for this that makes it safer and makes it work on at least
+        // some CentOS 7+ / Red Hat family Linux systems.
+        // Fixes https://github.com/NagVis/nagvis/issues/206
+        exec('PATH='.escapeshellarg($_SERVER['PATH']).' which '.escapeshellarg($path).' 2>&1', $arrReturn, $exitCode);
 
         if($exitCode == 0) {
             $automap_graphviz_path = str_replace($binary, '', $arrReturn[0]);
