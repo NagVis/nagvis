@@ -75,6 +75,7 @@ class Success extends NagVisException {
     }
 }
 
+class AuthenticationException extends NagVisException {}
 class CoreAuthModNoSupport extends NagVisException {}
 
 class BackendException extends NagVisException {}
