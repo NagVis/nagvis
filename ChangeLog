@@ -1,4 +1,7 @@
 1.9.46
+  * Feature: add option to verify session cookie via curl. Before when having allow_url_fopen
+    disabled, NagVis was not able to verify the session cookie. Now you can use curl to verify
+    the session cookie. Depending on your distribution the curl extension can be installed differently.
 
 1.9.45
   * FIX: Fix XSS on support info page (Thanks to jmacario24)

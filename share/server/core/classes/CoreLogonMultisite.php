@@ -88,7 +88,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 
     private function checkAuthCookie($cookieName) {
         if(!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
-            throw new Exception();
+            throw new AuthenticationException(l("No auth cookie provided."));
         }
 
         // Checkmk 1.6+ may add double quotes round the value in some cases
@@ -104,7 +104,7 @@ class CoreLogonMultisite extends CoreLogonModule {
             $users = $this->loadAuthFile($this->serialsPath);
 
         if(!isset($users[$username])) {
-            throw new Exception();
+            throw new AuthenticationException(l("User not found in auth file."));
         }
         $user_secret = $users[$username];
 
@@ -155,9 +155,27 @@ class CoreLogonMultisite extends CoreLogonModule {
         ];
 
         $context = stream_context_create($contextOptions);
-        $result = file_get_contents($url, false, $context);
-        if ($result === false) {
-            throw new Exception();
+        if(filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN)) {
+            $result = file_get_contents($url, false, $context);
+            if ($result === false) {
+                throw new AuthenticationException(l("Cookie is invalid."));
+            }
+        }
+        else if (extension_loaded('curl')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($http_status != 200) {
+                throw new AuthenticationException(l("Cookie is invalid."));
+            }
+        }
+        else {
+            throw new NagVisException(l('No method to check the session validity is available.
+                Please either enable allow_url_fopen in php.ini or install the curl PHP extension.'));
         }
 
         return $username;
@@ -178,7 +196,9 @@ class CoreLogonMultisite extends CoreLogonModule {
                 session_write_close();
 
                 return $name;
-            } catch(Exception $e) {}
+            } catch(AuthenticationException $e) {
+                throw new NagVisException(l('LogonMultisite: Not authenticated. ') . $e->getMessage());
+            }
         }
         return '';
     }
