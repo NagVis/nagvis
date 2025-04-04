@@ -63,6 +63,16 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             'default'  => 'http://localhost/check_mk/',
             'match'    => MATCH_STRING_URL,
         ),
+        // The automation user based authentication was removed in Checkmk 2.4 and replaced by the
+        // site internal authentication. For the local site backend we make use of it with the
+        // automatically configured backend.
+        'site_internal_auth' => Array(
+            'must'     => 0,
+            'editable' => 1,
+            'default'  => 0,
+            'match'    => MATCH_BOOLEAN,
+            'field_type' => 'boolean',
+        ),
         'auth_user' => Array(
             'must'     => 0,
             'editable' => 1,
@@ -141,12 +151,17 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             );
         }
 
-        // Always set the HTTP basic auth header
-        $username = cfg('backend_'.$backendId, 'auth_user');
-        $secret = $this->getSecret();
-        if($username && $secret) {
-            $authCred = base64_encode($username.':'.$secret);
-            $httpContext['header'] = 'Authorization: Basic '.$authCred."\r\n";
+        if ($this->isSiteInternalAuthEnabled()) {
+            $httpContext['header'] = 'Authorization: InternalToken '
+                                     .base64_encode($this->siteInternalAuthSecret())."\r\n";
+        } else {
+            // Always set the HTTP basic auth header
+            $username = cfg('backend_'.$backendId, 'auth_user');
+            $secret = $this->getSecret();
+            if($username && $secret) {
+                $authCred = base64_encode($username.':'.$secret);
+                $httpContext['header'] = 'Authorization: Basic '.$authCred."\r\n";
+            }
         }
 
         $this->context = stream_context_create(array(
@@ -158,6 +173,14 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     /**************************************************************************
      * HELPERS
      *************************************************************************/
+
+    private function isSiteInternalAuthEnabled() {
+        return cfg('backend_'.$this->backendId, 'site_internal_auth') == 1;
+    }
+
+    private function siteInternalAuthSecret() {
+        return file_get_contents($_SERVER['OMD_ROOT'] . "/etc/site_internal.secret");
+    }
 
     private function getSecret() {
         $secret_file_path = cfg('backend_'.$this->backendId, 'auth_secret_file');
@@ -178,10 +201,13 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      */
     private function getUrl($params) {
         $url = $this->baseUrl.$params.'&output_format=json';
-        $username = cfg('backend_'.$this->backendId, 'auth_user');
-        $secret   = $this->getSecret();
-        if ($username && $secret)
-            $url .= '&_username='.$username.'&_secret='.$secret;
+
+        if (!$this->isSiteInternalAuthEnabled()) {
+            $username = cfg('backend_'.$this->backendId, 'auth_user');
+            $secret   = $this->getSecret();
+            if ($username && $secret)
+                $url .= '&_username='.$username.'&_secret='.$secret;
+        }
 
         // Is there some cache to use? The cache is not persisted. It is available
         // until the request has finished.

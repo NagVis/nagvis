@@ -39,16 +39,32 @@
             from the host NagVis is running on.</td>
     </tr>
     <tr>
+        <td>site_internal_auth</td>
+        <td>0</td>
+        <td>Use the so called site internal authentication introduced with Checkmk 2.4. The
+            site internal secret is automatically derived from the Checkmk sites environment.
+        </td>
+    </tr>
+    <tr>
         <td>auth_user</td>
         <td></td>
         <td>User to use for authentication when accessing the <code>base_url</code>. It
             has to be created within Checkmk as &quot;automation&quot; user in order to 
-            configure a backend which is allowed to retrieve Checkmk BI states.</td>
+            configure a backend which is allowed to retrieve Checkmk BI states.
+            Used for the automation authentication together with auth_secret or auth_secret_file.
+            This was the authentication mechanism until Checkmk 2.3.
+        </td>
     </tr>
     <tr>
         <td>auth_secret</td>
         <td></td>
         <td>The authentication secret configured within Checkmk for the given user.</td>
+    </tr>
+    <tr>
+        <td>auth_secret_file</td>
+        <td></td>
+        <td>Read the authentication secret configured within Checkmk for the given user from this
+            path.</td>
     </tr>
     <tr>
         <td>verify_peer</td>

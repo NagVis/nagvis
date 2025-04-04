@@ -121,6 +121,11 @@ backend="$OMD_SITE"
 [backend_$OMD_SITE]
 backendtype="mklivestatus"
 socket="unix:$OMD_ROOT/tmp/run/live"
+EOF
+
+# The automation secrets were removed with Checkmk 2.4. Care for both cases for now.
+if [ -f "$OMD_ROOT/var/check_mk/web/automation/automation.secret" ]; then
+    cat >>"$OMD_CFG" <<EOF
 
 [backend_${OMD_SITE}_bi]
 backendtype="mkbi"
@@ -129,6 +134,16 @@ auth_user="automation"
 auth_secret_file="$OMD_ROOT/var/check_mk/web/automation/automation.secret"
 timeout=10
 EOF
+else
+    cat >>"$OMD_CFG" <<EOF
+
+[backend_${OMD_SITE}_bi]
+backendtype="mkbi"
+base_url="http://localhost/$OMD_SITE/check_mk/"
+site_internal_auth=1
+timeout=10
+EOF
+fi
 
 # Backup the agvis.conf on first time using omd_install.sh
 if ! grep omd_install.sh $OMD_ROOT/etc/apache/conf.d/nagvis.conf >/dev/null 2>&1; then
