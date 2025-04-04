@@ -40,7 +40,7 @@ fi
 
 echo -n "Do you really want to continue? [y] "
 read OPT
-if [ ! -z "$OPT" ] &&  [ $OPT != "y" ]; then
+if [ ! -z "$OPT" ] && [ $OPT != "y" ]; then
     echo "Terminated by user."
     exit 1
 fi
@@ -88,7 +88,7 @@ if ! grep omd_install.sh $OMD_CFG >/dev/null 2>&1; then
 fi
 
 # Update omd specific nagvis.ini.php file
-cat > $OMD_CFG <<EOF
+cat >$OMD_CFG <<EOF
 ; <?php return 1; ?>
 ; -----------------------------------------------------------------
 ; Don't touch this file. It is under control of OMD. Modifying this
@@ -135,7 +135,7 @@ if ! grep omd_install.sh $OMD_ROOT/etc/apache/conf.d/nagvis.conf >/dev/null 2>&1
     cp $OMD_ROOT/etc/apache/conf.d/nagvis.conf $OMD_ROOT/etc/apache/conf.d/nagvis.conf.bak
 fi
 
-cat > $OMD_ROOT/etc/apache/conf.d/nagvis.conf <<EOF
+cat >$OMD_ROOT/etc/apache/conf.d/nagvis.conf <<EOF
 # NagVis Apache2 configuration file for use in OMD
 #
 # This file has been created by omd_install.sh which installs NagVis into
