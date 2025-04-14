@@ -800,7 +800,7 @@ class GlobalMapCfg {
         if(isset($params['source_file']))
             unset($params['source_file']);
         $param_values = $this->paramsToString($params);
-        $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.$param_values.'-'.$this->isView.'-'.CONST_VERSION.'.cache';
+        $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.sha1($param_values.'-'.$this->isView.'-'.CONST_VERSION).'.cache';
         $CACHE = new GlobalFileCache(array(), $cacheFile);
 
         // 2a. Check if the cache file exists
