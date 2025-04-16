@@ -7,7 +7,7 @@ function dynmap_get_objects($MAPCFG, $p) {
     $objects = array();
 
     $type = $p['dynmap_object_types'];
-    $filter = str_replace('\n', "\n", $p['dynmap_object_filter']);
+    $filter = preg_replace('/(\\\\n)+/', "\n", $p['dynmap_object_filter']);
     foreach($MAPCFG->getValue(0, 'backend_id') AS $backend_id) {
         $ret = $_BACKEND->getBackend($backend_id)->getObjects($type, '', '', $filter);
         // only use the internal names
