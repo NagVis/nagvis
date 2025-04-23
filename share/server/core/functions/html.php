@@ -271,6 +271,11 @@ function textarea($name, $default = '', $class = '', $style = '') {
     if (submitted($form_name))
         $default = post($name, $default);
 
+    global $AUTHORISATION;
+    if(!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
+        echo '<b>Cannot edit HTML. Please contact your administrator.</b>';
+        return;
+    }
     // plain <textarea>
     echo '<textarea id="textarea_'.$name.'" name="'.$name.'"'.$class.$style.'>'.escape_html($default).'</textarea>'.N;
 

@@ -116,6 +116,11 @@ class ViewMapAddModify {
         $perm_user   = get_checkbox('perm_user');
         $show_dialog = false;
 
+        global $AUTHORISATION;
+        if(!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
+            throw new NagVisException(l('Cannot edit HTML. Please contact your administrator'));
+        }
+
         // Modification/Creation?
         // The object_id is known on modification. When it is not known 'type' is set
         // to create new objects
