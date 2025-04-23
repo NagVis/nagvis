@@ -53,6 +53,7 @@ class CoreAuthorisationHandler {
             'createObject' => 'edit',
             'deleteObject' => 'edit',
             'addModify' => 'edit',
+            'editHtml' => 'edit',
         ),
         'Overview' => Array(
             'getOverviewRotations' => 'view',
