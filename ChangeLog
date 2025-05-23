@@ -2,7 +2,7 @@
   * FIX: Don't show complete backtrace if crashing. Now the backtrace is being logged to the apache error log
   * FIX: Fix potential XSS via WYSIWYG editor. Now the option to edit these such elements is moved to a specific
    permission and only administrators can use this editor per default. (CVE-2024-47090)
-  * FIX: Fix possible livestatus injection via dynmaps (#398 Thanks to Shortfinga)
+  * FIX: Fix possible livestatus injection via dynmaps (CVE-2024-38866) (#398 Thanks to Shortfinga)
    (CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:L)
 
 1.9.46
