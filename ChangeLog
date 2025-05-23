@@ -1,3 +1,5 @@
+1.9.48
+
 1.9.47
   * FIX: Don't show complete backtrace if crashing. Now the backtrace is being logged to the apache error log
   * FIX: Fix potential XSS via WYSIWYG editor. Now the option to edit these such elements is moved to a specific
