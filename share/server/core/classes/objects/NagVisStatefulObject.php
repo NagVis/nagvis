@@ -360,9 +360,9 @@ class NagVisStatefulObject extends NagVisObject {
     public function getExcludeFilterKey($isCount) {
         // When this is a count use the exclude_member_states over the 
         // exclude_members
-        if($isCount && $this->exclude_member_states !== '')
+        if($isCount && $this->exclude_member_states != '')
             return 'exclude_member_states';
-        elseif($this->exclude_members !== '')
+        elseif($this->exclude_members != '')
             return 'exclude_members';
         else
             return '';
