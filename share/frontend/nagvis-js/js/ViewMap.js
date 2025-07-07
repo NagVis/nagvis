@@ -221,6 +221,15 @@ var ViewMap = View.extend({
 
     renderObject: function(object_id) {
         var obj = this.objects[object_id];
+        var parents = obj.getParentObjectIds();
+
+        if (parents){
+            for (var parentObjId in parents) {
+                if (!this.objects[parentObjId]){
+                    return;
+                }
+            }
+        }
 
         // FIXME: Are all these steps needed here?
         obj.update();
@@ -234,7 +243,6 @@ var ViewMap = View.extend({
         }
 
         // Store object dependencies
-        var parents = obj.getParentObjectIds();
         if (parents) {
             for (var parentObjId in parents) {
                 if (isset(this.objects[parentObjId])) this.objects[parentObjId].addChild(obj);
