@@ -223,7 +223,7 @@ var ViewMap = View.extend({
         var obj = this.objects[object_id];
         var parents = obj.getParentObjectIds();
 
-        if (parents){
+        if (parents && usesSource('automap')){
             for (var parentObjId in parents) {
                 if (!this.objects[parentObjId]){
                     return;
