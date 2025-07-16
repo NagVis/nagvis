@@ -71,7 +71,7 @@ define('MATCH_PNG_GIF_JPG_FILE_OR_URL', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s:+[\]
 define('MATCH_ROTATION_STEP_TYPES_EMPTY', '/^(?:map|url)?$/');
 define('MATCH_LANGUAGE_EMPTY', '/^[a-zA-Z0-9\-_]*$/');
 define('MATCH_LANGUAGE_FILE', '/^([^.].*)/');
-define('MATCH_ICONSET', '/^(.+)_ok.(png|gif|jpg)$/u');
+define('MATCH_ICONSET', '/^(.+)_ok.(png|gif|jpg|svg)$/u');
 define('MATCH_BACKEND_FILE', '/^GlobalBackend([^MI].+)\.php$/');
 define('MATCH_BACKEND_ID', '/^[0-9a-z._-]*$/iu');
 define('MATCH_DOC_DIR', '/^([a-z]{2}_[A-Z]{2})/');
