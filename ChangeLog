@@ -1,4 +1,7 @@
 1.9.48
+  * FIX: Fix exclude_members related PHP 8.1 compatibility issue (#400 Thanks to ekapsner-ne)
+  * Hide lines of excluded members in automaps (#402 Thanks to ekapsner-ne)
+  * Add support for SVG based icon sets (#405 Thanks to dnelson-nagios)
 
 1.9.47
   * FIX: Don't show complete backtrace if crashing. Now the backtrace is being logged to the apache error log
