@@ -1,5 +1,6 @@
 1.9.48
   * FIX: Fix exclude_members related PHP 8.1 compatibility issue (#400 Thanks to ekapsner-ne)
+  * FIX: misaligned labels on state changes
   * Hide lines of excluded members in automaps (#402 Thanks to ekapsner-ne)
   * Add support for SVG based icon sets (#405 Thanks to dnelson-nagios)
 
