@@ -758,8 +758,8 @@ var ElementLine = Element.extend({
         // This can fix the perfdata values from Checkmks if and if64 checks.
         // The assumption is that there are perfdata values 'in' and 'out' with byte rates
         // and maximum values given to be able to calculate the percentage usage
-        if (perf[0][2] === null || perf[0][2] === ''
-           || perf[1][2] === null || perf[1][2] === '') {
+        if (perf[0][2] === null || perf[0][2] === '' || perf[0][2] === 'b/s'
+           || perf[1][2] === null || perf[1][2] === '' || perf[1][2] === 'b/s') {
             perf = this.calculateUsage(perf, this.obj.conf.output);
         }
 
@@ -831,25 +831,37 @@ var ElementLine = Element.extend({
             line_label_out = this.obj.conf.line_label_out;
         }
         for(var i = 0; i < oldPerfdata.length; i++) {
-            if(oldPerfdata[i][0] == line_label_in && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
-                newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
-                if(!display_bits) {
-                    newPerfdata[2] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
-                } else {
-                    oldPerfdata[i][1] *= 8; // convert those hakish bytes to bits
+            if(oldPerfdata[i][0] == line_label_in) {
+                if(oldPerfdata[i][2] === null || oldPerfdata[i][2] === '') {
+                    newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
+                    if(!display_bits) {
+                        newPerfdata[2] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
+                    } else {
+                        oldPerfdata[i][1] *= 8; // convert those hakish bytes to bits
+                        newPerfdata[2] = this.perfdataCalcBitsReadable(oldPerfdata[i]);
+                    }
+                    foundNew = true;
+                } else if(oldPerfdata[i][2] === 'b/s') {
+                    newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
                     newPerfdata[2] = this.perfdataCalcBitsReadable(oldPerfdata[i]);
+                    foundNew = true;
                 }
-                foundNew = true;
             }
-            if(oldPerfdata[i][0] == line_label_out && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
-                newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
-                if(!display_bits) {
-                    newPerfdata[3] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
-                } else {
-                    oldPerfdata[i][1] *= 8; // convert those hakish bytes to bits
+            if(oldPerfdata[i][0] == line_label_out) {
+                if(oldPerfdata[i][2] === null || oldPerfdata[i][2] === '') {
+                    newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
+                    if(!display_bits) {
+                        newPerfdata[3] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
+                    } else {
+                        oldPerfdata[i][1] *= 8; // convert those hakish bytes to bits
+                        newPerfdata[3] = this.perfdataCalcBitsReadable(oldPerfdata[i]);
+                    }
+                    foundNew = true;
+                } else if(oldPerfdata[i][2] === 'b/s') {
+                    newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
                     newPerfdata[3] = this.perfdataCalcBitsReadable(oldPerfdata[i]);
+                    foundNew = true;
                 }
-                foundNew = true;
             }
         }
         if(foundNew)
@@ -941,7 +953,7 @@ var ElementLine = Element.extend({
         perfdata = perfdata.replace('/\s*=\s*/', '=');
 
         // Break perfdata string into array of individual sets
-        var re = /([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/g;
+        var re = /([^=]+)=([\d\.\-]+)([\w%\/]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/g;
         var perfdataMatches = perfdata.match(re);
 
         // Check for empty perfdata
@@ -951,7 +963,7 @@ var ElementLine = Element.extend({
         // Break perfdata parts into array
         for (var i = 0; i < perfdataMatches.length; i++) {
             // Get parts of perfdata from string
-            var tmpSetMatches = perfdataMatches[i].match(/(&#145;)?([\w\s\=\'\-]*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/);
+            var tmpSetMatches = perfdataMatches[i].match(/(&#145;)?([\w\s\=\'\-]*)(&#145;)?\=([\d\.\-\+]*)([\w%\/]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/);
 
             // Check if we got any perfdata
             if (tmpSetMatches === null)
