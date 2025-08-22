@@ -312,7 +312,14 @@ class NagVisStatefulObject extends NagVisObject {
             if(self::$dateFormat == '') {
                 self::$dateFormat = cfg('global','dateformat');
             }
-            return date(self::$dateFormat, intval($this->state[$attr]));
+
+            if($this->state[$attr] instanceof DateTime) {
+                $timestamp = $this->state[$attr]->getTimestamp();
+            } else {
+                $timestamp = intval($this->state[$attr]);
+            }
+
+            return date(self::$dateFormat, $timestamp);
         } else {
             return 'N/A';
         }
