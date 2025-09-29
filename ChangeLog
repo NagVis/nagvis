@@ -3,6 +3,7 @@
   * FIX: misaligned labels on state changes
   * Hide lines of excluded members in automaps (#402 Thanks to ekapsner-ne)
   * Add support for SVG based icon sets (#405 Thanks to dnelson-nagios)
+  * FIX: session validity: only check cookie for site NagVis is running on
 
 1.9.47
   * FIX: Don't show complete backtrace if crashing. Now the backtrace is being logged to the apache error log
