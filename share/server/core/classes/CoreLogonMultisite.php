@@ -108,27 +108,27 @@ class CoreLogonMultisite extends CoreLogonModule {
         }
         $user_secret = $users[$username];
 
-	if ($this->cookieVersion < 1) {
-	    // Older Checkmk versions do not set the cookieVersion, therefore we guess based on the length.
+        if ($this->cookieVersion < 1) {
+            // Older Checkmk versions do not set the cookieVersion, therefore we guess based on the length.
 
-            // Checkmk 2.0 changed the following:
-            // a) 2nd field from "issue time" to session ID
-            // b) 3rd field from md5 hash to sha256 hash
-            // NagVis is used with older and newer Checkmk versions. Be compatible
-            // to both cookie formats.
-            $is_pre_20_cookie = strlen($cookieHash) == 32;
+                // Checkmk 2.0 changed the following:
+                // a) 2nd field from "issue time" to session ID
+                // b) 3rd field from md5 hash to sha256 hash
+                // NagVis is used with older and newer Checkmk versions. Be compatible
+                // to both cookie formats.
+                $is_pre_20_cookie = strlen($cookieHash) == 32;
 
-            if ($is_pre_20_cookie)
-                $hash = $this->generatePre20Hash($username, $sessionId, (string) $user_secret);
-            else
-                $hash = $this->generatePre22Hash($username, $sessionId, (string) $user_secret);
-	}
-	elseif ($this->cookieVersion == 1) {
-            $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
-	}
-	else {
-            throw new NagVisException(l('The Multisite Cookie version is not supported'));
-	}
+                if ($is_pre_20_cookie)
+                    $hash = $this->generatePre20Hash($username, $sessionId, (string) $user_secret);
+                else
+                    $hash = $this->generatePre22Hash($username, $sessionId, (string) $user_secret);
+        }
+        elseif ($this->cookieVersion == 1) {
+                $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
+        }
+        else {
+                throw new NagVisException(l('The Multisite Cookie version is not supported'));
+        }
 
         // Validate the hash
         if (!hash_equals($hash, $cookieHash)) {
