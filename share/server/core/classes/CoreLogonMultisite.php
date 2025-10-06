@@ -86,6 +86,13 @@ class CoreLogonMultisite extends CoreLogonModule {
         return md5($username . $issue_time . $user_secret . $secret);
     }
 
+    private function isValidUuidV4($uuid) {
+        // We could be more precise here but currently we mostly care for newlines and special chars
+        $pattern = '/^[-0-9a-f]{36}$/i';
+
+        return preg_match($pattern, $uuid) === 1;
+    }
+
     private function checkAuthCookie($cookieName) {
         if(!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
             throw new AuthenticationException(l("No auth cookie provided."));
@@ -133,6 +140,10 @@ class CoreLogonMultisite extends CoreLogonModule {
         // Validate the hash
         if (!hash_equals($hash, $cookieHash)) {
             throw new Exception();
+        }
+
+        if (!$this->isValidUuidV4($sessionId)){
+            throw new AuthenticationException(l("Malformed session id"));
         }
 
         // Check session periods validity
