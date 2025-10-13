@@ -24,127 +24,30 @@
  *****************************************************************************/
 
 class CoreLogonMultisite extends CoreLogonModule {
-    private $htpasswdPath;
-    private $serialsPath;
-    private $secretPath;
-    private $cookieVersion;
-    private $authFile;
+    private function isCookiePlausible($username, $sessionId, $cookieHash) {
+        // Mostly meant to check that we don't process malicious cookies, e.g.
+        // data with special chars.
 
-    public function __construct() {
-        $this->htpasswdPath  = cfg('global', 'logon_multisite_htpasswd');
-        $this->serialsPath   = cfg('global', 'logon_multisite_serials');
-        $this->secretPath    = cfg('global', 'logon_multisite_secret');
-        $this->cookieVersion = intval(cfg('global', 'logon_multisite_cookie_version'));
-
-        // When the auth.serial file exists, use this instead of the htpasswd
-        // for validating the cookie. The structure of the file is equal, so
-        // the same code can be used.
-        if(file_exists($this->serialsPath)) {
-            $this->authFile = 'serial';
-
-        } elseif(file_exists($this->htpasswdPath)) {
-            $this->authFile = 'htpasswd';
-
-        } else {
-            throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
-                                       .'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
-                          array('HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath)));
+        if (preg_match('/^[\w$][-@.+\w$]*$/i', $username) !== 1){
+            // See https://github.com/Checkmk/checkmk/blob/1cc2796314508092b18d52d34b932fe0435beba4/packages/cmk-ccc/cmk/ccc/user.py#L52
+            throw new AuthenticationException(l("Malformed username"));
         }
-
-        if(!file_exists($this->secretPath)) {
-            $this->redirectToLogin();
+        if (preg_match('/^[-0-9a-f]{36}$/i', $sessionId) !== 1){
+            throw new AuthenticationException(l("Malformed session id"));
         }
-    }
-
-    private function loadAuthFile($path) {
-        $creds = array();
-        foreach(file($path) AS $line) {
-            if(strpos($line, ':') !== false) {
-                list($username, $secret) = explode(':', $line, 2);
-                $creds[$username] = rtrim($secret);
-            }
+        if (preg_match('/^[-0-9a-f]{64}$/i', $cookieHash) !== 1){
+            throw new AuthenticationException(l("Malformed hash"));
         }
-        return $creds;
-    }
-
-    private function loadSecret() {
-        return file_get_contents($this->secretPath);
-    }
-
-    private function generateHash($username, $session_id, $user_secret) {
-        $secret = $this->loadSecret();
-        return hash_hmac("sha256", $username . $session_id. $user_secret, $secret);
-    }
-
-    private function generatePre22Hash($username, $session_id, $user_secret) {
-        $secret = $this->loadSecret();
-        return hash("sha256", $username . $session_id. $user_secret . $secret);
-    }
-
-    private function generatePre20Hash($username, $issue_time, $user_secret) {
-        $secret = $this->loadSecret();
-        return md5($username . $issue_time . $user_secret . $secret);
-    }
-
-    private function isValidUuidV4($uuid) {
-        // We could be more precise here but currently we mostly care for newlines and special chars
-        $pattern = '/^[-0-9a-f]{36}$/i';
-
-        return preg_match($pattern, $uuid) === 1;
     }
 
     private function checkAuthCookie($cookieName) {
         if(!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
             throw new AuthenticationException(l("No auth cookie provided."));
         }
-
-        // Checkmk 1.6+ may add double quotes round the value in some cases
-        // (e.g. when @ signs are found in the value)
-        $cookieValue = trim($_COOKIE[$cookieName], '"');
-
-        // 2nd field is "issue time" in pre 2.0 cookies. Now it's the session ID
+        $cookieValue = $_COOKIE[$cookieName];
         list($username, $sessionId, $cookieHash) = explode(':', $cookieValue, 3);
 
-        if($this->authFile == 'htpasswd')
-            $users = $this->loadAuthFile($this->htpasswdPath);
-        else
-            $users = $this->loadAuthFile($this->serialsPath);
-
-        if(!isset($users[$username])) {
-            throw new AuthenticationException(l("User not found in auth file."));
-        }
-        $user_secret = $users[$username];
-
-        if ($this->cookieVersion < 1) {
-            // Older Checkmk versions do not set the cookieVersion, therefore we guess based on the length.
-
-                // Checkmk 2.0 changed the following:
-                // a) 2nd field from "issue time" to session ID
-                // b) 3rd field from md5 hash to sha256 hash
-                // NagVis is used with older and newer Checkmk versions. Be compatible
-                // to both cookie formats.
-                $is_pre_20_cookie = strlen($cookieHash) == 32;
-
-                if ($is_pre_20_cookie)
-                    $hash = $this->generatePre20Hash($username, $sessionId, (string) $user_secret);
-                else
-                    $hash = $this->generatePre22Hash($username, $sessionId, (string) $user_secret);
-        }
-        elseif ($this->cookieVersion == 1) {
-                $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
-        }
-        else {
-                throw new NagVisException(l('The Multisite Cookie version is not supported'));
-        }
-
-        // Validate the hash
-        if (!hash_equals($hash, $cookieHash)) {
-            throw new Exception();
-        }
-
-        if (!$this->isValidUuidV4($sessionId)){
-            throw new AuthenticationException(l("Malformed session id"));
-        }
+        $this->isCookiePlausible($username, $sessionId, $cookieHash);
 
         // Check session periods validity
         $site = getenv('OMD_SITE');
@@ -167,7 +70,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         $context = stream_context_create($contextOptions);
         if(filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN)) {
-            $result = file_get_contents($url, false, $context);
+            $result = @ file_get_contents($url, false, $context);
             if ($result === false) {
                 throw new AuthenticationException(l("Cookie is invalid."));
             }
