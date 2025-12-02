@@ -4,6 +4,8 @@
   * Hide lines of excluded members in automaps (#402 Thanks to ekapsner-ne)
   * Add support for SVG based icon sets (#405 Thanks to dnelson-nagios)
   * FIX: session validity: only check cookie for site NagVis is running on
+  * FIX: Fix User enumeration and Cleanup CMK session cookie validation (CVE-2025-39665) (#411 Thanks to Shortfinga)
+      (CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N)
 
 1.9.47
   * FIX: Don't show complete backtrace if crashing. Now the backtrace is being logged to the apache error log
