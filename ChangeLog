@@ -1,3 +1,5 @@
+1.9.49
+
 1.9.48
   * FIX: Fix exclude_members related PHP 8.1 compatibility issue (#400 Thanks to ekapsner-ne)
   * FIX: misaligned labels on state changes
