@@ -221,6 +221,8 @@
 ;htmlbase="/nagvis"
 ; absolute html NagVis cgi path
 ;htmlcgi="/nagios/cgi-bin"
+; absolute etc NagVis path
+;data="/usr/local/nagvis/etc"
 
 ; Default values which get inherited to the maps and its objects
 [defaults]
