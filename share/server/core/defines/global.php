@@ -75,11 +75,20 @@ define('DEBUGFILE', '../../../var/nagvis-debug.log');
 // The last value wins.
 //
 // Path to the main configuration file
-define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
-define('CONST_MAINCFG_CACHE', '../../../var/nagvis-conf');
+                                                       
+                                                          
 
-// Path to the main configuration conf.d directory
-define('CONST_MAINCFG_DIR', '../../../etc/conf.d');
+if (getenv('NAGVIS_CONFIG') !== false && getenv('NAGVIS_CONFIG') !== '') {
+    $nagvis_config = getenv('NAGVIS_CONFIG');
+    $nagvis_config_dir = dirname($nagvis_config);
+    define('CONST_MAINCFG', $nagvis_config);
+    define('CONST_MAINCFG_DIR', $nagvis_config_dir . '/conf.d');
+} else {
+    define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
+    // Path to the main configuration conf.d directory
+    define('CONST_MAINCFG_DIR', '../../../etc/conf.d');
+}
+define('CONST_MAINCFG_CACHE', '../../../var/nagvis-conf');
 
 // The directory below the NagVis root which is shared by the webserver
 define('HTDOCS_DIR', 'share');
