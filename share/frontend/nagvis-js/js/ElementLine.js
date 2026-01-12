@@ -817,8 +817,9 @@ var ElementLine = Element.extend({
 
         // Checkmk if/if64 checks support switching between bytes/bits.
         var display_bits = false;
+        var reBits = /\bIn(?:\s+average\s+[^:]+)?:\s*[0-9][0-9.,]*\s*\S*Bit\/s\b[\s\S]*?\bOut(?:\s+average\s+[^:]+)?:\s*[0-9][0-9.,]*\s*\S*Bit\/s\b/i;
 
-        if (output.match('In: [0-9].*(Bit|bit)/s.*Out: [0-9]+')) {
+        if (output.match(reBits)) {
             display_bits=true;
         }
 
