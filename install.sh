@@ -55,7 +55,7 @@ NAGVIS_PATH_OLD_PARAM_SET=0
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
 # Version of NagVis to be installed
-NAGVIS_VER=$(cat share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }')
+NAGVIS_VER=$(php -r "require './share/server/core/defines/global.php'; echo CONST_VERSION;")
 INSTALLER_VERSION=$NAGVIS_VER
 # Version of old NagVis (will be detected if update)
 NAGVIS_VER_OLD=""
@@ -83,7 +83,7 @@ WEB_USER=""
 WEB_GROUP=""
 
 # Version prerequisites
-NEED_PHP_VERSION=$(cat share/server/core/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }')
+NEED_PHP_VERSION=$(php -r "require './share/server/core/defines/global.php'; echo CONST_NEEDED_PHP_VERSION;")
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
 NEED_PHP_MODULES="gd mbstring gettext session xml pdo"
@@ -1163,11 +1163,11 @@ line "Checking for existing NagVis" "+"
 
 if [ -d $NAGVIS_PATH_OLD ]; then
     if [ -e $NAGVIS_PATH_OLD/nagvis/includes/defines/global.php ]; then
-        NAGVIS_VER_OLD=`cat $NAGVIS_PATH_OLD/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+        NAGVIS_VER_OLD=$(php -r "require '$NAGVIS_PATH_OLD/nagvis/includes/defines/global.php'; echo CONST_VERSION;")
     elif [ -e $NAGVIS_PATH_OLD/share/nagvis/includes/defines/global.php ]; then
-        NAGVIS_VER_OLD=`cat $NAGVIS_PATH_OLD/share/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+        NAGVIS_VER_OLD=$(php -r "require '$NAGVIS_PATH_OLD/share/nagvis/includes/defines/global.php'; echo CONST_VERSION;")
     elif [ -e $NAGVIS_PATH_OLD/share/server/core/defines/global.php ]; then
-        NAGVIS_VER_OLD=`cat $NAGVIS_PATH_OLD/share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
+        NAGVIS_VER_OLD=$(php -r "require '$NAGVIS_PATH_OLD/share/server/core/defines/global.php'; echo CONST_VERSION;")
     else
         NAGVIS_VER_OLD="UNKNOWN"
     fi
