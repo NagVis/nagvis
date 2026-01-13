@@ -228,7 +228,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
 
         if (!$this->isSiteInternalAuthEnabled()) {
             $username = cfg('backend_' . $this->backendId, 'auth_user');
-            $secret   = $this->getSecret();
+            $secret = $this->getSecret();
             if ($username && $secret) {
                 $url .= '&_username=' . $username . '&_secret=' . $secret;
             }
