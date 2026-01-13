@@ -428,6 +428,11 @@ function textarea($name, $default = '', $class = '', $style = '')
         $default = post($name, $default);
     }
 
+    global $AUTHORISATION;
+    if(!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
+        echo '<b>Cannot edit HTML. Please contact your administrator.</b>';
+        return;
+    }
     // plain <textarea>
     echo '<textarea id="textarea_'
         . $name

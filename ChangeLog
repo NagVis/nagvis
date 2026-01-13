@@ -1,4 +1,33 @@
+1.9.49
+
+1.9.48
+  * FIX: Fix exclude_members related PHP 8.1 compatibility issue (#400 Thanks to ekapsner-ne)
+  * FIX: misaligned labels on state changes
+  * Hide lines of excluded members in automaps (#402 Thanks to ekapsner-ne)
+  * Add support for SVG based icon sets (#405 Thanks to dnelson-nagios)
+  * FIX: session validity: only check cookie for site NagVis is running on
+  * FIX: Fix User enumeration and Cleanup CMK session cookie validation (CVE-2025-39665) (#411 Thanks to Shortfinga)
+      (CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N)
+
+1.9.47
+  * FIX: Don't show complete backtrace if crashing. Now the backtrace is being logged to the apache error log
+  * FIX: Fix potential XSS via WYSIWYG editor. Now the option to edit these such elements is moved to a specific
+   permission and only administrators can use this editor per default. (CVE-2024-47090)
+  * FIX: Fix possible livestatus injection via dynmaps (CVE-2024-38866) (#398 Thanks to Shortfinga)
+   (CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:L)
+
+1.9.46
+  * Feature: add option to verify session cookie via curl. Before when having allow_url_fopen
+    disabled, NagVis was not able to verify the session cookie. Now you can use curl to verify
+    the session cookie. Depending on your distribution the curl extension can be installed differently.
+  * Checkmk BI backend: Add option 'site_internal_auth' to enable the Checkmk 2.4 site internal
+    authentication. This option is configured automatically for the sites local
+    backend ('backend_[site]_bi') which is created automatiocally in Checkmk sites.
+
 1.9.45
+  * FIX: Fix XSS on support info page (Thanks to jmacario24)
+  * FIX: Fix not working cookie session timestamps validation introduced with 1.9.43 in
+         when localhost is blocked or takes a long time to resolve
 
 1.9.44
   * FIX: Fix not working cookie session timestamps validation introduced with 1.9.43 in

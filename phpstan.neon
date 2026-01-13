@@ -3,6 +3,7 @@ parameters:
     paths:
         - .
     excludePaths:
+        - vendor
         - share/frontend/nagvis-js/ext
         - share/server/core/ext
         - etc/conf.d/demo.ini.php

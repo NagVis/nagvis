@@ -119,7 +119,7 @@
             NagVis vertraut dem gelieferten Benutzernamen implizit. NagVis benutzt die konfigurierte Umgebungsvariable, um den Benutzer zu identifizieren. Sie k&ouml;nnen Ihrem Webserver verschiedene Authentifizierungsmechanismen hinzuf&uuml;gen, angefangen mit der Basic-Authentifizierung, die von Nagios genutzt wird (.htaccess) bis hin zu Single-Sign-On-Umgebungen.<br> 
             Setzen Sie einfach logonmodule auf "LogonEnv", setzen Sie die als Benutzername zu verwendende Umgebungsvariable auf die Option logonenvvar und teilen Sie dem Authentifizierungsmodul mit, dass Benutzer in der Datenbank neu anzulegen sind, wenn der gelieferte Benutzer noch nicht vorhanden ist. Die Option logonenvcreaterole weist das Authentifizierungsmodul an, den neuen Benutzer einer Rolle zuzuweisen. Setzen Sie die Option auf einen leeren String, um dieses Verhalten auszuschalten.</p>
    
-            <p><i>LogonMultisite</i>: Dieses Modul benutzt die Authentifizierung von auth_*-Cookies, die von Check_MK-Multisite geliefert werden, wenn die Cookie-basierte Authentifizierung verwendet wird.</p>
+            <p><i>LogonMultisite</i>: Dieses Modul benutzt die Authentifizierung von auth_*-Cookies, die von Checkmk-Multisite geliefert werden, wenn die Cookie-basierte Authentifizierung verwendet wird.</p>
 
             <p>Es ist m&ouml;glich, eigene Logon-Module hinzuzuf&uuml;gen, um andere Dialoge zu bedienen.</p></td>
 

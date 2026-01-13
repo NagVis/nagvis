@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * NagVisAggr.php - Handles aggregations of either hosts or services
- *                      for example Check_MK BI aggregations
+ *                      for example Checkmk BI aggregations
  *
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *

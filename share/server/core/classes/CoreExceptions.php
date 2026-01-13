@@ -109,7 +109,11 @@ class Success extends NagVisException
     }
 }
 
-class CoreAuthModNoSupport extends NagVisException
+class AuthenticationException extends NagVisException
+{
+}
+
+class CoreAuthModNoSupport extends NagVisException {}
 {
 }
 

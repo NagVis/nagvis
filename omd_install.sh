@@ -40,7 +40,7 @@ fi
 
 echo -n "Do you really want to continue? [y] "
 read OPT
-if [ ! -z "$OPT" ] &&  [ $OPT != "y" ]; then
+if [ ! -z "$OPT" ] && [ $OPT != "y" ]; then
     echo "Terminated by user."
     exit 1
 fi
@@ -88,7 +88,7 @@ if ! grep omd_install.sh $OMD_CFG >/dev/null 2>&1; then
 fi
 
 # Update omd specific nagvis.ini.php file
-cat > $OMD_CFG <<EOF
+cat >$OMD_CFG <<EOF
 ; <?php return 1; ?>
 ; -----------------------------------------------------------------
 ; Don't touch this file. It is under control of OMD. Modifying this
@@ -121,6 +121,11 @@ backend="$OMD_SITE"
 [backend_$OMD_SITE]
 backendtype="mklivestatus"
 socket="unix:$OMD_ROOT/tmp/run/live"
+EOF
+
+# The automation secrets were removed with Checkmk 2.4. Care for both cases for now.
+if [ -f "$OMD_ROOT/var/check_mk/web/automation/automation.secret" ]; then
+    cat >>"$OMD_CFG" <<EOF
 
 [backend_${OMD_SITE}_bi]
 backendtype="mkbi"
@@ -129,13 +134,23 @@ auth_user="automation"
 auth_secret_file="$OMD_ROOT/var/check_mk/web/automation/automation.secret"
 timeout=10
 EOF
+else
+    cat >>"$OMD_CFG" <<EOF
+
+[backend_${OMD_SITE}_bi]
+backendtype="mkbi"
+base_url="http://localhost/$OMD_SITE/check_mk/"
+site_internal_auth=1
+timeout=10
+EOF
+fi
 
 # Backup the agvis.conf on first time using omd_install.sh
 if ! grep omd_install.sh $OMD_ROOT/etc/apache/conf.d/nagvis.conf >/dev/null 2>&1; then
     cp $OMD_ROOT/etc/apache/conf.d/nagvis.conf $OMD_ROOT/etc/apache/conf.d/nagvis.conf.bak
 fi
 
-cat > $OMD_ROOT/etc/apache/conf.d/nagvis.conf <<EOF
+cat >$OMD_ROOT/etc/apache/conf.d/nagvis.conf <<EOF
 # NagVis Apache2 configuration file for use in OMD
 #
 # This file has been created by omd_install.sh which installs NagVis into

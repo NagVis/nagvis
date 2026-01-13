@@ -755,7 +755,7 @@ var ElementLine = Element.extend({
 
         // This is the correct place to handle other perfdata format than the percent value
         // When no UOM is set try to calculate something...
-        // This can fix the perfdata values from Check_MKs if and if64 checks.
+        // This can fix the perfdata values from Checkmks if and if64 checks.
         // The assumption is that there are perfdata values 'in' and 'out' with byte rates
         // and maximum values given to be able to calculate the percentage usage
         if (perf[0][2] === null || perf[0][2] === ''
@@ -815,7 +815,7 @@ var ElementLine = Element.extend({
         var line_label_in = 'in';
         var line_label_out = 'out';
 
-        // Check_MK if/if64 checks support switching between bytes/bits.
+        // Checkmk if/if64 checks support switching between bytes/bits.
         var display_bits = false;
 
         if (output.match('In: [0-9].*(Bit|bit)/s.*Out: [0-9]+')) {

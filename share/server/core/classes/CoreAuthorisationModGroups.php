@@ -2,7 +2,7 @@
 /*******************************************************************************
  *
  * CoreAuthorisationModGroups.php - Authorsiation module based on the
- *                                     permissions granted in Check_MK Groups
+ *                                     permissions granted in Checkmk Groups
  *
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *

@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  * GlobalBackendmkbi.php - backend class for connecting NagVis directly
- *                             to Check_MK Business Intelligence via JSON
+ *                             to Checkmk Business Intelligence via JSON
  *
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
@@ -72,6 +72,16 @@ class GlobalBackendmkbi implements GlobalBackendInterface
             'editable' => 1,
             'default'  => 'http://localhost/check_mk/',
             'match'    => MATCH_STRING_URL,
+        ],
+        // The automation user based authentication was removed in Checkmk 2.4 and replaced by the
+        // site internal authentication. For the local site backend we make use of it with the
+        // automatically configured backend.
+        'site_internal_auth' => [
+            'must'     => 0,
+            'editable' => 1,
+            'default'  => 0,
+            'match'    => MATCH_BOOLEAN,
+            'field_type' => 'boolean',
         ],
         'auth_user' => [
             'must'     => 0,
@@ -154,12 +164,17 @@ class GlobalBackendmkbi implements GlobalBackendInterface
             ];
         }
 
-        // Always set the HTTP basic auth header
-        $username = cfg('backend_' . $backendId, 'auth_user');
-        $secret = $this->getSecret();
-        if ($username && $secret) {
-            $authCred = base64_encode($username . ':' . $secret);
-            $httpContext['header'] = 'Authorization: Basic ' . $authCred . "\r\n";
+        if ($this->isSiteInternalAuthEnabled()) {
+            $httpContext['header'] = 'Authorization: InternalToken '
+                                     .base64_encode($this->siteInternalAuthSecret())."\r\n";
+        } else {
+            // Always set the HTTP basic auth header
+            $username = cfg('backend_' . $backendId, 'auth_user');
+            $secret = $this->getSecret();
+            if ($username && $secret) {
+                $authCred = base64_encode($username . ':' . $secret);
+                $httpContext['header'] = 'Authorization: Basic ' . $authCred . "\r\n";
+            }
         }
 
         $this->context = stream_context_create([
@@ -171,6 +186,22 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /**************************************************************************
      * HELPERS
      *************************************************************************/
+
+    /**
+     * @return bool
+     */
+    private function isSiteInternalAuthEnabled()
+    {
+        return intval(cfg('backend_'.$this->backendId, 'site_internal_auth')) === 1;
+    }
+
+    /**
+     * @return string|false
+     */
+    private function siteInternalAuthSecret()
+    {
+        return file_get_contents($_SERVER['OMD_ROOT'] . "/etc/site_internal.secret");
+    }
 
     /**
      * @return string|null
@@ -207,10 +238,13 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     private function getUrl($params)
     {
         $url = $this->baseUrl . $params . '&output_format=json';
-        $username = cfg('backend_' . $this->backendId, 'auth_user');
-        $secret   = $this->getSecret();
-        if ($username && $secret) {
-            $url .= '&_username=' . $username . '&_secret=' . $secret;
+
+        if (!$this->isSiteInternalAuthEnabled()) {
+            $username = cfg('backend_' . $this->backendId, 'auth_user');
+            $secret   = $this->getSecret();
+            if ($username && $secret) {
+                $url .= '&_username=' . $username . '&_secret=' . $secret;
+            }
         }
 
         // Is there some cache to use? The cache is not persisted. It is available
@@ -318,7 +352,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     }
 
     /**
-     * Be compatible to Check_MK <1.2.9
+     * Be compatible to Checkmk <1.2.9
      *
      * @param string $aggr_treestate
      * @return array
@@ -347,7 +381,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
             $element = [
                 "title"             => $title,
                 "state"             => $bi_state,
-                // unknown infos in old Check_MK versions:
+                // unknown infos in old Checkmk versions:
                 "assumed"           => false,
                 "acknowledged"      => false,
                 "in_downtime"       => false,

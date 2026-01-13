@@ -1,0 +1,16 @@
+{
+    "name": "nagvis/nagvis",
+    "description": "NagVis is a visualization addon for the well known network management system Nagios.",
+    "type": "project",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "Lars Michelsen",
+            "email": "lm@larsmichelsen.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpstan/phpstan": "^2.1"
+    }
+}

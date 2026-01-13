@@ -1005,11 +1005,7 @@ class GlobalMapCfg
             . 'source-'
             . $this->name
             . '.cfg-'
-            . $param_values
-            . '-'
-            . $this->isView
-            . '-'
-            . CONST_VERSION
+            . sha1($param_values . '-' . $this->isView . '-' . CONST_VERSION)
             . '.cache';
         $CACHE = new GlobalFileCache([], $cacheFile);
 

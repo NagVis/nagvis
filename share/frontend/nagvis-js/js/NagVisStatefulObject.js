@@ -445,16 +445,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         this.bIsFlashing = show;
         if(show) {
-            oObjIcon.style.border  = "5px solid " + sColor;
+            oObjIcon.style.outline  = "5px solid " + sColor;
             oObjIcon.classList.add(sFlashingClass);
-            oObjIconDiv.style.top  = (this.parseCoord(this.conf.y, 'y') - 5) + 'px';
-            oObjIconDiv.style.left = (this.parseCoord(this.conf.x, 'x') - 5) + 'px';
             oObjIconDiv.classList.add(sFlashingDivClass);
         } else {
-            oObjIcon.style.border  = "none";
+            oObjIcon.style.outline  = "none";
             oObjIcon.classList.remove(sFlashingClass);
-            oObjIconDiv.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
-            oObjIconDiv.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
             oObjIconDiv.classList.remove(sFlashingDivClass);
         }
 
