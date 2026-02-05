@@ -7,7 +7,7 @@ function saveObjectAttr(objId, attr) {
     var urlPart = '';
     for (var key in attr)
         // parseInt() returned NaN, because value was set to "auto"
-        if ( ! isNaN(escapeUrlValues(attr[key])) )
+        if ( ! isNaN(attr[key]) )
             urlPart += '&' + key + '=' + escapeUrlValues(attr[key]);
 
     call_ajax(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
