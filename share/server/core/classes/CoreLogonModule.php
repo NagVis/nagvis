@@ -33,7 +33,7 @@ class CoreLogonModule {
         $AUTH->createUser($username, (time() * rand(1, 10)));
         if($role !== '') {
             $A = new CoreAuthorisationHandler();
-            $A->parsePermissions();
+            $A->parsePermissions($username);
             $A->updateUserRoles($A->getUserId($username), Array($A->getRoleId($role)));
         }
     }
