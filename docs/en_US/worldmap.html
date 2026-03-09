@@ -18,6 +18,10 @@
         This means if you add an object to a worldmap on a high zoom (detail level), the object is also added
         to worldmaps which are showing the whole earth. This has been done this way out of the assumption
         that each geographically positioned object has a single position on all maps.</p>
+        <p>By default all worldmaps share one object database file (<code>worldmap.db</code>).
+        If you need isolated object sets per map, configure a custom DB file with
+        <code>worldmap_db=&lt;filename&gt;</code> in the map global section.
+        Custom DB files are stored in <code>etc/nagvis/worldmaps/</code>.</p>
 
         <h2>Prerequisites</h2>
         <p>There is no special software needed on the NagVis server, but there is one special requirement. To
@@ -50,6 +54,7 @@
     worldmap_center=50.86837814203458,10.21728515625
     worldmap_zoom=6
     worldmap_tiles_saturate=33
+    worldmap_db=worldmap.db
 
     filter_group=my_group
 }</pre>
@@ -68,6 +73,10 @@
 
         <p>The <code>worldmap_tiles_saturate=33</code> (optional) dims the colors of default OpenStreetMap so that red motorways or
         large green forests don't interfere with actual map objects. Possible values are 0 (no colors, grayscale) through 100 (full colors).</p>
+
+        <p>The <code>worldmap_db=worldmap.db</code> (optional) defines the SQLite DB file used by this worldmap source.
+        The default shared DB is <code>etc/nagvis/worldmap.db</code>. Additional DBs are created below
+        <code>etc/nagvis/worldmaps/</code> (for example <code>worldmaps/worldmap-geo2.db</code>).</p>
 
         <p>The <code>filter_group=my_group</code> (optional) is an attribute for filtering the host objects on a worldmap by their
         memberships in the given host group. Only members of the group will be shown on the worldmap.</p>
