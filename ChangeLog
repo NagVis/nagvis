@@ -1,5 +1,6 @@
 1.9.49
   * FIX: Fix creating users during first login in some cases (#294)
+  * FIX: Fix if parseInt() interpret "auto" as NaN (#416 Thanks to ArminRadmueller)
 
 1.9.48
   * FIX: Fix exclude_members related PHP 8.1 compatibility issue (#400 Thanks to ekapsner-ne)
