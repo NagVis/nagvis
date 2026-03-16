@@ -159,8 +159,7 @@ class ViewMapAddModify {
                 // Normalize worldmap_db values entered via "Specify other" to the canonical
                 // storage format (worldmaps/<name>.db), so GUI and runtime stay in sync.
                 if ($this->object_type === 'global'
-                    && isset($this->attrs['worldmap_db'])
-                    && function_exists('worldmap_normalize_db_option')) {
+                    && isset($this->attrs['worldmap_db'])) {
                     $this->attrs['worldmap_db'] = worldmap_normalize_db_option($this->attrs['worldmap_db']);
                 }
 

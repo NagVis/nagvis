@@ -21,6 +21,20 @@
 
 class ViewManageMaps {
     private $error = null;
+    private function normalizeWorldmapDbOption($db_file) {
+        $db_file = trim((string) $db_file);
+        if ($db_file === '')
+            $db_file = 'worldmap.db';
+
+        if ($db_file !== 'worldmap.db') {
+            if (substr($db_file, -3) !== '.db')
+                $db_file .= '.db';
+            if (strpos($db_file, 'worldmaps/') !== 0)
+                $db_file = 'worldmaps/' . basename($db_file);
+        }
+
+        return $db_file;
+    }
 
     private function listCustomWorldmapDbs($with_usage = false) {
         $list = array();
@@ -33,6 +47,7 @@ class ViewManageMaps {
                 continue;
             if (!preg_match('/^.+\.db$/i', $f))
                 continue;
+
             $key = 'worldmaps/' . $f;
             $label = $key;
             if ($with_usage) {
@@ -44,6 +59,7 @@ class ViewManageMaps {
             }
             $list[$key] = $label;
         }
+
         return $list;
     }
 
@@ -51,9 +67,7 @@ class ViewManageMaps {
         global $CORE;
         $used_by = array();
 
-        $selected = $db_name;
-        if (function_exists('worldmap_normalize_db_option'))
-            $selected = worldmap_normalize_db_option($db_name);
+        $selected = $this->normalizeWorldmapDbOption($db_name);
 
         foreach ($CORE->getAvailableMaps() as $map_name) {
             try {
@@ -66,8 +80,7 @@ class ViewManageMaps {
                 $configured = $MAPCFG->getValue(0, 'worldmap_db');
                 if ($configured === false || $configured === null || $configured === '')
                     $configured = 'worldmap.db';
-                if (function_exists('worldmap_normalize_db_option'))
-                    $configured = worldmap_normalize_db_option($configured);
+                $configured = $this->normalizeWorldmapDbOption($configured);
 
                 if ($configured === $selected)
                     $used_by[] = $map_name;
@@ -512,3 +525,4 @@ class ViewManageMaps {
     }
 }
 ?>
+

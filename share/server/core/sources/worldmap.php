@@ -161,11 +161,8 @@ function worldmap_db_path($MAPCFG = null) {
     return cfg('paths', 'cfg') . $db_file;
 }
 
-function list_worldmap_dbs() {
-    $ret = array(
-        'worldmap.db' => 'worldmap.db (shared default)',
-    );
-
+function list_custom_worldmap_dbs() {
+    $ret = array();
     $dir = cfg('paths', 'cfg') . 'worldmaps';
     if (is_dir($dir) && is_readable($dir)) {
         foreach (scandir($dir) as $f) {
@@ -177,6 +174,17 @@ function list_worldmap_dbs() {
             $ret[$key] = $key;
         }
     }
+
+    return $ret;
+}
+
+function list_worldmap_dbs() {
+    $ret = array(
+        'worldmap.db' => 'worldmap.db (shared default)',
+    );
+
+    foreach (list_custom_worldmap_dbs() as $key => $label)
+        $ret[$key] = $label;
 
     return $ret;
 }
@@ -558,3 +566,4 @@ function swap(&$x, &$y) {
 }
 
 ?>
+
