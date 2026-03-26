@@ -415,13 +415,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 
             this.conf.url = this.conf.url.replace(getRegEx('htmlbase', '\\[htmlbase\\]', 'g'), oGeneralProperties.path_base);
 
-            this.conf.url = this.conf.url.replace(getRegEx(name, '\\['+name+'\\]', 'g'), this.conf.name);
+            this.conf.url = this.conf.url.replace(getRegEx(name, '\\['+name+'\\]', 'g'), encodeURIComponent(this.conf.name));
             if(this.conf.type == 'service') {
-                this.conf.url = this.conf.url.replace(getRegEx('service_description', '\\[service_description\\]', 'g'), this.conf.service_description);
+                this.conf.url = this.conf.url.replace(getRegEx('service_description', '\\[service_description\\]', 'g'), encodeURIComponent(this.conf.service_description));
             }
 
             if(this.conf.type != 'map') {
-                this.conf.url = this.conf.url.replace(getRegEx('backend_id', '\\[backend_id\\]', 'g'), this.conf.backend_id);
+                this.conf.url = this.conf.url.replace(getRegEx('backend_id', '\\[backend_id\\]', 'g'), encodeURIComponent(this.conf.backend_id));
             }
         }
     },
