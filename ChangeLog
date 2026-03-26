@@ -1,4 +1,5 @@
 1.9.49
+  * FIX: Prevent fatal autoloader error when backend has empty or missing backendtype
   * FIX: Fix creating users during first login in some cases (#294)
   * FIX: Fix if parseInt() interpret "auto" as NaN (#416 Thanks to ArminRadmueller)
 
