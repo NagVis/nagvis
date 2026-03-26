@@ -567,12 +567,13 @@ class CoreBackendMgmt {
      */
     public function checkBackendExists($backendId, $printErr) {
         global $CORE;
-        if($CORE->checkExisting(cfg('paths','class').'GlobalBackend'.cfg('backend_'.$backendId,'backendtype').'.php', false))
+        $backendType = cfg('backend_'.$backendId,'backendtype');
+        if($backendType != '' && $CORE->checkExisting(cfg('paths','class').'GlobalBackend'.$backendType.'.php', false))
             return true;
 
         if($printErr == 1)
             throw new NagVisException(l('backendNotExists', Array('BACKENDID'   => $backendId,
-                                                                  'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype'))));
+                                                                  'BACKENDTYPE' => $backendType)));
         return false;
     }
 
@@ -673,7 +674,7 @@ class CoreBackendMgmt {
      */
     public function checkBackendFeature($backendId, $feature, $printErr = 1) {
         $backendClass = 'GlobalBackend'.cfg('backend_'.$backendId, 'backendtype');
-        if(method_exists($backendClass, $feature)) {
+        if(class_exists($backendClass, false) && method_exists($backendClass, $feature)) {
             return true;
         } else {
             if($printErr == 1) {
