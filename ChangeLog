@@ -3,6 +3,7 @@
   * FIX: Fix creating users during first login in some cases (#294)
   * FIX: Fix if parseInt() interpret "auto" as NaN (#416 Thanks to ArminRadmueller)
   * FIX: URL-encode object names and service descriptions in map links to handle special characters like '#'
+  * FIX: Allow double quotes in service descriptions to support Checkmk if64 interface names
 
 1.9.48
   * FIX: Fix exclude_members related PHP 8.1 compatibility issue (#400 Thanks to ekapsner-ne)
