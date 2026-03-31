@@ -14,3 +14,10 @@ parameters:
         - share/server/core/ext/php-gettext-1.0.12/gettext.inc
         - stub_multisite_auth.php
         - stub_hosttags.php
+    ignoreErrors:
+        -
+            identifier: requireOnce.fileNotFound
+            path: share/server/core/classes/CoreTemplateSystem.php
+        -
+            identifier: requireOnce.fileNotFound
+            path: share/server/core/classes/GlobalLanguage.php
