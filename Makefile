@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-VERSION=1.9.49
+VERSION=1.9.50
 NAME=nagvis-$(VERSION)
 
 SED ?= sed
@@ -35,7 +35,7 @@ publish:
 	cp $(NAME).tar.gz ~/git/nagvis.org/htdocs/share/
 	VERSION=$(NAME) $(MAKE) -C ~/git/nagvis.org/htdocs release
 
-release: create-tag version
+release: create-tag
 	@echo "Tag pushed. GitHub Actions will build, sign and publish the release."
 
 version:
