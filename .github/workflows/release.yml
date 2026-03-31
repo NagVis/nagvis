@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'nagvis-*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#nagvis-}" >> $GITHUB_OUTPUT
+
+      - name: Build tarball
+        run: |
+          git archive \
+            --format=tar \
+            --prefix=nagvis-${{ steps.version.outputs.version }}/ \
+            HEAD \
+          | gzip > nagvis-${{ steps.version.outputs.version }}.tar.gz
+
+      - name: Generate checksums
+        run: |
+          sha256sum nagvis-${{ steps.version.outputs.version }}.tar.gz \
+            > nagvis-${{ steps.version.outputs.version }}.tar.gz.sha256
+
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "${{ secrets.GPG_KEY_ID }}:6:" | gpg --import-ownertrust
+
+      - name: Sign tarball
+        run: |
+          gpg --batch \
+              --yes \
+              --local-user "${{ secrets.GPG_KEY_ID }}" \
+              --detach-sign \
+              --armor \
+              nagvis-${{ steps.version.outputs.version }}.tar.gz
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: NagVis ${{ steps.version.outputs.version }}
+          draft: true
+          files: |
+            nagvis-${{ steps.version.outputs.version }}.tar.gz
+            nagvis-${{ steps.version.outputs.version }}.tar.gz.asc
+            nagvis-${{ steps.version.outputs.version }}.tar.gz.sha256
