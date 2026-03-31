@@ -35,7 +35,8 @@ publish:
 	cp $(NAME).tar.gz ~/git/nagvis.org/htdocs/share/
 	VERSION=$(NAME) $(MAKE) -C ~/git/nagvis.org/htdocs release
 
-release: dist create-tag publish version
+release: create-tag version
+	@echo "Tag pushed. GitHub Actions will build, sign and publish the release."
 
 version:
 	@newversion=$$(dialog --stdout --inputbox "Next Version:" 0 0 "$(VERSION)") ; \
