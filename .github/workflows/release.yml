@@ -34,7 +34,8 @@ jobs:
       - name: Import GPG key
         run: |
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-          echo "${{ secrets.GPG_KEY_ID }}:6:" | gpg --import-ownertrust
+          FINGERPRINT=$(gpg --list-secret-keys --with-colons | grep '^fpr' | head -1 | cut -d: -f10)
+          echo "${FINGERPRINT}:6:" | gpg --import-ownertrust
 
       - name: Sign tarball
         run: |
