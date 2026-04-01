@@ -3,6 +3,14 @@ name: CI
 on: [push]
 
 jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: php-actions/composer@v6
+      - name: PHP CS Fixer
+        run: vendor/bin/php-cs-fixer check --diff
+
   phpstan:
     runs-on: ubuntu-latest
     steps:
