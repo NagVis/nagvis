@@ -29,6 +29,7 @@ require('../../server/core/defines/matches.php');
 
 // Include functions
 require('../../server/core/classes/CoreExceptions.php');
+require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/functions/autoload.php');
 
 if (PROFILE) {

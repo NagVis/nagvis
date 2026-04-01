@@ -70,6 +70,9 @@
  *
  ******************************************************************************/
 
+// Load polyfills for functions not available in PHP < 8.0
+require_once(dirname(__FILE__) . '/../../server/core/functions/oldPhpVersionFixes.php');
+
 /**
  * parsePerfdata() parses a Nagios performance data string to an array
  *

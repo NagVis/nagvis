@@ -23,6 +23,9 @@
  *
  *****************************************************************************/
 
+// Load polyfills for functions not available in PHP < 8.0
+require_once(dirname(__FILE__) . '/../../server/core/functions/oldPhpVersionFixes.php');
+
 // Set colors
 $table_colors = [];
 $table_colors['WARNING'] = "#FFFF00";
