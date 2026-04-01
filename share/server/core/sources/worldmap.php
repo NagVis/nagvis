@@ -38,6 +38,14 @@ $configVars = array(
         'default'   => '',
         'match'     => MATCH_INTEGER_EMPTY,
     ),
+    'worldmap_db' => array(
+        'must'      => false,
+        'default'   => 'worldmap.db',
+        'match'     => MATCH_STRING_PATH,
+        'field_type' => 'dropdown',
+        'list'      => 'list_worldmap_dbs',
+        'other'     => true,
+    ),
 
     /*** OBJECT OPTIONS ***/
     'min_zoom' => array(
@@ -73,6 +81,7 @@ $configVarMap = array(
             'worldmap_center' => null,
             'worldmap_zoom'   => null,
             'worldmap_tiles_saturate'   => null,
+            'worldmap_db' => null,
         ),
     ),
 );
@@ -111,9 +120,78 @@ $updateConfigVars = array(
 
 // The worldmap database object
 $DB = null;
+$DB_PATH = null;
+
+function worldmap_normalize_db_option($db_file) {
+    $db_file = trim((string) $db_file);
+    if ($db_file === '')
+        $db_file = 'worldmap.db';
+
+    // Normalize:
+    // - keep "worldmap.db" at etc/nagvis/worldmap.db
+    // - put all custom DBs below etc/nagvis/worldmaps/
+    // - append ".db" when omitted
+    if ($db_file !== 'worldmap.db') {
+        if (substr($db_file, -3) !== '.db')
+            $db_file .= '.db';
+        if (strpos($db_file, 'worldmaps/') !== 0)
+            $db_file = 'worldmaps/' . basename($db_file);
+    }
+
+    return $db_file;
+}
+
+function worldmap_db_path($MAPCFG = null) {
+    $db_file = 'worldmap.db';
+    if ($MAPCFG !== null) {
+        $configured = trim((string) $MAPCFG->getValue(0, 'worldmap_db'));
+        if ($configured !== '')
+            $db_file = $configured;
+    }
+    $db_file = worldmap_normalize_db_option($db_file);
+
+    // Security: keep worldmap DB files inside cfg path.
+    if (strpos($db_file, '..') !== false
+        || preg_match('/^[\/\\\\]/', $db_file)
+        || preg_match('/^[A-Za-z]:/', $db_file)) {
+        throw new WorldmapError(l('Invalid worldmap_db path "[P]". Use a file name relative to etc/nagvis.',
+                                   array('P' => $db_file)));
+    }
+
+    return cfg('paths', 'cfg') . $db_file;
+}
+
+function list_custom_worldmap_dbs() {
+    $ret = array();
+    $dir = cfg('paths', 'cfg') . 'worldmaps';
+    if (is_dir($dir) && is_readable($dir)) {
+        foreach (scandir($dir) as $f) {
+            if ($f === '.' || $f === '..')
+                continue;
+            if (!preg_match('/^.+\.db$/i', $f))
+                continue;
+            $key = 'worldmaps/' . $f;
+            $ret[$key] = $key;
+        }
+    }
+
+    return $ret;
+}
+
+function list_worldmap_dbs() {
+    $ret = array(
+        'worldmap.db' => 'worldmap.db (shared default)',
+    );
+
+    foreach (list_custom_worldmap_dbs() as $key => $label)
+        $ret[$key] = $label;
+
+    return $ret;
+}
 
 function worldmap_init_schema() {
-    global $DB, $CORE;
+    global $DB, $CORE, $DB_PATH;
+    $is_default_worldmap_db = ($DB_PATH === cfg('paths', 'cfg') . 'worldmap.db');
     // Create initial db scheme if needed
     if (!$DB->tableExist('objects')) {
         $DB->query('CREATE TABLE objects '
@@ -124,32 +202,34 @@ function worldmap_init_schema() {
                  .' lng2 REAL,'
                  .' object TEXT,'
                  .' PRIMARY KEY(object_id))');
-        $DB->query('CREATE INDEX latlng ON objects (lat,long)');
-        $DB->query('CREATE INDEX latlng2 ON objects (lat2,long2)');
+        $DB->query('CREATE INDEX latlng ON objects (lat,lng)');
+        $DB->query('CREATE INDEX latlng2 ON objects (lat2,lng2)');
         $DB->createVersionTable();
 
-        // Install demo data
-        worldmap_db_update_object('273924', 53.5749514424993, 10.0405490398407, array(
-            "x"         => "53.57495144249931",
-            "y"         => "10.040549039840698",
-            "type"      => "map",
-            "map_name"  => "demo-ham-racks",
-            "object_id" => "273924"
-        ));
-        worldmap_db_update_object('0df2d3', 48.1125317248817, 11.6794109344482, array(
-            "x"              => "48.11253172488166",
-            "y"              => "11.67941093444824",
-            "type"           => "hostgroup",
-            "hostgroup_name" => "muc",
-            "object_id"      => "0df2d3"
-        ));
-        worldmap_db_update_object('ebbf59', 50.9391761712781, 6.95863723754883, array(
-            "x"              => "50.93917617127812",
-            "y"              => "6.958637237548828",
-            "type"           => "hostgroup",
-            "hostgroup_name" => "cgn",
-            "object_id"      => "ebbf59"
-        ));
+        if ($is_default_worldmap_db) {
+            // Install demo data only for the shared default DB.
+            worldmap_db_update_object('273924', 53.5749514424993, 10.0405490398407, array(
+                "x"         => "53.57495144249931",
+                "y"         => "10.040549039840698",
+                "type"      => "map",
+                "map_name"  => "demo-ham-racks",
+                "object_id" => "273924"
+            ));
+            worldmap_db_update_object('0df2d3', 48.1125317248817, 11.6794109344482, array(
+                "x"              => "48.11253172488166",
+                "y"              => "11.67941093444824",
+                "type"           => "hostgroup",
+                "hostgroup_name" => "muc",
+                "object_id"      => "0df2d3"
+            ));
+            worldmap_db_update_object('ebbf59', 50.9391761712781, 6.95863723754883, array(
+                "x"              => "50.93917617127812",
+                "y"              => "6.958637237548828",
+                "type"           => "hostgroup",
+                "hostgroup_name" => "cgn",
+                "object_id"      => "ebbf59"
+            ));
+        }
     }
     //else {
     //    // Maybe an update is needed
@@ -162,16 +242,32 @@ function worldmap_init_schema() {
     //}
 }
 
-function worldmap_init_db() {
-    global $DB;
-    if ($DB !== null)
-        return; // only init once
+function worldmap_init_db($db_path = null) {
+    global $DB, $DB_PATH;
+    if ($db_path === null)
+        $db_path = worldmap_db_path();
+
+    if ($DB !== null && $DB_PATH === $db_path)
+        return; // already connected to wanted DB
+
+    if ($DB !== null) {
+        $DB->close();
+        $DB = null;
+    }
+
+    $db_dir = dirname($db_path);
+    if (!is_dir($db_dir) && !@mkdir($db_dir, 0770, true) && !is_dir($db_dir)) {
+        throw new WorldmapError(l('Unable to create worldmap DB directory "[D]".',
+                                  array('D' => $db_dir)));
+    }
+
     $DB = new CorePDOHandler();
-    if (!$DB->open('sqlite', array('filename' => cfg('paths', 'cfg').'worldmap.db'), null, null))
+    if (!$DB->open('sqlite', array('filename' => $db_path), null, null))
         throw new NagVisException(l('Unable to open worldmap database ([DB]): [MSG]',
             Array('DB' => $DB->getDSN(),
                   'MSG' => json_encode($DB->error()))));
 
+    $DB_PATH = $db_path;
     worldmap_init_schema();
 }
 
@@ -195,9 +291,9 @@ function line_parameters($ax, $ay, $bx, $by) {
 
     return array($r, $s, $t);
 }
-function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
+function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat, $db_path = null) {
     global $DB;
-    worldmap_init_db();
+    worldmap_init_db($db_path);
 
     if ($sw_lat > $ne_lat) swap($sw_lat, $ne_lat);
     if ($sw_lng > $ne_lng) swap($sw_lng, $ne_lng);
@@ -292,9 +388,9 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     return $objects;
 }
 
-function worldmap_get_object_by_id($id) {
+function worldmap_get_object_by_id($id, $db_path = null) {
     global $DB;
-    worldmap_init_db();
+    worldmap_init_db($db_path);
 
     $q = 'SELECT object FROM objects WHERE object_id = :id LIMIT 1';
 
@@ -306,9 +402,10 @@ function worldmap_get_object_by_id($id) {
 
 // Worldmap internal helper function to add an object to the worldmap
 function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
-                                   $lat2 = null, $lng2 = null, $insert = true) {
+                                   $lat2 = null, $lng2 = null, $insert = true,
+                                   $db_path = null) {
     global $DB;
-    worldmap_init_db();
+    worldmap_init_db($db_path);
 
     if ($insert) {
         $q = 'INSERT INTO objects (object_id, lat, lng, lat2, lng2, object)'
@@ -339,6 +436,7 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
 
 function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $insert = true) {
     $obj = $map_config[$obj_id];
+    $db_path = worldmap_db_path($MAPCFG);
 
     if ($obj['type'] == 'global')
         return false; // adding global section (during map creation)
@@ -362,7 +460,7 @@ function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $inse
         $lng2 = $y[count($y)-1];
     }
 
-    return worldmap_db_update_object($obj_id, $lat, $lng, $obj, $lat2, $lng2, $insert);
+    return worldmap_db_update_object($obj_id, $lat, $lng, $obj, $lat2, $lng2, $insert, $db_path);
 }
 
 //
@@ -379,7 +477,7 @@ function init_map_worldmap($MAPCFG, $map_name, &$map_config) {
 // Returns the minimum bounds needed to be able to display all objects
 function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
     global $DB;
-    worldmap_init_db();
+    worldmap_init_db(worldmap_db_path($MAPCFG));
 
     $q = 'SELECT min(lat) as min_lat, min(lng) as min_lng, '
         .'max(lat) as max_lat, max(lng) as max_lng '
@@ -391,7 +489,7 @@ function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
 
 function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     global $DB;
-    worldmap_init_db();
+    worldmap_init_db(worldmap_db_path($MAPCFG));
 
     if (isset($map_config[$obj_id]))
         return true; // already loaded
@@ -404,7 +502,7 @@ function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
 
 function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     global $DB;
-    worldmap_init_db();
+    worldmap_init_db(worldmap_db_path($MAPCFG));
 
     $q = 'DELETE FROM objects WHERE object_id=:obj_id';
     if ($DB->query($q, array('obj_id' => $obj_id)))
@@ -425,6 +523,7 @@ function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
 function process_worldmap($MAPCFG, $map_name, &$map_config) {
     $bbox = val($_GET, 'bbox', null);
     $clone_id = val($_GET, 'clone_id', null);
+    $db_path = worldmap_db_path($MAPCFG);
 
     if ($bbox !== null)
     {
@@ -432,7 +531,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
         $zoom = (int)$params['worldmap_zoom'];
 
         list($sw_lng, $sw_lat, $ne_lng, $ne_lat) = explode(',', $bbox);
-        foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj) {
+        foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat, $db_path) as $object_id => $obj) {
             // Now, when the object has a maximum / minimum zoom configured,
             // hide it depending on the zoom
             $min_zoom = isset($obj['min_zoom']) ? (int)$obj['min_zoom'] : $MAPCFG->getDefaultValue('host', 'min_zoom');
@@ -448,7 +547,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
     }
     elseif ($clone_id !== null)
     {
-        $map_config[$clone_id] = worldmap_get_object_by_id($clone_id);
+        $map_config[$clone_id] = worldmap_get_object_by_id($clone_id, $db_path);
         return true;
     }
 
@@ -456,7 +555,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
 }
 
 function changed_worldmap($MAPCFG, $compare_time) {
-    $db_path = cfg('paths', 'cfg').'worldmap.db';
+    $db_path = worldmap_db_path($MAPCFG);
     return !file_exists($db_path) || filemtime($db_path) > $compare_time;
 }
 
@@ -467,3 +566,4 @@ function swap(&$x, &$y) {
 }
 
 ?>
+

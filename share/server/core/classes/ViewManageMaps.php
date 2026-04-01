@@ -21,6 +21,76 @@
 
 class ViewManageMaps {
     private $error = null;
+    private function normalizeWorldmapDbOption($db_file) {
+        $db_file = trim((string) $db_file);
+        if ($db_file === '')
+            $db_file = 'worldmap.db';
+
+        if ($db_file !== 'worldmap.db') {
+            if (substr($db_file, -3) !== '.db')
+                $db_file .= '.db';
+            if (strpos($db_file, 'worldmaps/') !== 0)
+                $db_file = 'worldmaps/' . basename($db_file);
+        }
+
+        return $db_file;
+    }
+
+    private function listCustomWorldmapDbs($with_usage = false) {
+        $list = array();
+        $dir = cfg('paths', 'cfg') . 'worldmaps';
+        if (!is_dir($dir) || !is_readable($dir))
+            return $list;
+
+        foreach (scandir($dir) as $f) {
+            if ($f === '.' || $f === '..')
+                continue;
+            if (!preg_match('/^.+\.db$/i', $f))
+                continue;
+
+            $key = 'worldmaps/' . $f;
+            $label = $key;
+            if ($with_usage) {
+                $used_by = $this->mapsUsingWorldmapDb($key);
+                if (count($used_by) === 0)
+                    $label .= ' (unused)';
+                else
+                    $label .= ' (used by '.count($used_by).' map'.(count($used_by) === 1 ? '' : 's').')';
+            }
+            $list[$key] = $label;
+        }
+
+        return $list;
+    }
+
+    private function mapsUsingWorldmapDb($db_name) {
+        global $CORE;
+        $used_by = array();
+
+        $selected = $this->normalizeWorldmapDbOption($db_name);
+
+        foreach ($CORE->getAvailableMaps() as $map_name) {
+            try {
+                $MAPCFG = new GlobalMapCfg($map_name);
+                $MAPCFG->readMapConfig(ONLY_GLOBAL);
+                $sources = $MAPCFG->getValue(0, 'sources');
+                if (!is_array($sources) || !in_array('worldmap', $sources))
+                    continue;
+
+                $configured = $MAPCFG->getValue(0, 'worldmap_db');
+                if ($configured === false || $configured === null || $configured === '')
+                    $configured = 'worldmap.db';
+                $configured = $this->normalizeWorldmapDbOption($configured);
+
+                if ($configured === $selected)
+                    $used_by[] = $map_name;
+            } catch (Exception $e) {
+                // Ignore broken/unreadable maps during usage scan.
+            }
+        }
+
+        return $used_by;
+    }
 
     private function createForm() {
         global $CORE;
@@ -316,6 +386,64 @@ class ViewManageMaps {
         form_end();
     }
 
+    private function deleteWorldmapDbForm() {
+        echo '<h2>'.l('Delete Worldmap DB').'</h2>';
+
+        if (is_action() && post('mode') == 'delete_worldmap_db') {
+            try {
+                $db_name = post('worldmap_db');
+                if (!$db_name)
+                    throw new FieldInputError('worldmap_db', l('Please choose a worldmap DB'));
+
+                $choices = $this->listCustomWorldmapDbs();
+                if (!isset($choices[$db_name]))
+                    throw new FieldInputError('worldmap_db', l('The given worldmap DB is invalid'));
+
+                $used_by = $this->mapsUsingWorldmapDb($db_name);
+                if (count($used_by) > 0) {
+                    throw new FieldInputError(
+                        'worldmap_db',
+                        l('Unable to delete this worldmap DB, because it is currently used by these maps: [M].',
+                          array('M' => implode(', ', $used_by)))
+                    );
+                }
+
+                $db_path = cfg('paths', 'cfg') . $db_name;
+                if (!is_file($db_path))
+                    throw new FieldInputError('worldmap_db', l('The selected worldmap DB does not exist'));
+
+                if (!@unlink($db_path))
+                    throw new NagVisException(l('The worldmap DB could not be deleted.'));
+
+                success(l('The worldmap DB has been deleted.'));
+                reload(null, 1);
+            } catch (FieldInputError $e) {
+                form_error($e->field, $e->msg);
+            } catch (Exception $e) {
+                if (isset($e->msg))
+                    form_error(null, $e->msg);
+                else
+                    throw $e;
+            }
+        }
+        echo $this->error;
+
+        js_form_start('delete_worldmap_db');
+        hidden('mode', 'delete_worldmap_db');
+
+        echo '<table class="mytable">';
+        echo '<tr><td class="tdlabel">'.l('Worldmap DB').'</td>';
+        echo '<td class="tdfield">';
+        $dbs = array('' => l('Choose a worldmap DB'));
+        $dbs = array_merge($dbs, $this->listCustomWorldmapDbs(true));
+        select('worldmap_db', $dbs);
+        echo '</td></tr>';
+        echo '</table>';
+
+        submit(l('Delete'));
+        form_end();
+    }
+
     private function importForm() {
         global $CORE;
         echo '<h2>'.l('Import Map').'</h2>';
@@ -389,6 +517,7 @@ class ViewManageMaps {
         $this->createForm();
         $this->renameForm();
         $this->deleteForm();
+        $this->deleteWorldmapDbForm();
         $this->exportForm();
         $this->importForm();
 
@@ -396,3 +525,4 @@ class ViewManageMaps {
     }
 }
 ?>
+

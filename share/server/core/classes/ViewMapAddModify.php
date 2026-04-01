@@ -156,6 +156,13 @@ class ViewMapAddModify {
                 $show_dialog = true;
             }
             else {
+                // Normalize worldmap_db values entered via "Specify other" to the canonical
+                // storage format (worldmaps/<name>.db), so GUI and runtime stay in sync.
+                if ($this->object_type === 'global'
+                    && isset($this->attrs['worldmap_db'])) {
+                    $this->attrs['worldmap_db'] = worldmap_normalize_db_option($this->attrs['worldmap_db']);
+                }
+
                 if (!$this->MAPCFG->objExists($this->object_id))
                     throw new NagVisException(l('The object does not exist.'));
 
