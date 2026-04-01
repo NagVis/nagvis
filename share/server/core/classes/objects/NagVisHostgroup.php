@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisHostgroup.php - Class of a Hostgroup in NagVis with all necessary
@@ -51,7 +52,6 @@ class NagVisHostgroup extends NagVisStatefulObject
         $this->hostgroup_name = $hostgroupName;
         parent::__construct();
     }
-
 
     /**
      * Queues the state fetching to the backend.
@@ -208,9 +208,9 @@ class NagVisHostgroup extends NagVisStatefulObject
     {
         if ($this->hasMembers()) {
             $arrStates = [
-                CRITICAL => 0, DOWN    => 0, WARNING   => 0,
-                UNKNOWN  => 0, UP      => 0, OK        => 0,
-                ERROR    => 0, PENDING => 0, UNCHECKED => 0
+                CRITICAL => 0, DOWN => 0, WARNING => 0,
+                UNKNOWN => 0, UP => 0, OK => 0,
+                ERROR => 0, PENDING => 0, UNCHECKED => 0
             ];
 
             // Get summary state of this and child objects

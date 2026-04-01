@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisHost.php - Class of a Host in NagVis with all necessary information
@@ -131,7 +132,7 @@ class NagVisHost extends NagVisStatefulObject
     public function applyState()
     {
         if ($this->problem_msg) {
-            $this->sum[STATE]  = ERROR;
+            $this->sum[STATE] = ERROR;
             $this->sum[OUTPUT] = $this->problem_msg;
             $this->members = [];
             return;
@@ -169,8 +170,8 @@ class NagVisHost extends NagVisStatefulObject
     private function fetchSummaryState()
     {
         // Get Host state
-        $this->sum[STATE]    = $this->state[STATE];
-        $this->sum[ACK]      = $this->state[ACK];
+        $this->sum[STATE] = $this->state[STATE];
+        $this->sum[ACK] = $this->state[ACK];
         $this->sum[DOWNTIME] = $this->state[DOWNTIME];
 
         // Only merge host state with service state when recognize_services is set to 1
@@ -271,9 +272,9 @@ class NagVisHost extends NagVisStatefulObject
             // If there are services write the summary state for them
             if ($this->hasMembers()) {
                 $arrStates = [
-                    CRITICAL => 0, DOWN    => 0, WARNING   => 0,
-                    UNKNOWN  => 0, UP      => 0, OK        => 0,
-                    ERROR    => 0, PENDING => 0, UNCHECKED => 0
+                    CRITICAL => 0, DOWN => 0, WARNING => 0,
+                    UNKNOWN => 0, UP => 0, OK => 0,
+                    ERROR => 0, PENDING => 0, UNCHECKED => 0
                 ];
 
                 foreach ($this->members as &$SERVICE) {

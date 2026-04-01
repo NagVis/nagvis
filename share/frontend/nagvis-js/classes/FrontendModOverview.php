@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendModOverview.php - Module for handling the overview page

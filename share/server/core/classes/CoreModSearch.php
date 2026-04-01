@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModSearch.php - Core module to display the map object search dialog

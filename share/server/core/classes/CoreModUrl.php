@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModUrl.php - Core module to handle ajax requests for urls
@@ -48,7 +49,7 @@ class CoreModUrl extends CoreModule
 
         // Register valid actions
         $this->aActions = [
-            'getContents'   => 'view',
+            'getContents' => 'view',
         ];
     }
 

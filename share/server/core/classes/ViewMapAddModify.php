@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewMapAddModify.php - Class to render the main configuration edit dialog
@@ -32,16 +33,16 @@ class ViewMapAddModify
 
     // object related vars
     /** @var string|null */
-    private $object_id   = null;
+    private $object_id = null;
 
     /** @var string|null */
     private $object_type = null;
 
     /** @var string|null */
-    private $clone_id    = null;
+    private $clone_id = null;
 
     /** @var array */
-    private $attrs          = [];
+    private $attrs = [];
 
     /** @var array */
     private $attrs_filtered = [];
@@ -56,15 +57,15 @@ class ViewMapAddModify
     private function filterMapAttrs()
     {
         $exclude = [
-            'mod'       => true,
-            'act'       => true,
-            'show'      => true,
-            'clone_id'  => true,
-            'mode'      => true,
-            'perm'      => true,
+            'mod' => true,
+            'act' => true,
+            'show' => true,
+            'clone_id' => true,
+            'mode' => true,
+            'perm' => true,
             'perm_user' => true,
-            'lang'      => true,
-            'sec'       => true,
+            'lang' => true,
+            'sec' => true,
         ];
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         foreach ($_REQUEST as $attr => $val) {
@@ -79,7 +80,7 @@ class ViewMapAddModify
             if (
                 (isset($attrDefs[$attr]['must']) && $attrDefs[$attr]['must'] == '1')
                 || !has_var('toggle_' . $attr)
-                ||  get_checkbox('toggle_' . $attr)
+                || get_checkbox('toggle_' . $attr)
             ) {
                 if (isset($attrDefs[$attr]['array']) && $attrDefs[$attr]['array']) {
                     $val = explode(',', $val);
@@ -155,12 +156,12 @@ class ViewMapAddModify
      */
     private function handleAddModify()
     {
-        $perm        = get_checkbox('perm');
-        $perm_user   = get_checkbox('perm_user');
+        $perm = get_checkbox('perm');
+        $perm_user = get_checkbox('perm_user');
         $show_dialog = false;
 
         global $AUTHORISATION;
-        if(!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
+        if (!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
             throw new NagVisException(l('Cannot edit HTML. Please contact your administrator'));
         }
 
@@ -383,7 +384,7 @@ class ViewMapAddModify
             }
         }
 
-        $rowHide    = '';
+        $rowHide = '';
         $rowClasses = [];
 
         // Check if depends_on and depends_value are defined and if the value
@@ -473,10 +474,10 @@ class ViewMapAddModify
 
         // Display as text if inherited, otherwise display the input fields
         if ($isInherited === false) {
-            $hideTxt   = ' style="display:none"';
+            $hideTxt = ' style="display:none"';
             $hideField = '';
         } else {
-            $hideTxt   = '';
+            $hideTxt = '';
             $hideField = 'display:none;';
         }
 
@@ -514,7 +515,7 @@ class ViewMapAddModify
                 select($propname, $options, $value, $onChange, $hideField);
                 break;
             case 'dropdown':
-                $array    = isset($prop['array']) && $prop['array'];
+                $array = isset($prop['array']) && $prop['array'];
 
                 $func = $this->MAPCFG->getListFunc($this->object_type, $propname);
                 // Handle case that e.g. host_names can not be fetched from backend by
@@ -778,7 +779,7 @@ class ViewMapAddModify
         } else {
             // Creating/Cloning new object. The type is set by URL
             $this->object_type = req('type');
-            $this->object_id   = null;
+            $this->object_id = null;
         }
 
         $this->filterMapAttrs();

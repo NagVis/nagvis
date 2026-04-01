@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisLine.php - Class of a Stateless line in NagVis with all necessary

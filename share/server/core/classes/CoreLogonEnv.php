@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreModLogonEnv.php - Module for handling logins by environment vars

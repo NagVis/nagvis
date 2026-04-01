@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendRequestHandler.php - Wrapper class for handling HTTP requests in

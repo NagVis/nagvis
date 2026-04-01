@@ -21,11 +21,11 @@ $viewParams = [];
 global $configVars;
 $configVars = [
     'filter_group' => [
-        'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_STRING_EMPTY,
+        'must' => false,
+        'default' => '',
+        'match' => MATCH_STRING_EMPTY,
         'field_type' => 'dropdown',
-        'list'       => 'listHostgroupNames',
+        'list' => 'listHostgroupNames',
     ]
 ];
 
@@ -34,7 +34,7 @@ global $configVarMap;
 $configVarMap = [
     'global' => [
         'general' => [
-            'filter_group'  => null,
+            'filter_group' => null,
         ],
     ],
 ];

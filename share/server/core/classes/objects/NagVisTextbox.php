@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisTextbox.php - Class of a text object in NagVis with all necessary

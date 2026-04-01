@@ -1,4 +1,5 @@
-<?PHP
+<?php
+
 /*****************************************************************************
  *
  * ajax_handler.php - Ajax handler for the NagVis frontend
@@ -40,7 +41,7 @@ header('Content-Type: application/json');
 try {
     require('../../server/core/functions/core.php');
     $MHANDLER = new CoreModuleHandler();
-    $_name    = 'core';
+    $_name = 'core';
     $_modules = [
         'General',
         'Overview',
@@ -64,15 +65,15 @@ try {
     echo $e;
 } catch (NagVisErrorException $e) {
     echo json_encode([
-        'type'    => 'error',
+        'type' => 'error',
         'message' => (string)$e,
-        'title'   => l('Error: PHP Error'),
+        'title' => l('Error: PHP Error'),
     ]);
 } catch (Exception $e) {
     echo json_encode([
-        'type'    => 'error',
+        'type' => 'error',
         'message' => $e->getMessage(),
-        'title'   => l('Error: Unhandled Exception'),
+        'title' => l('Error: Unhandled Exception'),
     ]);
 }
 exit(1);

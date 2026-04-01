@@ -50,10 +50,10 @@ function geomap_read_csv($p)
         }
 
         $locations[] = [
-            'name'  => $parts[0],
+            'name' => $parts[0],
             'alias' => $parts[1],
-            'lat'   => (float) $parts[2],
-            'long'  => (float) $parts[3],
+            'lat' => (float) $parts[2],
+            'long' => (float) $parts[3],
         ];
     }
 
@@ -164,7 +164,7 @@ function geomap_get_contents($url)
     try {
         $opts = [
             'http' => [
-                'timeout'    => cfg('global', 'http_timeout'),
+                'timeout' => cfg('global', 'http_timeout'),
                 'user_agent' => 'NagVis ' . CONST_VERSION . ' geomap',
                 'max_redirects' => 0,
             ]
@@ -199,7 +199,7 @@ function geomap_get_contents($url)
 function list_geomap_types()
 {
     return [
-        'mapnik'     => 'Mapnik',
+        'mapnik' => 'Mapnik',
     ];
 }
 
@@ -209,7 +209,7 @@ function list_geomap_types()
 function list_geomap_source_types()
 {
     return [
-        'csv'     => l('CSV-File'),
+        'csv' => l('CSV-File'),
         'backend' => l('NagVis Backend'),
     ];
 }
@@ -251,37 +251,37 @@ $viewParams = [
 global $configVars;
 $configVars = [
     'geomap_type' => [
-        'must'       => false,
-        'default'    => 'mapnik',
-        'match'      => '/^(mapnik)$/i',
+        'must' => false,
+        'default' => 'mapnik',
+        'match' => '/^(mapnik)$/i',
         'field_type' => 'dropdown',
-        'list'       => 'list_geomap_types',
+        'list' => 'list_geomap_types',
     ],
     'geomap_zoom' => [
-        'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_INTEGER,
+        'must' => false,
+        'default' => '',
+        'match' => MATCH_INTEGER,
     ],
     'source_type' => [
-        'must'       => false,
-        'default'    => 'csv',
-        'match'      => MATCH_STRING,
+        'must' => false,
+        'default' => 'csv',
+        'match' => MATCH_STRING,
         'field_type' => 'dropdown',
-        'list'       => 'list_geomap_source_types',
+        'list' => 'list_geomap_source_types',
     ],
     'source_file' => [
-        'must'          => false,
-        'default'       => '',
-        'match'         => MATCH_STRING_EMPTY,
-        'field_type'    => 'dropdown',
-        'list'          => 'list_geomap_source_files',
-        'depends_on'    => 'source_type',
+        'must' => false,
+        'default' => '',
+        'match' => MATCH_STRING_EMPTY,
+        'field_type' => 'dropdown',
+        'list' => 'list_geomap_source_files',
+        'depends_on' => 'source_type',
         'depends_value' => 'csv',
     ],
     'geomap_border' => [
-        'must'       => false,
-        'default'    => 0.25,
-        'match'      => MATCH_FLOAT,
+        'must' => false,
+        'default' => 0.25,
+        'match' => MATCH_FLOAT,
     ],
 ];
 
@@ -290,10 +290,10 @@ global $configVarMap;
 $configVarMap = [
     'global' => [
         'geomap' => [
-            'geomap_type'   => null,
-            'geomap_zoom'   => null,
-            'source_type'   => null,
-            'source_file'   => null,
+            'geomap_type' => null,
+            'geomap_zoom' => null,
+            'source_type' => null,
+            'source_file' => null,
             'geomap_border' => null,
         ],
     ],
@@ -328,7 +328,7 @@ function geomap_files($params)
     unset($params['sources']);
     unset($params['backend_id']);
 
-    $image_name  = 'geomap-' . implode('_', array_values($params)) . '.png';
+    $image_name = 'geomap-' . implode('_', array_values($params)) . '.png';
     return [
         $image_name,
         path('sys', '', 'backgrounds') . '/' . $image_name,
@@ -394,19 +394,19 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
     // Adapt the global section
     $map_config[0] = $saved_config[0];
     $map_config[0]['map_image'] = $image_name . '?' . time() . '.png';
-    $map_config[0]['iconset']   = $iconset;
+    $map_config[0]['iconset'] = $iconset;
 
     // Now add the objects to the map
     foreach ($locations as $loc) {
         $object_id = $MAPCFG->genObjId($loc['name']);
         $map_config[$object_id] = [
-            'type'      => 'host',
+            'type' => 'host',
             'host_name' => $loc['name'],
-            'iconset'   => $iconset,
+            'iconset' => $iconset,
             'object_id' => $object_id,
-            'alias'     => $loc['alias'],
-            'lat'       => $loc['lat'],
-            'long'      => $loc['long'],
+            'alias' => $loc['alias'],
+            'lat' => $loc['lat'],
+            'long' => $loc['long'],
         ];
 
         if (isset($loc['backend_id'])) {
@@ -452,8 +452,8 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
     }
 
     // Fix equal coordinates (Simply add some space on all sides)
-    $min_lat  -= $params['geomap_border'];
-    $max_lat  += $params['geomap_border'];
+    $min_lat -= $params['geomap_border'];
+    $max_lat += $params['geomap_border'];
     $min_long -= $params['geomap_border'];
     $max_long += $params['geomap_border'];
 
@@ -477,7 +477,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
     // The geomap zoom seems to be something different than the nagvis zoom. Use
     // the dedicated geomap_zoom parameter
     if (isset($params['geomap_zoom']) && $params['geomap_zoom'] != '') {
-        $mid_lat  = ($min_lat + $max_lat) / 2;
+        $mid_lat = ($min_lat + $max_lat) / 2;
         $mid_long = ($min_long + $max_long) / 2;
         $url .= '&zoom=' . $params['geomap_zoom']
             . '&center=' . $mid_long . ',' . $mid_lat;
@@ -527,17 +527,17 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
         $parts = explode(',', file_get_contents($data_path));
     }
 
-    $img_left  = (float) $parts[0];
-    $img_top   = (float) $parts[1];
+    $img_left = (float) $parts[0];
+    $img_top = (float) $parts[1];
     $img_right = (float) $parts[2];
-    $img_down  = (float) $parts[3];
+    $img_down = (float) $parts[3];
 
     $long_diff = $img_right - $img_left;
-    $lat_diff  = $img_top   - $img_down;
+    $lat_diff = $img_top - $img_down;
 
     $long_para = $params['width'] / $long_diff;
-    $lat_para  = $params['height'] / $lat_diff;
-    $lat_mult  = $params['height'] / (ProjectF($img_top) - ProjectF($img_down));
+    $lat_para = $params['height'] / $lat_diff;
+    $lat_mult = $params['height'] / (ProjectF($img_top) - ProjectF($img_down));
 
     // Now add the coordinates to the map objects
     foreach ($map_config as &$obj) {
@@ -615,5 +615,5 @@ function ProjectF($Lat)
 {
     $Lat = deg2rad($Lat);
     $Y = log(tan($Lat) + (1 / cos($Lat)));
-    return($Y);
+    return ($Y);
 }

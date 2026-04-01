@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthorisationHandler.php - Authorsiation handler
@@ -84,15 +85,15 @@ class CoreAuthorisationHandler
             'deleteObject' => 'edit',
         ],
         'ManageShapes' => [
-            'view'                 => 'manage',
-            'doUpload'             => 'manage',
-            'doDelete'             => 'manage',
+            'view' => 'manage',
+            'doUpload' => 'manage',
+            'doDelete' => 'manage',
         ],
         'ManageBackgrounds' => [
-            'view'                 => 'manage',
-            'doUpload'             => 'manage',
-            'doCreate'             => 'manage',
-            'doDelete'             => 'manage',
+            'view' => 'manage',
+            'doUpload' => 'manage',
+            'doCreate' => 'manage',
+            'doDelete' => 'manage',
         ],
         'ChangePassword' => [
             'view' => 'change',

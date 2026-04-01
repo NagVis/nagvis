@@ -21,15 +21,15 @@ $viewParams = [
 global $configVars;
 $configVars = [
     'width' => [
-        'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_INTEGER_EMPTY,
+        'must' => false,
+        'default' => '',
+        'match' => MATCH_INTEGER_EMPTY,
         'field_type' => 'dimension',
     ],
     'height' => [
-        'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_INTEGER_EMPTY,
+        'must' => false,
+        'default' => '',
+        'match' => MATCH_INTEGER_EMPTY,
         'field_type' => 'dimension',
     ],
 ];
@@ -39,7 +39,7 @@ global $configVarMap;
 $configVarMap = [
     'global' => [
         'appearance' => [
-            'width'  => null,
+            'width' => null,
             'height' => null,
         ],
     ],
@@ -54,27 +54,27 @@ function iconset_size($iconset)
 {
     global $CORE;
     $fileType = $CORE->getIconsetFiletype($iconset);
-    $iconPath      = path('sys',  'global', 'icons') . '/' . $iconset . '_ok.' . $fileType;
-    $iconPathLocal = path('sys',  'local',  'icons') . '/' . $iconset . '_ok.' . $fileType;
-    if(file_exists($iconPathLocal)) {
-        if($fileType == "svg") {
+    $iconPath = path('sys', 'global', 'icons') . '/' . $iconset . '_ok.' . $fileType;
+    $iconPathLocal = path('sys', 'local', 'icons') . '/' . $iconset . '_ok.' . $fileType;
+    if (file_exists($iconPathLocal)) {
+        if ($fileType == "svg") {
             return svg_size($iconPathLocal);
-        }
-        else {
+        } else {
             return getimagesize($iconPathLocal);
         }
-    }
-    elseif(file_exists($iconPath)) {
-        if($fileType == "svg") {
+    } elseif (file_exists($iconPath)) {
+        if ($fileType == "svg") {
             return svg_size($iconPath);
         } else {
             return getimagesize($iconPath);
-        }    } else {
+        }
+    } else {
         return [0, 0];
     }
 }
 
-function svg_size($filepath) {
+function svg_size($filepath)
+{
     if (!file_exists($filepath)) {
         return array(0, 0);
     }
@@ -99,9 +99,10 @@ function svg_size($filepath) {
     return array(floatval($width), floatval($height));
 }
 
-function shape_size($icon) {
-    $iconPath      = path('sys',  'global', 'shapes') . '/' . $icon;
-    $iconPathLocal = path('sys',  'local',  'shapes') . '/' . $icon;
+function shape_size($icon)
+{
+    $iconPath = path('sys', 'global', 'shapes') . '/' . $icon;
+    $iconPathLocal = path('sys', 'local', 'shapes') . '/' . $icon;
     if (file_exists($iconPathLocal)) {
         return getimagesize($iconPathLocal);
     } elseif (file_exists($iconPath)) {

@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthHandler.php - Handler for authentication modules
@@ -43,7 +44,7 @@ class CoreAuthHandler
     private $sModuleName;
 
     /** @var bool */
-    private $trustUsername  = false;
+    private $trustUsername = false;
 
     /** @var bool */
     private $logoutPossible = true;
@@ -272,11 +273,13 @@ class CoreAuthHandler
         return $this->logoutPossible;
     }
 
-    public function usesBcrypt() {
+    public function usesBcrypt()
+    {
         return $this->MOD->usesBcrypt($this->getUser());
     }
 
-    public function logout($enforce = false) {
+    public function logout($enforce = false)
+    {
         if (!$enforce && !$this->logoutSupported()) {
             return false;
         }

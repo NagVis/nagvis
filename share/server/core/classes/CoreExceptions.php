@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreExceptions.php - Collection of exceptions in NagVis
@@ -31,14 +32,16 @@ class NagVisException extends Exception
     /** @var array */
     protected $e;
 
-    function __construct($msg, $title = null, $time = null, $url = null) {
-        if($title === null) {            $title = l('ERROR');
+    public function __construct($msg, $title = null, $time = null, $url = null)
+    {
+        if ($title === null) {
+            $title = l('ERROR');
         }
 
         $this->e = [
             'message' => $msg,
-            'title'   => $title,
-            'type'    => 'error',
+            'title' => $title,
+            'type' => 'error',
         ];
 
         if ($time !== null) {
@@ -51,27 +54,33 @@ class NagVisException extends Exception
         parent::__construct($msg);
     }
 
-    function __toString() {
+    public function __toString()
+    {
         return json_encode($this->e);
     }
 
-    function message() {
+    public function message()
+    {
         return $this->e['message'];
     }
 }
 
-class MapInMaintenance extends NagVisException {
-    function __construct($map) {
+class MapInMaintenance extends NagVisException
+{
+    public function __construct($map)
+    {
         $this->e = [
-            'type'    => 'info',
+            'type' => 'info',
             'message' => l('mapInMaintenance', ['MAP' => $map]),
-            'title'   => l('INFO'),
+            'title' => l('INFO'),
         ];
     }
 }
 
-class Success extends NagVisException {
-    function __construct($msg, $title = null, $time = null, $url = null) {
+class Success extends NagVisException
+{
+    public function __construct($msg, $title = null, $time = null, $url = null)
+    {
         parent::__construct($msg, $title, $time, $url);
         $this->e['type'] = 'ok';
         if ($this->e['title'] == l('ERROR')) {
@@ -80,8 +89,12 @@ class Success extends NagVisException {
     }
 }
 
-class AuthenticationException extends NagVisException {}
-class CoreAuthModNoSupport extends NagVisException {}
+class AuthenticationException extends NagVisException
+{
+}
+class CoreAuthModNoSupport extends NagVisException
+{
+}
 
 class BackendException extends NagVisException
 {
@@ -116,19 +129,23 @@ class FieldInputError extends NagVisException
     public $field;
     public $msg;
 
-    function __construct($field, $msg) {
+    public function __construct($field, $msg)
+    {
         $this->field = $field;
-        $this->msg   = $msg;
+        $this->msg = $msg;
     }
 
-    function message() {
+    public function message()
+    {
         return $this->msg;
     }
 }
 
 // This exception is used to handle PHP errors
-class NagVisErrorException extends ErrorException {
-    function __toString() {
+class NagVisErrorException extends ErrorException
+{
+    public function __toString()
+    {
         $msg = "Error: (" . $this->getCode() . ") " . $this->getMessage()
             . "<div class=\"details\">"
             . "URL: " . $_SERVER['REQUEST_URI'] . "<br>\n"

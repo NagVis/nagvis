@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewManageRoles.php - Dialog for managing roles and permissions
@@ -189,8 +190,8 @@ class ViewManageRoles
         }
 
         $sections = [
-            'general'   => l('General'),
-            'maps'      => l('Maps'),
+            'general' => l('General'),
+            'maps' => l('Maps'),
             'rotations' => l('Rotations'),
         ];
 
@@ -199,8 +200,8 @@ class ViewManageRoles
         render_section_navigation($open, $sections);
 
         $permissions_by_section = [
-            'general'   => [],
-            'maps'      => [],
+            'general' => [],
+            'maps' => [],
             'rotations' => [],
         ];
         foreach ($AUTHORISATION->getAllVisiblePerms() as $perm) {
@@ -229,7 +230,8 @@ class ViewManageRoles
         }
     }
 
-    function renderMapsSection($permissions, $permitted) {
+    public function renderMapsSection($permissions, $permitted)
+    {
         echo '<table class="mytable perms">';
         echo '<tr>';
         echo '<th>' . l('Map') . '</th>';
@@ -253,7 +255,8 @@ class ViewManageRoles
         echo '</table>';
     }
 
-    function renderOtherSection($permissions, $permitted) {
+    public function renderOtherSection($permissions, $permitted)
+    {
         echo '<table class="mytable perms">';
         echo '<tr>';
         echo '<th>' . l('Module') . '</th>';

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreLogonMixed.php - Module for handling mixed logins. Uses LogonEnv

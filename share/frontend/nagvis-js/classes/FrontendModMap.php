@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendModMap.php - Module for handling the maps in NagVis
@@ -55,15 +56,15 @@ class FrontendModMap extends FrontendModule
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Map';
-        $this->CORE  = $CORE;
+        $this->CORE = $CORE;
 
         // Parse the view specific options
         $aOpts = [
-            'show'          => MATCH_MAP_NAME_EMPTY,
-            'search'        => MATCH_STRING_NO_SPACE_EMPTY,
-            'rotation'      => MATCH_ROTATION_NAME_EMPTY,
-            'rotationStep'  => MATCH_INTEGER_EMPTY,
-            'perm'          => MATCH_BOOLEAN_EMPTY,
+            'show' => MATCH_MAP_NAME_EMPTY,
+            'search' => MATCH_STRING_NO_SPACE_EMPTY,
+            'rotation' => MATCH_ROTATION_NAME_EMPTY,
+            'rotationStep' => MATCH_INTEGER_EMPTY,
+            'perm' => MATCH_BOOLEAN_EMPTY,
         ];
 
         // There might be a default map when none is given
@@ -71,11 +72,11 @@ class FrontendModMap extends FrontendModule
 
         // getCustomOptions fetches and validates the values
         $aVals = $this->getCustomOptions($aOpts, $aDefaults);
-        $this->name         = $aVals['show'];
-        $this->search       = $aVals['search'];
-        $this->rotation     = $aVals['rotation'];
+        $this->name = $aVals['show'];
+        $this->search = $aVals['search'];
+        $this->rotation = $aVals['rotation'];
         $this->rotationStep = $aVals['rotationStep'];
-        $this->perm         = $aVals['perm'];
+        $this->perm = $aVals['perm'];
 
         // Register valid actions
         $this->aActions = [

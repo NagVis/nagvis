@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
@@ -158,18 +159,18 @@ function state_str($state)
 function state_num($state_str)
 {
     $a = [
-        'UNCHECKED'     => UNCHECKED,
-        'UNREACHABLE'   => UNREACHABLE,
-        'DOWN'          => DOWN,
-        'UP'            => UP,
+        'UNCHECKED' => UNCHECKED,
+        'UNREACHABLE' => UNREACHABLE,
+        'DOWN' => DOWN,
+        'UP' => UP,
         // services
-        'PENDING'       => PENDING,
-        'UNKNOWN'       => UNKNOWN,
-        'CRITICAL'      => CRITICAL,
-        'WARNING'       => WARNING,
-        'OK'            => OK,
+        'PENDING' => PENDING,
+        'UNKNOWN' => UNKNOWN,
+        'CRITICAL' => CRITICAL,
+        'WARNING' => WARNING,
+        'OK' => OK,
         // generic
-        'ERROR'         => ERROR
+        'ERROR' => ERROR
     ];
     return $a[$state_str];
 }
@@ -256,7 +257,7 @@ function listHoverChildSorters()
 function listHoverChildOrders()
 {
     return [
-        'asc'  => l('Ascending'),
+        'asc' => l('Ascending'),
         'desc' => l('Descending'),
     ];
 }

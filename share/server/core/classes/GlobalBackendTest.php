@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalBackendTest.php
@@ -36,11 +37,11 @@ class GlobalBackendTest implements GlobalBackendInterface
     /** @var array[] These are the backend local configuration options */
     private static $validConfig = [
         'generate_mapcfg' => [
-            'must'       => 1,
-            'editable'   => 1,
-            'default'    => 0,
+            'must' => 1,
+            'editable' => 1,
+            'default' => 0,
             'field_type' => 'boolean',
-            'match'      => MATCH_BOOLEAN
+            'match' => MATCH_BOOLEAN
         ]
     ];
 
@@ -48,7 +49,7 @@ class GlobalBackendTest implements GlobalBackendInterface
     private $parents = [];
 
     /** @var array */
-    private $childs  = [];
+    private $childs = [];
 
     /** @var array[] */
     private $obj = [
@@ -60,32 +61,32 @@ class GlobalBackendTest implements GlobalBackendInterface
 
     /** @var array[] */
     private $hostStates = [
-        UP          => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
-        DOWN        => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        UP => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
+        DOWN => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
         UNREACHABLE => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
-        UNCHECKED   => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
+        UNCHECKED => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
     ];
 
     /** @var array[] */
     private $serviceStates = [
-        OK          => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
-        WARNING     => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
-        CRITICAL    => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
-        UNKNOWN     => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
-        PENDING     => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
+        OK => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
+        WARNING => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        CRITICAL => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        UNKNOWN => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        PENDING => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
     ];
 
     /** @var array[] */
     private $canBeSoft = [
-        UP          => ['hard'],
-        DOWN        => ['hard', 'soft'],
+        UP => ['hard'],
+        DOWN => ['hard', 'soft'],
         UNREACHABLE => ['hard', 'soft'],
-        UNCHECKED   => ['hard'],
-        PENDING     => ['hard'],
-        OK          => ['hard'],
-        WARNING     => ['hard', 'soft'],
-        CRITICAL    => ['hard', 'soft'],
-        UNKNOWN     => ['hard'],
+        UNCHECKED => ['hard'],
+        PENDING => ['hard'],
+        OK => ['hard'],
+        WARNING => ['hard', 'soft'],
+        CRITICAL => ['hard', 'soft'],
+        UNKNOWN => ['hard'],
     ];
 
     /**
@@ -120,14 +121,14 @@ class GlobalBackendTest implements GlobalBackendInterface
         $in_downtime = $substate == 'downtime';
         if ($in_downtime) {
             $downtime_author = 'Kunibert';
-            $downtime_data   = 'xyz';
-            $downtime_start  = $this->now - 60;
-            $downtime_end    = $this->now + 60;
+            $downtime_data = 'xyz';
+            $downtime_start = $this->now - 60;
+            $downtime_end = $this->now + 60;
         } else {
             $downtime_author = null;
-            $downtime_data   = null;
-            $downtime_start  = null;
-            $downtime_end    = null;
+            $downtime_data = null;
+            $downtime_start = null;
+            $downtime_end = null;
         }
 
         return [
@@ -180,14 +181,14 @@ class GlobalBackendTest implements GlobalBackendInterface
         $in_downtime = $substate == 'downtime';
         if ($in_downtime) {
             $downtime_author = 'Kunibert';
-            $downtime_data   = 'xyz';
-            $downtime_start  = $this->now - 60;
-            $downtime_end    = $this->now + 60;
+            $downtime_data = 'xyz';
+            $downtime_start = $this->now - 60;
+            $downtime_end = $this->now + 60;
         } else {
             $downtime_author = null;
-            $downtime_data   = null;
-            $downtime_start  = null;
-            $downtime_end    = null;
+            $downtime_data = null;
+            $downtime_start = null;
+            $downtime_end = null;
         }
         if ($output === null) {
             $output = 'output ' . $name2;
@@ -230,9 +231,9 @@ class GlobalBackendTest implements GlobalBackendInterface
      */
     private function hostgroup($name, $members)
     {
-        return  [
-            'name'    => $name,
-            'alias'   => 'Alias ' . $name,
+        return [
+            'name' => $name,
+            'alias' => 'Alias ' . $name,
             'members' => $members
         ];
     }
@@ -245,8 +246,8 @@ class GlobalBackendTest implements GlobalBackendInterface
     private function servicegroup($name, $members)
     {
         return [
-            'name'    => $name,
-            'alias'   => 'Alias ' . $name,
+            'name' => $name,
+            'alias' => 'Alias ' . $name,
             'members' => $members
         ];
     }
@@ -262,7 +263,7 @@ class GlobalBackendTest implements GlobalBackendInterface
         $this->obj['host']['muc-gw1'] = $this->host('muc-gw1', UP);
         $wan = $this->service('muc-gw1', 'Interface WAN', CRITICAL);
         $wan[PERFDATA] = 'in=98.13%;85;98 out=12.12%;85;98';
-        $wan[OUTPUT]   = 'In: 98.13%, Out: 12.12%';
+        $wan[OUTPUT] = 'In: 98.13%, Out: 12.12%';
         $this->obj['service']['muc-gw1'] = [$wan];
 
         $this->obj['host']['muc-srv1'] = $this->host('muc-srv1', UP);
@@ -352,7 +353,7 @@ class GlobalBackendTest implements GlobalBackendInterface
         $this->obj['host']['ham-gw1'] = $this->host('ham-gw1', UP);
         $wan = $this->service('ham-gw1', 'Interface WAN', OK);
         $wan[PERFDATA] = 'in=77.24%;85;98 out=32.89%;85;98';
-        $wan[OUTPUT]   = 'In: 77.24%, Out: 32.89%';
+        $wan[OUTPUT] = 'In: 77.24%, Out: 32.89%';
         $this->obj['service']['ham-gw1'] = [$wan];
 
         $this->obj['host']['ham-srv1'] = $this->host('ham-srv1', UP);
@@ -410,9 +411,9 @@ class GlobalBackendTest implements GlobalBackendInterface
 
         $this->childs = [
             'muc-srv2' => ['muc-srv1', 'muc-gw1'],
-            'muc-gw1'  => ['ham-gw1', 'cgn-gw1'],
-            'cgn-gw1'  => ['cgn-srv1', 'cgn-srv2', 'cgn-srv3'],
-            'ham-gw1'  => ['ham-srv1', 'ham-srv2', 'ham-printer1'],
+            'muc-gw1' => ['ham-gw1', 'cgn-gw1'],
+            'cgn-gw1' => ['cgn-srv1', 'cgn-srv2', 'cgn-srv3'],
+            'ham-gw1' => ['ham-srv1', 'ham-srv2', 'ham-printer1'],
         ];
 
         foreach ($this->childs as $parent => $childs) {
@@ -431,7 +432,7 @@ class GlobalBackendTest implements GlobalBackendInterface
         foreach ($this->hostStates as $state => $substates) {
             foreach ($this->canBeSoft[$state] as $stateType) {
                 foreach (array_keys($substates) as $substate) {
-                    $ident    = 'host-' . $state . '-' . $stateType . '-' . $substate;
+                    $ident = 'host-' . $state . '-' . $stateType . '-' . $substate;
                     $hostname = $ident;
 
                     $this->obj['host'][$hostname] = $this->host(
@@ -576,8 +577,10 @@ class GlobalBackendTest implements GlobalBackendInterface
         return -1;
     }
 
-    function getAllTypeObjects($type) {
-        if($type == 'service') {            $s = [];
+    public function getAllTypeObjects($type)
+    {
+        if ($type == 'service') {
+            $s = [];
             foreach ($this->obj['service'] as $services) {
                 $s = array_merge($s, $services);
             }
@@ -587,7 +590,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
-    function genMapCfg($path) {
+    public function genMapCfg($path)
+    {
         $f = "define global {\n"
             . "  backend_id=test_1\n"
             . "}\n"
@@ -752,7 +756,6 @@ class GlobalBackendTest implements GlobalBackendInterface
 
         return implode('', $aFilters) . $count;
     }
-
 
     /**
      * Queries the livestatus socket for the state of a host

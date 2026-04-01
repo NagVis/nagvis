@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendModule.php - Wrapper class to define a module in the nagvis-js

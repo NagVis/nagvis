@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * debug.php - Some functions for debugging
@@ -28,7 +29,6 @@
 
 // Save the start time of NagVis
 define('DEBUGSTART', microtime_float());
-
 
 /**
  * Writes the debug output to the debug file

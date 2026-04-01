@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreLogonDialogHandler.php - This module handles the submission of the
@@ -102,7 +103,7 @@ class CoreLogonDialogHandler
         }
 
         $a = [
-            'user'     => $FHANDLER->get('_username'),
+            'user' => $FHANDLER->get('_username'),
             'password' => $FHANDLER->get('_password')
         ];
 

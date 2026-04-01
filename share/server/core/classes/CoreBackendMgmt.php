@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreBackendMgmt.php - class for handling all backends
@@ -41,14 +42,13 @@ class CoreBackendMgmt
 
     /** @var string[] */
     private $countQueries = [
-        'serviceState'            => '',
-        'hostState'               => '',
-        'hostMemberState'         => '',
-        'hostgroupMemberState'    => '',
+        'serviceState' => '',
+        'hostState' => '',
+        'hostMemberState' => '',
+        'hostgroupMemberState' => '',
         'servicegroupMemberState' => '',
-        'DYN_GROUP_MEMBER_STATE'  => '',
+        'DYN_GROUP_MEMBER_STATE' => '',
     ];
-
 
     /**
      * Constructor
@@ -790,12 +790,13 @@ class CoreBackendMgmt
     {
         global $CORE;
         $backendType = cfg('backend_' . $backendId, 'backendtype');
-        if($backendType != '' && $CORE->checkExisting(cfg('paths', 'class') . 'GlobalBackend' . $backendType . '.php', false)) {            return true;
+        if ($backendType != '' && $CORE->checkExisting(cfg('paths', 'class') . 'GlobalBackend' . $backendType . '.php', false)) {
+            return true;
         }
 
         if ($printErr == 1) {
             throw new NagVisException(l('backendNotExists', [
-                'BACKENDID'   => $backendId,
+                'BACKENDID' => $backendId,
                 'BACKENDTYPE' => $backendType,
             ]));
         }
@@ -928,15 +929,16 @@ class CoreBackendMgmt
     public function checkBackendFeature($backendId, $feature, $printErr = 1)
     {
         $backendClass = 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype');
-        if(class_exists($backendClass, false) && method_exists($backendClass, $feature)) {            return true;
+        if (class_exists($backendClass, false) && method_exists($backendClass, $feature)) {
+            return true;
         } else {
             if ($printErr == 1) {
                 throw new NagVisException(
                     l(
                         'The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.',
                         [
-                            'FEATURE'     => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
-                            'BACKENDID'   => $backendId,
+                            'FEATURE' => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
+                            'BACKENDID' => $backendId,
                             'BACKENDTYPE' => cfg('backend_' . $backendId, 'backendtype')
                         ]
                     )

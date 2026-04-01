@@ -1,4 +1,5 @@
-<?PHP
+<?php
+
 /*****************************************************************************
  *
  * ajax_error_handler.php - Ajax error handler for the NagVis ajax handlers
@@ -21,7 +22,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
-
 
 /**
  * This is a custom error handling function for submitting PHP errors to the

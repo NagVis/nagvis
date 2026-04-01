@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreRotation.php - Class represents all rotations in NagVis
@@ -149,8 +150,8 @@ class CoreRotation
                     'The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]',
                     [
                         'ROTATION' => htmlentities($this->sPoolName, ENT_COMPAT, 'UTF-8'),
-                        'STEP'     => htmlentities($sStep, ENT_COMPAT, 'UTF-8'),
-                        'TYPE'     => htmlentities($sType, ENT_COMPAT, 'UTF-8')
+                        'STEP' => htmlentities($sStep, ENT_COMPAT, 'UTF-8'),
+                        'TYPE' => htmlentities($sType, ENT_COMPAT, 'UTF-8')
                     ]
                 )
             );

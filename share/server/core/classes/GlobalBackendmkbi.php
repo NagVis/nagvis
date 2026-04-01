@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalBackendmkbi.php - backend class for connecting NagVis directly
@@ -35,13 +36,13 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     private $backendId = '';
 
     /** @var string */
-    private $baseUrl   = '';
+    private $baseUrl = '';
 
     /** @var string|resource */
-    private $context   = '';
+    private $context = '';
 
     /** @var array */
-    private $cache     = [];
+    private $cache = [];
 
     /** @var string[] */
     private static $bi_aggr_states = [
@@ -57,74 +58,74 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /** @var int[] */
     private static $bi_short_states = [
         'PD' => -1,
-        'OK' =>  0,
-        'WA' =>  1,
-        'CR' =>  2,
-        'UN' =>  3,
+        'OK' => 0,
+        'WA' => 1,
+        'CR' => 2,
+        'UN' => 3,
         'MI' => -2,
-        'NA' =>  4,
+        'NA' => 4,
     ];
 
     /** @var array These are the backend local configuration options */
     private static $validConfig = [
         'base_url' => [
-            'must'     => 1,
+            'must' => 1,
             'editable' => 1,
-            'default'  => 'http://localhost/check_mk/',
-            'match'    => MATCH_STRING_URL,
+            'default' => 'http://localhost/check_mk/',
+            'match' => MATCH_STRING_URL,
         ],
         // The automation user based authentication was removed in Checkmk 2.4 and replaced by the
         // site internal authentication. For the local site backend we make use of it with the
         // automatically configured backend.
         'site_internal_auth' => [
-            'must'     => 0,
+            'must' => 0,
             'editable' => 1,
-            'default'  => 0,
-            'match'    => MATCH_BOOLEAN,
+            'default' => 0,
+            'match' => MATCH_BOOLEAN,
             'field_type' => 'boolean',
         ],
         'auth_user' => [
-            'must'     => 0,
+            'must' => 0,
             'editable' => 1,
-            'default'  => '',
-            'match'    => MATCH_STRING,
+            'default' => '',
+            'match' => MATCH_STRING,
         ],
         'auth_secret' => [
-            'must'     => 0,
+            'must' => 0,
             'editable' => 1,
-            'default'  => '',
-            'match'    => MATCH_STRING,
+            'default' => '',
+            'match' => MATCH_STRING,
         ],
         'auth_secret_file' => [
-            'must'     => 0,
+            'must' => 0,
             'editable' => 1,
-            'default'  => '',
-            'match'    => MATCH_STRING_PATH,
+            'default' => '',
+            'match' => MATCH_STRING_PATH,
         ],
         'verify_peer' => [
-            'must'       => 0,
-            'editable'   => 1,
-            'default'    => 1,
-            'match'      => MATCH_BOOLEAN,
+            'must' => 0,
+            'editable' => 1,
+            'default' => 1,
+            'match' => MATCH_BOOLEAN,
             'field_type' => 'boolean',
         ],
         'verify_depth' => [
-            'must'       => 0,
-            'editable'   => 1,
-            'default'    => 3,
-            'match'      => MATCH_INTEGER,
+            'must' => 0,
+            'editable' => 1,
+            'default' => 3,
+            'match' => MATCH_INTEGER,
         ],
         'ca_path' => [
-            'must'      => 0,
-            'editable'  => 1,
-            'default'   => '',
-            'match'     => MATCH_STRING_PATH,
+            'must' => 0,
+            'editable' => 1,
+            'default' => '',
+            'match' => MATCH_STRING_PATH,
         ],
         'timeout' => [
-            'must'      => 1,
-            'editable'  => 1,
-            'default'   => 5,
-            'match'     => MATCH_INTEGER,
+            'must' => 1,
+            'editable' => 1,
+            'default' => 5,
+            'match' => MATCH_INTEGER,
         ],
     ];
 
@@ -140,18 +141,18 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         $this->baseUrl = cfg('backend_' . $backendId, 'base_url');
 
         $httpContext = [
-            'method'     => 'GET',
+            'method' => 'GET',
             'user_agent' => 'NagVis BI Backend',
-            'timeout'    => cfg('backend_' . $backendId, 'timeout'),
+            'timeout' => cfg('backend_' . $backendId, 'timeout'),
         ];
 
         $sslContext = [];
 
         if (cfg('backend_' . $backendId, 'verify_peer')) {
             $sslContext = [
-                'verify_peer'      => true,
+                'verify_peer' => true,
                 'verify_peer_name' => false,
-                'verify_depth'     => cfg('backend_' . $backendId, 'verify_depth'),
+                'verify_depth' => cfg('backend_' . $backendId, 'verify_depth'),
             ];
             $ca_path = cfg('backend_' . $backendId, 'ca_path');
             if ($ca_path) {
@@ -159,7 +160,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
             }
         } else {
             $sslContext = [
-                'verify_peer'      => false,
+                'verify_peer' => false,
                 'verify_peer_name' => false,
             ];
         }
@@ -171,14 +172,15 @@ class GlobalBackendmkbi implements GlobalBackendInterface
             // Always set the HTTP basic auth header
             $username = cfg('backend_' . $backendId, 'auth_user');
             $secret = $this->getSecret();
-            if($username && $secret) {
+            if ($username && $secret) {
                 $authCred = base64_encode($username . ':' . $secret);
                 $httpContext['header'] = 'Authorization: Basic ' . $authCred . "\r\n";
-            }        }
+            }
+        }
 
         $this->context = stream_context_create([
             'http' => $httpContext,
-            'ssl'  => $sslContext,
+            'ssl' => $sslContext,
         ]);
     }
 
@@ -186,15 +188,18 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * HELPERS
      *************************************************************************/
 
-    private function isSiteInternalAuthEnabled() {
+    private function isSiteInternalAuthEnabled()
+    {
         return cfg('backend_'.$this->backendId, 'site_internal_auth') == 1;
     }
 
-    private function siteInternalAuthSecret() {
+    private function siteInternalAuthSecret()
+    {
         return file_get_contents($_SERVER['OMD_ROOT'] . "/etc/site_internal.secret");
     }
 
-    private function getSecret() {
+    private function getSecret()
+    {
         $secret_file_path = cfg('backend_' . $this->backendId, 'auth_secret_file');
         if ($secret_file_path) {
             return trim(file_get_contents($secret_file_path));
@@ -339,7 +344,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     }
 
     // Be compatible to Checkmk <1.2.9
-    private function getAggrElementsFromString($aggr_treestate) {
+    private function getAggrElementsFromString($aggr_treestate)
+    {
         // remove leading/trailing newlines
         $raw_states = trim($aggr_treestate);
         // replace multiple newlines with singe ones
@@ -359,16 +365,16 @@ class GlobalBackendmkbi implements GlobalBackendInterface
             $bi_state = GlobalBackendmkbi::$bi_short_states[$short_state];
 
             $element = [
-                "title"             => $title,
-                "state"             => $bi_state,
+                "title" => $title,
+                "state" => $bi_state,
                 // unknown infos in old Checkmk versions:
-                "assumed"           => false,
-                "acknowledged"      => false,
-                "in_downtime"       => false,
+                "assumed" => false,
+                "acknowledged" => false,
+                "in_downtime" => false,
                 "in_service_period" => false,
                 // Create some kind of default output when aggregation does
                 // not provide any detail output
-                "output"            => l("BI-State is: [S]", ["S" => GlobalBackendmkbi::$bi_aggr_states[$bi_state]]),
+                "output" => l("BI-State is: [S]", ["S" => GlobalBackendmkbi::$bi_aggr_states[$bi_state]]),
             ];
             $elements[] = $element;
         }
@@ -385,30 +391,30 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     {
         $c = [
             PENDING => [
-                'normal'   => 0,
+                'normal' => 0,
                 'downtime' => 0,
             ],
             OK => [
-                'normal'   => 0,
-                'stale'    => 0,
+                'normal' => 0,
+                'stale' => 0,
                 'downtime' => 0,
             ],
             WARNING => [
-                'normal'   => 0,
-                'stale'    => 0,
-                'ack'      => 0,
+                'normal' => 0,
+                'stale' => 0,
+                'ack' => 0,
                 'downtime' => 0,
             ],
             CRITICAL => [
-                'normal'   => 0,
-                'stale'    => 0,
-                'ack'      => 0,
+                'normal' => 0,
+                'stale' => 0,
+                'ack' => 0,
                 'downtime' => 0,
             ],
             UNKNOWN => [
-                'normal'   => 0,
-                'stale'    => 0,
-                'ack'      => 0,
+                'normal' => 0,
+                'stale' => 0,
+                'ack' => 0,
                 'downtime' => 0,
             ],
         ];
@@ -506,16 +512,16 @@ class GlobalBackendmkbi implements GlobalBackendInterface
                 'details' => [
                     ALIAS => $aggr['aggr_name'],
                     // This forces the aggregation state to be the summary state of the object
-                    STATE    => $this->getAggrState($aggr['aggr_state_num']),
-                    OUTPUT   => "xxxxxxxxxxxxxx",
-                    ACK      => $is_acknowledged == "1" ? 1 : 0,
+                    STATE => $this->getAggrState($aggr['aggr_state_num']),
+                    OUTPUT => "xxxxxxxxxxxxxx",
+                    ACK => $is_acknowledged == "1" ? 1 : 0,
                     DOWNTIME => $is_in_downtime == "1" ? 1 : 0,
                 ],
                 'attrs' => [
                     // Forces the URL to point to the BI aggregate
                     'url' => $obj_url ?: $this->aggrUrl($key),
                 ],
-                'counts'  => $this->getAggrCounts($aggr),
+                'counts' => $this->getAggrCounts($aggr),
             ];
 
             // Add optional outputs which replaces the NagVis summary_output

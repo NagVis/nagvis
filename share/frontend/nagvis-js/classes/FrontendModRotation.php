@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendModRotation.php - Module for handling rotations in NagVis
@@ -31,13 +32,13 @@ class FrontendModRotation extends FrontendModule
     private $CORE;
 
     /** @var string */
-    private $name   = '';
+    private $name = '';
 
     /** @var string */
-    private $type   = '';
+    private $type = '';
 
     /** @var string */
-    private $step   = '';
+    private $step = '';
 
     /** @var string */
     private $stepId = '';
@@ -60,9 +61,9 @@ class FrontendModRotation extends FrontendModule
         ];
 
         $aVals = $this->getCustomOptions($aOpts);
-        $this->name   = $aVals['show'];
-        $this->type   = $aVals['type'];
-        $this->step   = $aVals['step'];
+        $this->name = $aVals['show'];
+        $this->type = $aVals['type'];
+        $this->step = $aVals['step'];
         $this->stepId = $aVals['stepId'];
 
         // Register valid actions

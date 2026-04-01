@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalBackground.php - Class for global background image handling
@@ -88,7 +89,7 @@ class GlobalBackground
             } else {
                 $this->type = 'local';
 
-                $this->path    = path('sys', '', 'backgrounds', $this->getFileName());
+                $this->path = path('sys', '', 'backgrounds', $this->getFileName());
                 $this->webPath = path('html', 'global', 'backgrounds', $this->getFileName());
             }
         } else {
@@ -179,9 +180,11 @@ class GlobalBackground
      * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    function deleteImage($printErr = 1) {
-        if($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
-            if(unlink($this->path)) {                return true;
+    public function deleteImage($printErr = 1)
+    {
+        if ($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
+            if (unlink($this->path)) {
+                return true;
             } else {
                 if ($printErr) {
                     throw new NagVisException(l('couldNotDeleteMapImage', ['IMGPATH' => $this->path]));

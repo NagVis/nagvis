@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreModUser.php - Manages user defined options
@@ -46,7 +47,7 @@ class CoreModUser extends CoreModule
 
         $this->aActions = [
             'getOptions' => REQUIRES_AUTHORISATION,
-            'setOption'  => REQUIRES_AUTHORISATION,
+            'setOption' => REQUIRES_AUTHORISATION,
         ];
     }
 

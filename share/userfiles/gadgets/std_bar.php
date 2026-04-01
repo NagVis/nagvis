@@ -74,7 +74,7 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
  * Needs to be configured to tell gadgets_core.php how to handle the outputs
  * e.g. in case of error messages. This defaults to 'img'.
  */
-$_MODE          = 'html';
+$_MODE = 'html';
 
 // Include the gadgets core. Also handle OMD default and local paths
 if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
@@ -104,7 +104,7 @@ $fontDir = '/usr/share/fonts/truetype'; // openSuSE, SLES
 // $fontDir = '/usr/share/fonts/dejavu-lgc'; // CentOS
 // $fontDir = '/usr/share/fonts/dejavu'; // Fedora
 $fontName = 'DejaVuSans-Bold.ttf';
-$imgwidth  = 400 * $ratio;
+$imgwidth = 400 * $ratio;
 $imgheight = 50 * $ratio;
 
 /**

@@ -69,7 +69,7 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
  * Needs to be configured to tell gadgets_core.php how to handle the outputs
  * e.g. in case of error messages. This defaults to 'img'.
  */
-$_MODE          = 'img';
+$_MODE = 'img';
 
 // Include the gadgets core. Also handle OMD default and local paths
 if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
@@ -95,13 +95,13 @@ header("Content-type: image/png");
 
 $ratio = $aOpts['scale'] / 100;
 
-$imgwidth  = 220 * $ratio;
+$imgwidth = 220 * $ratio;
 $imgheight = 110 * $ratio;
-$outerdia  = 150 * $ratio;
+$outerdia = 150 * $ratio;
 $outerdia2 = $outerdia + 10;
-$outerrad  = $outerdia / 2;
+$outerrad = $outerdia / 2;
 $outerrad2 = $outerdia2 / 2;
-$innerrad  = $outerdia / 10;
+$innerrad = $outerdia / 10;
 
 /**
  * Don't change anything below (unless you know what you do)
@@ -261,7 +261,6 @@ for ($i = 0; $i < $pdc; $i++) {
         if ($critp > -1) {
             $critp = -1;
         }
-
 
         // Base
         imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);

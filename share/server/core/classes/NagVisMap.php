@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisMap.php - Class for parsing the NagVis maps

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalFileCache.php - Class for handling caching of config files etc.

@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModOverview.php - Core Overview module to handle ajax requests
@@ -39,9 +40,9 @@ class CoreModOverview extends CoreModule
         $this->sName = 'Overview';
 
         $this->aActions = [
-            'getOverviewMaps'       => 'view',
-            'getOverviewRotations'  => 'view',
-            'getObjectStates'       => 'view',
+            'getOverviewMaps' => 'view',
+            'getOverviewRotations' => 'view',
+            'getObjectStates' => 'view',
         ];
     }
 
@@ -135,14 +136,14 @@ class CoreModOverview extends CoreModule
         $MAP->MAPOBJ->setConfiguration($this->getMapDefaultOpts($mapName, $MAPCFG->getAlias()));
 
         if ($MAP->MAPOBJ->checkMaintenance(0)) {
-            $map['overview_url']    = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $mapName;
-            $map['overview_class']  = '';
+            $map['overview_url'] = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $mapName;
+            $map['overview_class'] = '';
         } else {
-            $map['overview_class']  = 'disabled';
-            $map['overview_url']    = 'javascript:alert(\''
+            $map['overview_class'] = 'disabled';
+            $map['overview_url'] = 'javascript:alert(\''
                 . l('The map is in maintenance mode. Please be patient.')
                 . '\');';
-            $map['summary_output']  = l('The map is in maintenance mode. Please be patient.');
+            $map['summary_output'] = l('The map is in maintenance mode. Please be patient.');
 
             $MAP->MAPOBJ->clearMembers();
             $MAP->MAPOBJ->setSummaryState('UNKNOWN');
@@ -226,19 +227,19 @@ class CoreModOverview extends CoreModule
     private function getMapDefaultOpts($name, $alias)
     {
         return [
-            'type'              => 'map',
-            'map_name'          => $name,
-            'object_id'         => 'map-' . $name,
-            'hover_menu'        => 1,
+            'type' => 'map',
+            'map_name' => $name,
+            'object_id' => 'map-' . $name,
+            'hover_menu' => 1,
             'hover_childs_show' => 1,
-            'hover_template'    => 'default',
-            'context_menu'      => 1,
-            'context_template'  => 'default',
-            'label_show'        => 0,
+            'hover_template' => 'default',
+            'context_menu' => 1,
+            'context_template' => 'default',
+            'label_show' => 0,
             // Enforce std_big iconset - don't use map default iconset
-            'iconset'           => 'std_big',
-            'icon_size'         => [22],
-            'alias'             => $alias
+            'iconset' => 'std_big',
+            'icon_size' => [22],
+            'alias' => $alias
         ];
     }
 
@@ -250,16 +251,16 @@ class CoreModOverview extends CoreModule
     private function mapError($name, $msg)
     {
         $map = $this->getMapDefaultOpts($name, $name);
-        $map['name']            = $map['map_name'];
+        $map['name'] = $map['map_name'];
         unset($map['map_name']);
-        $map['state']           = 'ERROR';
-        $map['summary_state']   = 'ERROR';
-        $map['icon']            = 'std_big_error.png';
-        $map['members']         = [];
-        $map['num_members']     = 0;
-        $map['overview_class']  = 'error';
-        $map['overview_url']    = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $map['name'];
-        $map['summary_output']  = l('Map Error: [ERR]', ['ERR' => $msg]);
+        $map['state'] = 'ERROR';
+        $map['summary_state'] = 'ERROR';
+        $map['icon'] = 'std_big_error.png';
+        $map['members'] = [];
+        $map['num_members'] = 0;
+        $map['overview_class'] = 'error';
+        $map['overview_url'] = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $map['name'];
+        $map['summary_output'] = l('Map Error: [ERR]', ['ERR' => $msg]);
         return $map;
     }
 
@@ -271,7 +272,7 @@ class CoreModOverview extends CoreModule
     private function renderMapThumb($MAPCFG)
     {
         global $CORE;
-        $imgPath     = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
+        $imgPath = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
 
         // Check if
         // a) PHP supports gd
@@ -282,8 +283,8 @@ class CoreModOverview extends CoreModule
             return $MAPCFG->BACKGROUND->getFile();
         }
 
-        $sThumbFile     = $MAPCFG->getName() . '-thumb.' . $this->getFileType($imgPath);
-        $sThumbPath     = cfg('paths', 'sharedvar') . $sThumbFile;
+        $sThumbFile = $MAPCFG->getName() . '-thumb.' . $this->getFileType($imgPath);
+        $sThumbPath = cfg('paths', 'sharedvar') . $sThumbFile;
         $sThumbPathHtml = cfg('paths', 'htmlsharedvar') . $sThumbFile;
 
         // Only create a new thumb when there is no cached one
@@ -318,15 +319,15 @@ class CoreModOverview extends CoreModule
             for ($i = 0; $i < $iNum; $i++) {
                 $aSteps[] = [
                     'name' => $ROTATION->getStepLabelById($i),
-                    'url'  => $ROTATION->getStepUrlById($i)
+                    'url' => $ROTATION->getStepUrlById($i)
                 ];
             }
 
             $aRotations[] = [
-                'name'      => $poolName,
-                'url'       => $ROTATION->getStepUrlById(0),
+                'name' => $poolName,
+                'url' => $ROTATION->getStepUrlById(0),
                 'num_steps' => $ROTATION->getNumSteps(),
-                'steps'     => $aSteps
+                'steps' => $aSteps
             ];
         }
 

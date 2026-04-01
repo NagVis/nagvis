@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisMapView.php - Class for parsing the NagVis maps in nagvis-js frontend
@@ -28,22 +29,22 @@
 class NagVisMapView
 {
     /** @var GlobalMapCfg|null */
-    private $MAPCFG    = null;
+    private $MAPCFG = null;
 
     /** @var string */
-    private $name      = '';
+    private $name = '';
 
     /** @var string */
-    private $search    = '';
+    private $search = '';
 
     /** @var array  */
     private $aRotation = [];
 
     /** @var bool */
-    private $editMode  = false;
+    private $editMode = false;
 
     /** @var array */
-    private $aParams   = [];
+    private $aParams = [];
 
     /**
      * @param GlobalCore $CORE
@@ -115,7 +116,7 @@ class NagVisMapView
          */
         global $_MAINCFG, $CORE;
         // Initialize template system
-        $TMPL    = new FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
 
@@ -123,20 +124,20 @@ class NagVisMapView
         $this->MAPCFG->readMapConfig(ONLY_GLOBAL, true, true, true);
 
         $aData = [
-            'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
-            'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
+            'generalProperties' => $_MAINCFG->parseGeneralProperties(),
+            'workerProperties' => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
-            'viewProperties'     => $this->parseViewProperties(),
-            'stateProperties'    => json_encode($_MAINCFG->getStateWeightJS()),
-            'pageProperties'     => json_encode($this->MAPCFG->getMapProperties()),
-            'userProperties'     => $USERCFG->doGetAsJson(),
-            'mapName'            => $this->name,
-            'zoomFill'           => $this->MAPCFG->getValue(0, 'zoom') == 'fill',
-            'fileAges'           => json_encode([
-                'maincfg'   => $_MAINCFG->getConfigFileAge(),
+            'viewProperties' => $this->parseViewProperties(),
+            'stateProperties' => json_encode($_MAINCFG->getStateWeightJS()),
+            'pageProperties' => json_encode($this->MAPCFG->getMapProperties()),
+            'userProperties' => $USERCFG->doGetAsJson(),
+            'mapName' => $this->name,
+            'zoomFill' => $this->MAPCFG->getValue(0, 'zoom') == 'fill',
+            'fileAges' => json_encode([
+                'maincfg' => $_MAINCFG->getConfigFileAge(),
                 $this->name => $this->MAPCFG->getFileModificationTime(),
             ]),
-            'locales'            => json_encode($CORE->getGeneralJSLocales()),
+            'locales' => json_encode($CORE->getGeneralJSLocales()),
         ];
 
         // Build page based on the template file and the data array
@@ -157,17 +158,17 @@ class NagVisMapView
         global $AUTHORISATION;
         $arr = [];
 
-        $arr['search']                = $this->search;
-        $arr['edit_mode']             = $this->editMode;
-        $arr['grid_show']             = intval($this->MAPCFG->getValue(0, 'grid_show'));
-        $arr['grid_color']            = $this->MAPCFG->getValue(0, 'grid_color');
-        $arr['grid_steps']            = intval($this->MAPCFG->getValue(0, 'grid_steps'));
+        $arr['search'] = $this->search;
+        $arr['edit_mode'] = $this->editMode;
+        $arr['grid_show'] = intval($this->MAPCFG->getValue(0, 'grid_show'));
+        $arr['grid_color'] = $this->MAPCFG->getValue(0, 'grid_color');
+        $arr['grid_steps'] = intval($this->MAPCFG->getValue(0, 'grid_steps'));
         $arr['event_repeat_interval'] = intval($this->MAPCFG->getValue(0, 'event_repeat_interval'));
         $arr['event_repeat_duration'] = intval($this->MAPCFG->getValue(0, 'event_repeat_duration'));
-        $arr['event_on_load']         = intval($this->MAPCFG->getValue(0, 'event_on_load'));
-        $arr['permitted_edit']        = $AUTHORISATION !== null
+        $arr['event_on_load'] = intval($this->MAPCFG->getValue(0, 'event_on_load'));
+        $arr['permitted_edit'] = $AUTHORISATION !== null
             && $AUTHORISATION->isPermitted('Map', 'edit', $this->name);
-        $arr['permitted_perform']     = $AUTHORISATION !== null
+        $arr['permitted_perform'] = $AUTHORISATION !== null
             && $AUTHORISATION->isPermitted('Action', 'perform', '*');
 
         // hover_menu & context_menu have to be handled separated from the others

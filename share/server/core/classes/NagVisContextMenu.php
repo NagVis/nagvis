@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisContextMenu.php - Class for handling the context menus
@@ -63,7 +64,7 @@ class NagVisContextMenu
         $this->OBJPAGE = $OBJ;
         $this->templateName = $templateName;
 
-        $this->pathHtmlBase     = cfg('paths', 'htmlbase');
+        $this->pathHtmlBase = cfg('paths', 'htmlbase');
         $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.context.html');
 
         $this->CACHE = new GlobalFileCache(
@@ -100,8 +101,10 @@ class NagVisContextMenu
      * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    function readTemplate() {
-        if($this->checkTemplateReadable(1)) {            $this->code = file_get_contents($this->pathTemplateFile);
+    public function readTemplate()
+    {
+        if ($this->checkTemplateReadable(1)) {
+            $this->code = file_get_contents($this->pathTemplateFile);
             return true;
         } else {
             return false;

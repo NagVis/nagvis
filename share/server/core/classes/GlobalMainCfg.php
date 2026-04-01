@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalMainCfg.php - Class for handling the main configuration of NagVis
@@ -90,10 +91,10 @@ class GlobalMainCfg
         $this->validConfig = [
             'global' => [
                 'audit_log' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => 0,
-                    'match'      => MATCH_BOOLEAN,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'match' => MATCH_BOOLEAN,
                     'field_type' => 'boolean',
                 ],
                 'authmodule' => [
@@ -111,59 +112,59 @@ class GlobalMainCfg
                 ],
 
                 'authorisation_multisite_file' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => '',
-                    'depends_on'    => 'authorisationmodule',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'depends_on' => 'authorisationmodule',
                     'depends_value' => 'CoreAuthorisationModMultisite',
-                    'match'         => MATCH_STRING_PATH_AUTHORISATION,
+                    'match' => MATCH_STRING_PATH_AUTHORISATION,
                 ],
 
                 'authorisation_group_perms_file' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => '',
-                    'depends_on'    => 'authorisationmodule',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'depends_on' => 'authorisationmodule',
                     'depends_value' => 'CoreAuthorisationModGroup',
-                    'match'         => MATCH_STRING_PATH,
+                    'match' => MATCH_STRING_PATH,
                 ],
                 'authorisation_group_backends' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => [],
-                    'array'         => true,
-                    'depends_on'    => 'authorisationmodule',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => [],
+                    'array' => true,
+                    'depends_on' => 'authorisationmodule',
                     'depends_value' => 'CoreAuthorisationModGroup',
-                    'match'         => MATCH_STRING_NO_SPACE,
+                    'match' => MATCH_STRING_NO_SPACE,
                 ],
 
                 'dateformat' => [
-                    'must'     => 1,
+                    'must' => 1,
                     'editable' => 1,
-                    'default'  => 'Y-m-d H:i:s',
-                    'match'    => MATCH_STRING
+                    'default' => 'Y-m-d H:i:s',
+                    'match' => MATCH_STRING
                 ],
 
                 'dialog_ack_sticky' => [
-                    'must'       => 1,
-                    'editable'   => 1,
-                    'default'    => 1,
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => 1,
                     'field_type' => 'boolean',
-                    'match'      => MATCH_BOOLEAN
+                    'match' => MATCH_BOOLEAN
                 ],
                 'dialog_ack_notify' => [
-                    'must'       => 1,
-                    'editable'   => 1,
-                    'default'    => 1,
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => 1,
                     'field_type' => 'boolean',
-                    'match'      => MATCH_BOOLEAN
+                    'match' => MATCH_BOOLEAN
                 ],
                 'dialog_ack_persist' => [
-                    'must'       => 1,
-                    'editable'   => 1,
-                    'default'    => 0,
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => 0,
                     'field_type' => 'boolean',
-                    'match'      => MATCH_BOOLEAN
+                    'match' => MATCH_BOOLEAN
                 ],
 
                 'displayheader' => [
@@ -180,52 +181,52 @@ class GlobalMainCfg
                     'match' => MATCH_STRING
                 ],
                 'file_mode' => [
-                    'must'    => 1,
+                    'must' => 1,
                     'default' => 660,
-                    'match'   => MATCH_INTEGER_EMPTY
+                    'match' => MATCH_INTEGER_EMPTY
                 ],
 
                 'geomap_server' => [
-                    'must'    => 1,
+                    'must' => 1,
                     'default' => 'http://geomap.nagvis.org/',
-                    'match'   => MATCH_STRING_URL,
+                    'match' => MATCH_STRING_URL,
                 ],
 
                 'worldmap_tiles_url' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    'match'   => MATCH_STRING_URL,
+                    'match' => MATCH_STRING_URL,
                 ],
                 'worldmap_tiles_attribution' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                    'match'   => MATCH_ALL
+                    'match' => MATCH_ALL
                 ],
                 'worldmap_satellite_tiles_url' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '',
-                    'match'   => MATCH_STRING_URL,
+                    'match' => MATCH_STRING_URL,
                 ],
                 'worldmap_satellite_tiles_attribution' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '',
-                    'match'   => MATCH_ALL
+                    'match' => MATCH_ALL
                 ],
 
                 'http_proxy' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => null,
-                    'match'   => MATCH_STRING_PROXY,
+                    'match' => MATCH_STRING_PROXY,
                 ],
                 'http_proxy_auth' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => null,
-                    'match'   => MATCH_NOT_EMPTY,
+                    'match' => MATCH_NOT_EMPTY,
                 ],
                 'http_timeout' => [
-                    'must'    => 1,
+                    'must' => 1,
                     'default' => 2,
-                    'match'   => MATCH_INTEGER,
+                    'match' => MATCH_INTEGER,
                 ],
 
                 'language_detection' => [
@@ -243,12 +244,12 @@ class GlobalMainCfg
                     'match' => MATCH_STRING_NO_SPACE
                 ],
                 'language' => [
-                    'must'       => 1,
-                    'editable'   => 1,
-                    'default'    => 'en_US',
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => 'en_US',
                     'field_type' => 'dropdown',
-                    'list'       => 'listAvailableLanguages',
-                    'match'      => MATCH_LANGUAGE_EMPTY
+                    'list' => 'listAvailableLanguages',
+                    'match' => MATCH_LANGUAGE_EMPTY
                 ],
                 'logonmodule' => [
                     'must' => 1,
@@ -284,78 +285,78 @@ class GlobalMainCfg
                 ],
 
                 'logon_multisite_htpasswd' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => '',
-                    'depends_on'    => 'logonmodule',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
-                    'match'         => MATCH_STRING_PATH,
+                    'match' => MATCH_STRING_PATH,
                 ],
                 'logon_multisite_serials' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => '',
-                    'depends_on'    => 'logonmodule',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
-                    'match'         => MATCH_STRING_PATH,
+                    'match' => MATCH_STRING_PATH,
                 ],
                 'logon_multisite_secret' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => '',
-                    'depends_on'    => 'logonmodule',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
-                    'match'         => MATCH_STRING_PATH,
+                    'match' => MATCH_STRING_PATH,
                 ],
                 'logon_multisite_cookie_version' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => '0',
-                    'depends_on'    => 'logonmodule',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => '0',
+                    'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
-                    'match'         => MATCH_INTEGER,
+                    'match' => MATCH_INTEGER,
                 ],
                 'logon_multisite_createuser' => [
-                    'must'          => 1,
-                    'editable'      => 1,
-                    'default'       => '1',
-                    'field_type'    => 'boolean',
-                    'depends_on'    => 'logonmodule',
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
-                    'match'         => MATCH_BOOLEAN
+                    'match' => MATCH_BOOLEAN
                 ],
                 'logon_multisite_createrole' => [
-                    'must'          => 1,
-                    'editable'      => 1,
-                    'default'       => 'Guests',
-                    'depends_on'    => 'logonmodule',
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => 'Guests',
+                    'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
-                    'match'         => MATCH_STRING
+                    'match' => MATCH_STRING
                 ],
 
                 'multisite_snapin_layout' => [
-                    'must'        => 0,
-                    'editable'    => 1,
-                    'default'     => 'list',
-                    'match'       => MATCH_STRING_NO_SPACE,
-                    'field_type'  => 'dropdown',
-                    'list'        => 'listMultisiteSnapinLayouts',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 'list',
+                    'match' => MATCH_STRING_NO_SPACE,
+                    'field_type' => 'dropdown',
+                    'list' => 'listMultisiteSnapinLayouts',
                 ],
 
                 'only_permitted_objects' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => 0,
-                    'match'      => MATCH_BOOLEAN,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'match' => MATCH_BOOLEAN,
                     'field_type' => 'boolean',
                 ],
 
                 'user_filtering' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => 0,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
                     'field_type' => 'boolean',
-                    'match'      => MATCH_BOOLEAN
+                    'match' => MATCH_BOOLEAN
                 ],
 
                 'refreshtime' => [
@@ -379,85 +380,85 @@ class GlobalMainCfg
                 ],
                 'sesscookieduration' => [
                     'must' => 1,
-                    'editable'    => 1,
-                    'default'     => '86400',
-                    'match'       => MATCH_STRING
+                    'editable' => 1,
+                    'default' => '86400',
+                    'match' => MATCH_STRING
                 ],
                 'sesscookiesecure' => [
-                    'must'        => 0,
-                    'editable'    => 1,
-                    'default'     => 0,
-                    'field_type'  => 'boolean',
-                    'match'       => MATCH_BOOLEAN
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN
                 ],
                 'sesscookiehttponly' => [
-                    'must'        => 0,
-                    'editable'    => 1,
-                    'default'     => 0,
-                    'field_type'  => 'boolean',
-                    'match'       => MATCH_BOOLEAN
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN
                 ],
                 'shinken_features' => [
                     'must' => 1,
-                    'editable'    => 1,
-                    'default'     => '0',
-                    'field_type'    => 'boolean',
-                    'match'         => MATCH_BOOLEAN
+                    'editable' => 1,
+                    'default' => '0',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN
                 ],
 
                 'staleness_threshold' => [
-                    'must'        => 1,
-                    'editable'    => 1,
-                    'default'     => '1.5',
-                    'match'       => MATCH_FLOAT,
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => '1.5',
+                    'match' => MATCH_FLOAT,
                 ],
 
                 'startmodule' => [
                     'must' => 1,
-                    'editable'    => 1,
-                    'default'     => 'Overview',
-                    'match'       => MATCH_STRING
+                    'editable' => 1,
+                    'default' => 'Overview',
+                    'match' => MATCH_STRING
                 ],
                 'startaction' => [
                     'must' => 1,
-                    'editable'    => 1,
-                    'default'     => 'view',
-                    'match'       => MATCH_STRING
+                    'editable' => 1,
+                    'default' => 'view',
+                    'match' => MATCH_STRING
                 ],
-                'startshow'   => [
+                'startshow' => [
                     'must' => 0,
-                    'editable'    => 1,
-                    'default'     => '',
-                    'match'       => MATCH_STRING_EMPTY
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_EMPTY
                 ],
 
                 'worldmap_start_pos' => [
-                    'editable'    => true,
-                    'default'     => '51.505,-0.09',
-                    'match'       => MATCH_LATLONG,
+                    'editable' => true,
+                    'default' => '51.505,-0.09',
+                    'match' => MATCH_LATLONG,
                 ],
                 'worldmap_start_zoom' => [
-                    'editable'    => true,
-                    'default'     => 13,
-                    'match'       => MATCH_INTEGER,
+                    'editable' => true,
+                    'default' => 13,
+                    'match' => MATCH_INTEGER,
                 ],
             ],
             'defaults' => [
                 'backend' => [
-                    'must'        => 0,
-                    'editable'    => 1,
-                    'default'     => ['live_1'],
-                    'array'       => true,
-                    'field_type'  => 'dropdown',
-                    'list'        => 'listBackendIds',
-                    'match'       => MATCH_BACKEND_ID
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => ['live_1'],
+                    'array' => true,
+                    'field_type' => 'dropdown',
+                    'list' => 'listBackendIds',
+                    'match' => MATCH_BACKEND_ID
                 ],
                 'backgroundcolor' => [
-                    'must'        => 0,
-                    'editable'    => 1,
-                    'default'     => 'transparent',
-                    'field_type'  => 'color',
-                    'match'       => MATCH_COLOR
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 'transparent',
+                    'field_type' => 'color',
+                    'match' => MATCH_COLOR
                 ],
                 'contextmenu' => [
                     'must' => 0,
@@ -467,14 +468,14 @@ class GlobalMainCfg
                     'match' => MATCH_BOOLEAN
                 ],
                 'contexttemplate' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 'default',
-                    'depends_on'    => 'contextmenu',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'contextmenu',
                     'depends_value' => 1,
-                    'field_type'    => 'dropdown',
-                    'list'          => 'listContextTemplates',
-                    'match'         => MATCH_STRING_NO_SPACE
+                    'field_type' => 'dropdown',
+                    'list' => 'listContextTemplates',
+                    'match' => MATCH_STRING_NO_SPACE
                 ],
                 'stylesheet' => [
                     'must' => 0,
@@ -484,23 +485,23 @@ class GlobalMainCfg
                 ],
 
                 'event_on_load' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => 0,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
                     'field_type' => 'boolean',
-                    'match'      => MATCH_BOOLEAN
+                    'match' => MATCH_BOOLEAN
                 ],
                 'event_repeat_interval' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => 0,
-                    'match'      => MATCH_INTEGER,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'match' => MATCH_INTEGER,
                 ],
                 'event_repeat_duration' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => -1,
-                    'match'      => MATCH_INTEGER_PRESIGN,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => -1,
+                    'match' => MATCH_INTEGER_PRESIGN,
                 ],
 
                 'eventbackground' => [
@@ -589,38 +590,38 @@ class GlobalMainCfg
                 ],
 
                 'headermenu' => [
-                    'must'       => 1,
-                    'editable'   => 1,
-                    'default'    => '1',
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => '1',
                     'field_type' => 'boolean',
-                    'match'      => MATCH_BOOLEAN
+                    'match' => MATCH_BOOLEAN
                 ],
                 'headertemplate' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 'default',
-                    'depends_on'    => 'headermenu',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'headermenu',
                     'depends_value' => 1,
-                    'field_type'    => 'dropdown',
-                    'list'          => 'listHeaderTemplates',
-                    'match'         => MATCH_STRING_NO_SPACE,
+                    'field_type' => 'dropdown',
+                    'list' => 'listHeaderTemplates',
+                    'match' => MATCH_STRING_NO_SPACE,
                 ],
                 'headerfade' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 0,
-                    'depends_on'    => 'headermenu',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'depends_on' => 'headermenu',
                     'depends_value' => 1,
-                    'field_type'    => 'boolean',
-                    'deprecated'    => 1,
-                    'match'         => MATCH_BOOLEAN
+                    'field_type' => 'boolean',
+                    'deprecated' => 1,
+                    'match' => MATCH_BOOLEAN
                 ],
                 'header_show_states' => [
-                    'must'       => 1,
-                    'editable'   => 1,
-                    'default'    => 1,
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => 1,
                     'field_type' => 'boolean',
-                    'match'      => MATCH_BOOLEAN
+                    'match' => MATCH_BOOLEAN
                 ],
                 'hovermenu' => [
                     'must' => 0,
@@ -630,14 +631,14 @@ class GlobalMainCfg
                     'match' => MATCH_BOOLEAN
                 ],
                 'hovertemplate' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 'default',
-                    'depends_on'    => 'hovermenu',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'hovermenu',
                     'depends_value' => 1,
-                    'field_type'    => 'dropdown',
-                    'list'          => 'listHoverTemplates',
-                    'match'         => MATCH_STRING_NO_SPACE,
+                    'field_type' => 'dropdown',
+                    'list' => 'listHoverTemplates',
+                    'match' => MATCH_STRING_NO_SPACE,
                 ],
                 'hovertimeout' => [
                     'must' => 0,
@@ -672,39 +673,39 @@ class GlobalMainCfg
                     'match' => MATCH_INTEGER_PRESIGN
                 ],
                 'hoverchildsorder' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 'asc',
-                    'depends_on'    => 'hovermenu',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 'asc',
+                    'depends_on' => 'hovermenu',
                     'depends_value' => 1,
-                    'field_type'    => 'dropdown',
-                    'list'          => 'listHoverChildOrders',
-                    'match'         => MATCH_ORDER
+                    'field_type' => 'dropdown',
+                    'list' => 'listHoverChildOrders',
+                    'match' => MATCH_ORDER
                 ],
                 'hoverchildssort' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 's',
-                    'depends_on'    => 'hovermenu',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 's',
+                    'depends_on' => 'hovermenu',
                     'depends_value' => 1,
-                    'field_type'    => 'dropdown',
-                    'list'          => 'listHoverChildSorters',
-                    'match'         => MATCH_STRING_NO_SPACE,
+                    'field_type' => 'dropdown',
+                    'list' => 'listHoverChildSorters',
+                    'match' => MATCH_STRING_NO_SPACE,
                 ],
                 'icons' => [
-                    'must'       => 1,
-                    'editable'   => 1,
-                    'default'    => 'std_medium',
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => 'std_medium',
                     'field_type' => 'dropdown',
-                    'list'       => 'listIconsets',
-                    'match'      => MATCH_STRING_NO_SPACE
+                    'list' => 'listIconsets',
+                    'match' => MATCH_STRING_NO_SPACE
                 ],
                 'icon_size' => [
-                    'must'       => 1,
-                    'editable'   => 1,
-                    'default'    => [],
-                    'match'      => MATCH_INTEGER,
-                    'array'    => true,
+                    'must' => 1,
+                    'editable' => 1,
+                    'default' => [],
+                    'match' => MATCH_INTEGER,
+                    'array' => true,
                 ],
                 'onlyhardstates' => [
                     'must' => 0,
@@ -729,10 +730,10 @@ class GlobalMainCfg
                 ],
                 'showinmultisite' => [
                     'must' => 0,
-                    'editable'                => 1,
-                    'default'                 => 1,
-                    'field_type'              => 'boolean',
-                    'match'                   => MATCH_BOOLEAN
+                    'editable' => 1,
+                    'default' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN
                 ],
                 'urltarget' => [
                     'must' => 0,
@@ -766,73 +767,73 @@ class GlobalMainCfg
                     'match' => MATCH_STRING_URL_EMPTY
                 ],
                 'dyngroupurl' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '',
-                    'match'   => MATCH_STRING_URL_EMPTY
+                    'match' => MATCH_STRING_URL_EMPTY
                 ],
                 'aggrurl' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '',
-                    'match'   => MATCH_STRING_URL_EMPTY
+                    'match' => MATCH_STRING_URL_EMPTY
                 ],
                 'host_downtime_url' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '[html_cgi]/cmd.cgi?cmd_typ=55&host=[name]',
-                    'match'   => MATCH_STRING_URL_EMPTY
+                    'match' => MATCH_STRING_URL_EMPTY
                 ],
                 'host_ack_url' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '[html_cgi]/cmd.cgi?cmd_typ=96&host=[name]&force_check',
-                    'match'   => MATCH_STRING_URL_EMPTY
+                    'match' => MATCH_STRING_URL_EMPTY
                 ],
                 'service_downtime_url' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '[html_cgi]/cmd.cgi?cmd_typ=56&host=[name]&service=[service_description]',
-                    'match'   => MATCH_STRING_URL_EMPTY
+                    'match' => MATCH_STRING_URL_EMPTY
                 ],
                 'service_ack_url' => [
-                    'must'    => 0,
+                    'must' => 0,
                     'default' => '[html_cgi]/cmd.cgi?cmd_typ=7&host=[name]&service=[service_description]&force_check',
-                    'match'   => MATCH_STRING_URL_EMPTY
+                    'match' => MATCH_STRING_URL_EMPTY
                 ],
                 'view_template' => [
-                    'must'     => 0,
+                    'must' => 0,
                     'editable' => 1,
-                    'default'  => 'default',
-                    'match'    => MATCH_STRING_NO_SPACE
+                    'default' => 'default',
+                    'match' => MATCH_STRING_NO_SPACE
                 ],
                 'label_show' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => '0',
-                    'match'      => MATCH_BOOLEAN,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => '0',
+                    'match' => MATCH_BOOLEAN,
                     'field_type' => 'boolean',
                 ],
                 'line_weather_colors' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => '10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000',
-                    'match'      => MATCH_WEATHER_COLORS,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => '10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000',
+                    'match' => MATCH_WEATHER_COLORS,
                 ],
                 'line_width' => [
-                    'must'       => 0,
-                    'editable'   => 1,
-                    'default'    => 3,
-                    'match'      => MATCH_INTEGER,
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 3,
+                    'match' => MATCH_INTEGER,
                 ],
                 'zoombar' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 0,
-                    'field_type'    => 'boolean',
-                    'match'         => MATCH_BOOLEAN
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN
                 ],
                 'zoom_scale_objects' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 1,
-                    'field_type'    => 'boolean',
-                    'match'         => MATCH_BOOLEAN
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN
                 ],
             ],
             'wui' => [
@@ -860,15 +861,15 @@ class GlobalMainCfg
                     'match' => MATCH_BOOLEAN
                 ],
                 'headertemplate' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 'default',
-                    'deprecated'    => 1,
-                    'depends_on'    => 'headermenu',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'deprecated' => 1,
+                    'depends_on' => 'headermenu',
                     'depends_value' => 1,
-                    'field_type'    => 'dropdown',
-                    'list'          => 'listHeaderTemplates',
-                    'match'         => MATCH_STRING_NO_SPACE
+                    'field_type' => 'dropdown',
+                    'list' => 'listHeaderTemplates',
+                    'match' => MATCH_STRING_NO_SPACE
                 ],
                 'maplocktime' => [
                     'must' => 0,
@@ -929,11 +930,11 @@ class GlobalMainCfg
                     'match' => MATCH_STRING_PATH
                 ],
                 'actions' => [
-                    'must'       => 0,
-                    'editable'   => 0,
-                    'default'    => '',
+                    'must' => 0,
+                    'editable' => 0,
+                    'default' => '',
                     'field_type' => 'hidden',
-                    'match'      => MATCH_STRING_PATH
+                    'match' => MATCH_STRING_PATH
                 ],
                 'icons' => [
                     'must' => 0,
@@ -1021,11 +1022,11 @@ class GlobalMainCfg
                     'match' => MATCH_STRING_PATH
                 ],
                 'geomap' => [
-                    'must'       => 0,
-                    'editable'   => 0,
-                    'default'    => '',
+                    'must' => 0,
+                    'editable' => 0,
+                    'default' => '',
                     'field_type' => 'hidden',
-                    'match'      => MATCH_STRING_PATH,
+                    'match' => MATCH_STRING_PATH,
                 ],
                 'profiles' => [
                     'must' => 0,
@@ -1050,18 +1051,18 @@ class GlobalMainCfg
                     'match' => MATCH_STRING_PATH
                 ],
                 'styles' => [
-                    'must'       => 0,
-                    'editable'   => 0,
-                    'default'    => '',
+                    'must' => 0,
+                    'editable' => 0,
+                    'default' => '',
                     'field_type' => 'hidden',
-                    'match'      => MATCH_STRING_PATH
+                    'match' => MATCH_STRING_PATH
                 ],
                 'backgrounds' => [
-                    'must'       => 0,
-                    'editable'   => 0,
-                    'default'    => '',
+                    'must' => 0,
+                    'editable' => 0,
+                    'default' => '',
                     'field_type' => 'hidden',
-                    'match'      => MATCH_STRING_PATH
+                    'match' => MATCH_STRING_PATH
                 ],
                 'templates' => [
                     'must' => 0,
@@ -1199,44 +1200,44 @@ class GlobalMainCfg
                     'match' => MATCH_INTEGER
                 ],
                 'maps' => [
-                    'must'     => 1,
+                    'must' => 1,
                     'editable' => 1,
-                    'default'  => 'demo,demo2',
-                    'match'    => MATCH_STRING
+                    'default' => 'demo,demo2',
+                    'match' => MATCH_STRING
                 ]
             ],
             'action' => [
                 'action_type' => [
-                    'must'     => 1,
+                    'must' => 1,
                     'editable' => 0,
-                    'default'  => '',
-                    'match'    => MATCH_STRING_NO_SPACE
+                    'default' => '',
+                    'match' => MATCH_STRING_NO_SPACE
                 ],
                 'action_id' => [
-                    'must'     => 1,
+                    'must' => 1,
                     'editable' => 0,
-                    'default'  => '',
-                    'match'    => MATCH_STRING_NO_SPACE
+                    'default' => '',
+                    'match' => MATCH_STRING_NO_SPACE
                 ],
                 'condition' => [
-                    'must'     => 0,
+                    'must' => 0,
                     'editable' => 1,
-                    'default'  => '',
-                    'match'    => MATCH_CONDITION
+                    'default' => '',
+                    'match' => MATCH_CONDITION
                 ],
                 'obj_type' => [
-                    'must'     => 1,
+                    'must' => 1,
                     'editable' => 1,
-                    'array'    => true,
-                    'default'  => ['host', 'service'],
-                    'match'    => MATCH_STRING
+                    'array' => true,
+                    'default' => ['host', 'service'],
+                    'match' => MATCH_STRING
                 ],
                 'client_os' => [
-                    'must'     => 0,
+                    'must' => 0,
                     'editable' => 1,
-                    'array'    => true,
-                    'default'  => [],
-                    'match'    => MATCH_STRING
+                    'array' => true,
+                    'default' => [],
+                    'match' => MATCH_STRING
                 ],
                 'options' => []
             ],
@@ -1284,14 +1285,14 @@ class GlobalMainCfg
                     'match' => MATCH_BOOLEAN
                 ],
                 'headertemplate' => [
-                    'must'          => 0,
-                    'editable'      => 1,
-                    'default'       => 'default',
-                    'depends_on'    => 'headermenu',
+                    'must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'headermenu',
                     'depends_value' => 1,
-                    'field_type'    => 'dropdown',
-                    'list'          => 'listHeaderTemplates',
-                    'match'         => MATCH_STRING_NO_SPACE,
+                    'field_type' => 'dropdown',
+                    'list' => 'listHeaderTemplates',
+                    'match' => MATCH_STRING_NO_SPACE,
                 ],
                 'showautomaps' => [
                     'must' => 0,
@@ -2106,43 +2107,43 @@ class GlobalMainCfg
      */
     private function setPathsByBase($base, $htmlBase)
     {
-        $this->validConfig['paths']['cfg']['default']            = $base . 'etc/';
-        $this->validConfig['paths']['mapcfg']['default']         = $base . 'etc/maps/';
-        $this->validConfig['paths']['geomap']['default']         = $base . 'etc/geomap';
-        $this->validConfig['paths']['profiles']['default']       = $base . 'etc/profiles';
+        $this->validConfig['paths']['cfg']['default'] = $base . 'etc/';
+        $this->validConfig['paths']['mapcfg']['default'] = $base . 'etc/maps/';
+        $this->validConfig['paths']['geomap']['default'] = $base . 'etc/geomap';
+        $this->validConfig['paths']['profiles']['default'] = $base . 'etc/profiles';
         $this->validConfig['global']['authorisation_group_perms_file']['default'] = $base . 'etc/perms.db';
 
-        $this->validConfig['paths']['var']['default']            = $base . 'var/';
-        $this->validConfig['paths']['sharedvar']['default']      = $base . HTDOCS_DIR . '/var/';
-        $this->validConfig['paths']['htmlsharedvar']['default']  = $htmlBase . '/var/';
+        $this->validConfig['paths']['var']['default'] = $base . 'var/';
+        $this->validConfig['paths']['sharedvar']['default'] = $base . HTDOCS_DIR . '/var/';
+        $this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase . '/var/';
 
-        $this->validConfig['paths']['language']['default']       = $base . HTDOCS_DIR . '/frontend/nagvis-js/locale';
-        $this->validConfig['paths']['class']['default']          = $base . HTDOCS_DIR . '/server/core/classes/';
-        $this->validConfig['paths']['server']['default']         = $base . HTDOCS_DIR . '/server/core';
-        $this->validConfig['paths']['doc']['default']            = $base . HTDOCS_DIR . '/docs';
+        $this->validConfig['paths']['language']['default'] = $base . HTDOCS_DIR . '/frontend/nagvis-js/locale';
+        $this->validConfig['paths']['class']['default'] = $base . HTDOCS_DIR . '/server/core/classes/';
+        $this->validConfig['paths']['server']['default'] = $base . HTDOCS_DIR . '/server/core';
+        $this->validConfig['paths']['doc']['default'] = $base . HTDOCS_DIR . '/docs';
 
-        $this->validConfig['paths']['htmlcss']['default']        = $htmlBase . '/frontend/nagvis-js/css/';
+        $this->validConfig['paths']['htmlcss']['default'] = $htmlBase . '/frontend/nagvis-js/css/';
 
-        $this->validConfig['paths']['js']['default']             = $base . HTDOCS_DIR . '/frontend/nagvis-js/js/';
-        $this->validConfig['paths']['htmljs']['default']         = $htmlBase . '/frontend/nagvis-js/js/';
+        $this->validConfig['paths']['js']['default'] = $base . HTDOCS_DIR . '/frontend/nagvis-js/js/';
+        $this->validConfig['paths']['htmljs']['default'] = $htmlBase . '/frontend/nagvis-js/js/';
 
-        $this->validConfig['paths']['images']['default']         = $base . HTDOCS_DIR . '/frontend/nagvis-js/images/';
-        $this->validConfig['paths']['htmlimages']['default']     = $htmlBase . '/frontend/nagvis-js/images/';
+        $this->validConfig['paths']['images']['default'] = $base . HTDOCS_DIR . '/frontend/nagvis-js/images/';
+        $this->validConfig['paths']['htmlimages']['default'] = $htmlBase . '/frontend/nagvis-js/images/';
 
-        $this->validConfig['paths']['templates']['default']      = 'userfiles/templates/';
-        $this->validConfig['paths']['styles']['default']         = 'userfiles/styles/';
-        $this->validConfig['paths']['gadgets']['default']        = 'userfiles/gadgets/';
-        $this->validConfig['paths']['backgrounds']['default']    = 'userfiles/images/maps/';
-        $this->validConfig['paths']['icons']['default']          = 'userfiles/images/iconsets/';
-        $this->validConfig['paths']['shapes']['default']         = 'userfiles/images/shapes/';
-        $this->validConfig['paths']['sounds']['default']         = 'userfiles/sounds/';
-        $this->validConfig['paths']['sources']['default']        = 'server/core/sources';
-        $this->validConfig['paths']['actions']['default']        = 'server/core/actions';
+        $this->validConfig['paths']['templates']['default'] = 'userfiles/templates/';
+        $this->validConfig['paths']['styles']['default'] = 'userfiles/styles/';
+        $this->validConfig['paths']['gadgets']['default'] = 'userfiles/gadgets/';
+        $this->validConfig['paths']['backgrounds']['default'] = 'userfiles/images/maps/';
+        $this->validConfig['paths']['icons']['default'] = 'userfiles/images/iconsets/';
+        $this->validConfig['paths']['shapes']['default'] = 'userfiles/images/shapes/';
+        $this->validConfig['paths']['sounds']['default'] = 'userfiles/sounds/';
+        $this->validConfig['paths']['sources']['default'] = 'server/core/sources';
+        $this->validConfig['paths']['actions']['default'] = 'server/core/actions';
 
         $this->validConfig['paths']['templateimages']['default'] = 'userfiles/images/templates/';
 
         // This option directly relies on the configured htmlBase by default
-        $this->validConfig['global']['sesscookiepath']['default']    = $htmlBase;
+        $this->validConfig['global']['sesscookiepath']['default'] = $htmlBase;
     }
 
     /**
@@ -2320,7 +2321,6 @@ class GlobalMainCfg
                 }
             }
         }
-
 
         return $this->checkMainConfigIsValid(1);
     }
@@ -2596,10 +2596,10 @@ class GlobalMainCfg
     public function getPath($type, $loc, $var, $relfile = '')
     {
         $lb = $this->getValue('paths', 'local_base', true) . HTDOCS_DIR;
-        $b  = $this->getValue('paths', 'base') . HTDOCS_DIR;
+        $b = $this->getValue('paths', 'base') . HTDOCS_DIR;
 
         $lh = $this->getValue('paths', 'local_htmlbase', true);
-        $h  = $this->getValue('paths', 'htmlbase');
+        $h = $this->getValue('paths', 'htmlbase');
 
         // Get the relative path
         if (isset($this->config['paths'][$var])) {
@@ -2610,7 +2610,7 @@ class GlobalMainCfg
 
         // Compute the full system paths
         $l_file = $lb !== false && $lb !== '' ? $lb . '/' . $relpath . $relfile : null;
-        $file   = $b . '/' . $relpath . $relfile;
+        $file = $b . '/' . $relpath . $relfile;
 
         // Decide which path to return
         // When $loc is set to local it returns the local path
@@ -2762,15 +2762,15 @@ class GlobalMainCfg
     public function parseGeneralProperties()
     {
         $p = [
-            'date_format'        => $this->getValue('global', 'dateformat'),
-            'path_base'          => $this->getValue('paths', 'htmlbase'),
-            'path_cgi'           => $this->getValue('paths', 'htmlcgi'),
-            'path_sounds'        => $this->getPath('html', 'global', 'sounds'),
-            'path_iconsets'      => $this->getPath('html', 'global', 'icons'),
-            'path_shapes'        => $this->getPath('html', 'global', 'shapes'),
-            'path_images'        => $this->getValue('paths', 'htmlimages'),
-            'path_server'        => $this->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php',
-            'internal_title'     => $this->getValue('internal', 'title'),
+            'date_format' => $this->getValue('global', 'dateformat'),
+            'path_base' => $this->getValue('paths', 'htmlbase'),
+            'path_cgi' => $this->getValue('paths', 'htmlcgi'),
+            'path_sounds' => $this->getPath('html', 'global', 'sounds'),
+            'path_iconsets' => $this->getPath('html', 'global', 'icons'),
+            'path_shapes' => $this->getPath('html', 'global', 'shapes'),
+            'path_images' => $this->getValue('paths', 'htmlimages'),
+            'path_server' => $this->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php',
+            'internal_title' => $this->getValue('internal', 'title'),
             'header_show_states' => intval($this->getValue('defaults', 'header_show_states')),
             'zoom_scale_objects' => intval($this->getValue('defaults', 'zoom_scale_objects')),
             'worldmap_tiles_url' => $this->getValue('global', 'worldmap_tiles_url'),
@@ -2787,7 +2787,7 @@ class GlobalMainCfg
         $p['actions'] = [];
         foreach (GlobalCore::getInstance()->getDefinedCustomActions() as $id) {
             $p['actions'][$id] = [
-                'obj_type'  => $this->getValue('action_' . $id, 'obj_type'),
+                'obj_type' => $this->getValue('action_' . $id, 'obj_type'),
                 'client_os' => $this->getValue('action_' . $id, 'client_os'),
                 'condition' => $this->getValue('action_' . $id, 'condition')
             ];
@@ -2805,7 +2805,7 @@ class GlobalMainCfg
     public function parseWorkerProperties()
     {
         return json_encode([
-            'worker_interval'             => $this->getValue('worker', 'interval'),
+            'worker_interval' => $this->getValue('worker', 'interval'),
             'worker_update_object_states' => $this->getValue('worker', 'updateobjectstates')
         ]);
     }
@@ -2889,7 +2889,8 @@ class GlobalMainCfg
      * @return  array   The validConfig array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    function getValidObjectType($type) {
+    public function getValidObjectType($type)
+    {
         return $this->validConfig[$type];
     }
 
@@ -2899,7 +2900,8 @@ class GlobalMainCfg
      * @return	array The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function getValidConfig() {
+    public function getValidConfig()
+    {
         return $this->validConfig;
     }
 
@@ -2909,7 +2911,8 @@ class GlobalMainCfg
      * @return	array The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function getConfig() {
+    public function getConfig()
+    {
         return $this->config;
     }
 
@@ -2920,7 +2923,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function setSection($sec) {
+    public function setSection($sec)
+    {
         // Try to append new backends after already defined
         if (str_starts_with($sec, 'backend_')) {
             $lastBackendIndex = 0;
@@ -2958,7 +2962,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function delSection($sec) {
+    public function delSection($sec)
+    {
         $this->config[$sec] = '';
         unset($this->config[$sec]);
 
@@ -2972,7 +2977,8 @@ class GlobalMainCfg
      * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    function writeConfig() {
+    public function writeConfig()
+    {
         // Check for config file write permissions
         if (!$this->checkNagVisConfigWriteable(1)) {
             return false;
@@ -3088,7 +3094,8 @@ class GlobalMainCfg
      * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    function checkNagVisConfigWriteable($printErr) {
+    public function checkNagVisConfigWriteable($printErr)
+    {
         return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles) - 1], $printErr);
     }
 
@@ -3118,13 +3125,13 @@ class GlobalMainCfg
     public function getSectionTitle($sec)
     {
         $titles = [
-            'global'   => l('Global Settings'),
+            'global' => l('Global Settings'),
             'defaults' => l('Object Defaults'),
-            'index'    => l('Overview'),
-            'worker'   => l('State Updates'),
-            'states'   => l('States'),
-            'paths'    => l('Paths'),
-            'automap'  => l('Automap'),
+            'index' => l('Overview'),
+            'worker' => l('State Updates'),
+            'states' => l('States'),
+            'paths' => l('Paths'),
+            'automap' => l('Automap'),
         ];
         if (isset($titles[$sec])) {
             return $titles[$sec];

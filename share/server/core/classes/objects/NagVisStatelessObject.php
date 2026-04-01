@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisStatelessObject.php - Abstract class of a stateless object in NagVis
@@ -31,7 +32,7 @@ class NagVisStatelessObject extends NagVisObject
     protected $label_show;
 
     /** @var string|null */
-    protected static $iconPath      = null;
+    protected static $iconPath = null;
 
     /** @var string|null */
     protected static $iconPathLocal = null;

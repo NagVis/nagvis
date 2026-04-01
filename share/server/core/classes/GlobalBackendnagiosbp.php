@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalBackendnagiosbp.php - backend class for connecting NagVis directly
@@ -47,33 +48,33 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     private $backendId = '';
 
     /** @var string */
-    private $baseUrl   = '';
+    private $baseUrl = '';
 
     /** @var false|resource|string */
-    private $context   = '';
+    private $context = '';
 
     /** @var array */
-    private $cache     = [];
+    private $cache = [];
 
     /** @var array These are the backend local configuration options */
     private static $validConfig = [
         'base_url' => [
-            'must'     => 1,
+            'must' => 1,
             'editable' => 1,
-            'default'  => 'http://localhost/nagios/cgi-bin/nagios-bp.cgi',
-            'match'    => MATCH_STRING_URL,
+            'default' => 'http://localhost/nagios/cgi-bin/nagios-bp.cgi',
+            'match' => MATCH_STRING_URL,
         ],
         'auth_user' => [
-            'must'     => 0,
+            'must' => 0,
             'editable' => 1,
-            'default'  => '',
-            'match'    => MATCH_STRING,
+            'default' => '',
+            'match' => MATCH_STRING,
         ],
         'auth_pass' => [
-            'must'     => 0,
+            'must' => 0,
             'editable' => 1,
-            'default'  => '',
-            'match'    => MATCH_STRING,
+            'default' => '',
+            'match' => MATCH_STRING,
         ],
     ];
 
@@ -89,9 +90,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
         $this->baseUrl = cfg('backend_' . $backendId, 'base_url');
 
         $httpContext = [
-                'method'     => 'GET',
+                'method' => 'GET',
                 'user_agent' => 'NagVis NagiosBP Backend',
-                'timeout'    => 5,
+                'timeout' => 5,
         ];
 
         $username = cfg('backend_' . $backendId, 'auth_user');
@@ -235,29 +236,29 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     {
         $c = [
             PENDING => [
-                'normal'   => 0,
+                'normal' => 0,
             ],
             OK => [
-                'normal'   => 0,
-                'stale'    => 0,
+                'normal' => 0,
+                'stale' => 0,
                 'downtime' => 0,
             ],
             WARNING => [
-                'normal'   => 0,
-                'stale'    => 0,
-                'ack'      => 0,
+                'normal' => 0,
+                'stale' => 0,
+                'ack' => 0,
                 'downtime' => 0,
             ],
             CRITICAL => [
-                'normal'   => 0,
-                'stale'    => 0,
-                'ack'      => 0,
+                'normal' => 0,
+                'stale' => 0,
+                'ack' => 0,
                 'downtime' => 0,
             ],
             UNKNOWN => [
-                'normal'   => 0,
-                'stale'    => 0,
-                'ack'      => 0,
+                'normal' => 0,
+                'stale' => 0,
+                'ack' => 0,
                 'downtime' => 0,
             ],
         ];
@@ -335,7 +336,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
                     // This forces the BP state to be the summary state of the BP object
                     STATE => $this->getBPState($bp['hardstate']),
                 ],
-                'counts'  => $this->getBPCounts($bp),
+                'counts' => $this->getBPCounts($bp),
             ];
 
             // Add optional outputs which replaces the NagVis summary_output

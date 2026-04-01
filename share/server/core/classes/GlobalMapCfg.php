@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalMapCfg.php - Class for handling the map configuration files of NagVis
@@ -70,13 +71,13 @@ class GlobalMapCfg
     protected $ignoreSourceErrors = false;
 
     /** @var array|null Array for config validation */
-    protected static $validConfig       = null;
+    protected static $validConfig = null;
 
     /** @var array */
     protected static $updateValidConfig = [];
 
     /** @var array */
-    protected static $hiddenConfigVars  = [];
+    protected static $hiddenConfigVars = [];
 
     /** @var array Array for holding the registered map sources */
     protected static $viewParams = [];
@@ -131,7 +132,7 @@ class GlobalMapCfg
         global $CORE;
         self::$validConfig = [];
         // Holds all registered config vars
-        $mapConfigVars   = [];
+        $mapConfigVars = [];
         // Maps the config vars to the object types
         $mapConfigVarMap = [];
 
@@ -417,7 +418,6 @@ class GlobalMapCfg
                 $file[$l] = iso8859_1_to_utf8($file[$l]);
             }
 
-
             // This is an object ending. Reset the object type and skip to next line
             if ($sFirstChar == '}') {
                 if ($obj['type'] === 'global') {
@@ -433,7 +433,7 @@ class GlobalMapCfg
                     while (isset($this->mapConfig[$new])) {
                         $new = $this->genObjId($new . time());
                     }
-                    $obj['object_id']      = $new;
+                    $obj['object_id'] = $new;
                     $this->mapConfig[$new] = $obj;
                     $this->storeDeleteElement('_' . $iObjId, $this->formatElement($new));
                 } else {
@@ -460,7 +460,7 @@ class GlobalMapCfg
                     throw new NagVisException(l(
                         'unknownObject',
                         [
-                            'TYPE'    => $sObjType,
+                            'TYPE' => $sObjType,
                             'MAPNAME' => $this->name
                         ]
                     ));
@@ -629,12 +629,12 @@ class GlobalMapCfg
     {
         global $CORE;
         foreach ($CORE->getAvailableSources() as $source_name) {
-            $viewParams       = [];
-            $configVars       = [];
-            $configVarMap     = [];
+            $viewParams = [];
+            $configVars = [];
+            $configVarMap = [];
             $updateConfigVars = [];
             $hiddenConfigVars = [];
-            $selectable       = false;
+            $selectable = false;
 
             if (file_exists(path('sys', 'local', 'sources'))) {
                 include_once(path('sys', 'local', 'sources') . '/' . $source_name . '.php');
@@ -712,7 +712,6 @@ class GlobalMapCfg
         }
         return $values;
     }
-
 
     /**
      * @param array $params
@@ -849,9 +848,9 @@ class GlobalMapCfg
         $only_view_parameters = false
     ) {
         // First get a list of source names to get the parameters for
-        $config  = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
+        $config = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         $sources = array_merge(['*'], $config);
-        $params  = $this->getSourceParamsOfSources(
+        $params = $this->getSourceParamsOfSources(
             $sources,
             $only_user_supplied,
             $only_customized,
@@ -1007,7 +1006,7 @@ class GlobalMapCfg
         // 2a. Check if the cache file exists
         // 2b. Check if the cache file is newer than the latest changed source
         $cache_sources = $CACHE->isCached();
-        $cache_map     = $this->CACHE->isCached();
+        $cache_map = $this->CACHE->isCached();
         $cache_maincfg = $_MAINCFG->isCached();
         if (
             $useCache
@@ -1269,7 +1268,7 @@ class GlobalMapCfg
                             'mapCfgMustValueNotSet',
                             [
                                 'MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
-                                'TYPE'    => $type,       'ID'        => $id
+                                'TYPE' => $type,       'ID' => $id
                             ]
                         ));
                     }
@@ -1509,7 +1508,8 @@ class GlobalMapCfg
      * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    function checkMapCfgFolderWriteable($printErr) {
+    public function checkMapCfgFolderWriteable($printErr)
+    {
         global $CORE;
         return $CORE->checkReadable(dirname($this->configFile), $printErr);
     }
@@ -1624,7 +1624,7 @@ class GlobalMapCfg
      */
     public function filterMapObjects($objIds)
     {
-        $newConfig =  [0 => $this->mapConfig[0]]; // keep the global section
+        $newConfig = [0 => $this->mapConfig[0]]; // keep the global section
         foreach ($objIds as $id) {
             if (isset($this->mapConfig[$id])) {
                 $newConfig[$id] = $this->mapConfig[$id];
@@ -1727,9 +1727,9 @@ class GlobalMapCfg
             $id = $this->genObjId((count($this->mapConfig) + 1) . time());
         }
 
-        $this->mapConfig[$id]              = $properties;
+        $this->mapConfig[$id] = $properties;
         $this->mapConfig[$id]['object_id'] = $id;
-        $this->mapConfig[$id]['type']      = $type;
+        $this->mapConfig[$id]['type'] = $type;
         if ($perm) {
             $this->storeAddElement($id);
         }
@@ -1841,8 +1841,8 @@ class GlobalMapCfg
 
         $type = $this->mapConfig[$id]['type'];
 
-        $this->mapConfig[$id]              = $properties;
-        $this->mapConfig[$id]['type']      = $type;
+        $this->mapConfig[$id] = $properties;
+        $this->mapConfig[$id]['type'] = $type;
         $this->mapConfig[$id]['object_id'] = $id;
 
         if ($perm) {
@@ -1876,7 +1876,7 @@ class GlobalMapCfg
         }
         // Remove object head/foot
         $start += 1;
-        $end   -= 1;
+        $end -= 1;
 
         if (!$inObj) {
             // It might happen that the object can not be found in the current map config.
@@ -1986,7 +1986,7 @@ class GlobalMapCfg
         $count = 0;
         $start = null;
         $inObj = false;
-        $end   = null;
+        $end = null;
 
         $f = $this->getConfig();
         for ($i = 0, $len = count($f); $i < $len; $i++) {
@@ -2025,7 +2025,7 @@ class GlobalMapCfg
     {
         $start = null;
         $inObj = false;
-        $end   = null;
+        $end = null;
 
         $f = $this->getConfig();
         for ($i = 0, $len = count($f); $i < $len; $i++) {
@@ -2048,7 +2048,7 @@ class GlobalMapCfg
             // Check if this is the object_id line
             $delimPos = strpos($f[$i], '=');
             if ($delimPos !== false) {
-                $key   = trim(substr($f[$i], 0, $delimPos));
+                $key = trim(substr($f[$i], 0, $delimPos));
                 $value = trim(substr($f[$i], ($delimPos + 1)));
                 if ($key === 'object_id' && $value === $id) {
                     $inObj = true;
@@ -2347,28 +2347,28 @@ class GlobalMapCfg
     public function getMapProperties()
     {
         return [
-            'view_type'                => 'map',
-            'map_name'                 => $this->getName(),
-            'alias'                    => $this->getValue(0, 'alias'),
-            'background_image'         => $this->BACKGROUND->getFile(),
-            'background_color'         => $this->getValue(0, 'background_color'),
-            'favicon_image'            => cfg('paths', 'htmlimages') . 'internal/favicon.png',
-            'page_title'               => $this->getValue(0, 'alias')
+            'view_type' => 'map',
+            'map_name' => $this->getName(),
+            'alias' => $this->getValue(0, 'alias'),
+            'background_image' => $this->BACKGROUND->getFile(),
+            'background_color' => $this->getValue(0, 'background_color'),
+            'favicon_image' => cfg('paths', 'htmlimages') . 'internal/favicon.png',
+            'page_title' => $this->getValue(0, 'alias')
                                             . ' ([SUMMARY_STATE]) :: '
                                             . cfg('internal', 'title'),
-            'event_background'         => $this->getValue(0, 'event_background'),
-            'event_highlight'          => $this->getValue(0, 'event_highlight'),
+            'event_background' => $this->getValue(0, 'event_background'),
+            'event_highlight' => $this->getValue(0, 'event_highlight'),
             'event_highlight_interval' => $this->getValue(0, 'event_highlight_interval'),
             'event_highlight_duration' => $this->getValue(0, 'event_highlight_duration'),
-            'event_log'                => $this->getValue(0, 'event_log'),
-            'event_log_level'          => $this->getValue(0, 'event_log_level'),
-            'event_log_events'         => $this->getValue(0, 'event_log_events'),
-            'event_log_height'         => $this->getValue(0, 'event_log_height'),
-            'event_log_hidden'         => $this->getValue(0, 'event_log_hidden'),
-            'event_scroll'             => $this->getValue(0, 'event_scroll'),
-            'event_sound'              => $this->getValue(0, 'event_sound'),
-            'in_maintenance'           => $this->getValue(0, 'in_maintenance'),
-            'sources'                  => $this->getValue(0, 'sources'),
+            'event_log' => $this->getValue(0, 'event_log'),
+            'event_log_level' => $this->getValue(0, 'event_log_level'),
+            'event_log_events' => $this->getValue(0, 'event_log_events'),
+            'event_log_height' => $this->getValue(0, 'event_log_height'),
+            'event_log_hidden' => $this->getValue(0, 'event_log_hidden'),
+            'event_scroll' => $this->getValue(0, 'event_scroll'),
+            'event_sound' => $this->getValue(0, 'event_sound'),
+            'in_maintenance' => $this->getValue(0, 'in_maintenance'),
+            'sources' => $this->getValue(0, 'sources'),
         ];
     }
 
@@ -2379,17 +2379,17 @@ class GlobalMapCfg
     public function getSectionTitle($sec)
     {
         $titles = [
-            'general'           => l('General'),
-            'appearance'        => l('Appearance'),
-            'state'             => l('State'),
-            'actions'           => l('Actions'),
-            'label'             => l('Label'),
-            'dynmap'            => l('Dynmap'),
-            'automap'           => l('Automap'),
-            'geomap'            => l('Geomap'),
-            'worldmap'          => l('Worldmap'),
-            'object_defaults'   => l('Obj. Defaults'),
-            'events'            => l('Events'),
+            'general' => l('General'),
+            'appearance' => l('Appearance'),
+            'state' => l('State'),
+            'actions' => l('Actions'),
+            'label' => l('Label'),
+            'dynmap' => l('Dynmap'),
+            'automap' => l('Automap'),
+            'geomap' => l('Geomap'),
+            'worldmap' => l('Worldmap'),
+            'object_defaults' => l('Obj. Defaults'),
+            'events' => l('Events'),
         ];
         if (isset($titles[$sec])) {
             return $titles[$sec];

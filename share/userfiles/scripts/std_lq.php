@@ -1,4 +1,5 @@
-<?PHP
+<?php
+
 /*****************************************************************************
  *
  * std_lq.php - Example helper script to query a requested livestatus backend
@@ -49,7 +50,7 @@
  */
 
 // Modify the default allowed query type match regex. By default only GET requests are allowed.
-$queryTypes  = 'GET';
+$queryTypes = 'GET';
 // Modify the matchig regex for the allowed tables
 $queryTables = '([a-z]+)';
 // Adds the username of the authed user to the livestatus query to filter the objects to query
@@ -132,7 +133,7 @@ try {
     }
 
     $backendId = $_GET['backend_id'];
-    $query     = str_replace('\\\\n', "\n", $_GET['query']);
+    $query = str_replace('\\\\n', "\n", $_GET['query']);
 
     if ($setAuthUser) {
         $query .= 'AuthUser: ' . $username . "\n";

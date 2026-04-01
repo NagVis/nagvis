@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalBackendmklivestatus.php
@@ -66,29 +67,29 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     /** @var array These are the backend local configuration options */
     private static $validConfig = [
         'socket' => [
-            'must'      => 1,
-            'editable'  => 1,
-            'default'   => 'unix:/usr/local/nagios/var/rw/live',
-            'match'     => MATCH_SOCKET,
+            'must' => 1,
+            'editable' => 1,
+            'default' => 'unix:/usr/local/nagios/var/rw/live',
+            'match' => MATCH_SOCKET,
         ],
         'verify_tls_peer' => [
-            'must'       => 0,
-            'editable'   => 1,
-            'default'    => 1,
-            'match'      => MATCH_BOOLEAN,
+            'must' => 0,
+            'editable' => 1,
+            'default' => 1,
+            'match' => MATCH_BOOLEAN,
             'field_type' => 'boolean',
         ],
         'verify_tls_ca_path' => [
-            'must'      => 0,
-            'editable'  => 1,
-            'default'   => '',
-            'match'     => MATCH_STRING_PATH,
+            'must' => 0,
+            'editable' => 1,
+            'default' => '',
+            'match' => MATCH_STRING_PATH,
         ],
         'timeout' => [
-            'must'      => 1,
-            'editable'  => 1,
-            'default'   => 5,
-            'match'     => MATCH_INTEGER,
+            'must' => 1,
+            'editable' => 1,
+            'default' => 5,
+            'match' => MATCH_INTEGER,
         ],
     ];
 
@@ -284,8 +285,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 'Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
                 [
                     'BACKENDID' => $this->backendId,
-                    'SOCKET'    => $this->socketSpec,
-                    'MSG'       => $error_msg
+                    'SOCKET' => $this->socketSpec,
+                    'MSG' => $error_msg
                 ]
             ));
             throw $this->CONNECT_EXC;
@@ -353,7 +354,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         //Add authorization data to mk livestatus query
         if (cfg('global', 'only_permitted_objects')) {
             global $AUTH;
-            $userName  = $AUTH->getUser();
+            $userName = $AUTH->getUser();
             $query .= "AuthUser: $userName\n";
         }
 
@@ -391,7 +392,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
             ));
         }
 
-
         // Return here if no answer is expected
         if (!$response) {
             return;
@@ -427,8 +427,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 'Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                 [
                     'BACKENDID' => $this->backendId,
-                    'SOCKET'    => $this->socketSpec,
-                    'MSG'       => 'Error while reading socket (content)'
+                    'SOCKET' => $this->socketSpec,
+                    'MSG' => 'Error while reading socket (content)'
                 ]
             ));
         }
@@ -439,8 +439,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 'Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                 [
                     'BACKENDID' => $this->backendId,
-                    'SOCKET'    => $this->socketSpec,
-                    'MSG'       => $read
+                    'SOCKET' => $this->socketSpec,
+                    'MSG' => $read
                 ]
             ));
         }
@@ -1042,9 +1042,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 // $e[2]:  state
                 if ($e[19] == 0 || $e[2] === '') {
                     $svc = array_fill(0, EXT_STATE_SIZE, null);
-                    $svc[DESCRIPTION]  = $e[0];
+                    $svc[DESCRIPTION] = $e[0];
                     $svc[DISPLAY_NAME] = $e[1];
-                    $svc[STATE]  = PENDING;
+                    $svc[STATE] = PENDING;
                     $svc[OUTPUT] = l('serviceNotChecked', ['SERVICE' => $e[0]]);
                 } else {
                     switch ($e[2]) {
@@ -1207,29 +1207,29 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                     //'details' => Array('alias' => $e[1]),
                     'counts' => [
                         PENDING => [
-                            'normal'   => intval($e[2]),
+                            'normal' => intval($e[2]),
                         ],
                         OK => [
-                            'normal'   => intval($e[3]),
-                            'stale'    => intval($e[4]),
+                            'normal' => intval($e[3]),
+                            'stale' => intval($e[4]),
                             'downtime' => intval($e[5]),
                         ],
                         WARNING => [
-                            'normal'   => intval($e[6]),
-                            'stale'    => intval($e[7]),
-                            'ack'      => intval($e[8]),
+                            'normal' => intval($e[6]),
+                            'stale' => intval($e[7]),
+                            'ack' => intval($e[8]),
                             'downtime' => intval($e[9]),
                         ],
                         CRITICAL => [
-                            'normal'   => intval($e[10]),
-                            'stale'    => intval($e[11]),
-                            'ack'      => intval($e[12]),
+                            'normal' => intval($e[10]),
+                            'stale' => intval($e[11]),
+                            'ack' => intval($e[12]),
                             'downtime' => intval($e[13]),
                         ],
                         UNKNOWN => [
-                            'normal'   => intval($e[14]),
-                            'stale'    => intval($e[15]),
-                            'ack'      => intval($e[16]),
+                            'normal' => intval($e[14]),
+                            'stale' => intval($e[15]),
+                            'ack' => intval($e[16]),
                             'downtime' => intval($e[17]),
                         ],
                     ]
@@ -1272,29 +1272,29 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         $e = $l[0];
         return [
             PENDING => [
-                'normal'   => intval($e[0]),
+                'normal' => intval($e[0]),
             ],
             OK => [
-                'normal'   => intval($e[1]),
-                'stale'    => intval($e[2]),
+                'normal' => intval($e[1]),
+                'stale' => intval($e[2]),
                 'downtime' => intval($e[3]),
             ],
             WARNING => [
-                'normal'   => intval($e[4]),
-                'stale'    => intval($e[5]),
-                'ack'      => intval($e[6]),
+                'normal' => intval($e[4]),
+                'stale' => intval($e[5]),
+                'ack' => intval($e[6]),
                 'downtime' => intval($e[7]),
             ],
             CRITICAL => [
-                'normal'   => intval($e[8]),
-                'stale'    => intval($e[9]),
-                'ack'      => intval($e[10]),
+                'normal' => intval($e[8]),
+                'stale' => intval($e[9]),
+                'ack' => intval($e[10]),
                 'downtime' => intval($e[11]),
             ],
             UNKNOWN => [
-                'normal'   => intval($e[12]),
-                'stale'    => intval($e[13]),
-                'ack'      => intval($e[14]),
+                'normal' => intval($e[12]),
+                'stale' => intval($e[13]),
+                'ack' => intval($e[14]),
                 'downtime' => intval($e[15]),
             ],
         ];
@@ -1316,19 +1316,19 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         $by_group = true
     ) {
         if ($by_group) {
-            $host_suffix    = 'bygroup';
+            $host_suffix = 'bygroup';
             $service_suffix = 'byhostgroup';
 
-            $host_grouping    = "Columns: hostgroup_name hostgroup_alias\n";
+            $host_grouping = "Columns: hostgroup_name hostgroup_alias\n";
             $service_grouping = "Columns: hostgroup_name\n";
 
             $hoffset = 2;
             $soffset = 1;
         } else {
-            $host_suffix    = '';
+            $host_suffix = '';
             $service_suffix = '';
 
-            $host_grouping    = '';
+            $host_grouping = '';
             $service_grouping = '';
 
             $hoffset = 0;
@@ -1430,24 +1430,24 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
                 $counts = [
                     UNCHECKED => [
-                        'normal'    => intval($e[0 + $hoffset]),
+                        'normal' => intval($e[0 + $hoffset]),
                     ],
                     UP => [
-                        'normal'    => intval($e[1 + $hoffset]),
-                        'stale'     => intval($e[2 + $hoffset]),
-                        'downtime'  => intval($e[3 + $hoffset]),
+                        'normal' => intval($e[1 + $hoffset]),
+                        'stale' => intval($e[2 + $hoffset]),
+                        'downtime' => intval($e[3 + $hoffset]),
                     ],
                     DOWN => [
-                        'normal'    => intval($e[4 + $hoffset]),
-                        'stale'     => intval($e[5 + $hoffset]),
-                        'ack'       => intval($e[6 + $hoffset]),
-                        'downtime'  => intval($e[7 + $hoffset]),
+                        'normal' => intval($e[4 + $hoffset]),
+                        'stale' => intval($e[5 + $hoffset]),
+                        'ack' => intval($e[6 + $hoffset]),
+                        'downtime' => intval($e[7 + $hoffset]),
                     ],
                     UNREACHABLE => [
-                        'normal'    => intval($e[8 + $hoffset]),
-                        'stale'     => intval($e[9 + $hoffset]),
-                        'ack'       => intval($e[10 + $hoffset]),
-                        'downtime'  => intval($e[11 + $hoffset]),
+                        'normal' => intval($e[8 + $hoffset]),
+                        'stale' => intval($e[9 + $hoffset]),
+                        'ack' => intval($e[10 + $hoffset]),
+                        'downtime' => intval($e[11 + $hoffset]),
                     ],
                 ];
 
@@ -1456,7 +1456,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 } else {
                     $arrReturn[$e[0]] = [
                         'details' => [ALIAS => $e[1]],
-                        'counts'  => $counts
+                        'counts' => $counts
                     ];
                 }
             }
@@ -1490,29 +1490,29 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
                 $counts = [
                     PENDING => [
-                        'normal'   => intval($e[0 + $soffset])
+                        'normal' => intval($e[0 + $soffset])
                     ],
                     OK => [
-                        'normal'   => intval($e[1 + $soffset]),
-                        'stale'    => intval($e[2 + $soffset]),
+                        'normal' => intval($e[1 + $soffset]),
+                        'stale' => intval($e[2 + $soffset]),
                         'downtime' => intval($e[3 + $soffset]),
                     ],
                     WARNING => [
-                        'normal'   => intval($e[4 + $soffset]),
-                        'stale'    => intval($e[5 + $soffset]),
-                        'ack'      => intval($e[6 + $soffset]),
+                        'normal' => intval($e[4 + $soffset]),
+                        'stale' => intval($e[5 + $soffset]),
+                        'ack' => intval($e[6 + $soffset]),
                         'downtime' => intval($e[7 + $soffset]),
                     ],
                     CRITICAL => [
-                        'normal'   => intval($e[8 + $soffset]),
-                        'stale'    => intval($e[9 + $soffset]),
-                        'ack'      => intval($e[10 + $soffset]),
+                        'normal' => intval($e[8 + $soffset]),
+                        'stale' => intval($e[9 + $soffset]),
+                        'ack' => intval($e[10 + $soffset]),
                         'downtime' => intval($e[11 + $soffset]),
                     ],
                     UNKNOWN => [
-                        'normal'   => intval($e[12 + $soffset]),
-                        'stale'    => intval($e[13 + $soffset]),
-                        'ack'      => intval($e[14 + $soffset]),
+                        'normal' => intval($e[12 + $soffset]),
+                        'stale' => intval($e[13 + $soffset]),
+                        'ack' => intval($e[14 + $soffset]),
                         'downtime' => intval($e[15 + $soffset]),
                     ],
                 ];
@@ -1604,30 +1604,30 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                     'details' => [ALIAS => $e[1]],
                     'counts' => [
                         PENDING => [
-                            'normal'    => intval($e[2]),
+                            'normal' => intval($e[2]),
                         ],
                         OK => [
-                            'normal'    => intval($e[3]),
-                            'stale'     => intval($e[4]),
-                            'downtime'  => intval($e[5]),
+                            'normal' => intval($e[3]),
+                            'stale' => intval($e[4]),
+                            'downtime' => intval($e[5]),
                         ],
                         WARNING => [
-                            'normal'    => intval($e[6]),
-                            'stale'     => intval($e[7]),
-                            'ack'       => intval($e[8]),
-                            'downtime'  => intval($e[9]),
+                            'normal' => intval($e[6]),
+                            'stale' => intval($e[7]),
+                            'ack' => intval($e[8]),
+                            'downtime' => intval($e[9]),
                         ],
                         CRITICAL => [
-                            'normal'    => intval($e[10]),
-                            'stale'     => intval($e[11]),
-                            'ack'       => intval($e[12]),
-                            'downtime'  => intval($e[13]),
+                            'normal' => intval($e[10]),
+                            'stale' => intval($e[11]),
+                            'ack' => intval($e[12]),
+                            'downtime' => intval($e[13]),
                         ],
                         UNKNOWN => [
-                            'normal'    => intval($e[14]),
-                            'stale'     => intval($e[15]),
-                            'ack'       => intval($e[16]),
-                            'downtime'  => intval($e[17]),
+                            'normal' => intval($e[14]),
+                            'stale' => intval($e[15]),
+                            'ack' => intval($e[16]),
+                            'downtime' => intval($e[17]),
                         ],
                     ]
                 ];
@@ -1752,10 +1752,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 $custom_variables = array_combine($row[1], $row[2]);
                 if (isset($custom_variables['LAT']) && isset($custom_variables['LONG'])) {
                     $hosts[] = [
-                        'name'       => $row[0],
-                        'lat'        => $custom_variables['LAT'],
-                        'long'       => $custom_variables['LONG'],
-                        'alias'      => $row[3],
+                        'name' => $row[0],
+                        'lat' => $custom_variables['LAT'],
+                        'long' => $custom_variables['LONG'],
+                        'alias' => $row[3],
                         'backend_id' => $this->backendId,
                     ];
                 }
@@ -1797,8 +1797,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
             $what = 'SVC';
         }
 
-        $sticky  = $sticky ? '2' : '0';
-        $notify  = $notify ? '1' : '0';
+        $sticky = $sticky ? '2' : '0';
+        $notify = $notify ? '1' : '0';
         $persist = $notify ? '1' : '0';
 
         $this->command(

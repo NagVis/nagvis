@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * std_html_bar.php - Sample HTML based gadget for NagVis
@@ -51,7 +52,7 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
  * Needs to be configured to tell gadgets_core.php how to handle the outputs
  * e.g. in case of error messages. This defaults to 'img'.
  */
-$_MODE          = 'html';
+$_MODE = 'html';
 
 // Include the gadgets core. Also handle OMD default and local paths
 if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
@@ -78,8 +79,8 @@ $max = -1;
 $default = 0;
 
 // Set default parameters values
-$border                      = 1; // Border
-$perfdata                    = 0; // Perfdata
+$border = 1; // Border
+$perfdata = 0; // Perfdata
 
 // Get parameters from gadget_opts
 if (isset($_GET['opts']) && ($_GET['opts'] != '')) {
@@ -99,11 +100,11 @@ if (isset($_GET['opts']) && ($_GET['opts'] != '')) {
 // Read dataset of performance data from parameters
 
 $value = $aPerfdata[$perfdata]['value'];
-$uom   = $aPerfdata[$perfdata]['uom'];
-$warn  = $aPerfdata[$perfdata]['warning'];
-$crit  = $aPerfdata[$perfdata]['critical'];
-$min   = $aPerfdata[$perfdata]['min'];
-$max   = $aPerfdata[$perfdata]['max'];
+$uom = $aPerfdata[$perfdata]['uom'];
+$warn = $aPerfdata[$perfdata]['warning'];
+$crit = $aPerfdata[$perfdata]['critical'];
+$min = $aPerfdata[$perfdata]['min'];
+$max = $aPerfdata[$perfdata]['max'];
 
 //================
 // Normalize / Fix value and max

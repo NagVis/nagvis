@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendRotation.php - Wrapper class to have rotation handling in nagvis-js

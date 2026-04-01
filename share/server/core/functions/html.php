@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
@@ -77,7 +78,7 @@ function has_var($key)
  * FORM HANDLING
  */
 
-$form_keys   = [];
+$form_keys = [];
 $form_errors = [];
 
 /**
@@ -429,7 +430,7 @@ function textarea($name, $default = '', $class = '', $style = '')
     }
 
     global $AUTHORISATION;
-    if(!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
+    if (!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
         echo '<b>Cannot edit HTML. Please contact your administrator.</b>';
         return;
     }

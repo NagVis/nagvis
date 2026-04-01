@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreUriHandler.php - Class to handle uri parsing

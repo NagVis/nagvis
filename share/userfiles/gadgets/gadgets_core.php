@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * gadgets_core.php - Core code for standard gadgets, provides basic functions
@@ -202,9 +203,9 @@ $aPerfdata = [];
 
 // Get params without default values
 foreach ([
-    'opts'  => null, 'name1'     => null, 'name2' => null,
+    'opts' => null, 'name1' => null, 'name2' => null,
     'state' => null, 'stateType' => null, 'scale' => 100,
-    'ack'   => null, 'downtime'  => null
+    'ack' => null, 'downtime' => null
 ] as $opt => $default) {
     if (isset($_GET[$opt]) && $_GET[$opt] != '') {
         $aOpts[$opt] = $_GET[$opt];
@@ -215,7 +216,7 @@ foreach ([
 
 if (isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
     $aOpts['perfdata'] = $_GET['perfdata'];
-} elseif (isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
+} elseif (isset($_GET['conf']) && $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
     $aOpts['perfdata'] = $sDummyPerfdata;
 } elseif (!isset($_GET['opts']) || !str_contains($_GET['opts'], 'no_perf')) {
     errorBox('ERROR: The needed parameter "perfdata" is missing.');

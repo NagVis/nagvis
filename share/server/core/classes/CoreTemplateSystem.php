@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreTemplateSystem.php - Core wrapper class for the template system

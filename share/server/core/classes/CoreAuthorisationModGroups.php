@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthorisationModGroups.php - Authorsiation module based on the
@@ -51,7 +52,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
      */
     public function __construct()
     {
-        $this->file     = cfg('global', 'authorisation_group_perms_file');
+        $this->file = cfg('global', 'authorisation_group_perms_file');
 
         if ($this->file == '') {
             throw new NagVisException(
@@ -145,7 +146,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
     {
         # Add implicit permissions. These are basic permissions
         # which are needed for most users.
-        $perms =  [
+        $perms = [
             ['Overview',  'view',               '*'],
             ['General',   'getContextTemplate', '*'],
             ['General',   'getHoverTemplate',   '*'],

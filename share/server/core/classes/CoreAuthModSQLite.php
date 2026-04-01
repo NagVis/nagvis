@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthModSQLite.php - Authentication module based on a SQLite database

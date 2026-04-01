@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisServicegroup.php - Class of a Servicegroup in NagVis with all necessary
@@ -175,7 +176,6 @@ class NagVisServicegroup extends NagVisStatefulObject
             }
         }
 
-
         // FIXME: Recode mergeSummaryOutput method
         $this->mergeSummaryOutput($arrServiceStates, l('services'));
 
@@ -201,8 +201,8 @@ class NagVisServicegroup extends NagVisStatefulObject
         if ($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, WARNING => 0,
-                UNKNOWN  => 0, OK      => 0,
-                ERROR    => 0, PENDING => 0
+                UNKNOWN => 0, OK => 0,
+                ERROR => 0, PENDING => 0
             ];
 
             // Get summary state of this and child objects

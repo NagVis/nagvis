@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CorePDOHandler.php - Class to handle any database using the PDO abstraction
@@ -278,7 +279,6 @@ class CorePDOHandler
 
                     '-table-exists' => "SELECT * FROM sqlite_master WHERE type='table' AND name=:name",
                 ],
-
 
                 'init' => [
                     'PRAGMA journal_mode = wal',

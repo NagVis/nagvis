@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisInfoView.php - Class for handling the rendering of the support
@@ -53,19 +54,19 @@ class NagVisInfoView
         $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
-        $userName  = $AUTH->getUser();
-        $userId    = $AUTH->getUserId();
+        $userName = $AUTH->getUser();
+        $userId = $AUTH->getUserId();
         $userRoles = $AUTHORISATION->getUserRoles($userId);
         $userPerms = $AUTHORISATION->parsePermissions();
 
         $aData = [
-            'pageTitle'      => cfg('internal', 'title') . ' &rsaquo; ' . l('supportInfo'),
-            'htmlBase'       => cfg('paths', 'htmlbase'),
-            'htmlTemplates'  => path('html', 'global', 'templates'),
-            'nagvisVersion'  => CONST_VERSION,
-            'phpVersion'     => PHP_VERSION,
-            'mysqlVersion'   => shell_exec('mysql --version'),
-            'os'             => shell_exec('uname -a'),
+            'pageTitle' => cfg('internal', 'title') . ' &rsaquo; ' . l('supportInfo'),
+            'htmlBase' => cfg('paths', 'htmlbase'),
+            'htmlTemplates' => path('html', 'global', 'templates'),
+            'nagvisVersion' => CONST_VERSION,
+            'phpVersion' => PHP_VERSION,
+            'mysqlVersion' => shell_exec('mysql --version'),
+            'os' => shell_exec('uname -a'),
             'serverSoftware' => $_SERVER['SERVER_SOFTWARE'],
             'scriptFilename' => $_SERVER['SCRIPT_FILENAME'],
             'scriptName' => $_SERVER['SCRIPT_NAME'],
@@ -77,25 +78,25 @@ class NagVisInfoView
             'phpLoadedExtensions' => implode(", ", get_loaded_extensions()),
             'userAgent' => htmlspecialchars($_SERVER['HTTP_USER_AGENT']),
             // Auth details
-            'logonModule'         => cfg('global', 'logonmodule'),
-            'authModule'          => cfg('global', 'authmodule'),
+            'logonModule' => cfg('global', 'logonmodule'),
+            'authModule' => cfg('global', 'authmodule'),
             'authorisationModule' => cfg('global', 'authorisationmodule'),
-            'logonEnvVar'         => cfg('global', 'logonenvvar'),
-            'logonEnvVal'         => (
+            'logonEnvVar' => cfg('global', 'logonenvvar'),
+            'logonEnvVal' => (
                 isset($_SERVER[cfg('global', 'logonenvvar')])
                                             ? $_SERVER[cfg('global', 'logonenvvar')]
                                             : ''
             ),
-            'logonEnvCreateUser'  => cfg('global', 'logonenvcreateuser'),
-            'logonEnvCreateRole'  => cfg('global', 'logonenvcreaterole'),
-            'loggedIn'            => $userName . ' (' . $userId . ')',
-            'userRoles'           => json_encode($userRoles),
-            'userPerms'           => json_encode($userPerms),
-            'userAuthModule'      => $AUTH->getAuthModule(),
-            'userLogonModule'     => $AUTH->getLogonModule(),
-            'userAuthTrusted'     => ($AUTH->authedTrusted() ? l("yes") : l("no")),
-            'compatJsonEncode'    => (l("yes")),
-            'compatJsonDecode'    => (l("yes")),
+            'logonEnvCreateUser' => cfg('global', 'logonenvcreateuser'),
+            'logonEnvCreateRole' => cfg('global', 'logonenvcreaterole'),
+            'loggedIn' => $userName . ' (' . $userId . ')',
+            'userRoles' => json_encode($userRoles),
+            'userPerms' => json_encode($userPerms),
+            'userAuthModule' => $AUTH->getAuthModule(),
+            'userLogonModule' => $AUTH->getLogonModule(),
+            'userAuthTrusted' => ($AUTH->authedTrusted() ? l("yes") : l("no")),
+            'compatJsonEncode' => (l("yes")),
+            'compatJsonDecode' => (l("yes")),
         ];
 
         // Build page based on the template file and the data array

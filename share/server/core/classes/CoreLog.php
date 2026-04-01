@@ -1,6 +1,5 @@
 <?php
 
-
 class CoreLog
 {
     /** @var string|null */

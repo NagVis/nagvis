@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisDynGroup.php - Handles dynamic grouping of either hosts or services
@@ -27,9 +28,9 @@ class NagVisDynGroup extends NagVisStatefulObject
     /** @var string */
     protected $type = 'dyngroup';
 
-    protected static $langType   = null;
-    protected static $langSelf   = null;
-    protected static $langChild  = null;
+    protected static $langType = null;
+    protected static $langSelf = null;
+    protected static $langChild = null;
     protected static $langChild1 = null;
 
     /** @var string */
@@ -51,7 +52,7 @@ class NagVisDynGroup extends NagVisStatefulObject
     public function __construct($backend_id, $name)
     {
         $this->backend_id = $backend_id;
-        $this->name       = $name;
+        $this->name = $name;
         parent::__construct();
     }
 
@@ -217,9 +218,9 @@ class NagVisDynGroup extends NagVisStatefulObject
     {
         if ($this->hasMembers()) {
             $arrStates = [
-                CRITICAL => 0, DOWN    => 0, WARNING   => 0,
-                UNKNOWN  => 0, UP      => 0, OK        => 0,
-                ERROR    => 0, PENDING => 0, UNCHECKED => 0
+                CRITICAL => 0, DOWN => 0, WARNING => 0,
+                UNKNOWN => 0, UP => 0, OK => 0,
+                ERROR => 0, PENDING => 0, UNCHECKED => 0
             ];
 
             // Get summary state of this and child objects

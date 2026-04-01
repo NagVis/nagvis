@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthModule.php - Abstract definition of a CoreAuthModule

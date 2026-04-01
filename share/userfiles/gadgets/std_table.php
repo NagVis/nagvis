@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * std_table.php - Renders a table showing host and service object info
@@ -26,11 +27,11 @@
 $table_colors = [];
 $table_colors['WARNING'] = "#FFFF00";
 $table_colors['UNKNOWN'] = "#FFCC66";
-$table_colors['UP']      = "#00FF00";
-$table_colors['DOWN']    = "#FF0000";
-$table_colors['ERROR']   = "#3498db";
-$table_colors['HEADER']  = "#34495e";
-$table_colors['EMPTY']   = "#eff0f1";
+$table_colors['UP'] = "#00FF00";
+$table_colors['DOWN'] = "#FF0000";
+$table_colors['ERROR'] = "#3498db";
+$table_colors['HEADER'] = "#34495e";
+$table_colors['EMPTY'] = "#eff0f1";
 
 if (!preg_match('/^(?:[a-z0-9]+)$/i', $_GET['object_id'])) {
     echo "ERROR: Invalid object_id given.";
@@ -41,11 +42,11 @@ if (!preg_match('/^(?:[a-z0-9]+)$/i', $_GET['object_id'])) {
 $ident = $_GET['object_id'] . '-gadget';
 
 // Set default parameters values
-$show_header               = 1; // Show header or not (STATUS, DOWNTIME,...)
-$show_subheader            = 1; // Show sub header or not (OK, WARNING, CRITICAL,...)
-$show_all                  = 0; // Hide cells with value of 0
-$group_states              = 1; // Downtime and ack states are with standard states
-$size                      = 1; // Scale
+$show_header = 1; // Show header or not (STATUS, DOWNTIME,...)
+$show_subheader = 1; // Show sub header or not (OK, WARNING, CRITICAL,...)
+$show_all = 0; // Hide cells with value of 0
+$group_states = 1; // Downtime and ack states are with standard states
+$size = 1; // Scale
 
 // Only relevant for hostgroup gadgets
 $show_service_states = 1;

@@ -18,25 +18,26 @@ function dynmap_get_objects($MAPCFG, $p)
 
     $type = $p['dynmap_object_types'];
     $filter = preg_replace('/(\\\\n)+/', "\n", $p['dynmap_object_filter']);
-    foreach($MAPCFG->getValue(0, 'backend_id') as $backend_id) {        $ret = $_BACKEND->getBackend($backend_id)->getObjects($type, '', '', $filter);
+    foreach ($MAPCFG->getValue(0, 'backend_id') as $backend_id) {
+        $ret = $_BACKEND->getBackend($backend_id)->getObjects($type, '', '', $filter);
         // only use the internal names
         foreach ($ret as $key => $val) {
             if ($type == 'service') {
                 $obj_id = $MAPCFG->genObjId($backend_id . '~~' . $val['name1'] . '~~' . $val['name2']);
                 $object = [
-                    'type'                => $type,
-                    'object_id'           => $obj_id,
-                    'backend_id'          => [$backend_id],
-                    'host_name'           => $val['name1'],
+                    'type' => $type,
+                    'object_id' => $obj_id,
+                    'backend_id' => [$backend_id],
+                    'host_name' => $val['name1'],
                     'service_description' => $val['name2'],
                 ];
             } else {
                 $obj_id = $MAPCFG->genObjId($backend_id . '~~' . $val['name1']);
                 $object = [
-                    'type'                => $type,
-                    'object_id'           => $obj_id,
-                    'backend_id'          => [$backend_id],
-                    $type . '_name'         => $val['name1'],
+                    'type' => $type,
+                    'object_id' => $obj_id,
+                    'backend_id' => [$backend_id],
+                    $type . '_name' => $val['name1'],
                 ];
             }
             $objects[$obj_id] = $object;
@@ -82,9 +83,9 @@ $viewParams = [
 function listDynObjectTypes($CORE)
 {
     return [
-        'host'         => l('Hosts'),
-        'service'      => l('Services'),
-        'hostgroup'    => l('Hostgroup'),
+        'host' => l('Hosts'),
+        'service' => l('Services'),
+        'hostgroup' => l('Hostgroup'),
         'servicegroup' => l('Servicegroup'),
     ];
 }
@@ -93,55 +94,55 @@ function listDynObjectTypes($CORE)
 global $configVars;
 $configVars = [
     'dynmap_object_types' => [
-        'must'       => false,
-        'default'    => '',
+        'must' => false,
+        'default' => '',
         'field_type' => 'dropdown',
-        'match'      => MATCH_DYN_OBJECT_TYPES,
-        'list'       => 'listDynObjectTypes',
+        'match' => MATCH_DYN_OBJECT_TYPES,
+        'list' => 'listDynObjectTypes',
     ],
     'dynmap_object_filter' => [
-        'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_LIVESTATUS_FILTER,
+        'must' => false,
+        'default' => '',
+        'match' => MATCH_LIVESTATUS_FILTER,
     ],
     'dynmap_init_x' => [
-        'must'       => false,
-        'default'    => 20,
-        'match'      => MATCH_COORD_SIMPLE,
+        'must' => false,
+        'default' => 20,
+        'match' => MATCH_COORD_SIMPLE,
     ],
     'dynmap_init_y' => [
-        'must'       => false,
-        'default'    => 700,
-        'match'      => MATCH_COORD_SIMPLE,
+        'must' => false,
+        'default' => 700,
+        'match' => MATCH_COORD_SIMPLE,
     ],
     'dynmap_offset_x' => [
-        'must'       => false,
-        'default'    => 30,
-        'match'      => MATCH_COORD_SIMPLE,
+        'must' => false,
+        'default' => 30,
+        'match' => MATCH_COORD_SIMPLE,
     ],
     'dynmap_offset_y' => [
-        'must'       => false,
-        'default'    => 30,
-        'match'      => MATCH_COORD_SIMPLE,
+        'must' => false,
+        'default' => 30,
+        'match' => MATCH_COORD_SIMPLE,
     ],
     'dynmap_per_row' => [
-        'must'       => false,
-        'default'    => 30,
-        'match'      => MATCH_COORD_SIMPLE,
+        'must' => false,
+        'default' => 30,
+        'match' => MATCH_COORD_SIMPLE,
     ],
     'dynmap_sort' => [
-        'must'       => false,
-        'default'    => 'a',
-        'match'      => MATCH_STRING_NO_SPACE,
+        'must' => false,
+        'default' => 'a',
+        'match' => MATCH_STRING_NO_SPACE,
         'field_type' => 'dropdown',
-        'list'       => 'listHoverChildSorters',
+        'list' => 'listHoverChildSorters',
     ],
     'dynmap_order' => [
-        'must'       => false,
-        'default'    => 'asc',
-        'match'      => MATCH_ORDER,
+        'must' => false,
+        'default' => 'asc',
+        'match' => MATCH_ORDER,
         'field_type' => 'dropdown',
-        'list'       => 'listHoverChildOrders',
+        'list' => 'listHoverChildOrders',
     ],
 ];
 
@@ -150,15 +151,15 @@ global $configVarMap;
 $configVarMap = [
     'global' => [
         'dynmap' => [
-            'dynmap_object_types'  => null,
+            'dynmap_object_types' => null,
             'dynmap_object_filter' => null,
-            'dynmap_init_x'        => null,
-            'dynmap_init_y'        => null,
-            'dynmap_offset_x'      => null,
-            'dynmap_offset_y'      => null,
-            'dynmap_per_row'       => null,
-            'dynmap_sort'          => null,
-            'dynmap_order'         => null,
+            'dynmap_init_x' => null,
+            'dynmap_init_y' => null,
+            'dynmap_offset_x' => null,
+            'dynmap_offset_y' => null,
+            'dynmap_per_row' => null,
+            'dynmap_sort' => null,
+            'dynmap_order' => null,
         ],
     ],
 ];
@@ -170,7 +171,7 @@ $configVarMap = [
  */
 function dynmap_object_in_grid($params, $map_object)
 {
-    $top  = $params['dynmap_init_y'];
+    $top = $params['dynmap_init_y'];
     $left = $params['dynmap_init_x'];
     $step_y = $params['dynmap_offset_y'];
     $step_x = $params['dynmap_offset_x'];

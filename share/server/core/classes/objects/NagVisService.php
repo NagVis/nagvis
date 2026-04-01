@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisService.php - Class of a Service in NagVis with all necessary

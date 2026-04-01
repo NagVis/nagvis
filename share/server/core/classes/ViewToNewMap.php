@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewToNewMap.php - Class for rendering the "to new map" dialog

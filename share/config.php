@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * config.php - Redirects the requests to the frontend index file

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewEditMainCfg.php - Class to render the main configuration edit dialog
@@ -214,13 +215,13 @@ class ViewEditMainCfg
             }
 
             if ($cur_val !== null) {
-                $checked      = ' checked="checked"';
+                $checked = ' checked="checked"';
                 $show_default = ' style="display:none"';
-                $show_input   = '';
+                $show_input = '';
             } else {
-                $checked      = '';
+                $checked = '';
                 $show_default = '';
-                $show_input   = ' style="display:none"';
+                $show_input = ' style="display:none"';
             }
 
             echo '<tr' . $row_class . $row_style . '>';
