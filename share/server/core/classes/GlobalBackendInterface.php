@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalBackendInterface.php - Interface for implementing a backend in NagVis

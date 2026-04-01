@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisMapObj.php - Class of a Map object in NagVis with all necessary
@@ -464,9 +465,9 @@ class NagVisMapObj extends NagVisStatefulObject
     {
         global $CORE;
         // at the moment only handle the complete exclusion
-        $filter  = $this->getExcludeFilter($isCount);
+        $filter = $this->getExcludeFilter($isCount);
         $objType = $OBJ->getType();
-        $parts   = explode('~~', $filter);
+        $parts = explode('~~', $filter);
 
         // Never exclude stateless objects
         if (isset($CORE->statelessObjectTypes[$objType])) {
@@ -634,7 +635,7 @@ class NagVisMapObj extends NagVisStatefulObject
                     throw new NagVisException(l(
                         'unknownObject',
                         [
-                            'TYPE'    => $type,
+                            'TYPE' => $type,
                             'MAPNAME' => $this->getName()
                         ]
                     ));
@@ -700,9 +701,9 @@ class NagVisMapObj extends NagVisStatefulObject
         if ($this->hasMembers()) {
             $arrStates = [
                 UNREACHABLE => 0, CRITICAL => 0, DOWN => 0,
-                WARNING     => 0, UNKNOWN  => 0, UP   => 0,
-                OK          => 0, ERROR    => 0, UNCHECKED => 0,
-                PENDING     => 0
+                WARNING => 0, UNKNOWN => 0, UP => 0,
+                OK => 0, ERROR => 0, UNCHECKED => 0,
+                PENDING => 0
             ];
 
             foreach ($this->getStateRelevantMembers(true) as $OBJ) {
@@ -733,7 +734,7 @@ class NagVisMapObj extends NagVisStatefulObject
         ) {
             return true;
         } else {
-            $OBJ->sum[STATE]  = UNKNOWN;
+            $OBJ->sum[STATE] = UNKNOWN;
             $OBJ->sum[OUTPUT] = l('noReadPermissions');
 
             return false;

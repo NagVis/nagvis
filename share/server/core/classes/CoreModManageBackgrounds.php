@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModManageBackgrounds.php - Core module to manage backgrounds
@@ -43,7 +44,7 @@ class CoreModManageBackgrounds extends CoreModule
 
         // Register valid actions
         $this->aActions = [
-            'view'      => 'manage',
+            'view' => 'manage',
         ];
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisOverviewView.php - Class for handling the map index page
@@ -38,24 +39,24 @@ class NagVisOverviewView
     {
         $arr = [];
 
-        $arr['view_type']          = 'overview';
-        $arr['showmaps']           = (int) cfg('index', 'showmaps');
-        $arr['showgeomap']         = (int) cfg('index', 'showgeomap');
-        $arr['showmapthumbs']      = (int) cfg('index', 'showmapthumbs');
-        $arr['showrotations']      = (int) cfg('index', 'showrotations');
+        $arr['view_type'] = 'overview';
+        $arr['showmaps'] = (int) cfg('index', 'showmaps');
+        $arr['showgeomap'] = (int) cfg('index', 'showgeomap');
+        $arr['showmapthumbs'] = (int) cfg('index', 'showmapthumbs');
+        $arr['showrotations'] = (int) cfg('index', 'showrotations');
 
-        $arr['page_title']         = cfg('internal', 'title');
-        $arr['favicon_image']      = cfg('paths', 'htmlimages') . 'internal/favicon.png';
-        $arr['background_color']   = cfg('index', 'backgroundcolor');
+        $arr['page_title'] = cfg('internal', 'title');
+        $arr['favicon_image'] = cfg('paths', 'htmlimages') . 'internal/favicon.png';
+        $arr['background_color'] = cfg('index', 'backgroundcolor');
 
-        $arr['lang_mapIndex']      = l('mapIndex');
+        $arr['lang_mapIndex'] = l('mapIndex');
         $arr['lang_rotationPools'] = l('rotationPools');
 
-        $arr['event_log']          = (int) cfg('defaults', 'eventlog');
-        $arr['event_log_level']    = cfg('defaults', 'eventloglevel');
-        $arr['event_log_events']   = (int) cfg('defaults', 'eventlogevents');
-        $arr['event_log_height']   = (int) cfg('defaults', 'eventlogheight');
-        $arr['event_log_hidden']   = (int) cfg('defaults', 'eventloghidden');
+        $arr['event_log'] = (int) cfg('defaults', 'eventlog');
+        $arr['event_log_level'] = cfg('defaults', 'eventloglevel');
+        $arr['event_log_events'] = (int) cfg('defaults', 'eventlogevents');
+        $arr['event_log_height'] = (int) cfg('defaults', 'eventlogheight');
+        $arr['event_log_hidden'] = (int) cfg('defaults', 'eventloghidden');
 
         return $arr;
     }
@@ -76,25 +77,25 @@ class NagVisOverviewView
          */
         global $_MAINCFG, $CORE;
         // Initialize template system
-        $TMPL    = new FrontendTemplateSystem();
+        $TMPL = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
 
-        $maps      = cfg('index', 'showmaps') == 1 ? $CORE->getListMaps() : [];
+        $maps = cfg('index', 'showmaps') == 1 ? $CORE->getListMaps() : [];
         $rotations = cfg('index', 'showrotations') == 1 ? array_keys($CORE->getPermittedRotationPools()) : [];
 
         $aData = [
             'generalProperties' => $_MAINCFG->parseGeneralProperties(),
-            'workerProperties'  => $_MAINCFG->parseWorkerProperties(),
-            'stateProperties'   => json_encode($_MAINCFG->getStateWeightJS()),
-            'userProperties'    => $USERCFG->doGetAsJson(),
-            'pageProperties'    => json_encode($this->getProperties()),
-            'fileAges'          => json_encode([
+            'workerProperties' => $_MAINCFG->parseWorkerProperties(),
+            'stateProperties' => json_encode($_MAINCFG->getStateWeightJS()),
+            'userProperties' => $USERCFG->doGetAsJson(),
+            'pageProperties' => json_encode($this->getProperties()),
+            'fileAges' => json_encode([
                 'maincfg' => $_MAINCFG->getConfigFileAge(),
             ]),
-            'locales'           => json_encode($CORE->getGeneralJSLocales()),
-            'rotation_names'    => json_encode($rotations),
-            'map_names'         => json_encode($maps),
+            'locales' => json_encode($CORE->getGeneralJSLocales()),
+            'rotation_names' => json_encode($rotations),
+            'map_names' => json_encode($maps),
         ];
 
         // Build page based on the template file and the data array

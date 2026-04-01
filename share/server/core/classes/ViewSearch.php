@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewSearch.php - Class for handling the search dialog

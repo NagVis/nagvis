@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * index.php - This file is included by the single index files in NagVis to

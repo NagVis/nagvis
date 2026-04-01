@@ -53,6 +53,7 @@ share/nagvis/gadgets/*.php
 var/*
 
 /vendor/
+.php-cs-fixer.cache
 
 # Exclude IDE directories
 .idea/

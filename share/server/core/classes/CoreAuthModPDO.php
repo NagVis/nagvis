@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthModPDO.php - Authentication module using the PDO database abstraction
@@ -64,8 +65,8 @@ abstract class CoreAuthModPDO extends CoreAuthModule
 
             // Changing passwords
             'passNewPassword' => true,
-            'changePassword'  => true,
-            'resetPassword'   => true,
+            'changePassword' => true,
+            'resetPassword' => true,
 
             // Managing users
             'createUser' => true,
@@ -118,7 +119,8 @@ abstract class CoreAuthModPDO extends CoreAuthModule
         return $this->DB->count('-user-count', ['name' => $name]);
     }
 
-    private function checkUserAuth() {
+    private function checkUserAuth()
+    {
         $data = $this->DB->query('-user-get-by-pass', ['name' => $this->sUsername, 'password' => $this->sPasswordHash])->fetch();
         if (!isset($data['userId'])) {
             return 0;
@@ -126,14 +128,17 @@ abstract class CoreAuthModPDO extends CoreAuthModule
         return intval($data['userId']);
     }
 
-    private function getTrustedUser() {
+    private function getTrustedUser()
+    {
         $data = $this->DB->query('-user-get-by-name', array('name' => $this->sUsername))->fetch();
-        if (!isset($data['userId']))
+        if (!isset($data['userId'])) {
             return 0;
+        }
         return intval($data['userId']);
     }
 
-    private function checkBcryptAuth() {
+    private function checkBcryptAuth()
+    {
         if ($this->sPassword === '') {
             return $this->checkUserAuth();
         }
@@ -146,7 +151,8 @@ abstract class CoreAuthModPDO extends CoreAuthModule
         return $this->getTrustedUser();
     }
 
-    private function updatePassword($uid, $pw) {
+    private function updatePassword($uid, $pw)
+    {
         try {
             $res = $this->DB->query('-user-update-pass', ['id' => $uid, 'password' => $pw]);
             return $res !== false && $res->rowCount() === 1;
@@ -285,20 +291,20 @@ abstract class CoreAuthModPDO extends CoreAuthModule
         // this time. For example when the user just entered the password
         // for logging in. If the user is already logged in and this is just
         // a session check don't try to rehash the password.
-        if($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '' && !$use_bcrypt) {
+        if ($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '' && !$use_bcrypt) {
             // Compose the password hash for comparing with the stored hash
             $this->sPasswordHash = $this->oldHash($this->sPassword);
         }
 
         if ($bTrustUsername === AUTH_TRUST_USERNAME) {
             $userId = $this->getTrustedUser();
-        } else if ($use_bcrypt) {
+        } elseif ($use_bcrypt) {
             $userId = $this->checkBcryptAuth();
         } else {
             $userId = $this->checkUserAuth();
         }
 
-        if($userId > 0) {
+        if ($userId > 0) {
             $this->iUserId = $userId;
             // If the user authenticates successfully with an old hash for the first time the password is rewritten
             // with a bcrypt hash.
@@ -312,12 +318,15 @@ abstract class CoreAuthModPDO extends CoreAuthModule
         return false;
     }
 
-    public function usesBcrypt($username) {
+    public function usesBcrypt($username)
+    {
         $data = $this->DB->query('-user-get-pw-hash', array('name' => $username))->fetch();
-        if (!isset($data['password']))
+        if (!isset($data['password'])) {
             return false;
-        if (substr($data['password'], 0, 4) == '$2y$')
+        }
+        if (substr($data['password'], 0, 4) == '$2y$') {
             return true;
+        }
         return false;
     }
 
@@ -337,11 +346,13 @@ abstract class CoreAuthModPDO extends CoreAuthModule
         return $this->iUserId;
     }
 
-    private function oldHash($password) {
+    private function oldHash($password)
+    {
         return sha1(AUTH_PASSWORD_SALT . $password);
     }
 
-    private function createHash($password) {
+    private function createHash($password)
+    {
         return password_hash($password, PASSWORD_BCRYPT);
     }
 }

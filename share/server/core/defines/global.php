@@ -1,4 +1,5 @@
-<?PHP
+<?php
+
 /*****************************************************************************
  *
  * global.php - File for global constants and some other standards
@@ -32,8 +33,8 @@ const CONST_VERSION = '1.9.50';
 // from version 8.0 and above E_DEPRECATED
 if (version_compare(PHP_VERSION, '8.0') >= 0) {
     error_reporting(E_ALL & ~E_DEPRECATED);
-}
-elseif (version_compare(PHP_VERSION, '5.2') >= 0) {    error_reporting(E_ALL ^ E_STRICT);
+} elseif (version_compare(PHP_VERSION, '5.2') >= 0) {
+    error_reporting(E_ALL ^ E_STRICT);
 } else {
     error_reporting(E_ALL);
 }

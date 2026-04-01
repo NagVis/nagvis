@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModuleHandler.php - Class to handle core modules

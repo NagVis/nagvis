@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreModChangePassword.php - This module handles the password changes of
@@ -36,7 +37,7 @@ class CoreModChangePassword extends CoreModule
         $this->sName = 'ChangePassword';
 
         $this->aActions = [
-            'view'   => REQUIRES_AUTHORISATION,
+            'view' => REQUIRES_AUTHORISATION,
         ];
     }
 

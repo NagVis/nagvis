@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * index.php - Main page of NagVis
@@ -43,7 +44,7 @@ const CONST_AJAX = false;
 try {
     require('../../server/core/functions/core.php');
     $MHANDLER = new FrontendModuleHandler();
-    $_name    = 'nagvis-js';
+    $_name = 'nagvis-js';
     $_modules = [
         'Info',
         'Map',

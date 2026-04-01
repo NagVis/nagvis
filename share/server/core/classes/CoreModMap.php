@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModMap.php - Core Map module to handle ajax requests
@@ -48,21 +49,21 @@ class CoreModMap extends CoreModule
 
         // Register valid actions
         $this->aActions = [
-            'getMapProperties'  => 'view',
-            'getMapObjects'     => 'view',
-            'getObjectStates'   => 'view',
+            'getMapProperties' => 'view',
+            'getMapObjects' => 'view',
+            'getObjectStates' => 'view',
 
-            'manage'            => REQUIRES_AUTHORISATION,
-            'doExportMap'       => 'edit',
-            'addModify'         => 'edit',
-            'modifyObject'      => 'edit',
-            'deleteObject'      => 'edit',
-            'toStaticMap'       => 'edit',
-            'manageTmpl'        => 'edit',
+            'manage' => REQUIRES_AUTHORISATION,
+            'doExportMap' => 'edit',
+            'addModify' => 'edit',
+            'modifyObject' => 'edit',
+            'deleteObject' => 'edit',
+            'toStaticMap' => 'edit',
+            'manageTmpl' => 'edit',
 
             // Worldmap related
             'getWorldmapBounds' => 'view',
-            'viewToNewMap'      => 'edit',
+            'viewToNewMap' => 'edit',
         ];
 
         // Register valid objects
@@ -400,10 +401,10 @@ class CoreModMap extends CoreModule
             $id = $FHANDLER->get('id') === "0" ? 0 : $FHANDLER->get('id');
             // Return the data
             return [
-                'map'     => $FHANDLER->get('map'),
-                'id'      => $id,
+                'map' => $FHANDLER->get('map'),
+                'id' => $id,
                 'refresh' => $FHANDLER->get('ref'),
-                'opts'    => $aOpts
+                'opts' => $aOpts
             ];
         } else {
             return false;
@@ -433,8 +434,8 @@ class CoreModMap extends CoreModule
     {
         $aOpts = [
             'ty' => MATCH_GET_OBJECT_TYPE,
-            'i'  => MATCH_STRING_NO_SPACE_EMPTY,
-            'f'  => MATCH_STRING_NO_SPACE_EMPTY
+            'i' => MATCH_STRING_NO_SPACE_EMPTY,
+            'f' => MATCH_STRING_NO_SPACE_EMPTY
         ];
         $aVals = $this->getCustomOptions($aOpts, [], true);
 

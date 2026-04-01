@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewChangePassword.php - Class for handling the change password page
@@ -69,8 +70,8 @@ class ViewChangePassword
 
                 // Set new passwords in authentication module, then change it
                 $AUTH->passNewPassword([
-                    'user'        => $user,
-                    'password'    => $password_old,
+                    'user' => $user,
+                    'password' => $password_old,
                     'passwordNew' => $password_new1,
                 ]);
                 if (!$AUTH->changePassword()) {

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisIndexView.php - Class for parsing the NagVis index in nagvis-js
@@ -97,16 +98,16 @@ class NagVisIndexView
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = [
-            'pageTitle'        => cfg('internal', 'title') . $this->sSubtitle,
-            'htmlBase'         => cfg('paths', 'htmlbase'),
-            'htmlJs'           => cfg('paths', 'htmljs'),
-            'htmlCss'          => cfg('paths', 'htmlcss'),
-            'version'          => CONST_VERSION,
-            'htmlTemplates'    => path('html', 'global', 'templates'),
+            'pageTitle' => cfg('internal', 'title') . $this->sSubtitle,
+            'htmlBase' => cfg('paths', 'htmlbase'),
+            'htmlJs' => cfg('paths', 'htmljs'),
+            'htmlCss' => cfg('paths', 'htmlcss'),
+            'version' => CONST_VERSION,
+            'htmlTemplates' => path('html', 'global', 'templates'),
             'bUseCompressedJs' => $this->checkJsCompressed(),
             'customStylesheet' => $this->sCustomStylesheet,
-            'headerMenu'       => $this->sHeaderMenu,
-            'content'          => $this->sContent
+            'headerMenu' => $this->sHeaderMenu,
+            'content' => $this->sContent
         ];
 
         // Build page based on the template file and the data array

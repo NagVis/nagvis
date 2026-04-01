@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalCore.php - The core of NagVis pages
@@ -52,9 +53,9 @@ class GlobalCore
 
     /** @var bool[] */
     public $statelessObjectTypes = [
-        'textbox'   => true,
-        'shape'     => true,
-        'line'      => true,
+        'textbox' => true,
+        'shape' => true,
+        'line' => true,
         'container' => true,
     ];
 
@@ -746,7 +747,7 @@ class GlobalCore
             return true;
         }
 
-        if($printErr) {
+        if ($printErr) {
             if (isset($_SERVER['OMD_ROOT'])) {
                 throw new NagVisException(l('The path "[PATH]" does not exist on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
             }            throw new NagVisException(l('The path "[PATH]" does not exist.', ['PATH' => $path]));
@@ -767,7 +768,7 @@ class GlobalCore
             return true;
         }
 
-        if($printErr) {
+        if ($printErr) {
             if (isset($_SERVER['OMD_ROOT'])) {
                 throw new NagVisException(l('The path "[PATH]" is not readable on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
             }            throw new NagVisException(l('The path "[PATH]" is not readable.', ['PATH' => $path]));
@@ -788,7 +789,7 @@ class GlobalCore
             return true;
         }
 
-        if($printErr) {
+        if ($printErr) {
             if (isset($_SERVER['OMD_ROOT'])) {
                 throw new NagVisException(l('The path "[PATH]" is not writable on your site.', ['PATH' => str_replace($_SERVER['OMD_ROOT'], '', $path)]));
             }            throw new NagVisException(l('The path "[PATH]" is not writeable.', ['PATH' => $path]));
@@ -936,36 +937,38 @@ class GlobalCore
     public function getGeneralJSLocales()
     {
         return [
-            'more items...'      => l('more items...'),
-            'Create Object'      => l('Create Object'),
+            'more items...' => l('more items...'),
+            'Create Object' => l('Create Object'),
             // object types
-            'host'               => l('host'),
-            'hostname'           => l('hostname'),
-            'servicename'        => l('servicename'),
-            'service'            => l('service'),
-            'hostgroup'          => l('hostgroup'),
-            'hostgroupname'      => l('hostgroupname'),
-            'servicegroup'       => l('servicegroup'),
-            'servicegroupname'   => l('servicegroupname'),
-            'Dynamic Group'      => l('Dynamic Group'),
+            'host' => l('host'),
+            'hostname' => l('hostname'),
+            'servicename' => l('servicename'),
+            'service' => l('service'),
+            'hostgroup' => l('hostgroup'),
+            'hostgroupname' => l('hostgroupname'),
+            'servicegroup' => l('servicegroup'),
+            'servicegroupname' => l('servicegroupname'),
+            'Dynamic Group' => l('Dynamic Group'),
             'Dynamic Group Name' => l('Dynamic Group Name'),
-            'Object Name'        => l('Object Name'),
-            'Aggregation'        => l('Aggregation'),
-            'Aggregation Name'   => l('Aggregation Name'),
-            'Name'               => l('Name'),
-            'map'                => l('map'),
-            'mapname'            => l('mapname'),
-            'objectname'         => l('objectname'),
+            'Object Name' => l('Object Name'),
+            'Aggregation' => l('Aggregation'),
+            'Aggregation Name' => l('Aggregation Name'),
+            'Name' => l('Name'),
+            'map' => l('map'),
+            'mapname' => l('mapname'),
+            'objectname' => l('objectname'),
         ];
     }
 
     // Sort array of map arrays by alias
-    static function cmpAlias($a, $b) {
+    public static function cmpAlias($a, $b)
+    {
         return strnatcasecmp($a['alias'], $b['alias']);
     }
 
     // Sort array of map arrays by alias used for header menu
-    static function cmpMapAlias($a, $b) {
+    public static function cmpMapAlias($a, $b)
+    {
         return strnatcasecmp($a['mapAlias'], $b['mapAlias']);
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisLoginView.php - Class for handling the login page
@@ -65,7 +66,7 @@ class NagVisLoginView
 
         $aData = [
             'generalProperties' => $_MAINCFG->parseGeneralProperties(),
-            'locales'           => json_encode([]),
+            'locales' => json_encode([]),
             'pageTitle' => cfg('internal', 'title') . ' &rsaquo; Log In',
             'htmlBase' => cfg('paths', 'htmlbase'),
             'htmlJs' => cfg('paths', 'htmljs'),

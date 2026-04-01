@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreLogonModule.php - Implements some common used code which is used by

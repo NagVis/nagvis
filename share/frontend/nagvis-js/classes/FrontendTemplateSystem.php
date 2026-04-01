@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendTemplateSystem.php - Implements the template parsing in NagVis

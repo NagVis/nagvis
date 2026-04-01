@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * win_ssh.php - Custom action module for connecting to hosts via RDP. This

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewMapManageTmpl.php - Class to render the map template management page
@@ -164,8 +165,8 @@ class ViewMapManageTmpl
                 throw new FieldInputError('name', l('A template with this name does not exist.'));
             }
 
-            $templates   = $MAPCFG->getDefinitions('template');
-            $obj_id      = $MAPCFG->getTemplateIdByName($name);
+            $templates = $MAPCFG->getDefinitions('template');
+            $obj_id = $MAPCFG->getTemplateIdByName($name);
             $options = [];
             foreach ($templates[$obj_id] as $key => $val) {
                 if ($key != 'type' && $key != 'object_id' && $key != 'name') {

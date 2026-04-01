@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModule.php - Abstract definition of a core module
@@ -385,7 +386,7 @@ abstract class CoreModule
 
             } elseif ($ty == 'map') {
                 if ($AUTHORISATION->isPermitted('Map', 'view', $name)) {
-                    $MAPCFG  = new GlobalMapCfg($name);
+                    $MAPCFG = new GlobalMapCfg($name);
                     $MAPCFG->readMapConfig();
                     $cur_age = $MAPCFG->getFileModificationTime($age);
                 }
@@ -400,7 +401,7 @@ abstract class CoreModule
         if (count($changed) > 0) {
             return json_encode([
                 'status' => 'CHANGED',
-                'data'   => $changed,
+                'data' => $changed,
             ]);
         } else {
             return null;

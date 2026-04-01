@@ -86,7 +86,7 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0)
     $str .= 'URL="' . $tree['object_id'] . '", ';
     $str .= 'tooltip="' . $tree['object_id'] . '", ';
 
-    $width  = $tree['.width'];
+    $width = $tree['.width'];
     $height = $tree['.height'];
 
     // This should be scaled by the choosen iconset
@@ -148,7 +148,7 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0)
  */
 function graphviz_config(&$params, &$tree)
 {
-    $str  = "graph automap {\n";
+    $str = "graph automap {\n";
     //, ranksep="0.1", nodesep="0.4", ratio=auto, bb="0,0,500,500"
     $str .= '    graph [';
     $str .= 'dpi="72", ';
@@ -365,9 +365,9 @@ function graphviz_parse(&$map_config, $imagemap)
             )
         ) {
             if (isset($aMatches[1]) && isset($aMatches[2])) {
-                $type      = trim($aMatches[1]);
+                $type = trim($aMatches[1]);
                 $object_id = trim($aMatches[2]);
-                $coords    = trim($aMatches[3]);
+                $coords = trim($aMatches[3]);
 
                 switch ($type) {
                     case 'rect':
@@ -430,7 +430,7 @@ function process_automap_pos($MAPCFG, $map_name, &$map_config, &$tree, &$params)
 {
     automap_pos_check_preflight($params);
 
-    $cfg      = graphviz_config($params, $tree);
+    $cfg = graphviz_config($params, $tree);
     $imagemap = graphviz_run($map_name, $params, $cfg);
     graphviz_parse($map_config, $imagemap);
 

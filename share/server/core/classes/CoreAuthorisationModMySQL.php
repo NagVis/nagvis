@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthorisationModMySQL.php - Authorsiation module based on MySQL

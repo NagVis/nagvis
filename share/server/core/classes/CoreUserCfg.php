@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreUserCfg.php - Class for handling user/profile specific configurations
@@ -32,8 +33,8 @@ class CoreUserCfg
 
     /** @var string[] Optional list of value types to be fixed */
     private $types = [
-        'sidebar'  => 'i',
-        'header'   => 'b',
+        'sidebar' => 'i',
+        'header' => 'b',
         'eventlog' => 'b',
     ];
 

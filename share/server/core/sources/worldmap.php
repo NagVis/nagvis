@@ -26,43 +26,43 @@ global $configVars;
 $configVars = [
     /*** GLOBAL OPTIONS ***/
     'worldmap_center' => [
-        'must'      => true,
-        'default'   => '50.86837814203458,10.21728515625',
-        'match'     => MATCH_LATLONG,
+        'must' => true,
+        'default' => '50.86837814203458,10.21728515625',
+        'match' => MATCH_LATLONG,
     ],
     'worldmap_zoom' => [
-        'must'      => true,
-        'default'   => 6,
-        'match'     => MATCH_WORLDMAP_ZOOM,
+        'must' => true,
+        'default' => 6,
+        'match' => MATCH_WORLDMAP_ZOOM,
     ],
     'worldmap_tiles_saturate' => [
-        'must'      => false,
-        'default'   => '',
-        'match'     => MATCH_INTEGER_EMPTY,
+        'must' => false,
+        'default' => '',
+        'match' => MATCH_INTEGER_EMPTY,
     ],
 
     /*** OBJECT OPTIONS ***/
     'min_zoom' => [
-        'must'      => false,
-        'default'   => 2,
-        'match'     => MATCH_WORLDMAP_ZOOM,
+        'must' => false,
+        'default' => 2,
+        'match' => MATCH_WORLDMAP_ZOOM,
     ],
     'max_zoom' => [
-        'must'      => false,
-        'default'   => 20,
-        'match'     => MATCH_WORLDMAP_ZOOM,
+        'must' => false,
+        'default' => 20,
+        'match' => MATCH_WORLDMAP_ZOOM,
     ],
 
     'scale_to_zoom' => [
-        'must'       => 0,
-        'default'    => 0,
-        'match'      => MATCH_BOOLEAN,
+        'must' => 0,
+        'default' => 0,
+        'match' => MATCH_BOOLEAN,
         'field_type' => 'boolean',
     ],
     'normal_size_at_zoom' => [
-        'must'      => false,
-        'default'   => 19,
-        'match'     => MATCH_WORLDMAP_ZOOM,
+        'must' => false,
+        'default' => 19,
+        'match' => MATCH_WORLDMAP_ZOOM,
     ],
 
 ];
@@ -73,8 +73,8 @@ $configVarMap = [
     'global' => [
         'worldmap' => [
             'worldmap_center' => null,
-            'worldmap_zoom'   => null,
-            'worldmap_tiles_saturate'   => null,
+            'worldmap_zoom' => null,
+            'worldmap_tiles_saturate' => null,
         ],
     ],
 ];
@@ -142,25 +142,25 @@ function worldmap_init_schema()
 
         // Install demo data
         worldmap_db_update_object('273924', 53.5749514424993, 10.0405490398407, [
-            "x"         => "53.57495144249931",
-            "y"         => "10.040549039840698",
-            "type"      => "map",
-            "map_name"  => "demo-ham-racks",
+            "x" => "53.57495144249931",
+            "y" => "10.040549039840698",
+            "type" => "map",
+            "map_name" => "demo-ham-racks",
             "object_id" => "273924"
         ]);
         worldmap_db_update_object('0df2d3', 48.1125317248817, 11.6794109344482, [
-            "x"              => "48.11253172488166",
-            "y"              => "11.67941093444824",
-            "type"           => "hostgroup",
+            "x" => "48.11253172488166",
+            "y" => "11.67941093444824",
+            "type" => "hostgroup",
             "hostgroup_name" => "muc",
-            "object_id"      => "0df2d3"
+            "object_id" => "0df2d3"
         ]);
         worldmap_db_update_object('ebbf59', 50.9391761712781, 6.95863723754883, [
-            "x"              => "50.93917617127812",
-            "y"              => "6.958637237548828",
-            "type"           => "hostgroup",
+            "x" => "50.93917617127812",
+            "y" => "6.958637237548828",
+            "type" => "hostgroup",
             "hostgroup_name" => "cgn",
-            "object_id"      => "ebbf59"
+            "object_id" => "ebbf59"
         ]);
     }
     //else {
@@ -452,8 +452,8 @@ function worldmap_update_object(
         return true;
     }
 
-    $lat  = $obj['x'];
-    $lng  = $obj['y'];
+    $lat = $obj['x'];
+    $lng = $obj['y'];
     $lat2 = null;
     $lng2 = null;
 
@@ -461,8 +461,8 @@ function worldmap_update_object(
     if ($MAPCFG->getValue($obj_id, 'view_type') == 'line' || $obj['type'] == 'line') {
         $x = explode(',', $obj['x']);
         $y = explode(',', $obj['y']);
-        $lat  = $x[0];
-        $lng  = $y[0];
+        $lat = $x[0];
+        $lng = $y[0];
         $lat2 = $x[count($x) - 1];
         $lng2 = $y[count($y) - 1];
     }

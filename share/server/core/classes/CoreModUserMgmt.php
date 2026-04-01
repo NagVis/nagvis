@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreModUserMgmt.php - Core module for handling the user management tasks
@@ -32,7 +33,7 @@ class CoreModUserMgmt extends CoreModule
         $this->sName = 'UserMgmt';
 
         $this->aActions = [
-            'view'         => 'manage',
+            'view' => 'manage',
         ];
     }
 

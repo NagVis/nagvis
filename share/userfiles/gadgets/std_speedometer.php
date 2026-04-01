@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * std_speedometer.php - Sample gadget for NagVis
@@ -47,7 +48,7 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
  * Needs to be configured to tell gadgets_core.php how to handle the outputs
  * e.g. in case of error messages. This defaults to 'img'.
  */
-$_MODE          = 'img';
+$_MODE = 'img';
 
 // Include the gadgets core. Also handle OMD default and local paths
 if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {

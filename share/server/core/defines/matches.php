@@ -1,4 +1,5 @@
-<?PHP
+<?php
+
 /*****************************************************************************
  *
  * matches.php - File for global match constants
@@ -47,7 +48,7 @@ const MATCH_STRING_URL = '/^(?:' . MATCH_ALLOWED_URL_SCHEMES . ':)?[0-9a-z\s;|+[
 const MATCH_STRING_URL_EMPTY = '/^(?:' . MATCH_ALLOWED_URL_SCHEMES . ':)?[0-9a-z\s;|+[\]()=%?&_,.\-#@=\/\\\~:]*' . MATCH_PORT . '$/i';
 const MATCH_GADGET_OPT = '/^[0-9a-z\s:+[\]()_.,\-&?!#@=\/\\\%]+$/i';
 const MATCH_STRING_STYLE = '/^[0-9a-z:;\-+%#(),.]*$/i';
-const MATCH_COORDS       = '/^(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))$/';
+const MATCH_COORDS = '/^(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))$/';
 const MATCH_COORDS_MULTI = '/^(?:(?:(?:[0-9]+)|(?:-?[0-9]+(?:.[0-9]+)?)|([a-z0-9]+(?:%[+-][0-9]+)?)),?)+$/';
 const MATCH_COORDS_MULTI_EMPTY = '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))[.,]?)*$/';
 const MATCH_COORD_SIMPLE = '/^[0-9]+$/';

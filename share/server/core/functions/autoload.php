@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * autoload.php - Class for defining the autoload method for NagVis

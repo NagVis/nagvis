@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModMultisite.php - Core multisite  module to handle ajax requests
@@ -188,17 +189,17 @@ class CoreModMultisite extends CoreModule
 
             // Apply mulitsite snapin related configuration to object
             $objConf = [
-                'type'              => 'map',
-                'map_name'          => $MAPCFG->getName(),
-                'object_id'         => $object_id,
+                'type' => 'map',
+                'map_name' => $MAPCFG->getName(),
+                'object_id' => $object_id,
                 // Enable the hover menu in all cases - maybe make it configurable
-                'hover_menu'        => 0,
+                'hover_menu' => 0,
                 'hover_childs_show' => 0,
-                'hover_template'    => 'default',
-                'parent_map'        => $MAPCFG->getValue(0, 'parent_map'),
+                'hover_template' => 'default',
+                'parent_map' => $MAPCFG->getValue(0, 'parent_map'),
                 // Enforce std_big iconset - don't use map default iconset
-                'iconset'           => 'std_big',
-                'icon_size'         => [22],
+                'iconset' => 'std_big',
+                'icon_size' => [22],
             ];
             $MAP->MAPOBJ->setConfiguration($objConf);
 

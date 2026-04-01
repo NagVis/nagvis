@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * index.php - Redirects the requests to the frontend index file

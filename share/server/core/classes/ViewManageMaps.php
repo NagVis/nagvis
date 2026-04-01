@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
@@ -35,11 +36,11 @@ class ViewManageMaps
         echo '<h2>' . l('Create Map') . '</h2>';
 
         $map_types = [
-            'map'      => l('Regular map'),
+            'map' => l('Regular map'),
             'worldmap' => l('Geographical map (interactive)'),
-            'geomap'   => l('Geographical map (non interactive)'),
-            'automap'  => l('Automap based on parent/child relations'),
-            'dynmap'   => l('Dynamic map'),
+            'geomap' => l('Geographical map (non interactive)'),
+            'automap' => l('Automap based on parent/child relations'),
+            'dynmap' => l('Dynamic map'),
         ];
 
         if (is_action() && post('mode') == 'create') {
@@ -421,7 +422,7 @@ class ViewManageMaps
 
                 $file_name = $file['name'];
                 $file_path = cfg('paths', 'mapcfg') . $file_name;
-                $map_name  = substr($file_name, 0, -4);
+                $map_name = substr($file_name, 0, -4);
 
                 if (!preg_match(MATCH_CFG_FILE, $file_name)) {
                     throw new FieldInputError('map_file', l('The uploaded file is no map configuration file.'));
@@ -439,13 +440,15 @@ class ViewManageMaps
                 $MAPCFG = new GlobalMapCfg($map_name);
                 try {
                     $MAPCFG->readMapConfig();
-                } catch(MapCfgInvalid $e) {
+                } catch (MapCfgInvalid $e) {
                     unlink($file_path);
                     throw new FieldInputError('map_file', l('The uploaded map configuration is invalid.'));
-                } catch(Exception $e) {
+                } catch (Exception $e) {
                     unlink($file_path);
-                    throw new FieldInputError('map_file', l('The uploaded map configuration caused a crash: [ERROR].',
-                      Array('ERROR' => $e->getMessage())));
+                    throw new FieldInputError('map_file', l(
+                        'The uploaded map configuration caused a crash: [ERROR].',
+                        array('ERROR' => $e->getMessage())
+                    ));
                 }
 
                 success(l('The map has been imported. Changing to the new map...'));

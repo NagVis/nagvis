@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisStatefulObject.php - Abstract class of a stateful object in NagVis
@@ -82,16 +83,16 @@ class NagVisStatefulObject extends NagVisObject
     protected $iconDetails;
 
     /** @var string|null */
-    protected static $iconPath         = null;
+    protected static $iconPath = null;
 
     /** @var string|null */
-    protected static $iconPathLocal    = null;
+    protected static $iconPathLocal = null;
 
     /** @var string|null */
     protected static $langMemberStates = null;
 
     /** @var string|null */
-    protected static $dateFormat       = null;
+    protected static $dateFormat = null;
 
     /** @var array|null */
     protected $state = null;
@@ -466,10 +467,10 @@ class NagVisStatefulObject extends NagVisObject
     {
         // When this is a count use the exclude_member_states over the
         // exclude_members
-        if($isCount && $this->exclude_member_states != '') {
+        if ($isCount && $this->exclude_member_states != '') {
             return 'exclude_member_states';
-        }
-        elseif($this->exclude_members != '') {            return 'exclude_members';
+        } elseif ($this->exclude_members != '') {
+            return 'exclude_members';
         } else {
             return '';
         }
@@ -485,17 +486,17 @@ class NagVisStatefulObject extends NagVisObject
     {
         $arr = [];
 
-        $arr['state']                         = state_str(val($this->state, STATE));
+        $arr['state'] = state_str(val($this->state, STATE));
         $arr['problem_has_been_acknowledged'] = val($this->state, ACK);
-        $arr['in_downtime']                   = val($this->state, DOWNTIME);
-        $arr['stale']                         = $this->isStale();
-        $arr['output']         = $this->escapeStringForJson(val($this->state, OUTPUT, ''));
+        $arr['in_downtime'] = val($this->state, DOWNTIME);
+        $arr['stale'] = $this->isStale();
+        $arr['output'] = $this->escapeStringForJson(val($this->state, OUTPUT, ''));
 
-        $arr['summary_state']                 = state_str(val($this->sum, STATE));
+        $arr['summary_state'] = state_str(val($this->sum, STATE));
         $arr['summary_problem_has_been_acknowledged'] = val($this->sum, ACK);
-        $arr['summary_in_downtime']           = val($this->sum, DOWNTIME);
-        $arr['summary_stale']                 = $this->isStale(true);
-        $arr['summary_output']                = $this->escapeStringForJson(val($this->sum, OUTPUT, ''));
+        $arr['summary_in_downtime'] = val($this->sum, DOWNTIME);
+        $arr['summary_stale'] = $this->isStale(true);
+        $arr['summary_output'] = $this->escapeStringForJson(val($this->sum, OUTPUT, ''));
 
         // Macros which are only for services and hosts
         if ($this->type == 'host' || $this->type == 'service') {
@@ -521,18 +522,18 @@ class NagVisStatefulObject extends NagVisObject
             }
 
             $arr['downtime_author'] = val($this->state, DOWNTIME_AUTHOR);
-            $arr['downtime_data']   = val($this->state, DOWNTIME_DATA);
-            $arr['downtime_start']  = val($this->state, DOWNTIME_START);
-            $arr['downtime_end']    = val($this->state, DOWNTIME_END);
+            $arr['downtime_data'] = val($this->state, DOWNTIME_DATA);
+            $arr['downtime_start'] = val($this->state, DOWNTIME_START);
+            $arr['downtime_end'] = val($this->state, DOWNTIME_END);
 
             $arr['last_check'] = $this->get_date(LAST_CHECK);
             $arr['next_check'] = $this->get_date(NEXT_CHECK);
             $arr['state_type'] = $this->getStateType();
-            $arr['current_check_attempt']  = val($this->state, CURRENT_ATTEMPT);
-            $arr['max_check_attempts']     = val($this->state, MAX_CHECK_ATTEMPTS);
-            $arr['last_state_change']      = $this->get_date(LAST_STATE_CHANGE);
+            $arr['current_check_attempt'] = val($this->state, CURRENT_ATTEMPT);
+            $arr['max_check_attempts'] = val($this->state, MAX_CHECK_ATTEMPTS);
+            $arr['last_state_change'] = $this->get_date(LAST_STATE_CHANGE);
             $arr['last_hard_state_change'] = $this->get_date(LAST_HARD_STATE_CHANGE);
-            $arr['state_duration']         = $this->getStateDuration();
+            $arr['state_duration'] = $this->getStateDuration();
             $arr['perfdata'] = $this->escapeStringForJson(val($this->state, PERFDATA, ''));
         }
 
@@ -580,7 +581,7 @@ class NagVisStatefulObject extends NagVisObject
     {
         // Set the paths of this iconset
         if (NagVisStatefulObject::$iconPath === null) {
-            NagVisStatefulObject::$iconPath      = path('sys', 'global', 'icons');
+            NagVisStatefulObject::$iconPath = path('sys', 'global', 'icons');
             NagVisStatefulObject::$iconPathLocal = path('sys', 'local', 'icons');
         }
 
@@ -659,9 +660,9 @@ class NagVisStatefulObject extends NagVisObject
                     isset($stateWeight[$sState]['normal']) && isset($aSubstates['normal']) && $aSubstates['normal'] !== 0
                 ) {
                     $stateCounts[] = [
-                        'name'   => $sState,
+                        'name' => $sState,
                         'weight' => $stateWeight[$sState]['normal'],
-                        'count'  => $aSubstates['normal']
+                        'count' => $aSubstates['normal']
                     ];
                 }
             }
@@ -770,12 +771,11 @@ class NagVisStatefulObject extends NagVisObject
         return strtr($s, [
             "\r" => '<br />',
             "\n" => '<br />',
-            '"'  => '&quot;',
+            '"' => '&quot;',
             '\'' => '&#145;',
-            '$'  => '&#36;'
+            '$' => '&#36;'
         ]);
     }
-
 
     /**
      * Is called when an object should only be displayed as child
@@ -786,14 +786,14 @@ class NagVisStatefulObject extends NagVisObject
     protected function fetchObjectAsChild()
     {
         return [
-            'type'                => $this->getType(),
-            'name'                => $this->getName(),
-            'display_name'        => $this->escapeStringForJson($this->getDisplayName()),
-            'summary_state'       => state_str($this->sum[STATE]),
+            'type' => $this->getType(),
+            'name' => $this->getName(),
+            'display_name' => $this->escapeStringForJson($this->getDisplayName()),
+            'summary_state' => state_str($this->sum[STATE]),
             'summary_in_downtime' => $this->sum[DOWNTIME],
             'summary_problem_has_been_acknowledged' => $this->sum[ACK],
-            'summary_stale'       => $this->isStale(true),
-            'summary_output'      => $this->escapeStringForJson($this->sum[OUTPUT])
+            'summary_stale' => $this->isStale(true),
+            'summary_output' => $this->escapeStringForJson($this->sum[OUTPUT])
         ];
     }
 
@@ -834,9 +834,9 @@ class NagVisStatefulObject extends NagVisObject
                 l(
                     'Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
                     [
-                        'STATE'    => $this->sum[STATE],
+                        'STATE' => $this->sum[STATE],
                         'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
-                        'TYPE'     => $this->getType()
+                        'TYPE' => $this->getType()
                     ]
                 )
             );
@@ -892,10 +892,10 @@ class NagVisStatefulObject extends NagVisObject
                             l(
                                 'Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].',
                                 [
-                                    'STATE'    => $sState,
+                                    'STATE' => $sState,
                                     'SUBSTATE' => $sSubState,
-                                    'TYPE'     => $this->getType(),
-                                    'NAME'     => $this->getName()
+                                    'TYPE' => $this->getType(),
+                                    'NAME' => $this->getName()
                                 ]
                             )
                         );
@@ -983,9 +983,9 @@ class NagVisStatefulObject extends NagVisObject
             }
 
             $objSummaryState = $OBJ->sum[STATE];
-            $objAck          = $OBJ->sum[ACK];
-            $objDowntime     = $OBJ->sum[DOWNTIME];
-            $objStale        = $OBJ->sum[STALE];
+            $objAck = $OBJ->sum[ACK];
+            $objDowntime = $OBJ->sum[DOWNTIME];
+            $objStale = $OBJ->sum[STALE];
 
             if (isset($stateWeight[$objSummaryState])) {
                 // Gather the object summary state type
@@ -1005,11 +1005,11 @@ class NagVisStatefulObject extends NagVisObject
                         || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight
                     )
                 ) {
-                    $this->sum[STATE]    = $objSummaryState;
-                    $this->sum[ACK]      = $objAck;
+                    $this->sum[STATE] = $objSummaryState;
+                    $this->sum[ACK] = $objAck;
                     $this->sum[DOWNTIME] = $objDowntime;
-                    $this->sum[STALE]    = $objStale;
-                    $currentStateWeight  = $stateWeight[$objSummaryState][$objType];
+                    $this->sum[STALE] = $objStale;
+                    $currentStateWeight = $stateWeight[$objSummaryState][$objType];
                 }
             }
         }
@@ -1033,10 +1033,10 @@ class NagVisStatefulObject extends NagVisObject
 
         if ($this->type == 'host' || $this->type == 'service') {
             $obj_attrs = [
-                'alias'         => ALIAS,
-                'display_name'  => DISPLAY_NAME,
-                'address'       => ADDRESS,
-                'notes'         => NOTES,
+                'alias' => ALIAS,
+                'display_name' => DISPLAY_NAME,
+                'address' => ADDRESS,
+                'notes' => NOTES,
                 'check_command' => CHECK_COMMAND,
             ];
             foreach ($obj_attrs as $attr => $state_key) {
@@ -1063,12 +1063,12 @@ class NagVisStatefulObject extends NagVisObject
         $i = 0;
         foreach ($this->backend_id as $backend_id) {
             if ($i == 0) {
-                $arr['htmlcgi']  = cfg('backend_' . $backend_id, 'htmlcgi');
+                $arr['htmlcgi'] = cfg('backend_' . $backend_id, 'htmlcgi');
                 $arr['custom_1'] = cfg('backend_' . $backend_id, 'custom_1');
                 $arr['custom_2'] = cfg('backend_' . $backend_id, 'custom_2');
                 $arr['custom_3'] = cfg('backend_' . $backend_id, 'custom_3');
             } else {
-                $arr['htmlcgi_' . $i]  = cfg('backend_' . $backend_id, 'htmlcgi');
+                $arr['htmlcgi_' . $i] = cfg('backend_' . $backend_id, 'htmlcgi');
                 $arr['custom_1_' . $i] = cfg('backend_' . $backend_id, 'custom_1');
                 $arr['custom_2_' . $i] = cfg('backend_' . $backend_id, 'custom_2');
                 $arr['custom_3_' . $i] = cfg('backend_' . $backend_id, 'custom_3');

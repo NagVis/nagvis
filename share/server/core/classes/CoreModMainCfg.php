@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModMainCfg.php - Core Map module to handle ajax requests
@@ -40,9 +41,9 @@ class CoreModMainCfg extends CoreModule
 
         // Register valid actions
         $this->aActions = [
-            'edit'              => REQUIRES_AUTHORISATION,
-            'manageBackends'    => 'edit',
-            'doBackendEdit'     => 'edit',
+            'edit' => REQUIRES_AUTHORISATION,
+            'manageBackends' => 'edit',
+            'doBackendEdit' => 'edit',
         ];
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewManageBackgrounds.php - View to render manage backgrounds page

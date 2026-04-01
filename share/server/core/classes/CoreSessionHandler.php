@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreSessionHandler.php - Class to handle PHP session data
@@ -30,16 +31,15 @@
  */
 class CoreSessionHandler
 {
-
     /**
      * @throws ErrorException
      */
     public function __construct()
     {
-        $sDomain   = cfg('global', 'sesscookiedomain');
-        $sPath     = cfg('global', 'sesscookiepath');
+        $sDomain = cfg('global', 'sesscookiedomain');
+        $sPath = cfg('global', 'sesscookiepath');
         $iDuration = cfg('global', 'sesscookieduration');
-        $bSecure   = cfg('global', 'sesscookiesecure') == 1;
+        $bSecure = cfg('global', 'sesscookiesecure') == 1;
         $bHTTPOnly = cfg('global', 'sesscookiehttponly') == 1;
 
         // Set the session name (used in params/cookie names)

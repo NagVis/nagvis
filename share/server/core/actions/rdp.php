@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * rdp.php - Custom action module for connecting to hosts via RDP
@@ -29,16 +30,16 @@
 global $configVars;
 $configVars = [
     'domain' => [
-        'must'     => 1,
+        'must' => 1,
         'editable' => 1,
-        'default'  => '',
-        'match'    => MATCH_STRING_NO_SPACE_EMPTY
+        'default' => '',
+        'match' => MATCH_STRING_NO_SPACE_EMPTY
     ],
     'username' => [
-        'must'     => 1,
+        'must' => 1,
         'editable' => 1,
-        'default'  => '',
-        'match'    => MATCH_STRING_NO_SPACE_EMPTY
+        'default' => '',
+        'match' => MATCH_STRING_NO_SPACE_EMPTY
     ],
 ];
 
@@ -46,8 +47,8 @@ if (!function_exists('handle_action_rdp')) {
     function handle_action_rdp($MAPCFG, $objId)
     {
         $host_name = $MAPCFG->getValue($objId, 'host_name');
-        $domain    = $MAPCFG->getValue($objId, 'domain');
-        $username  = $MAPCFG->getValue($objId, 'username');
+        $domain = $MAPCFG->getValue($objId, 'domain');
+        $username = $MAPCFG->getValue($objId, 'username');
 
         // Get the host address! erm ... looks a little complicated...
         global $_BACKEND;

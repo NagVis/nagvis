@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreModAuth.php - This module handles the user login and logout
@@ -42,7 +43,7 @@ class CoreModAuth extends CoreModule
         $this->CORE = $CORE;
 
         $this->aActions = [
-            'login'  => !REQUIRES_AUTHORISATION,
+            'login' => !REQUIRES_AUTHORISATION,
                                 'logout' => REQUIRES_AUTHORISATION
         ];
 

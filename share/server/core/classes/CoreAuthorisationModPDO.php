@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthorisationModPDO.php - Authorsiation module using the PDO abstraction

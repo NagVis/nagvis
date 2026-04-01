@@ -36,10 +36,10 @@ if (cfg('global', 'shinken_features')) {
 function list_automap_render_modes()
 {
     return [
-        'directed'    => 'directed',
-        'undirected'  => 'undirected',
-        'radial'      => 'radial',
-        'circular'    => 'circular',
+        'directed' => 'directed',
+        'undirected' => 'undirected',
+        'radial' => 'radial',
+        'circular' => 'circular',
         'undirected2' => 'undirected2',
         'undirected3' => 'undirected3',
     ];
@@ -58,17 +58,17 @@ function list_automap_rankdirs()
 function list_automap_overlaps()
 {
     return [
-        'true'     => l('true'),
-        'false'    => l('false'),
-        'scale'    => l('scale'),
-        'scalexy'  => l('scalexy'),
-        'ortho'    => l('ortho'),
-        'orthoxy'  => l('orthoxy'),
-        'orthoyx'  => l('orthoyx'),
+        'true' => l('true'),
+        'false' => l('false'),
+        'scale' => l('scale'),
+        'scalexy' => l('scalexy'),
+        'ortho' => l('ortho'),
+        'orthoxy' => l('orthoxy'),
+        'orthoyx' => l('orthoyx'),
         'compress' => l('compress'),
-        'ipsep'    => l('ipsep'),
-        'vpsc'     => l('vpsc'),
-        'prism'    => l('prism'),
+        'ipsep' => l('ipsep'),
+        'vpsc' => l('vpsc'),
+        'prism' => l('prism'),
     ];
 }
 
@@ -85,28 +85,28 @@ function list_automaps($CORE)
 global $configVars;
 $configVars = [
     'render_mode' => [
-        'must'       => false,
-        'default'    => 'undirected',
-        'match'      => MATCH_AUTOMAP_RENDER_MODE,
+        'must' => false,
+        'default' => 'undirected',
+        'match' => MATCH_AUTOMAP_RENDER_MODE,
         'field_type' => 'dropdown',
-        'list'       => 'list_automap_render_modes',
+        'list' => 'list_automap_render_modes',
     ],
     'root' => [
-        'must'       => false,
-        'default'    => '<<<monitoring>>>',
-        'match'      => MATCH_AUTOMAP_HOSTNAME,
+        'must' => false,
+        'default' => '<<<monitoring>>>',
+        'match' => MATCH_AUTOMAP_HOSTNAME,
     ],
     'filter_by_state' => [
-        'must'       => false,
-        'default'    => '0',
+        'must' => false,
+        'default' => '0',
         'field_type' => 'boolean',
-        'match'      => MATCH_BOOLEAN,
+        'match' => MATCH_BOOLEAN,
     ],
     'filter_by_ids' => [
-        'must'       => false,
-        'hidden'     => true,
-        'default'    => '',
-        'match'      => MATCH_BOOLEAN,
+        'must' => false,
+        'hidden' => true,
+        'default' => '',
+        'match' => MATCH_BOOLEAN,
     ],
 
     /**
@@ -114,44 +114,44 @@ $configVars = [
      * this means no limitation.
      */
     'child_layers' => [
-        'must'       => false,
-        'default'    => -1,
-        'match'      => MATCH_INTEGER_PRESIGN_EMPTY,
+        'must' => false,
+        'default' => -1,
+        'match' => MATCH_INTEGER_PRESIGN_EMPTY,
     ],
     /**
      * This sets how many parent layers should be displayed. Default value is
      * 0, this means the direction is not fteched
      */
     'parent_layers' => [
-        'must'       => false,
-        'default'    => 0,
-        'match'      => MATCH_INTEGER_PRESIGN_EMPTY,
+        'must' => false,
+        'default' => 0,
+        'match' => MATCH_INTEGER_PRESIGN_EMPTY,
     ],
 
     'ignore_hosts' => [
-        'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_STRING_NO_SPACE_EMPTY,
+        'must' => false,
+        'default' => '',
+        'match' => MATCH_STRING_NO_SPACE_EMPTY,
     ],
 
     'margin' => [
-        'must'       => false,
-        'default'    => '50',
-        'match'      => MATCH_FLOAT_EMPTY,
+        'must' => false,
+        'default' => '50',
+        'match' => MATCH_FLOAT_EMPTY,
     ],
     'rankdir' => [
-        'must'       => false,
-        'default'    => 'LR',
-        'match'      => MATCH_AUTOMAP_RANKDIR,
+        'must' => false,
+        'default' => 'LR',
+        'match' => MATCH_AUTOMAP_RANKDIR,
         'field_type' => 'dropdown',
-        'list'       => 'list_automap_rankdirs',
+        'list' => 'list_automap_rankdirs',
     ],
     'overlap' => [
-        'must'       => false,
-        'default'    => 'scale',
-        'match'      => MATCH_AUTOMAP_OVERLAP,
+        'must' => false,
+        'default' => 'scale',
+        'match' => MATCH_AUTOMAP_OVERLAP,
         'field_type' => 'dropdown',
-        'list'       => 'list_automap_overlaps',
+        'list' => 'list_automap_overlaps',
     ],
 ];
 
@@ -160,16 +160,16 @@ global $configVarMap;
 $configVarMap = [
     'global' => [
         'automap' => [
-            'render_mode'     => null,
-            'root'            => null,
+            'render_mode' => null,
+            'root' => null,
             'filter_by_state' => null,
-            'filter_by_ids'   => null,
-            'child_layers'    => null,
-            'parent_layers'   => null,
-            'ignore_hosts'    => null,
-            'margin'          => null,
-            'rankdir'         => null,
-            'overlap'         => null,
+            'filter_by_ids' => null,
+            'child_layers' => null,
+            'parent_layers' => null,
+            'ignore_hosts' => null,
+            'margin' => null,
+            'rankdir' => null,
+            'overlap' => null,
         ],
     ],
 ];
@@ -178,20 +178,20 @@ if (cfg('global', 'shinken_features')) {
     function list_business_impact()
     {
         return [
-            '0'          => '0_development',
-            '1'          => '1_testing',
-            '2'          => '2_standard',
-            '3'          => '3_production',
-            '4'          => '4_top_production',
-            '5'          => '5_business_critical',
+            '0' => '0_development',
+            '1' => '1_testing',
+            '2' => '2_standard',
+            '3' => '3_production',
+            '4' => '4_top_production',
+            '5' => '5_business_critical',
         ];
     }
     $configVars['min_business_impact'] = [
-        'must'       => false,
-        'default'    => '0_development',
-        'match'      => MATCH_AUTOMAP_BUSINESS_IMPACT,
+        'must' => false,
+        'default' => '0_development',
+        'match' => MATCH_AUTOMAP_BUSINESS_IMPACT,
         'field_type' => 'dropdown',
-        'list'       => 'list_business_impact',
+        'list' => 'list_business_impact',
     ];
 
     $configVarMap['global']['automap']['min_business_impact'] = null;
@@ -405,13 +405,13 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name)
 
     if ($obj_name === '<<<monitoring>>>') {
         $obj['host_name'] = 'Monitoring';
-        $obj['type']      = 'shape';
+        $obj['type'] = 'shape';
         $obj['icon_size'] = [22];
-        $obj['icon']      = 'std_nagvis.png';
-        $obj['.width']    = 22;
-        $obj['.height']   = 22;
+        $obj['icon'] = 'std_nagvis.png';
+        $obj['.width'] = 22;
+        $obj['.height'] = 22;
     } else {
-        $obj['type']      = 'host';
+        $obj['type'] = 'host';
         $obj['host_name'] = $obj_name;
 
         // Default to params iconset
@@ -437,19 +437,19 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name)
             $h = $size[1];
         }
 
-        $obj['.width']  = $w;
+        $obj['.width'] = $w;
         $obj['.height'] = $h;
 
-        $obj['label_show']       = $MAPCFG->getValue(0, 'label_show');
-        $obj['label_border']     = $MAPCFG->getValue(0, 'label_border');
+        $obj['label_show'] = $MAPCFG->getValue(0, 'label_show');
+        $obj['label_border'] = $MAPCFG->getValue(0, 'label_border');
         $obj['label_background'] = $MAPCFG->getValue(0, 'label_background');
-        $obj['label_maxlen']     = $MAPCFG->getValue(0, 'label_maxlen');
+        $obj['label_maxlen'] = $MAPCFG->getValue(0, 'label_maxlen');
     }
 
     // Header menu has z-index 100, this object's label the below+1
-    $obj['z']           = 98;
-    $obj['.parents']    = [];
-    $obj['.childs']     = [];
+    $obj['z'] = 98;
+    $obj['.parents'] = [];
+    $obj['.childs'] = [];
 
     return $obj;
 }
@@ -468,16 +468,16 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
 
     $obj = automap_obj_base($MAPCFG, $params, $saved_config, $obj_name);
 
-    $obj['type']       = 'line';
-    $obj['view_type']  = 'line';
-    $obj['line_type']  = '11';
-    $obj['z']          = 90;
+    $obj['type'] = 'line';
+    $obj['view_type'] = 'line';
+    $obj['line_type'] = '11';
+    $obj['z'] = 90;
     $obj['line_color'] = $MAPCFG->getValue(0, 'line_color');
     $obj['line_width'] = $MAPCFG->getValue(0, 'line_width');
-    $obj['x']          = $from_obj['object_id'] . '%+' . ($from_obj['.width']  / 2) . ','
-                        . $to_obj['object_id']   . '%+' . ($to_obj['.width']    / 2);
-    $obj['y']          = $from_obj['object_id'] . '%+' . ($from_obj['.height'] / 2) . ','
-                        . $to_obj['object_id']   . '%+' . ($to_obj['.height']   / 2);
+    $obj['x'] = $from_obj['object_id'] . '%+' . ($from_obj['.width'] / 2) . ','
+                        . $to_obj['object_id']   . '%+' . ($to_obj['.width'] / 2);
+    $obj['y'] = $from_obj['object_id'] . '%+' . ($from_obj['.height'] / 2) . ','
+                        . $to_obj['object_id']   . '%+' . ($to_obj['.height'] / 2);
 
     return $obj;
 }

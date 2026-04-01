@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewAck.php - Class for handling the Ack dialog
@@ -83,8 +84,8 @@ class ViewAck
                     throw new FieldInputError('comment', l('You need to provide a comment.'));
                 }
 
-                $sticky  = get_checkbox('sticky');
-                $notify  = get_checkbox('notify');
+                $sticky = get_checkbox('sticky');
+                $notify = get_checkbox('notify');
                 $persist = get_checkbox('persist');
 
                 // Now send the acknowledgement

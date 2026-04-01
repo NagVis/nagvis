@@ -1,4 +1,5 @@
-<?PHP
+<?php
+
 /*****************************************************************************
  *
  * nagvis-js.php - File for nagvis-js frontend related constants and some

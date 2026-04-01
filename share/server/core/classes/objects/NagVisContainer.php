@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisContainer.php - Class of a container object in NagVis with all necessary

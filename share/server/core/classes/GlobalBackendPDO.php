@@ -502,7 +502,6 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
         return ['query' => implode(' OR ', $aFilters), 'params' => $values];
     }
 
-
     /**
      * Returns if a host state has been acknowledged. The method doesn't check
      * if the host is in OK/DOWN, it only checks the has_been_acknowledged flag.
@@ -948,26 +947,26 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
                         'normal' => intval($data['pending']),
                     ],
                     OK => [
-                        'normal'   => intval($data['ok']),
-                        'stale'    => 0,
+                        'normal' => intval($data['ok']),
+                        'stale' => 0,
                         'downtime' => intval($data['ok_downtime']),
                     ],
                     WARNING => [
-                        'normal'   => intval($data['warning']),
-                        'stale'    => 0,
-                        'ack'      => intval($data['warning_ack']),
+                        'normal' => intval($data['warning']),
+                        'stale' => 0,
+                        'ack' => intval($data['warning_ack']),
                         'downtime' => intval($data['warning_downtime']),
                     ],
                     CRITICAL => [
-                        'normal'   => intval($data['critical']),
-                        'stale'    => 0,
-                        'ack'      => intval($data['critical_ack']),
+                        'normal' => intval($data['critical']),
+                        'stale' => 0,
+                        'ack' => intval($data['critical_ack']),
                         'downtime' => intval($data['critical_downtime']),
                     ],
                     UNKNOWN => [
-                        'normal'   => intval($data['unknown']),
-                        'stale'    => 0,
-                        'ack'      => intval($data['unknown_ack']),
+                        'normal' => intval($data['unknown']),
+                        'stale' => 0,
+                        'ack' => intval($data['unknown_ack']),
                         'downtime' => intval($data['unknown_downtime']),
                     ],
                 ]
@@ -1037,24 +1036,24 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
                 'details' => [ALIAS => $data['alias']],
                 'counts' => [
                     UNCHECKED => [
-                        'normal'    => intval($data['unchecked']),
+                        'normal' => intval($data['unchecked']),
                     ],
                     UP => [
-                        'normal'    => intval($data['up']),
-                        'stale'    => 0,
-                        'downtime'  => intval($data['up_downtime']),
+                        'normal' => intval($data['up']),
+                        'stale' => 0,
+                        'downtime' => intval($data['up_downtime']),
                     ],
                     DOWN => [
-                        'normal'    => intval($data['down']),
-                        'stale'    => 0,
-                        'ack'       => intval($data['down_ack']),
-                        'downtime'  => intval($data['down_downtime']),
+                        'normal' => intval($data['down']),
+                        'stale' => 0,
+                        'ack' => intval($data['down_ack']),
+                        'downtime' => intval($data['down_downtime']),
                     ],
                     UNREACHABLE => [
-                        'normal'    => intval($data['unreachable']),
-                        'stale'    => 0,
-                        'ack'       => intval($data['unreachable_ack']),
-                        'downtime'  => intval($data['unreachable_downtime']),
+                        'normal' => intval($data['unreachable']),
+                        'stale' => 0,
+                        'ack' => intval($data['unreachable_ack']),
+                        'downtime' => intval($data['unreachable_downtime']),
                     ],
                 ],
             ];
@@ -1114,22 +1113,22 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
         );
 
         while ($data = $QUERYHANDLE->fetch()) {
-            $arrReturn[$data['name1']]['counts'][PENDING]['normal']    = intval($data['pending']);
-            $arrReturn[$data['name1']]['counts'][OK]['normal']         = intval($data['ok']);
-            $arrReturn[$data['name1']]['counts'][OK]['stale']          = 0;
-            $arrReturn[$data['name1']]['counts'][OK]['downtime']       = intval($data['ok_downtime']);
-            $arrReturn[$data['name1']]['counts'][WARNING]['normal']    = intval($data['warning']);
-            $arrReturn[$data['name1']]['counts'][WARNING]['stale']     = 0;
-            $arrReturn[$data['name1']]['counts'][WARNING]['ack']       = intval($data['warning_ack']);
-            $arrReturn[$data['name1']]['counts'][WARNING]['downtime']  = intval($data['warning_downtime']);
-            $arrReturn[$data['name1']]['counts'][CRITICAL]['normal']   = intval($data['critical']);
-            $arrReturn[$data['name1']]['counts'][CRITICAL]['stale']    = 0;
-            $arrReturn[$data['name1']]['counts'][CRITICAL]['ack']      = intval($data['critical_ack']);
+            $arrReturn[$data['name1']]['counts'][PENDING]['normal'] = intval($data['pending']);
+            $arrReturn[$data['name1']]['counts'][OK]['normal'] = intval($data['ok']);
+            $arrReturn[$data['name1']]['counts'][OK]['stale'] = 0;
+            $arrReturn[$data['name1']]['counts'][OK]['downtime'] = intval($data['ok_downtime']);
+            $arrReturn[$data['name1']]['counts'][WARNING]['normal'] = intval($data['warning']);
+            $arrReturn[$data['name1']]['counts'][WARNING]['stale'] = 0;
+            $arrReturn[$data['name1']]['counts'][WARNING]['ack'] = intval($data['warning_ack']);
+            $arrReturn[$data['name1']]['counts'][WARNING]['downtime'] = intval($data['warning_downtime']);
+            $arrReturn[$data['name1']]['counts'][CRITICAL]['normal'] = intval($data['critical']);
+            $arrReturn[$data['name1']]['counts'][CRITICAL]['stale'] = 0;
+            $arrReturn[$data['name1']]['counts'][CRITICAL]['ack'] = intval($data['critical_ack']);
             $arrReturn[$data['name1']]['counts'][CRITICAL]['downtime'] = intval($data['critical_downtime']);
-            $arrReturn[$data['name1']]['counts'][UNKNOWN]['normal']    = intval($data['unknown']);
-            $arrReturn[$data['name1']]['counts'][UNKNOWN]['stale']     = 0;
-            $arrReturn[$data['name1']]['counts'][UNKNOWN]['ack']       = intval($data['unknown_ack']);
-            $arrReturn[$data['name1']]['counts'][UNKNOWN]['downtime']  = intval($data['unknown_downtime']);
+            $arrReturn[$data['name1']]['counts'][UNKNOWN]['normal'] = intval($data['unknown']);
+            $arrReturn[$data['name1']]['counts'][UNKNOWN]['stale'] = 0;
+            $arrReturn[$data['name1']]['counts'][UNKNOWN]['ack'] = intval($data['unknown_ack']);
+            $arrReturn[$data['name1']]['counts'][UNKNOWN]['downtime'] = intval($data['unknown_downtime']);
         }
 
         return $arrReturn;
@@ -1198,29 +1197,29 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface
                 'details' => [ALIAS => $data['alias']],
                 'counts' => [
                     PENDING => [
-                        'normal'   => intval($data['pending']),
+                        'normal' => intval($data['pending']),
                     ],
                     OK => [
-                        'normal'   => intval($data['ok']),
-                        'stale'    => 0,
+                        'normal' => intval($data['ok']),
+                        'stale' => 0,
                         'downtime' => intval($data['ok_downtime']),
                     ],
                     WARNING => [
-                        'normal'   => intval($data['warning']),
-                        'stale'    => 0,
-                        'ack'      => intval($data['warning_ack']),
+                        'normal' => intval($data['warning']),
+                        'stale' => 0,
+                        'ack' => intval($data['warning_ack']),
                         'downtime' => intval($data['warning_downtime']),
                     ],
                     CRITICAL => [
-                        'normal'   => intval($data['critical']),
-                        'stale'    => 0,
-                        'ack'      => intval($data['critical_ack']),
+                        'normal' => intval($data['critical']),
+                        'stale' => 0,
+                        'ack' => intval($data['critical_ack']),
                         'downtime' => intval($data['critical_downtime']),
                     ],
                     UNKNOWN => [
-                        'normal'   => intval($data['unknown']),
-                        'stale'    => 0,
-                        'ack'      => intval($data['unknown_ack']),
+                        'normal' => intval($data['unknown']),
+                        'stale' => 0,
+                        'ack' => intval($data['unknown_ack']),
                         'downtime' => intval($data['unknown_downtime']),
                     ],
                 ],

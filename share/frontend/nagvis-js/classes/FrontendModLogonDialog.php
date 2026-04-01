@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendModLogonDialog.php - Module for showing the logon dialog in NagVis

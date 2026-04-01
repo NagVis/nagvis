@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModRoleMgmt.php - Core module to handle the role management tasks
@@ -38,7 +39,7 @@ class CoreModRoleMgmt extends CoreModule
         $this->sName = 'RoleMgmt';
 
         $this->aActions = [
-            'view'         => 'manage',
+            'view' => 'manage',
         ];
     }
 

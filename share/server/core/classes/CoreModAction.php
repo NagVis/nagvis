@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModAction.php - Core module to handle object actions
@@ -33,8 +34,8 @@ class CoreModAction extends CoreModule
 
         // Register valid actions
         $this->aActions = [
-            'acknowledge'       => 'perform',
-            'custom_action'     => 'perform',
+            'acknowledge' => 'perform',
+            'custom_action' => 'perform',
         ];
     }
 
@@ -53,9 +54,9 @@ class CoreModAction extends CoreModule
             switch ($this->sAction) {
                 case 'custom_action':
                     $aOpts = [
-                        'map'       => MATCH_MAP_NAME,
+                        'map' => MATCH_MAP_NAME,
                         'object_id' => MATCH_OBJECTID,
-                        'cmd'       => MATCH_STRING_NO_SPACE,
+                        'cmd' => MATCH_STRING_NO_SPACE,
                     ];
                     $attrs = $this->getCustomOptions($aOpts);
 

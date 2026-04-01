@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisHeaderMenu.php - Class for handling the header menu
@@ -219,11 +220,11 @@ class NagVisHeaderMenu
                 }
 
                 $list[$mapName] = [
-                    'mapName'   => $MAPCFG->getName(),
-                    'mapAlias'  => $MAPCFG->getValue(0, 'alias'),
-                    'childs'    => [],
-                    'class'     => '',
-                    'parent'    => $MAPCFG->getValue(0, 'parent_map'),
+                    'mapName' => $MAPCFG->getName(),
+                    'mapAlias' => $MAPCFG->getValue(0, 'alias'),
+                    'childs' => [],
+                    'class' => '',
+                    'parent' => $MAPCFG->getValue(0, 'parent_map'),
                 ];
             }
 
@@ -315,18 +316,18 @@ class NagVisHeaderMenu
         $this->aMacros['permittedOverview'] = $AUTHORISATION->isPermitted('Overview', 'view', '*');
 
         // Check if the user is permitted to edit the current map
-        $this->aMacros['permittedView']  = $this->OBJ !== null
+        $this->aMacros['permittedView'] = $this->OBJ !== null
             && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->OBJ->getName());
-        $this->aMacros['permittedEdit']  = $this->OBJ !== null
+        $this->aMacros['permittedEdit'] = $this->OBJ !== null
             && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->OBJ->getName());
 
         // Permissions for the option menu
-        $this->aMacros['permittedSearch']            = $AUTHORISATION->isPermitted('Search', 'view', '*');
-        $this->aMacros['permittedEditMainCfg']       = $AUTHORISATION->isPermitted('MainCfg', 'edit', '*');
-        $this->aMacros['permittedManageShapes']      = $AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
+        $this->aMacros['permittedSearch'] = $AUTHORISATION->isPermitted('Search', 'view', '*');
+        $this->aMacros['permittedEditMainCfg'] = $AUTHORISATION->isPermitted('MainCfg', 'edit', '*');
+        $this->aMacros['permittedManageShapes'] = $AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
         $this->aMacros['permittedManageBackgrounds'] = $AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
         $this->aMacros['permittedManageBackgrounds'] = $AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
-        $this->aMacros['permittedManageMaps']        = $AUTHORISATION->isPermitted('Map', 'add', '*')
+        $this->aMacros['permittedManageMaps'] = $AUTHORISATION->isPermitted('Map', 'add', '*')
             && $AUTHORISATION->isPermitted('Map', 'edit', '*');
 
         $this->aMacros['currentUser'] = $AUTH->getUser();
@@ -338,26 +339,26 @@ class NagVisHeaderMenu
 
         // Replace some special macros for maps
         if ($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
-            $this->aMacros['currentMap']        = $this->OBJ->getName();
-            $this->aMacros['currentMapAlias']   = $this->OBJ->getValue(0, 'alias');
-            $this->aMacros['usesSources']       = count($this->OBJ->getValue(0, 'sources')) > 0;
-            $this->aMacros['zoombar']           = $this->OBJ->getValue(0, 'zoombar');
+            $this->aMacros['currentMap'] = $this->OBJ->getName();
+            $this->aMacros['currentMapAlias'] = $this->OBJ->getValue(0, 'alias');
+            $this->aMacros['usesSources'] = count($this->OBJ->getValue(0, 'sources')) > 0;
+            $this->aMacros['zoombar'] = $this->OBJ->getValue(0, 'zoombar');
 
-            $this->aMacros['canAddObjects']  = !in_array('automap', $this->OBJ->getValue(0, 'sources'))
+            $this->aMacros['canAddObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'))
                 && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
             $this->aMacros['canEditObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'));
             $this->aMacros['canMoveObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'))
                 && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
-            $this->aMacros['isWorldmap']     = in_array('worldmap', $this->OBJ->getValue(0, 'sources'));
+            $this->aMacros['isWorldmap'] = in_array('worldmap', $this->OBJ->getValue(0, 'sources'));
         } else {
-            $this->aMacros['currentMap']        = '';
-            $this->aMacros['currentMapAlias']   = '';
-            $this->aMacros['usesSources']       = false;
-            $this->aMacros['zoombar']           = false;
-            $this->aMacros['canAddObjects']     = false;
-            $this->aMacros['canEditObjects']    = false;
-            $this->aMacros['canMoveObjects']    = false;
-            $this->aMacros['isWorldmap']        = true;
+            $this->aMacros['currentMap'] = '';
+            $this->aMacros['currentMapAlias'] = '';
+            $this->aMacros['usesSources'] = false;
+            $this->aMacros['zoombar'] = false;
+            $this->aMacros['canAddObjects'] = false;
+            $this->aMacros['canEditObjects'] = false;
+            $this->aMacros['canMoveObjects'] = false;
+            $this->aMacros['isWorldmap'] = true;
         }
 
         // Add permitted rotations
@@ -441,26 +442,26 @@ class NagVisHeaderMenu
         // Replace paths and language macros
         $aReturn = [
             'pathBase' => $this->pathHtmlBase,
-            'currentUri'         => preg_replace(
+            'currentUri' => preg_replace(
                 '/[&?]lang=[a-z]{2}_[A-Z]{2}/',
                 '',
                 $UHANDLER->getRequestUri()
             ),
-            'pathImages'         => cfg('paths', 'htmlimages'),
-            'showStates'         => cfg('defaults', 'header_show_states'),
-            'pathHeaderJs'       => path(
+            'pathImages' => cfg('paths', 'htmlimages'),
+            'showStates' => cfg('defaults', 'header_show_states'),
+            'pathHeaderJs' => path(
                 'html',
                 'global',
                 'templates',
                 $this->templateName . '.header.js?v=' . CONST_VERSION
             ),
-            'pathTemplates'      => path('html', 'global', 'templates'),
+            'pathTemplates' => path('html', 'global', 'templates'),
             'pathTemplateImages' => path('html', 'global', 'templateimages'),
-            'langSearch'         => l('Search'),
-            'langUserMgmt'       => l('Manage Users'),
-            'langManageRoles'    => l('Manage Roles'),
-            'currentLanguage'    => curLang(),
-            'docLanguage'        => $this->getDocLanguage(),
+            'langSearch' => l('Search'),
+            'langUserMgmt' => l('Manage Users'),
+            'langManageRoles' => l('Manage Roles'),
+            'currentLanguage' => curLang(),
+            'docLanguage' => $this->getDocLanguage(),
             'langChooseLanguage' => l('Choose Language'),
             'langUser' => l('User menu'),
             'langActions' => l('Actions'),
@@ -508,10 +509,10 @@ class NagVisHeaderMenu
             'langToggleGrid' => l('Show/Hide Grid'),
             'langToStaticMap' => l('Export to static map'),
             'langModifyParams' => l('Modify view'),
-            'langMapViewport'      => l('Viewport'),
-            'langSaveView'         => l('Save view'),
+            'langMapViewport' => l('Viewport'),
+            'langSaveView' => l('Save view'),
             'langSaveViewAsNewMap' => l('Save as new map'),
-            'langScaleToAll'       => l('Show all objects'),
+            'langScaleToAll' => l('Show all objects'),
             // Supported by backend and not using trusted auth
             'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted(),
             'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),

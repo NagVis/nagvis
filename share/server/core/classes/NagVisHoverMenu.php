@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisHoverMenu.php - Class for handling the hover menus
@@ -64,7 +65,7 @@ class NagVisHoverMenu
 
         $this->templateName = $templateName;
 
-        $this->pathHtmlBase     = cfg('paths', 'htmlbase');
+        $this->pathHtmlBase = cfg('paths', 'htmlbase');
         $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.hover.html');
 
         // Simply skip processing with an invalid template file name
@@ -109,7 +110,7 @@ class NagVisHoverMenu
     private function readTemplate()
     {
         if ($this->checkTemplateReadable(1)) {
-            $this->code =  file_get_contents($this->pathTemplateFile);
+            $this->code = file_get_contents($this->pathTemplateFile);
             return true;
         } else {
             return false;

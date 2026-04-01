@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModManageShapes.php - Core Map module to manage shapes in WUI
@@ -43,7 +44,7 @@ class CoreModManageShapes extends CoreModule
 
         // Register valid actions
         $this->aActions = [
-            'view'      => 'manage',
+            'view' => 'manage',
         ];
     }
 

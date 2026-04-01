@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendModuleHandler.php - Module handling layer in nagvis-js frontend

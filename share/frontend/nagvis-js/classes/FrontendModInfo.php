@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendModRotation.php - Module for handling the info page of NagVis

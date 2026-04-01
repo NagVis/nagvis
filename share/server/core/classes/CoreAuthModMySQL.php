@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthModMySQL.php - Authentication module based on a MySQL database

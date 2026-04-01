@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreAuthorisationModMultisite.php - Authorsiation module based on the
@@ -64,7 +65,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule
     {
         # Add implicit permissions. These are basic permissions
         # which are needed for most users.
-        $perms =  [
+        $perms = [
             ['Overview',  'view',               '*'],
             ['General',   'getContextTemplate', '*'],
             ['General',   'getHoverTemplate',   '*'],
@@ -117,7 +118,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule
         foreach (all_users() as $username => $user) {
             $this->permissions[$username] = [
                 'permissions' => $this->getPermissions($username),
-                'language'    => $user['language'],
+                'language' => $user['language'],
             ];
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewManageBackends.php - View to render manage backends page
@@ -44,8 +45,8 @@ class ViewManageBackends
     {
         /** @var GlobalCore $CORE */
         global $CORE;
-        $this->editable_backends  = $CORE->getDefinedBackends(ONLY_USERCFG);
-        $this->defined_backends   = $CORE->getDefinedBackends();
+        $this->editable_backends = $CORE->getDefinedBackends(ONLY_USERCFG);
+        $this->defined_backends = $CORE->getDefinedBackends();
         $this->available_backends = $CORE->getAvailableBackends();
     }
 
@@ -164,7 +165,7 @@ class ViewManageBackends
         }
 
         $backend_type = submitted($mode) ? post('backend_type') : null;
-        $backend_id   = submitted($mode) ? post('backend_id') : null;
+        $backend_id = submitted($mode) ? post('backend_id') : null;
         if (is_action() && post('mode') == $mode) {
             try {
                 if ($mode == 'add' && (!$backend_type || !in_array($backend_type, $this->available_backends))) {

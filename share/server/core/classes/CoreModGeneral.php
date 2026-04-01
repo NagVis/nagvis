@@ -1,4 +1,5 @@
 <?php
+
 /*******************************************************************************
  *
  * CoreModGeneral.php - Core module to handle general ajax requests
@@ -39,9 +40,9 @@ class CoreModGeneral extends CoreModule
         $this->CORE = $CORE;
 
         $this->aActions = [
-            'getHoverTemplate'   => REQUIRES_AUTHORISATION,
+            'getHoverTemplate' => REQUIRES_AUTHORISATION,
             'getContextTemplate' => REQUIRES_AUTHORISATION,
-            'getHoverUrl'        => REQUIRES_AUTHORISATION,
+            'getHoverUrl' => REQUIRES_AUTHORISATION,
         ];
     }
 
@@ -90,9 +91,9 @@ class CoreModGeneral extends CoreModule
             }
 
             $arrReturn[] = [
-                'name'     => $sName,
+                'name' => $sName,
                 'css_file' => $OBJ->getCssFile(),
-                'code'     => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString()))
+                'code' => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString()))
             ];
         }
 

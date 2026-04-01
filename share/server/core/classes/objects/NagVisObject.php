@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisObject.php - Abstract class of an object in NagVis with all necessary
@@ -279,7 +280,6 @@ class NagVisObject
         return $arr;
     }
 
-
     /**
      * Gets the configuration of the object
      *
@@ -455,7 +455,7 @@ class NagVisObject
         } elseif ($stateWeight[$state1][$subState1] < $stateWeight[$state2][$subState2]) {
             // Sort depending on configured direction
             if ($sortOrder === 'asc') {
-                return + 1;
+                return +1;
             } else {
                 return -1;
             }
@@ -463,7 +463,7 @@ class NagVisObject
             // Sort depending on configured direction
             return -1;
         } else {
-            return + 1;
+            return +1;
         }
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisUrlView.php - Class for parsing the NagVis urls in nagvis-js frontend
@@ -77,7 +78,7 @@ class NagVisUrlView
     private function getProperties()
     {
         return [
-            'url'       => $this->url,
+            'url' => $this->url,
             'view_type' => 'url',
         ];
     }
@@ -105,16 +106,16 @@ class NagVisUrlView
         }
 
         $aData = [
-            'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
-            'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
+            'generalProperties' => $_MAINCFG->parseGeneralProperties(),
+            'workerProperties' => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
-            'pageProperties'     => json_encode($this->getProperties()),
-            'iframe'             => $iframe,
-            'url'                => $url,
-            'fileAges'           => json_encode([
+            'pageProperties' => json_encode($this->getProperties()),
+            'iframe' => $iframe,
+            'url' => $url,
+            'fileAges' => json_encode([
                 'maincfg' => $_MAINCFG->getConfigFileAge(),
             ]),
-            'locales'            => json_encode([]),
+            'locales' => json_encode([]),
         ];
 
         // Build page based on the template file and the data array

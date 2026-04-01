@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * FrontendModUrl.php - Module for handling external urls in NagVis

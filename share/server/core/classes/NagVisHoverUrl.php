@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * NagVisHoverUrl.php - Class for handling the hover urls
@@ -105,7 +106,6 @@ class NagVisHoverUrl
             ]));
         }
 
-
         if (!$content = file_get_contents($this->url)) {
             throw new NagVisException(l('couldNotGetHoverUrl', ['URL' => $this->url]));
         }
@@ -120,7 +120,6 @@ class NagVisHoverUrl
 
         $this->code = $content;
     }
-
 
     /**
      * Replace unwanted things from the code

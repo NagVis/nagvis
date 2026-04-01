@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * CoreLogonMultisite.php - Module for handling cookie based logins as
@@ -23,25 +24,28 @@
  *
  *****************************************************************************/
 
-class CoreLogonMultisite extends CoreLogonModule {
-    private function isCookiePlausible($username, $sessionId, $cookieHash) {
+class CoreLogonMultisite extends CoreLogonModule
+{
+    private function isCookiePlausible($username, $sessionId, $cookieHash)
+    {
         // Mostly meant to check that we don't process malicious cookies, e.g.
         // data with special chars.
 
-        if (preg_match('/^[\w$][-@.+\w$]*$/i', $username) !== 1){
+        if (preg_match('/^[\w$][-@.+\w$]*$/i', $username) !== 1) {
             // See https://github.com/Checkmk/checkmk/blob/1cc2796314508092b18d52d34b932fe0435beba4/packages/cmk-ccc/cmk/ccc/user.py#L52
             throw new AuthenticationException(l("Malformed username"));
         }
-        if (preg_match('/^[-0-9a-f]{36}$/i', $sessionId) !== 1){
+        if (preg_match('/^[-0-9a-f]{36}$/i', $sessionId) !== 1) {
             throw new AuthenticationException(l("Malformed session id"));
         }
-        if (preg_match('/^[-0-9a-f]{64}$/i', $cookieHash) !== 1){
+        if (preg_match('/^[-0-9a-f]{64}$/i', $cookieHash) !== 1) {
             throw new AuthenticationException(l("Malformed hash"));
         }
     }
 
-    private function checkAuthCookie($cookieName) {
-        if(!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
+    private function checkAuthCookie($cookieName)
+    {
+        if (!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
             throw new AuthenticationException(l("No auth cookie provided."));
         }
         $cookieValue = $_COOKIE[$cookieName];
@@ -54,7 +58,7 @@ class CoreLogonMultisite extends CoreLogonModule {
         $port = getenv('CONFIG_APACHE_TCP_PORT');
         $host = getenv('CONFIG_APACHE_TCP_ADDR');
         $url = "http://$host:$port/$site/check_mk/api/1.0/version";
-        
+
         $headers = [
             'Content-type: application/json',
             'Accept: application/json',
@@ -69,13 +73,12 @@ class CoreLogonMultisite extends CoreLogonModule {
         ];
 
         $context = stream_context_create($contextOptions);
-        if(filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN)) {
-            $result = @ file_get_contents($url, false, $context);
+        if (filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN)) {
+            $result = @file_get_contents($url, false, $context);
             if ($result === false) {
                 throw new AuthenticationException(l("Cookie is invalid."));
             }
-        }
-        else if (extension_loaded('curl')) {
+        } elseif (extension_loaded('curl')) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -86,8 +89,7 @@ class CoreLogonMultisite extends CoreLogonModule {
             if ($http_status != 200) {
                 throw new AuthenticationException(l("Cookie is invalid."));
             }
-        }
-        else {
+        } else {
             throw new NagVisException(l('No method to check the session validity is available.
                 Please either enable allow_url_fopen in php.ini or install the curl PHP extension.'));
         }
@@ -102,8 +104,8 @@ class CoreLogonMultisite extends CoreLogonModule {
     {
         // Loop all cookies trying to fetch a valid authentication
         // cookie for this installation
-        foreach(array_keys($_COOKIE) as $cookieName) {
-            if($cookieName != 'auth_' . getenv('OMD_SITE')) {
+        foreach (array_keys($_COOKIE) as $cookieName) {
+            if ($cookieName != 'auth_' . getenv('OMD_SITE')) {
                 continue;
             }
             try {
@@ -114,7 +116,7 @@ class CoreLogonMultisite extends CoreLogonModule {
                 session_write_close();
 
                 return $name;
-            } catch(AuthenticationException $e) {
+            } catch (AuthenticationException $e) {
                 throw new NagVisException(l('LogonMultisite: Not authenticated. ') . $e->getMessage());
             }
         }
@@ -175,7 +177,7 @@ class CoreLogonMultisite extends CoreLogonModule {
         $authenticated = $AUTH->isAuthenticated();
 
         if (!$AUTH->usesBcrypt()) {
-            $AUTH->resetPassword($AUTH->getUserId(),  (time() * rand(1, 10)));
+            $AUTH->resetPassword($AUTH->getUserId(), (time() * rand(1, 10)));
         }
 
         return $authenticated;

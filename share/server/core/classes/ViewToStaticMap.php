@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * ViewToStaticMap.php - Class for rendering the "to static map" dialog
