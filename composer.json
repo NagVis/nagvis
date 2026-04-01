@@ -10,6 +10,11 @@
         }
     ],
     "minimum-stability": "stable",
+    "config": {
+        "platform": {
+            "php": "8.2"
+        }
+    },
     "require-dev": {
         "phpstan/phpstan": "^2.1",
         "friendsofphp/php-cs-fixer": "^3.94"
