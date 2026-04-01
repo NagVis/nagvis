@@ -60,32 +60,56 @@ if (function_exists("date_default_timezone_get")) {
 // PHP 8.2 deprecates utf8_encode. To stay compatible with older installations
 // and installations not providing the mbstring extension, we implement an approach
 // which defaults to mbstring and falls back to a polyfill.
-function iso8859_1_to_utf8($s)
-{
-    if (function_exists("mb_convert_encoding")) {
-        return mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
-    }
-
-    $s .= $s;
-    $len = \strlen($s);
-
-    for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
-        switch (true) {
-            case $s[$i] < "\x80":
-                $s[$j] = $s[$i];
-                break;
-            case $s[$i] < "\xC0":
-                $s[$j] = "\xC2";
-                $s[++$j] = $s[$i];
-                break;
-            default:
-                $s[$j] = "\xC3";
-                $s[++$j] = \chr(\ord($s[$i]) - 64);
-                break;
+if (!function_exists('iso8859_1_to_utf8')) {
+    function iso8859_1_to_utf8($s)
+    {
+        if (function_exists("mb_convert_encoding")) {
+            return mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
         }
-    }
 
-    return substr($s, 0, $j);
+        $s .= $s;
+        $len = \strlen($s);
+
+        for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
+            switch (true) {
+                case $s[$i] < "\x80":
+                    $s[$j] = $s[$i];
+                    break;
+                case $s[$i] < "\xC0":
+                    $s[$j] = "\xC2";
+                    $s[++$j] = $s[$i];
+                    break;
+                default:
+                    $s[$j] = "\xC3";
+                    $s[++$j] = \chr(\ord($s[$i]) - 64);
+                    break;
+            }
+        }
+
+        return substr($s, 0, $j);
+    }
+}
+
+// str_starts_with, str_ends_with and str_contains were added in PHP 8.0.
+if (!function_exists('str_starts_with')) {
+    function str_starts_with($haystack, $needle)
+    {
+        return $needle === '' || strncmp($haystack, $needle, strlen($needle)) === 0;
+    }
+}
+
+if (!function_exists('str_ends_with')) {
+    function str_ends_with($haystack, $needle)
+    {
+        return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;
+    }
+}
+
+if (!function_exists('str_contains')) {
+    function str_contains($haystack, $needle)
+    {
+        return $needle === '' || strpos($haystack, $needle) !== false;
+    }
 }
 
 // This implements the function hash_equals which is needed for timing safe hash comparisons but
