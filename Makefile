@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-VERSION=1.9.50
+VERSION=1.10.0
 NAME=nagvis-$(VERSION)
 
 SED ?= sed
@@ -44,9 +44,9 @@ version:
 
 setversion:
 	$(SED) -i "s/^VERSION=.*/VERSION=$(NEW_VERSION)/g" Makefile
-	$(SED) -i "s/.*CONST_VERSION.*/define('CONST_VERSION', '$(NEW_VERSION)');/g" share/server/core/defines/global.php
+	$(SED) -i "s/.*CONST_VERSION.*/const CONST_VERSION = '$(NEW_VERSION)';/g" share/server/core/defines/global.php
 	$(SED) -i '1s;^;$(NEW_VERSION)\n\n;' ChangeLog
-	MAJ_VERSION=$(NEW_VERSION) ; MAJ_VERSION=$${MAJ_VERSION::3} ; \
+	MAJ_VERSION=$(NEW_VERSION) ; MAJ_VERSION=$${MAJ_VERSION::4} ; \
 	$(SED) -i "s/<title>NagVis [^ ]*/<title>NagVis $$MAJ_VERSION/g" docs/*/index.html ; \
 	$(SED) -i "s/<h1>NagVis [^ ]*/<h1>NagVis $$MAJ_VERSION/g" docs/*/welcome.html ; \
 	$(SED) -i "s/: [0-9.]*\.x/: $$MAJ_VERSION.x/g" docs/*/welcome.html ; \
