@@ -1,4 +1,5 @@
-1.9.50
+1.10.0
+  * FIX: Align code standards with PSR-12 (#378 Thanks to miken32)
 
 1.9.49
   * FIX: Prevent fatal autoloader error when backend has empty or missing backendtype
