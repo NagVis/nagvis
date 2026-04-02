@@ -772,6 +772,10 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '',
                     'match' => MATCH_STRING_PATH),
+                'data' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_PATH),
                 'local_base' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '',
@@ -1494,7 +1498,14 @@ class GlobalMainCfg {
 
         // Try to get the base path via $_SERVER['SCRIPT_FILENAME']
         $this->validConfig['paths']['base']['default'] = $this->getBasePath();
-        $this->setPathsByBase($this->getValue('paths','base'), $this->getValue('paths','htmlbase'));
+        $base = $this->getValue('paths', 'base');
+        $htmlBase = $this->getValue('paths', 'htmlbase');
+        $data = $this->getValue('paths', 'data');
+        if (empty($data)) {
+            $data = $base;
+        }
+
+        $this->setPathsByBase($base, $htmlBase, $data);
 
         // Define the main configuration files
         $this->setConfigFiles($this->getConfigFiles());
@@ -1579,11 +1590,23 @@ class GlobalMainCfg {
             $this->useCache = $this->CACHE->isCached(false);
 
             // want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
-            $this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+            $base = $this->getValue('paths', 'base');
+            $htmlBase = $this->getValue('paths', 'htmlbase');
+            $data = $this->getValue('paths', 'data');
+            if (empty($data)) {
+                $data = $base;
+            }
+            $this->setPathsByBase($base, $htmlBase, $data);
         }
         catch (Exception $e) {
             // Try our best to set the correct paths - even in case of exceptions
-            $this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+            $base = $this->getValue('paths', 'base');
+            $htmlBase = $this->getValue('paths', 'htmlbase');
+            $data = $this->getValue('paths', 'data');
+            if (empty($data)) {
+                $data = $base;
+            }
+            $this->setPathsByBase($base, $htmlBase, $data);
             throw $e;
         }
 
@@ -1638,12 +1661,12 @@ class GlobalMainCfg {
      * @param	Boolean $printErr
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function setPathsByBase($base, $htmlBase) {
-        $this->validConfig['paths']['cfg']['default']                = $base.'etc/';
-        $this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
-        $this->validConfig['paths']['geomap']['default']             = $base.'etc/geomap';
-        $this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
-        $this->validConfig['global']['authorisation_group_perms_file']['default'] = $base.'etc/perms.db';
+    private function setPathsByBase($base, $htmlBase, $data) {
+        $this->validConfig['paths']['cfg']['default']                = $data.'etc/';
+        $this->validConfig['paths']['mapcfg']['default']             = $data.'etc/maps/';
+        $this->validConfig['paths']['geomap']['default']             = $data.'etc/geomap';
+        $this->validConfig['paths']['profiles']['default']           = $data.'etc/profiles';
+        $this->validConfig['global']['authorisation_group_perms_file']['default'] = $data.'etc/perms.db';
 
         $this->validConfig['paths']['var']['default']                = $base.'var/';
         $this->validConfig['paths']['sharedvar']['default']          = $base.HTDOCS_DIR.'/var/';

@@ -5,6 +5,10 @@
 Alias @NAGVIS_WEB@ "@NAGVIS_PATH@"
 
 <Directory "@NAGVIS_PATH@">
+
+  # If want to customize config location
+  #SetEnv NAGVIS_CONFIG "@NAGVIS_PATH@/../etc/nagvis.ini.php"
+
   Options FollowSymLinks
   AllowOverride None
 
