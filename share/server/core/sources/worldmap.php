@@ -291,7 +291,9 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat)
         // line ends within bbox
         . 'OR (lat2 BETWEEN :sw_lat AND :ne_lat AND lng2 BETWEEN :sw_lng AND :ne_lng)'
         // line intersects one of 4 bbox borders
-        . "OR (lat2>0 AND lng2>0 AND ($intWithinWestBound OR $intWithinSouthBound OR $intWithinEastBound OR $intWithinNorthBound))";
+        . "OR (lat2>0 AND lng2>0 AND ($intWithinWestBound OR $intWithinSouthBound OR $intWithinEastBound OR $intWithinNorthBound))"
+        // object/line with relative (text) coordinates: cannot filter by viewport, always include
+        . " OR typeof(lat) = 'text' OR typeof(lat2) = 'text'";
 
     $q = str_replace(':sw_lng', $sw_lng, $q);
     $q = str_replace(':sw_lat', $sw_lat, $q);
@@ -613,7 +615,8 @@ function process_worldmap($MAPCFG, $map_name, &$map_config)
         $zoom = (int)$params['worldmap_zoom'];
 
         list($sw_lng, $sw_lat, $ne_lng, $ne_lat) = explode(',', $bbox);
-        foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj) {
+        $all_objects = worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat);
+        foreach ($all_objects as $object_id => $obj) {
             // Now, when the object has a maximum / minimum zoom configured,
             // hide it depending on the zoom
             $min_zoom = isset($obj['min_zoom']) ? (int)$obj['min_zoom'] : $MAPCFG->getDefaultValue('host', 'min_zoom');
@@ -624,6 +627,23 @@ function process_worldmap($MAPCFG, $map_name, &$map_config)
             }
 
             $map_config[$object_id] = $obj;
+        }
+
+        // Objects referenced by relative coordinates must always be included
+        // so that parseCoord() can resolve line endpoints, even if zoom
+        // constraints would otherwise hide the referenced parent object.
+        foreach ($map_config as $obj) {
+            foreach (['x', 'y'] as $coord_key) {
+                $val = isset($obj[$coord_key]) ? (string)$obj[$coord_key] : '';
+                foreach (explode(',', $val) as $coord) {
+                    if (str_contains($coord, '%')) {
+                        $ref_id = substr($coord, 0, 6);
+                        if (!isset($map_config[$ref_id]) && isset($all_objects[$ref_id])) {
+                            $map_config[$ref_id] = $all_objects[$ref_id];
+                        }
+                    }
+                }
+            }
         }
 
         return true;
