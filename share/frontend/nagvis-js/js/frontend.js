@@ -390,9 +390,16 @@ function set_fill_zoom_factor() {
                 c_right = o_right;
         }
     }
+    // Guard: no objects on the map, or all objects sit at y=0 with zero height/width.
+    // In both cases c_bottom / c_right are null or 0, making the division below produce
+    // NaN or Infinity which would corrupt the URL (zoom=NaN) and break the next load.
+    if (!c_bottom || !c_right)
+        return;
     var border = 40; // border per side in px * 2
     var zoom_y = parseInt((pageHeight() - border - getHeaderHeight()) / parseFloat(c_bottom) * 100);
     var zoom_x = parseInt((pageWidth() - border - getSidebarWidth())/ parseFloat(c_right) * 100);
+    if (!isFinite(zoom_y) || !isFinite(zoom_x))
+        return;
     set_zoom(Math.min(zoom_y, zoom_x));
 }
 
