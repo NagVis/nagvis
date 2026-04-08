@@ -1366,3 +1366,214 @@ a:focus,
 div:focus {
     outline: none;
 }
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body.main {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+
+    /* Header */
+    .header {
+        background-color: #2a2a2a;
+        border-bottom-color: #444;
+        box-shadow: 0 3px 6px #000;
+        color: #e0e0e0;
+    }
+
+    /* Logo has a white background baked into the PNG; blend it away */
+    li.logo img {
+        mix-blend-mode: multiply;
+    }
+
+    .header ul.head li.toggle a,
+    #headershow a,
+    .header ul.head li > a {
+        color: #e0e0e0;
+    }
+
+    #headershow {
+        background-color: #2a2a2a;
+        border-color: #444;
+    }
+
+    #sidetoggle {
+        background-color: #2a2a2a;
+        border-color: #444;
+    }
+
+    #sidetoggle:hover {
+        background-color: #333;
+    }
+
+    /* Dropdown menus */
+    .dropdown span:hover {
+        background-color: #333;
+    }
+
+    .dropdown a, .dropdown a:active, .dropdown li.spacer, .dropdown dl.subdropdown dt {
+        background: #2a2a2a;
+        color: #43B3CF;
+        border-left-color: #444;
+        border-right-color: #444;
+    }
+
+    .dropdown a:visited {
+        color: #43B3CF;
+    }
+
+    .dropdown a:hover {
+        background-color: #333;
+        color: #779D2A;
+    }
+
+    .dropdown li.spacer hr {
+        background-color: #444;
+    }
+
+    .dropdown .underline { border-bottom-color: #444; }
+    .subdropdown .topline { border-top-color: #444; }
+    .subdropdown .underline { border-bottom-color: #444; }
+
+    /* Sidebar */
+    #sidebar {
+        background-color: #2a2a2a;
+        border-right-color: #444;
+    }
+
+    #sidebar li.spacerbottom { border-bottom-color: #444; }
+    #sidebar li.spacertop { border-top-color: #444; }
+
+    #sidebar li.open > div a.title,
+    #sidebar li.closed > div a.title {
+        background-color: #2a2a2a;
+    }
+
+    /* Popup window */
+    div#popupWindow {
+        background: #2a2a2a;
+        border-color: #555;
+        -moz-box-shadow: rgba(0,0,0,0.8) 0 4px 18px;
+        -webkit-box-shadow: rgba(0,0,0,0.8) 0 4px 18px;
+        -khtml-box-shadow: rgba(0,0,0,0.8) 0 4px 18px;
+        box-shadow: rgba(0,0,0,0.8) 0 4px 18px;
+    }
+
+    div#popupWindow div.close {
+        border-color: #666;
+        color: #ccc;
+    }
+
+    #popupWindowContent {
+        color: #e0e0e0;
+    }
+
+    div.infopage h2,
+    div#popupWindow h1,
+    #popupWindowContent h2 {
+        color: #43B3CF;
+    }
+
+    div#popupWindow h1 {
+        border-bottom-color: #444;
+    }
+
+    #popupWindowContent table.mytable th,
+    #popupWindowContent table.mytable td {
+        color: #e0e0e0;
+    }
+
+    /* Popup nav tabs */
+    #popupWindow ul.nav li a {
+        background-color: #333;
+        border-color: #555;
+        color: #ccc;
+    }
+
+    #popupWindow ul.nav li a:hover {
+        background-color: #3c3c3c;
+        color: #779D2A;
+    }
+
+    #popupWindow ul.nav li.active a {
+        border-bottom-color: #2a2a2a;
+        color: #e0e0e0;
+    }
+
+    #popupWindowContent ul.nav {
+        border-bottom-color: #555;
+    }
+
+    /* Form inputs inside popup */
+    #popupWindowContent input, select {
+        color: #e0e0e0;
+        background-color: #3a3a3a;
+        border-color: #555;
+    }
+
+    /* Error/success messages */
+    #popupWindowContent div.success {
+        border-color: #00aa00;
+        background-color: #1a3a1a;
+        color: #88ff88;
+    }
+
+    #popupWindowContent div.err {
+        border-color: #ff4f4f;
+        background-color: #3a1a1a;
+        color: #ffaaaa;
+    }
+
+    #popupWindowContent div.error {
+        background-color: #3a1a1a;
+        border-color: #d5091b;
+        color: #ffaaaa;
+    }
+
+    #popupWindowContent div.error code,
+    #popupWindowContent div.error pre {
+        background-color: #2a2a2a;
+    }
+
+    /* Links */
+    #popupWindowContent a { color: #43B3CF; }
+    #popupWindowContent a:hover { color: #779D2A; }
+
+    /* Submit button */
+    #popupWindowContent .submit {
+        background-color: #3a3a3a;
+        border-color: #555;
+        color: #e0e0e0;
+    }
+
+    /* Infopage */
+    div.infobox div.mapobj {
+        background-color: #2a2a2a;
+        border-color: #444;
+    }
+
+    div.infobox table.rotation {
+        background-color: #2a2a2a;
+    }
+
+    div.infobox table.rotation td {
+        border-color: #444;
+    }
+
+    div.infopage > table {
+        background-color: #2a2a2a;
+    }
+
+    div.infopage > table td,
+    div.infopage > table th {
+        border-color: #444;
+        color: #e0e0e0;
+    }
+
+    /* Worldmap icon */
+    .leaflet-div-icon {
+        background: #2a2a2a;
+        border-color: #666;
+    }
+}
