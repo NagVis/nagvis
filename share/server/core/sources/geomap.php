@@ -396,7 +396,10 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
     $map_config[0]['map_image'] = $image_name . '?' . time() . '.png';
     $map_config[0]['iconset'] = $iconset;
 
-    // Now add the objects to the map
+    // Now add the objects to the map.
+    // Keep lat/long in a separate array so they never enter $map_config and
+    // cannot leak as dynamic properties onto NagVisHost objects (PHP 8.2+).
+    $coords = [];
     foreach ($locations as $loc) {
         $object_id = $MAPCFG->genObjId($loc['name']);
         $map_config[$object_id] = [
@@ -405,18 +408,21 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
             'iconset' => $iconset,
             'object_id' => $object_id,
             'alias' => $loc['alias'],
-            'lat' => $loc['lat'],
-            'long' => $loc['long'],
         ];
 
         if (isset($loc['backend_id'])) {
             $map_config[$object_id]['backend_id'] = [$loc['backend_id']];
         }
+
+        $coords[$object_id] = ['lat' => $loc['lat'], 'long' => $loc['long']];
     }
     unset($locations);
 
     // Now apply the filters. Though the map can be scaled by the filtered hosts
     process_filter($MAPCFG, $map_name, $map_config, $params);
+
+    // Keep coords in sync with the filtered map_config
+    $coords = array_intersect_key($coords, $map_config);
 
     // Terminate empty views
     if (count($map_config) <= 1) {
@@ -431,23 +437,19 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
     // east/west
     $min_long = 180;
     $max_long = -180;
-    foreach ($map_config as $obj) {
-        if ($obj['type'] == 'global') {
-            continue;
+    foreach ($coords as $c) {
+        if ($c['lat'] < $min_lat) {
+            $min_lat = $c['lat'];
+        }
+        if ($c['lat'] > $max_lat) {
+            $max_lat = $c['lat'];
         }
 
-        if ($obj['lat'] < $min_lat) {
-            $min_lat = $obj['lat'];
+        if ($c['long'] < $min_long) {
+            $min_long = $c['long'];
         }
-        if ($obj['lat'] > $max_lat) {
-            $max_lat = $obj['lat'];
-        }
-
-        if ($obj['long'] < $min_long) {
-            $min_long = $obj['long'];
-        }
-        if ($obj['long'] > $max_long) {
-            $max_long = $obj['long'];
+        if ($c['long'] > $max_long) {
+            $max_long = $c['long'];
         }
     }
 
@@ -540,25 +542,24 @@ function process_geomap($MAPCFG, $map_name, &$map_config)
     $lat_mult = $params['height'] / (ProjectF($img_top) - ProjectF($img_down));
 
     // Now add the coordinates to the map objects
-    foreach ($map_config as &$obj) {
-        if (!isset($obj['lat'])) {
+    foreach ($map_config as $object_id => &$obj) {
+        if (!isset($coords[$object_id])) {
             continue;
         }
 
+        $c = $coords[$object_id];
+
         // Calculate the lat (y) coords
-        $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * $lat_mult - ($icon_h / 2));
+        $obj['y'] = round((ProjectF($img_top) - ProjectF($c['lat'])) * $lat_mult - ($icon_h / 2));
         if ($obj['y'] < 0) {
             $obj['y'] = 0;
         }
 
         // Calculate the long (x) coords
-        $obj['x'] = round(($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2));
+        $obj['x'] = round(($long_para * ($c['long'] - $img_left)) - ($icon_w / 2));
         if ($obj['x'] < 0) {
             $obj['x'] = 0;
         }
-
-        unset($obj['lat']);
-        unset($obj['long']);
     }
 
     return true; // allow caching
