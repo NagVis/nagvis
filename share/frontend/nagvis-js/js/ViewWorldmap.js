@@ -127,7 +127,7 @@ var ViewWorldmap = ViewMap.extend({
         this.render(); // re-render the whole map
 
         // Put the new map view coords into URL (location) - consistent reloads
-        new_center = g_map.getCenter();
+        var new_center = g_map.getCenter();
         window.location.hash = new_center.lng + "/" + new_center.lat + "/" + g_map.getZoom();
     },
 
