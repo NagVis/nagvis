@@ -20,3 +20,15 @@ jobs:
         name: PHPStan Static Analysis
         with:
           path: .
+
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Prettier format check
+        run: npm run format:check

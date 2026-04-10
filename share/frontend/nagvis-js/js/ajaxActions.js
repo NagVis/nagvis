@@ -1,22 +1,30 @@
 function getMidOfAnchor(oObj) {
-    return [ oObj.x + parseInt(oObj.style.width)  / 2,
-             oObj.y + parseInt(oObj.style.height) / 2 ];
+    return [oObj.x + parseInt(oObj.style.width) / 2, oObj.y + parseInt(oObj.style.height) / 2];
 }
 
 function saveObjectAttr(objId, attr) {
-    var urlPart = '';
+    var urlPart = "";
     for (var key in attr)
         // parseInt() returned NaN, because value was set to "auto";
         // but also allow relative coordinate strings (contain '%')
-        if ( ! isNaN(attr[key]) || isRelativeCoord(attr[key]) )
-            urlPart += '&' + key + '=' + escapeUrlValues(attr[key]);
+        if (!isNaN(attr[key]) || isRelativeCoord(attr[key])) urlPart += "&" + key + "=" + escapeUrlValues(attr[key]);
 
-    call_ajax(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
-              + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId) + urlPart);
+    call_ajax(
+        oGeneralProperties.path_server +
+            "?mod=Map&act=modifyObject&map=" +
+            escapeUrlValues(oPageProperties.map_name) +
+            "&id=" +
+            escapeUrlValues(objId) +
+            urlPart
+    );
 }
 
 function saveObjectRemove(objId) {
-    call_ajax(oGeneralProperties.path_server + '?mod=Map&act=deleteObject&map='
-              + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId));
-
+    call_ajax(
+        oGeneralProperties.path_server +
+            "?mod=Map&act=deleteObject&map=" +
+            escapeUrlValues(oPageProperties.map_name) +
+            "&id=" +
+            escapeUrlValues(objId)
+    );
 }

@@ -22,17 +22,17 @@
  *****************************************************************************/
 
 var ViewUrl = View.extend({
-    type: 'url',
-    constructor: function(id) {
+    type: "url",
+    constructor: function (id) {
         this.base(id);
     },
 
-    init: function() {
+    init: function () {
         this.render();
         hideStatusMessage();
     },
 
-    update: function() {
+    update: function () {
         // Fetches the contents from the server and prints it to the page
         this.render();
     },
@@ -42,19 +42,17 @@ var ViewUrl = View.extend({
      */
 
     // Fetches the contents of the given url and prints it on the current page
-    render: function() {
+    render: function () {
         var url = oPageProperties.url;
-        this.dom_obj = document.getElementById('url');
-        if (this.dom_obj.tagName == 'DIV') {
+        this.dom_obj = document.getElementById("url");
+        if (this.dom_obj.tagName == "DIV") {
             // Fetch contents from server
-            call_ajax(oGeneralProperties.path_server + '?mod=Url&act=getContents&show='
-                      + escapeUrlValues(url), {
-                response_handler: function(response) {
+            call_ajax(oGeneralProperties.path_server + "?mod=Url&act=getContents&show=" + escapeUrlValues(url), {
+                response_handler: function (response) {
                     this.dom_obj.innerHTML = response.content;
-                }.bind(this),
+                }.bind(this)
             });
-        }
-        else {
+        } else {
             // iframe
             this.dom_obj.src = url;
         }

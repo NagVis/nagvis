@@ -28,27 +28,26 @@
 var _eventlog = null;
 
 var oSeverity = {
-    'debug':    4,
-    'info':     3,
-    'warning':  2,
-    'critical': 1,
-    'error':    1
+    debug: 4,
+    info: 3,
+    warning: 2,
+    critical: 1,
+    error: 1
 };
 
 function eventlogToggle(store) {
-    var oLog = document.getElementById('eventlog');
-    var oLogControl = document.getElementById('eventlogControl');
+    var oLog = document.getElementById("eventlog");
+    var oLogControl = document.getElementById("eventlogControl");
 
-    if(store === true)
-        storeUserOption('eventlog', oLog.style.display == 'none');
+    if (store === true) storeUserOption("eventlog", oLog.style.display == "none");
 
-    if(oLog.style.display != 'none') {
-        oLog.style.display = 'none';
-        oLogControl.style.bottom = '0px';
+    if (oLog.style.display != "none") {
+        oLog.style.display = "none";
+        oLogControl.style.bottom = "0px";
     } else {
-        oLog.style.display = '';
-        oLog.style.height = oPageProperties.event_log_height+'px';
-        oLogControl.style.bottom = (parseInt(oPageProperties.event_log_height, 10)+5)+'px';
+        oLog.style.display = "";
+        oLog.style.height = oPageProperties.event_log_height + "px";
+        oLogControl.style.bottom = parseInt(oPageProperties.event_log_height, 10) + 5 + "px";
     }
 
     oLog = null;
@@ -63,24 +62,24 @@ function eventlogToggle(store) {
  */
 function eventlogInitialize() {
     var doc = document;
-    var oEventlog = doc.createElement('div');
-    oEventlog.setAttribute("id","eventlog");
-    oEventlog.style.overflow = 'auto';
-    oEventlog.style.height = oPageProperties.event_log_height+'px';
+    var oEventlog = doc.createElement("div");
+    oEventlog.setAttribute("id", "eventlog");
+    oEventlog.style.overflow = "auto";
+    oEventlog.style.height = oPageProperties.event_log_height + "px";
 
-    var oEventlogControl = doc.createElement('div');
-    oEventlogControl.setAttribute("id","eventlogControl");
-    oEventlogControl.style.bottom = (parseInt(oPageProperties.event_log_height, 10)+5)+'px';
-    oEventlogControl.appendChild(doc.createTextNode('_'));
-    oEventlogControl.onmouseover = function() {
-        document.body.style.cursor='pointer';
+    var oEventlogControl = doc.createElement("div");
+    oEventlogControl.setAttribute("id", "eventlogControl");
+    oEventlogControl.style.bottom = parseInt(oPageProperties.event_log_height, 10) + 5 + "px";
+    oEventlogControl.appendChild(doc.createTextNode("_"));
+    oEventlogControl.onmouseover = function () {
+        document.body.style.cursor = "pointer";
     };
 
-    oEventlogControl.onmouseout = function() {
-        document.body.style.cursor='auto';
+    oEventlogControl.onmouseout = function () {
+        document.body.style.cursor = "auto";
     };
 
-    oEventlogControl.onclick = function() {
+    oEventlogControl.onclick = function () {
         eventlogToggle(true);
     };
 
@@ -90,8 +89,10 @@ function eventlogInitialize() {
     oEventlogControl = null;
 
     // Hide eventlog when configured
-    if((typeof(oUserProperties.eventlog) !== 'undefined' && oUserProperties.eventlog === false)
-       || oPageProperties.event_log_hidden == 1)
+    if (
+        (typeof oUserProperties.eventlog !== "undefined" && oUserProperties.eventlog === false) ||
+        oPageProperties.event_log_hidden == 1
+    )
         eventlogToggle(false);
 
     _eventlog = oEventlog;
@@ -112,24 +113,33 @@ function eventlogInitialize() {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function eventlog(sComponent, sSeverity, sText) {
-    if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null && oPageProperties.event_log && oPageProperties.event_log != '0') {
+    if (
+        typeof oPageProperties != "undefined" &&
+        oPageProperties !== null &&
+        oPageProperties.event_log &&
+        oPageProperties.event_log != "0"
+    ) {
         var doc = document;
 
-        if(_eventlog === null) {
+        if (_eventlog === null) {
             eventlogInitialize();
-            eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
+            eventlog("eventlog", "info", "Eventlog initialized (Level: " + oPageProperties.event_log_level + ")");
         }
         var oEventlog = _eventlog;
 
-        if(typeof oSeverity[sSeverity] === 'undefined') {
-            eventlog('eventlog', 'error', 'Unknown severity used, skipping: '+sSeverity+' '+sComponent+': '+sText)
+        if (typeof oSeverity[sSeverity] === "undefined") {
+            eventlog(
+                "eventlog",
+                "error",
+                "Unknown severity used, skipping: " + sSeverity + " " + sComponent + ": " + sText
+            );
             oEventlog = null;
         }
 
-        if(oSeverity[sSeverity] <= oSeverity[oPageProperties.event_log_level]) {
+        if (oSeverity[sSeverity] <= oSeverity[oPageProperties.event_log_level]) {
             // When the message limit is reached truncate the first log entry
             // 24 lines is the current limit
-            if(oEventlog.childNodes && oEventlog.childNodes.length >= oPageProperties.event_log_events * 2) {
+            if (oEventlog.childNodes && oEventlog.childNodes.length >= oPageProperties.event_log_events * 2) {
                 // Remove line
                 oEventlog.removeChild(oEventlog.firstChild);
 
@@ -138,14 +148,14 @@ function eventlog(sComponent, sSeverity, sText) {
             }
 
             // Format the new log entry
-            var oEntry = doc.createTextNode(getCurrentTime()+" "+sSeverity+" "+sComponent+": "+sText);
+            var oEntry = doc.createTextNode(getCurrentTime() + " " + sSeverity + " " + sComponent + ": " + sText);
 
             // Append new message to log
             oEventlog.appendChild(oEntry);
             oEntry = null;
 
             // Add line break after the line
-            oEventlog.appendChild(doc.createElement('br'));
+            oEventlog.appendChild(doc.createElement("br"));
 
             // Scroll down
             oEventlog.scrollTop = oEventlog.scrollHeight;

@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 var NagVisHostgroup = NagVisStatefulObject.extend({
-    constructor: function(oConf) {
+    constructor: function (oConf) {
         this.base(oConf);
     }
 });

@@ -22,14 +22,14 @@
  *****************************************************************************/
 
 var ElementIcon = Element.extend({
-    render: function() {
+    render: function () {
         this.renderIcon();
     },
 
     // Moves the icon to it's location as described by this js object
     place: function () {
-        this.dom_obj.style.top  = this.obj.parseCoord(this.obj.conf.y, 'y') + 'px';
-        this.dom_obj.style.left = this.obj.parseCoord(this.obj.conf.x, 'x') + 'px';
+        this.dom_obj.style.top = this.obj.parseCoord(this.obj.conf.y, "y") + "px";
+        this.dom_obj.style.left = this.obj.parseCoord(this.obj.conf.x, "x") + "px";
     },
 
     unlock: function () {
@@ -48,15 +48,13 @@ var ElementIcon = Element.extend({
 
     // Renders the object as icon and returns the icon container js object
     renderIcon: function () {
-        var alt = '';
-        if(this.obj.conf.type == 'service')
-            alt = this.obj.conf.name+'-'+this.obj.conf.service_description;
-        else
-            alt = this.obj.conf.name;
+        var alt = "";
+        if (this.obj.conf.type == "service") alt = this.obj.conf.name + "-" + this.obj.conf.service_description;
+        else alt = this.obj.conf.name;
 
-        var oIcon = document.createElement('img');
-        oIcon.setAttribute('id', this.obj.conf.object_id+'-icon');
-        oIcon.className = 'icon';
+        var oIcon = document.createElement("img");
+        oIcon.setAttribute("id", this.obj.conf.object_id + "-icon");
+        oIcon.className = "icon";
         this.obj.trigger_obj = oIcon;
 
         // When no icon size is configured, the native size of the image is used.
@@ -71,35 +69,39 @@ var ElementIcon = Element.extend({
                 var w = parseInt(size[0]),
                     h = parseInt(size[1]);
             }
-            oIcon.style.width = w + 'px';
-            oIcon.style.height = h + 'px';
+            oIcon.style.width = w + "px";
+            oIcon.style.height = h + "px";
         }
 
         // Register controls reposition handler to handle resizes during
         // loading the image (from alt="" text to the real image)
-        addEvent(oIcon, 'load', function(obj) {
-            return function() {
-                obj.place();
-                obj = null;
-            };
-        }(this.obj));
+        addEvent(
+            oIcon,
+            "load",
+            (function (obj) {
+                return function () {
+                    obj.place();
+                    obj = null;
+                };
+            })(this.obj)
+        );
 
         addZoomHandler(oIcon);
 
-        var oIconDiv = document.createElement('div');
+        var oIconDiv = document.createElement("div");
         this.dom_obj = oIconDiv;
         this.place();
 
-        oIconDiv.setAttribute('id', this.obj.conf.object_id+'-icondiv');
-        oIconDiv.className = 'icondiv';
+        oIconDiv.setAttribute("id", this.obj.conf.object_id + "-icondiv");
+        oIconDiv.className = "icondiv";
         oIconDiv.style.zIndex = this.obj.conf.z;
 
         oIcon.src = oGeneralProperties.path_iconsets + this.obj.conf.icon;
-        oIcon.alt = this.obj.conf.type + '-' + alt;
+        oIcon.alt = this.obj.conf.type + "-" + alt;
 
         // Parse link only when set
-        if (this.obj.conf.url && this.obj.conf.url !== '' && this.obj.conf.url !== '#') {
-            var oIconLink = document.createElement('a');
+        if (this.obj.conf.url && this.obj.conf.url !== "" && this.obj.conf.url !== "#") {
+            var oIconLink = document.createElement("a");
             oIconLink.href = this.obj.conf.url;
             oIconLink.target = this.obj.conf.url_target;
             oIconLink.appendChild(oIcon);
@@ -108,5 +110,4 @@ var ElementIcon = Element.extend({
             oIconDiv.appendChild(oIcon);
         }
     }
-
 });

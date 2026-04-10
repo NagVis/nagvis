@@ -40,14 +40,14 @@ var dragObj = null;
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function movemouse(e) {
- if(bDragging) {
-   dragObj.style.left = popupNN6 ? (pwTx + e.clientX - pwX) + 'px' : (pwTx + event.clientX - pwX) + 'px';
-   dragObj.style.top  = popupNN6 ? (pwTy + e.clientY - pwY) + 'px' : (pwTy + event.clientY - pwY) + 'px';
+    if (bDragging) {
+        dragObj.style.left = popupNN6 ? pwTx + e.clientX - pwX + "px" : pwTx + event.clientX - pwX + "px";
+        dragObj.style.top = popupNN6 ? pwTy + e.clientY - pwY + "px" : pwTy + event.clientY - pwY + "px";
 
-   return false;
- }
+        return false;
+    }
 
- return true;
+    return true;
 }
 
 /**
@@ -62,40 +62,38 @@ function movemouse(e) {
 function selectmouse(e) {
     bDragging = true;
 
-    dragObj = document.getElementById('popupWindow');
+    dragObj = document.getElementById("popupWindow");
 
-    pwTx = parseInt(dragObj.style.left+0, 10);
-    pwTy = parseInt(dragObj.style.top+0, 10);
+    pwTx = parseInt(dragObj.style.left + 0, 10);
+    pwTy = parseInt(dragObj.style.top + 0, 10);
     pwX = popupNN6 ? e.clientX : event.clientX;
     pwY = popupNN6 ? e.clientY : event.clientY;
 
     // Register the popup window handling on the body element
     // The document.onmousemove is used by the hover menu
-    document.body.onmousemove=movemouse;
+    document.body.onmousemove = movemouse;
 
     return false;
 }
 
 function popupWindowClose() {
-    var w = document.getElementById('popupWindow');
-    if (w)
-        document.body.removeChild(w);
+    var w = document.getElementById("popupWindow");
+    if (w) document.body.removeChild(w);
 
     // Some windows use the jscolor color picker. It might be visible while
     // a user closes the window. All eventual open color pickers are opened
     // within popup windows. So it is safe to close all color pickers when
     // closing a window
-    if (jscolor.picker && jscolor.picker.owner)
-        jscolor.picker.owner.hidePicker();
+    if (jscolor.picker && jscolor.picker.owner) jscolor.picker.owner.hidePicker();
 }
 
 function popupWindowPutContent(oContent) {
-    if(oContent === null || oContent.code === null) {
+    if (oContent === null || oContent.code === null) {
         return false;
     }
 
-    var oCell = document.getElementById('popupWindowContent');
-    if(oCell) {
+    var oCell = document.getElementById("popupWindowContent");
+    if (oCell) {
         oCell.innerHTML = oContent.code;
         executeJS(oCell);
     }
@@ -103,57 +101,55 @@ function popupWindowPutContent(oContent) {
 
 // Creates a javascript dialog
 function popupWindow(title, oContent, sWidth, closable) {
-    if(oContent === null || oContent.code === null)
-        return false;
+    if (oContent === null || oContent.code === null) return false;
 
-    if (typeof closable === 'undefined')
-        closable = true;
+    if (typeof closable === "undefined") closable = true;
 
     // Maybe some other window is still open. Close it now
     popupWindowClose();
 
     // Default window position
-    var posX = getScrollLeft() + (pageWidth()/2 - sWidth/2);
+    var posX = getScrollLeft() + (pageWidth() / 2 - sWidth / 2);
     var posY = getScrollTop() + 50;
 
-    var oContainerDiv = document.createElement('div');
-    oContainerDiv.setAttribute('id', 'popupWindow');
-    oContainerDiv.style.left = posX+'px';
-    oContainerDiv.style.top = posY+'px';
-    oContainerDiv.style.width = sWidth+'px';
+    var oContainerDiv = document.createElement("div");
+    oContainerDiv.setAttribute("id", "popupWindow");
+    oContainerDiv.style.left = posX + "px";
+    oContainerDiv.style.top = posY + "px";
+    oContainerDiv.style.width = sWidth + "px";
 
     oContainerDiv.url = oContent.url;
 
     // Render the close button
     if (closable) {
-        var oClose = document.createElement('div');
-        oClose.className = 'close';
+        var oClose = document.createElement("div");
+        oClose.className = "close";
 
-        oClose.onclick = function() {
+        oClose.onclick = function () {
             popupWindowClose();
             return false;
         };
 
-        oClose.appendChild(document.createTextNode('x'));
+        oClose.appendChild(document.createTextNode("x"));
         oContainerDiv.appendChild(oClose);
         oClose = null;
     }
 
     // Render the window title
-    var oTitle = document.createElement('h1');
+    var oTitle = document.createElement("h1");
     oTitle.appendChild(document.createTextNode(title));
 
     // Make title the drag window handler
     oTitle.onmousedown = selectmouse;
-    oTitle.onmouseup = function() {
+    oTitle.onmouseup = function () {
         bDragging = false;
     };
 
     oContainerDiv.appendChild(oTitle);
     oTitle = null;
 
-    var content = document.createElement('div');
-    content.setAttribute('id', 'popupWindowContent');
+    var content = document.createElement("div");
+    content.setAttribute("id", "popupWindowContent");
     oContainerDiv.appendChild(content);
     content = null;
 

@@ -22,19 +22,19 @@
  *****************************************************************************/
 
 var NagVisTextbox = NagVisStatelessObject.extend({
-    update: function() {
+    update: function () {
         this.clearElements();
         new ElementBox(this).addTo(this);
         this.base();
     },
 
     replaceMacros: function (text) {
-        text = text.replace('[refresh_counter]', '<font id="refreshCounter"></font>');
-        text = text.replace('[worker_last_run]', '<font id="workerLastRunCounter"></font>');
+        text = text.replace("[refresh_counter]", '<font id="refreshCounter"></font>');
+        text = text.replace("[worker_last_run]", '<font id="workerLastRunCounter"></font>');
         return text;
     },
 
-    getText: function() {
+    getText: function () {
         return this.replaceMacros(this.conf.text);
     }
 });

@@ -23,28 +23,27 @@
 
 var Element = Base.extend({
     // Holds the NagVis object which this element is associated with
-    obj     : null,
+    obj: null,
     // Holds the root dom object of this element
-    dom_obj : null,
+    dom_obj: null,
 
-    constructor: function(obj) {
+    constructor: function (obj) {
         this.obj = obj;
     },
 
     // Is called once when the object is being initialized and
     // on every time the config has changed. It's task is to
     // initialize this element and all eventual sub elements
-    update: function() {},
+    update: function () {},
 
     // Is called on every state/config update. For the most objects
     // this re-renders the element on each non state update.
-    updateAttrs: function(only_state, is_locked) {
+    updateAttrs: function (only_state, is_locked) {
         if (!only_state) {
             this.erase();
             this.render();
 
-            if (!is_locked)
-                this.unlock();
+            if (!is_locked) this.unlock();
 
             this.draw();
         }
@@ -53,50 +52,48 @@ var Element = Base.extend({
     // Is called to draw this elements DOM nodes this is called
     // once during initializaton and whenever the parent element
     // is redrawn, for example during a state update.
-    render: function() {},
+    render: function () {},
 
     // Is called to update the position of this elements DOM node.
     // It is called during movements of the objects and some of
     // the objects call it within the render() function to place
     // the objects during render() processing.
-    place: function() {},
+    place: function () {},
 
     // Is called by the parent element to add this elements DOM
     // object to the parent elements DOM object
-    draw: function() {
-        if (this.dom_obj && !this.dom_obj.parentNode)
-            this.obj.dom_obj.appendChild(this.dom_obj);
+    draw: function () {
+        if (this.dom_obj && !this.dom_obj.parentNode) this.obj.dom_obj.appendChild(this.dom_obj);
     },
 
     // Is called by the parent element to remove this elements DOM
     // object from the parent elements DOM object. This is the counterpart
     // of the draw() method.
-    erase: function() {
+    erase: function () {
         // FIXME: Remove all possible event handlers. Just to be
         // sure to prevent memory leaks
 
-        if (this.dom_obj && this.dom_obj.parentNode)
-            this.obj.dom_obj.removeChild(this.dom_obj);
+        if (this.dom_obj && this.dom_obj.parentNode) this.obj.dom_obj.removeChild(this.dom_obj);
     },
 
     // When the object is intially locked this is called once
     // during initialization and whenever the object shal be
     // locked
-    lock: function() {},
+    lock: function () {},
 
     // When the object is intially unlocked this is called once
     // during initialization and whenever the object shal be
     // unlocked
-    unlock: function() {},
+    unlock: function () {},
 
     // Is called to add this element to the parent element
-    addTo: function(obj) {
+    addTo: function (obj) {
         obj.addElement(this);
         return this;
     },
 
     // Is called to remove this element from the parent element
-    removeFrom: function(obj) {
+    removeFrom: function (obj) {
         obj.removeElement(this);
         return this;
     },
@@ -106,21 +103,20 @@ var Element = Base.extend({
     //
 
     // This enables/disables the the object left click action (link)
-    toggleLink: function(enable) {
-	if (enable) {
-            if (this.obj.trigger_obj.parentNode.tagName == 'A') {
+    toggleLink: function (enable) {
+        if (enable) {
+            if (this.obj.trigger_obj.parentNode.tagName == "A") {
                 this.obj.trigger_obj.parentNode.onclick = null;
             }
-	} else if (!enable) {
-            if (this.obj.trigger_obj.parentNode.tagName == 'A') {
-                this.obj.trigger_obj.parentNode.onclick = function(event) {
+        } else if (!enable) {
+            if (this.obj.trigger_obj.parentNode.tagName == "A") {
+                this.obj.trigger_obj.parentNode.onclick = function (event) {
                     var event = !event ? window.event : event;
-                    if(event.stopPropagation)
-                        event.stopPropagation();
+                    if (event.stopPropagation) event.stopPropagation();
                     event.cancelBubble = true;
                     return false;
                 };
             }
-	}
+        }
     }
 });

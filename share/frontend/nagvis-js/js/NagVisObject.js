@@ -22,75 +22,66 @@
  *****************************************************************************/
 
 var NagVisObject = Base.extend({
-    dom_obj:               null,
-    trigger_obj:           null,
-    visible:               false, // currently shown on the map?
-    conf:                  null,
-    lastUpdate:            null,
-    firstUpdate:           null,
-    bIsFlashing:           false,
-    bIsLocked:             true,
-    childs:                null,
+    dom_obj: null,
+    trigger_obj: null,
+    visible: false, // currently shown on the map?
+    conf: null,
+    lastUpdate: null,
+    firstUpdate: null,
+    bIsFlashing: false,
+    bIsLocked: true,
+    childs: null,
     // Holds all drawable GUI elements
-    elements:              null,
+    elements: null,
 
-    constructor: function(conf) {
+    constructor: function (conf) {
         this.setLastUpdate();
 
-        this.childs      = [];
-        this.elements    = [];
-        this.conf        = conf;
+        this.childs = [];
+        this.elements = [];
+        this.conf = conf;
 
-        if (this.conf.x) // exclude map summary object
+        if (this.conf.x)
+            // exclude map summary object
             this.transformCoordinates();
 
         // When no object_id given by server: generate own id
-        if (this.conf.object_id == null)
-            this.conf.object_id = getRandomLowerCaseLetter() + getRandom(1, 99999);
+        if (this.conf.object_id == null) this.conf.object_id = getRandomLowerCaseLetter() + getRandom(1, 99999);
 
         // Load lock options
         this.loadLocked();
         this.loadViewOpts();
     },
 
-    update: function() {
+    update: function () {
         // All objects need a context menu
         // (some in all states and some only unlocked)
-        if (this.needsContextMenu())
-            new ElementContext(this).addTo(this);
+        if (this.needsContextMenu()) new ElementContext(this).addTo(this);
 
-        if (this.needsHoverMenu())
-            new ElementHover(this).addTo(this);
+        if (this.needsHoverMenu()) new ElementHover(this).addTo(this);
 
-        if (this.conf.label_show && this.conf.label_show == '1')
-            new ElementLabel(this).addTo(this);
+        if (this.conf.label_show && this.conf.label_show == "1") new ElementLabel(this).addTo(this);
 
-        for (var i = 0; i < this.elements.length; i++)
-            this.elements[i].update();
+        for (var i = 0; i < this.elements.length; i++) this.elements[i].update();
     },
 
     // The counterpart of update(). Remove the elements added
     // by update. This is used to clean up to prepare a subsequent
     // call of update
-    clearElements: function() {
-        for (var i = 0; i < this.elements.length; i++)
-            this.elements[i].removeFrom(this);
+    clearElements: function () {
+        for (var i = 0; i < this.elements.length; i++) this.elements[i].removeFrom(this);
     },
 
-    updateAttrs: function(attrs, only_state) {
+    updateAttrs: function (attrs, only_state) {
         // Update this object (loop all options from array and set in current obj)
-        for (var key in attrs)
-            if (key != 'object_id')
-                this.conf[key] = attrs[key];
+        for (var key in attrs) if (key != "object_id") this.conf[key] = attrs[key];
 
         if (!only_state) {
             this.transformAttributes();
-            if (this.conf.x)
-                this.transformCoordinates();
+            if (this.conf.x) this.transformCoordinates();
         }
 
-        for (var i = 0; i < this.elements.length; i++)
-            this.elements[i].updateAttrs(only_state, this.bIsLocked);
+        for (var i = 0; i < this.elements.length; i++) this.elements[i].updateAttrs(only_state, this.bIsLocked);
 
         if (!only_state && this.conf.x) {
             this.clearElements();
@@ -103,15 +94,15 @@ var NagVisObject = Base.extend({
         this.setLastUpdate();
     },
 
-    transformAttributes: function() {},
+    transformAttributes: function () {},
 
     // Renders the current object and all it's elements
     render: function () {
         this.erase();
 
         // Create container div
-        var container = document.createElement('div');
-        container.setAttribute('id', this.conf.object_id);
+        var container = document.createElement("div");
+        container.setAttribute("id", this.conf.object_id);
 
         // Save reference to DOM obj in js obj
         this.dom_obj = container;
@@ -132,39 +123,34 @@ var NagVisObject = Base.extend({
         // The line labels need a) the line added to DOM and b) the label added
         // to the dom before being able to calculate the correct coordinates
         // needed in place().
-        if (this.conf.type == 'line' || this.conf.view_type == 'line')
-            for (var i = 0; i < this.elements.length; i++)
-                this.elements[i].place();
+        if (this.conf.type == "line" || this.conf.view_type == "line")
+            for (var i = 0; i < this.elements.length; i++) this.elements[i].place();
     },
 
-    draw: function() {
-        for (var i = 0; i < this.elements.length; i++)
-            this.elements[i].draw(this);
+    draw: function () {
+        for (var i = 0; i < this.elements.length; i++) this.elements[i].draw(this);
         this.visible = true;
     },
 
     erase: function () {
-        if (!this.visible)
-            return;
+        if (!this.visible) return;
 
-        for (var i = 0; i < this.elements.length; i++)
-            this.elements[i].erase(this);
+        for (var i = 0; i < this.elements.length; i++) this.elements[i].erase(this);
 
         g_view.eraseObject(this);
         this.visible = false;
     },
 
-    remove: function() {
+    remove: function () {
         this.erase();
     },
 
-    addElement: function(obj) {
-        if(this.elements.indexOf(obj) === -1)
-            this.elements.push(obj);
+    addElement: function (obj) {
+        if (this.elements.indexOf(obj) === -1) this.elements.push(obj);
         obj = null;
     },
 
-    removeElement: function(obj) {
+    removeElement: function (obj) {
         this.elements.splice(this.elements.indexOf(obj), 1);
         obj = null;
     },
@@ -177,21 +163,19 @@ var NagVisObject = Base.extend({
      * "edit_mode". In this case all map objects are unlocked but this
      * state is not saved to the user properties.
      */
-    loadLocked: function() {
+    loadLocked: function () {
         // Editing is only possible in maps
-        if (g_view.type != 'map')
-            return;
+        if (g_view.type != "map") return;
 
-        if (!oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
-            return;
+        if (!oUserProperties.hasOwnProperty("unlocked-" + oPageProperties.map_name)) return;
 
-        if (oViewProperties.hasOwnProperty('edit_mode') && oViewProperties['edit_mode'] === true) {
+        if (oViewProperties.hasOwnProperty("edit_mode") && oViewProperties["edit_mode"] === true) {
             this.bIsLocked = false;
             return;
         }
 
-        var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
-        this.bIsLocked = unlocked.indexOf(this.conf.object_id) === -1 && unlocked.indexOf('*') === -1;
+        var unlocked = oUserProperties["unlocked-" + oPageProperties.map_name].split(",");
+        this.bIsLocked = unlocked.indexOf(this.conf.object_id) === -1 && unlocked.indexOf("*") === -1;
     },
 
     /**
@@ -201,17 +185,16 @@ var NagVisObject = Base.extend({
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    loadViewOpts: function() {
+    loadViewOpts: function () {
         // Do not load the view options for stateless lines
-        if(this.conf.type == 'line')
-            return;
+        if (this.conf.type == "line") return;
 
         // View specific hover modifier set. Will override the map configured option
-        if(isset(oViewProperties) && isset(oViewProperties.hover_menu))
+        if (isset(oViewProperties) && isset(oViewProperties.hover_menu))
             this.conf.hover_menu = oViewProperties.hover_menu;
 
         // View specific context modifier set. Will override the map configured option
-        if(isset(oViewProperties) && isset(oViewProperties.context_menu))
+        if (isset(oViewProperties) && isset(oViewProperties.context_menu))
             this.conf.context_menu = oViewProperties.context_menu;
     },
 
@@ -222,30 +205,24 @@ var NagVisObject = Base.extend({
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    setLastUpdate: function() {
+    setLastUpdate: function () {
         this.lastUpdate = iNow;
 
         // Save datetime of the first state update (needed for hover parsing)
-        if(this.firstUpdate === null)
-            this.firstUpdate = this.lastUpdate;
+        if (this.firstUpdate === null) this.firstUpdate = this.lastUpdate;
     },
 
-    transformCoordinates: function() {
-        var converted = g_view.project(
-            this.conf.x.toString().split(','),
-            this.conf.y.toString().split(','));
-        this.conf.x = converted[0].join(',');
-        this.conf.y = converted[1].join(',');
+    transformCoordinates: function () {
+        var converted = g_view.project(this.conf.x.toString().split(","), this.conf.y.toString().split(","));
+        this.conf.x = converted[0].join(",");
+        this.conf.y = converted[1].join(",");
     },
 
-    getLineMid: function(coord, dir) {
-        var c = coord.split(',');
-        if(c.length == 2)
-            return middle(this.parseCoords(coord, dir)[0],
-                          this.parseCoords(coord, dir)[1],
-                          this.conf.line_cut);
-        else
-            return this.parseCoords(coord, dir)[1];
+    getLineMid: function (coord, dir) {
+        var c = coord.split(",");
+        if (c.length == 2)
+            return middle(this.parseCoords(coord, dir)[0], this.parseCoords(coord, dir)[1], this.conf.line_cut);
+        else return this.parseCoords(coord, dir)[1];
     },
 
     /**
@@ -254,72 +231,59 @@ var NagVisObject = Base.extend({
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    toggleLock: function(lock) {
+    toggleLock: function (lock) {
         var equal = false;
-        if(isset(lock) && lock === this.bIsLocked)
-            equal = true;
+        if (isset(lock) && lock === this.bIsLocked) equal = true;
 
-        if(isset(lock))
-            this.bIsLocked = lock;
-        else
-            this.bIsLocked = !this.bIsLocked;
+        if (isset(lock)) this.bIsLocked = lock;
+        else this.bIsLocked = !this.bIsLocked;
 
         for (var i = 0; i < this.elements.length; i++)
-            if (this.bIsLocked)
-                this.elements[i].lock();
-            else
-                this.elements[i].unlock();
+            if (this.bIsLocked) this.elements[i].lock();
+            else this.elements[i].unlock();
 
         // Only save the user option when not using the edit_mode
-        if (!isset(lock) && (!oViewProperties.hasOwnProperty('edit_mode') || oViewProperties['edit_mode'] !== true)) {
+        if (!isset(lock) && (!oViewProperties.hasOwnProperty("edit_mode") || oViewProperties["edit_mode"] !== true)) {
             var unlocked = [];
-            if(oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
-                unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
+            if (oUserProperties.hasOwnProperty("unlocked-" + oPageProperties.map_name))
+                unlocked = oUserProperties["unlocked-" + oPageProperties.map_name].split(",");
 
-            if(this.bIsLocked)
-                unlocked.splice(unlocked.indexOf(this.conf.object_id), 1);
-            else
-                unlocked.push(this.conf.object_id);
-            storeUserOption('unlocked-' + oPageProperties.map_name, unlocked.join(','));
+            if (this.bIsLocked) unlocked.splice(unlocked.indexOf(this.conf.object_id), 1);
+            else unlocked.push(this.conf.object_id);
+            storeUserOption("unlocked-" + oPageProperties.map_name, unlocked.join(","));
             unlocked = null;
         }
 
-        if (equal === true)
-            return 0;
-        else
-            return this.bIsLocked ? -1 : 1;
+        if (equal === true) return 0;
+        else return this.bIsLocked ? -1 : 1;
     },
 
     getObjLeft: function () {
-        if (this.conf.x.toString().split(',').length > 1) {
-            return Math.min.apply(Math, this.parseCoords(this.conf.x, 'x'));
+        if (this.conf.x.toString().split(",").length > 1) {
+            return Math.min.apply(Math, this.parseCoords(this.conf.x, "x"));
         } else {
-            return this.parseCoord(this.conf.x, 'x');
+            return this.parseCoord(this.conf.x, "x");
         }
     },
 
     getObjTop: function () {
-        if (this.conf.x.toString().split(',').length > 1) {
-            return Math.min.apply(Math, this.parseCoords(this.conf.y, 'y'));
+        if (this.conf.x.toString().split(",").length > 1) {
+            return Math.min.apply(Math, this.parseCoords(this.conf.y, "y"));
         } else {
-            return this.parseCoord(this.conf.y, 'y');
+            return this.parseCoord(this.conf.y, "y");
         }
     },
 
     getObjWidth: function () {
-        var o = document.getElementById(this.conf.object_id + '-icondiv');
-        if(o && o.clientWidth)
-            return parseInt(o.clientWidth);
-        else
-            return 0;
+        var o = document.getElementById(this.conf.object_id + "-icondiv");
+        if (o && o.clientWidth) return parseInt(o.clientWidth);
+        else return 0;
     },
 
     getObjHeight: function () {
-        var o = document.getElementById(this.conf.object_id + '-icondiv');
-        if(o && o.clientHeight)
-            return parseInt(o.clientHeight);
-        else
-            return 0;
+        var o = document.getElementById(this.conf.object_id + "-icondiv");
+        if (o && o.clientHeight) return parseInt(o.clientHeight);
+        else return 0;
     },
 
     /**
@@ -329,37 +293,31 @@ var NagVisObject = Base.extend({
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    parseCoord: function(val, dir, addZoom) {
-        if (addZoom === undefined)
-            addZoom = true;
+    parseCoord: function (val, dir, addZoom) {
+        if (addZoom === undefined) addZoom = true;
 
         var coord = 0;
 
-        if(!isRelativeCoord(val)) {
+        if (!isRelativeCoord(val)) {
             coord = parseInt(val);
         } else {
-            var parts     = val.split('%');
-            var objectId  = parts[0];
-            var offset    = parts[1];
-            var refObj    = getMapObjByDomObjId(objectId);
+            var parts = val.split("%");
+            var objectId = parts[0];
+            var offset = parts[1];
+            var refObj = getMapObjByDomObjId(objectId);
             if (refObj) {
                 coord = parseFloat(refObj.parseCoord(refObj.conf[dir], dir, false));
-                if (addZoom)
-                    coord = addZoomFactor(coord, true);
+                if (addZoom) coord = addZoomFactor(coord, true);
 
-                if (addZoom)
-                    coord += addZoomFactor(parseFloat(offset), false);
-                else
-                    coord += parseFloat(offset);
+                if (addZoom) coord += addZoomFactor(parseFloat(offset), false);
+                else coord += parseFloat(offset);
 
                 return coord;
             }
         }
 
-        if (addZoom)
-            return addZoomFactor(coord, true);
-        else
-            return coord;
+        if (addZoom) return addZoomFactor(coord, true);
+        else return coord;
     },
 
     /**
@@ -368,46 +326,43 @@ var NagVisObject = Base.extend({
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    parseCoords: function(val, dir, addZoom) {
+    parseCoords: function (val, dir, addZoom) {
         var l = [];
 
-	if(val)
-            l = val.toString().split(',');
+        if (val) l = val.toString().split(",");
 
-        for(var i = 0, len = l.length; i < len; i++)
-            l[i] = this.parseCoord(l[i], dir, addZoom);
+        for (var i = 0, len = l.length; i < len; i++) l[i] = this.parseCoord(l[i], dir, addZoom);
 
         return l;
     },
 
     // Transform the current coords to absolute coords when relative
-    makeAbsoluteCoords: function(num) {
-        var x = num === -1 ? this.conf.x : this.conf.x.split(',')[num];
-        var y = num === -1 ? this.conf.y : this.conf.y.split(',')[num];
+    makeAbsoluteCoords: function (num) {
+        var x = num === -1 ? this.conf.x : this.conf.x.split(",")[num];
+        var y = num === -1 ? this.conf.y : this.conf.y.split(",")[num];
 
         // Skip when already absolute
-        if(!isRelativeCoord(x) && !isRelativeCoord(y))
-            return;
+        if (!isRelativeCoord(x) && !isRelativeCoord(y)) return;
 
         // Get parent object ids
         var xParent = this.getCoordParent(this.conf.x, num);
         var yParent = this.getCoordParent(this.conf.y, num);
 
-        if(xParent == yParent) {
+        if (xParent == yParent) {
             var o = getMapObjByDomObjId(xParent);
             // Don't remove when another coord is a child of this object
-            if(o && Object.size(this.getRelativeCoordsUsingParent(xParent)) == 1) {
+            if (o && Object.size(this.getRelativeCoordsUsingParent(xParent)) == 1) {
                 o.delChild(this);
             }
         } else {
             var o = getMapObjByDomObjId(xParent);
             // Don't remove when another coord is a child of this object
-            if(o && Object.size(this.getRelativeCoordsUsingParent(xParent)) == 1) {
+            if (o && Object.size(this.getRelativeCoordsUsingParent(xParent)) == 1) {
                 o.delChild(this);
             }
             var o = getMapObjByDomObjId(yParent);
             // Don't remove when another coord is a child of this object
-            if(o && Object.size(this.getRelativeCoordsUsingParent(yParent)) == 1) {
+            if (o && Object.size(this.getRelativeCoordsUsingParent(yParent)) == 1) {
                 o.delChild(this);
             }
         }
@@ -415,46 +370,44 @@ var NagVisObject = Base.extend({
         // FIXME: Maybe the parent object is also a line. Then -1 is not correct
         //        But it is not coded to attach relative objects to lines. So it is no big
         //        deal to leave this as it is.
-        if(num === -1) {
-            this.conf.x = this.parseCoord(x, 'x', false);
-            this.conf.y = this.parseCoord(y, 'y', false);
+        if (num === -1) {
+            this.conf.x = this.parseCoord(x, "x", false);
+            this.conf.y = this.parseCoord(y, "y", false);
         } else {
-            var old  = this.conf.x.split(',');
-            old[num] = this.parseCoord(x, 'x', false);
-            this.conf.x = old.join(',');
+            var old = this.conf.x.split(",");
+            old[num] = this.parseCoord(x, "x", false);
+            this.conf.x = old.join(",");
 
-            old  = this.conf.y.split(',');
-            old[num] = this.parseCoord(y, 'y', false);
-            this.conf.y = old.join(',');
+            old = this.conf.y.split(",");
+            old[num] = this.parseCoord(y, "y", false);
+            this.conf.y = old.join(",");
         }
     },
 
     // Transform the current coords to relative
     // coords to the given object
-    makeRelativeCoords: function(oParent, num) {
+    makeRelativeCoords: function (oParent, num) {
         var xParent = this.getCoordParent(this.conf.x, num);
         var yParent = this.getCoordParent(this.conf.y, num);
 
-        var x = num === -1 ? this.conf.x : this.conf.x.split(',')[num];
-        var y = num === -1 ? this.conf.y : this.conf.y.split(',')[num];
+        var x = num === -1 ? this.conf.x : this.conf.x.split(",")[num];
+        var y = num === -1 ? this.conf.y : this.conf.y.split(",")[num];
 
-        if(isRelativeCoord(x) && isRelativeCoord(y)) {
+        if (isRelativeCoord(x) && isRelativeCoord(y)) {
             // Skip this when already relative to the same object
-            if(xParent == oParent.conf.object_id
-              && yParent == oParent.conf.object_id)
-                return;
+            if (xParent == oParent.conf.object_id && yParent == oParent.conf.object_id) return;
 
             // If this object was attached to another parent before, remove the attachment
-            if(xParent != oParent.conf.object_id) {
+            if (xParent != oParent.conf.object_id) {
                 var o = getMapObjByDomObjId(xParent);
-                if(o) {
+                if (o) {
                     o.delChild(this);
                     o = null;
                 }
             }
-            if(yParent != oParent.conf.object_id) {
+            if (yParent != oParent.conf.object_id) {
                 var o = getMapObjByDomObjId(yParent);
-                if(o) {
+                if (o) {
                     o.delChild(this);
                     o = null;
                 }
@@ -467,45 +420,43 @@ var NagVisObject = Base.extend({
         // FIXME: Maybe the parent object is also a line. Then -1 is not correct
         //        But it is not coded to attach relative objects to lines. So it is no big
         //        deal to leave this as it is.
-        if(num === -1) {
-            this.conf.x = this.getRelCoords(oParent, this.parseCoord(this.conf.x, 'x', false), 'x', -1);
-            this.conf.y = this.getRelCoords(oParent, this.parseCoord(this.conf.y, 'y', false), 'y', -1);
+        if (num === -1) {
+            this.conf.x = this.getRelCoords(oParent, this.parseCoord(this.conf.x, "x", false), "x", -1);
+            this.conf.y = this.getRelCoords(oParent, this.parseCoord(this.conf.y, "y", false), "y", -1);
         } else {
-            var newX = this.getRelCoords(oParent, this.parseCoords(this.conf.x, 'x', false)[num], 'x', -1);
-            var newY = this.getRelCoords(oParent, this.parseCoords(this.conf.y, 'y', false)[num], 'y', -1);
+            var newX = this.getRelCoords(oParent, this.parseCoords(this.conf.x, "x", false)[num], "x", -1);
+            var newY = this.getRelCoords(oParent, this.parseCoords(this.conf.y, "y", false)[num], "y", -1);
 
-            var old  = this.conf.x.split(',');
+            var old = this.conf.x.split(",");
             old[num] = newX;
-            this.conf.x = old.join(',');
+            this.conf.x = old.join(",");
 
-            old  = this.conf.y.split(',');
+            old = this.conf.y.split(",");
             old[num] = newY;
-            this.conf.y = old.join(',');
+            this.conf.y = old.join(",");
         }
     },
 
     /**
      * Returns the object id of the parent object
      */
-    getCoordParent: function(val, num) {
-        var coord = num === -1 ? val.toString() : val.split(',')[num].toString();
-        return coord.search('%') !== -1 ? coord.split('%')[0] : coord;
+    getCoordParent: function (val, num) {
+        var coord = num === -1 ? val.toString() : val.split(",")[num].toString();
+        return coord.search("%") !== -1 ? coord.split("%")[0] : coord;
     },
 
-    getRelCoords: function(refObj, val, dir, num) {
-        var refPos = num === -1 ? refObj.conf[dir] : refObj.conf[dir].split(',')[num];
+    getRelCoords: function (refObj, val, dir, num) {
+        var refPos = num === -1 ? refObj.conf[dir] : refObj.conf[dir].split(",")[num];
         var offset = parseInt(val) - parseInt(refObj.parseCoord(refPos, dir, false));
-        var pre    = offset >= 0 ? '+' : '';
-        val        = refObj.conf.object_id + '%' + pre + offset;
-        refObj     = null;
+        var pre = offset >= 0 ? "+" : "";
+        val = refObj.conf.object_id + "%" + pre + offset;
+        refObj = null;
         return val;
     },
 
-    hasRelativeCoord: function() {
-        var coords = this.conf.x.toString().split(',').concat(this.conf.y.toString().split(','));
-        for (var i = 0, len = coords.length; i < len; i++)
-            if (isRelativeCoord(coords[i]))
-                return true;
+    hasRelativeCoord: function () {
+        var coords = this.conf.x.toString().split(",").concat(this.conf.y.toString().split(","));
+        for (var i = 0, len = coords.length; i < len; i++) if (isRelativeCoord(coords[i])) return true;
         return false;
     },
 
@@ -518,40 +469,34 @@ var NagVisObject = Base.extend({
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    calcNewCoord: function(val, dir, num) {
-        if(!isset(num))
-            var num = -1;
+    calcNewCoord: function (val, dir, num) {
+        if (!isset(num)) var num = -1;
 
-        var oldVal = num === -1 ? this.conf[dir] : this.conf[dir].split(',')[num];
+        var oldVal = num === -1 ? this.conf[dir] : this.conf[dir].split(",")[num];
         // Check if the current value is an integer or a relative coord
-        if(isset(oldVal) && isRelativeCoord(oldVal)) {
+        if (isset(oldVal) && isRelativeCoord(oldVal)) {
             // This must be an object id
             var objectId = null;
-            if(oldVal.search('%') !== -1)
-                objectId = oldVal.split('%')[0];
-            else
-                objectId = oldVal;
+            if (oldVal.search("%") !== -1) objectId = oldVal.split("%")[0];
+            else objectId = oldVal;
 
             // Only an object id. Get the coordinate and return it
             var refObj = getMapObjByDomObjId(objectId);
             // FIXME: Maybe the parent object is also a line. Then -1 is not correct
-            if(refObj)
-                val = this.getRelCoords(refObj, val, dir, -1);
+            if (refObj) val = this.getRelCoords(refObj, val, dir, -1);
             objectId = null;
-        } else if(num === -1) {
+        } else if (num === -1) {
             val = Math.round(val);
         }
         oldVal = null;
 
-        if(num === -1) {
+        if (num === -1) {
             return val;
         } else {
-            var old  = this.conf[dir].split(',');
-            if(isRelativeCoord(val))
-                old[num] = val;
-            else
-                old[num] = Math.round(val);
-            return old.join(',');
+            var old = this.conf[dir].split(",");
+            if (isRelativeCoord(val)) old[num] = val;
+            else old[num] = Math.round(val);
+            return old.join(",");
         }
     },
 
@@ -562,25 +507,23 @@ var NagVisObject = Base.extend({
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    getParentObjectIds: function(num) {
+    getParentObjectIds: function (num) {
         var parentIds = {};
 
         if (isset(num)) {
-            var coords = (this.conf['x'].split(',')[num] + ',' + this.conf['y'].split(',')[num]).split(',');
+            var coords = (this.conf["x"].split(",")[num] + "," + this.conf["y"].split(",")[num]).split(",");
         } else if (isset(this.conf.x) && isset(this.conf.y)) {
-            var coords = (this.conf.x + ',' + this.conf.y).split(',');
+            var coords = (this.conf.x + "," + this.conf.y).split(",");
         } else {
             // Don't try to do strange things for objects not having coordinates. But
             // that should never happen anyways.
             return parentIds;
         }
 
-        for(var i = 0, len = coords.length; i < len; i++) {
-            if(isRelativeCoord(coords[i])) {
-                if(coords[i].search('%') !== -1)
-                    parentIds[coords[i].split('%')[0]] = true;
-                else if (coords[i])
-                    parentIds[coords[i]] = true;
+        for (var i = 0, len = coords.length; i < len; i++) {
+            if (isRelativeCoord(coords[i])) {
+                if (coords[i].search("%") !== -1) parentIds[coords[i].split("%")[0]] = true;
+                else if (coords[i]) parentIds[coords[i]] = true;
             }
         }
         coords = null;
@@ -591,13 +534,11 @@ var NagVisObject = Base.extend({
     /**
      * Returns the coord indexes which use a specific parent object_id
      */
-    getRelativeCoordsUsingParent: function(parentId) {
+    getRelativeCoordsUsingParent: function (parentId) {
         var matches = {};
-        for(var i = 0, len = this.conf.x.split(',').length; i < len; i++) {
-        if(this.getCoordParent(this.conf.x, i) === parentId && !isset(matches[i]))
-            matches[i] = true;
-        else if(this.getCoordParent(this.conf.y, i) === parentId && !isset(matches[i]))
-            matches[i] = true;
+        for (var i = 0, len = this.conf.x.split(",").length; i < len; i++) {
+            if (this.getCoordParent(this.conf.x, i) === parentId && !isset(matches[i])) matches[i] = true;
+            else if (this.getCoordParent(this.conf.y, i) === parentId && !isset(matches[i])) matches[i] = true;
         }
         return matches;
     },
@@ -609,13 +550,12 @@ var NagVisObject = Base.extend({
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    addChild: function(obj) {
-        if(this.childs.indexOf(obj) === -1)
-            this.childs.push(obj);
+    addChild: function (obj) {
+        if (this.childs.indexOf(obj) === -1) this.childs.push(obj);
         obj = null;
     },
 
-    delChild: function(obj) {
+    delChild: function (obj) {
         this.childs.splice(this.childs.indexOf(obj), 1);
         obj = null;
     },
@@ -629,34 +569,34 @@ var NagVisObject = Base.extend({
      * absolute using child.makeAbsoluteCoords(num).
      * After that the change must be sent to the core using saveObject...
      */
-    detachChilds: function() {
-        for(var i = this.childs.length - 1; i >= 0; i--) {
-        var nums = this.childs[i].getRelativeCoordsUsingParent(this.conf.object_id);
-        var obj = this.childs[i];
+    detachChilds: function () {
+        for (var i = this.childs.length - 1; i >= 0; i--) {
+            var nums = this.childs[i].getRelativeCoordsUsingParent(this.conf.object_id);
+            var obj = this.childs[i];
 
-        for(var num in nums) {
-            obj.makeAbsoluteCoords(num);
-        }
+            for (var num in nums) {
+                obj.makeAbsoluteCoords(num);
+            }
 
-        saveObjectAttr(obj.conf.object_id, {'x': obj.conf.x, 'y': obj.conf.y });
+            saveObjectAttr(obj.conf.object_id, { x: obj.conf.x, y: obj.conf.y });
 
-        obj  = null;
-        nums = null;
+            obj = null;
+            nums = null;
         }
     },
 
     /**
      * Returns the x coordinate of the object in px
      */
-    parsedX: function() {
-        return this.parseCoords(this.conf.x, 'x');
+    parsedX: function () {
+        return this.parseCoords(this.conf.x, "x");
     },
 
     /**
      * Returns the y coordinate of the object in px
      */
-    parsedY: function() {
-        return this.parseCoords(this.conf.y, 'y');
+    parsedY: function () {
+        return this.parseCoords(this.conf.y, "y");
     },
 
     /**
@@ -664,35 +604,39 @@ var NagVisObject = Base.extend({
      * Handles whole redrawing of the object while moving. The new
      * coordinates have already been set
      */
-    place: function() {
-        for(var i = 0, l = this.elements.length; i < l; i++)
-            this.elements[i].place();
+    place: function () {
+        for (var i = 0, l = this.elements.length; i < l; i++) this.elements[i].place();
 
         // Move child objects
-        for(var i = 0, l = this.childs.length; i < l; i++)
-            this.childs[i].place();
+        for (var i = 0, l = this.childs.length; i < l; i++) this.childs[i].place();
     },
 
     needsContextMenu: function () {
-        return (this.conf.context_menu && this.conf.context_menu !== '' && this.conf.context_menu !== '0'
-            && this.conf.context_template && this.conf.context_template !== '');
+        return (
+            this.conf.context_menu &&
+            this.conf.context_menu !== "" &&
+            this.conf.context_menu !== "0" &&
+            this.conf.context_template &&
+            this.conf.context_template !== ""
+        );
     },
 
-    needsHoverMenu: function() {
-        return this.conf.hover_menu && this.conf.hover_menu !== '' && this.conf.hover_menu !== '0'
-            && ((this.conf.hover_template && this.conf.hover_template !== '') ||
-                (this.conf.hover_url && this.conf.hover_url !== ''));
+    needsHoverMenu: function () {
+        return (
+            this.conf.hover_menu &&
+            this.conf.hover_menu !== "" &&
+            this.conf.hover_menu !== "0" &&
+            ((this.conf.hover_template && this.conf.hover_template !== "") ||
+                (this.conf.hover_url && this.conf.hover_url !== ""))
+        );
     },
 
-    needsLink: function() {
-        return this.conf.url && this.conf.url !== '' && this.conf.url !== '#';
+    needsLink: function () {
+        return this.conf.url && this.conf.url !== "" && this.conf.url !== "#";
     },
 
-    needsLineHoverArea: function() {
-        return this.needsHoverMenu()
-            || this.needsContextMenu()
-            || this.needsLink()
-            || !this.bIsLocked;
+    needsLineHoverArea: function () {
+        return this.needsHoverMenu() || this.needsContextMenu() || this.needsLink() || !this.bIsLocked;
     },
 
     /**
@@ -701,28 +645,26 @@ var NagVisObject = Base.extend({
      * Important: This is called from an event handler
      * the 'this.' keyword can not be used here.
      */
-    moveObject: function(trigger_obj, obj) {
-        var arr = trigger_obj.id.split('-');
+    moveObject: function (trigger_obj, obj) {
+        var arr = trigger_obj.id.split("-");
         var newPos;
-        if (obj.conf.view_type === 'line') {
+        if (obj.conf.view_type === "line") {
             newPos = getMidOfAnchor(trigger_obj);
 
             // Get current positions and replace only the current one
             var anchorId = arr[2];
-            newPos = [ obj.calcNewCoord(newPos[0], 'x', anchorId),
-                       obj.calcNewCoord(newPos[1], 'y', anchorId) ];
+            newPos = [obj.calcNewCoord(newPos[0], "x", anchorId), obj.calcNewCoord(newPos[1], "y", anchorId)];
 
             var parents = obj.getParentObjectIds(anchorId);
 
-            anchorId   = null;
+            anchorId = null;
         } else {
             // In case of an anchor there is an offset to the real object.
             // Handle this offset in the coordinate calculation for the obj
             var offsetX = isset(trigger_obj.objOffsetX) ? trigger_obj.objOffsetX : 0;
             var offsetY = isset(trigger_obj.objOffsetY) ? trigger_obj.objOffsetY : 0;
 
-            newPos = [ obj.calcNewCoord(trigger_obj.x - offsetX, 'x'),
-                       obj.calcNewCoord(trigger_obj.y - offsetY, 'y') ];
+            newPos = [obj.calcNewCoord(trigger_obj.x - offsetX, "x"), obj.calcNewCoord(trigger_obj.y - offsetY, "y")];
 
             var parents = obj.getParentObjectIds();
         }
@@ -738,47 +680,44 @@ var NagVisObject = Base.extend({
      * Important: This is called from an event handler
      * the 'this.' keyword can not be used here.
      */
-    saveObject: function(trigger_obj, obj, oParent) {
-        var arr = trigger_obj.id.split('-');
-        if(arr.length > 2)
-            var anchorId = arr[2];
-        if (obj.conf.view_type !== 'line')
-            anchorId = -1;
+    saveObject: function (trigger_obj, obj, oParent) {
+        var arr = trigger_obj.id.split("-");
+        if (arr.length > 2) var anchorId = arr[2];
+        if (obj.conf.view_type !== "line") anchorId = -1;
 
         // Honor the enabled grid and reposition the object after dropping
         if (useGrid()) {
-            if (obj.conf.view_type === 'line') {
-               var pos = coordsToGrid(obj.parseCoords(obj.conf.x, 'x', false)[anchorId],
-                                      obj.parseCoords(obj.conf.y, 'y', false)[anchorId]);
-               obj.conf.x = obj.calcNewCoord(pos[0], 'x', anchorId);
-               obj.conf.y = obj.calcNewCoord(pos[1], 'y', anchorId);
+            if (obj.conf.view_type === "line") {
+                var pos = coordsToGrid(
+                    obj.parseCoords(obj.conf.x, "x", false)[anchorId],
+                    obj.parseCoords(obj.conf.y, "y", false)[anchorId]
+                );
+                obj.conf.x = obj.calcNewCoord(pos[0], "x", anchorId);
+                obj.conf.y = obj.calcNewCoord(pos[1], "y", anchorId);
             } else {
-               var pos = coordsToGrid(obj.parseCoord(obj.conf.x, 'x', false),
-                                      obj.parseCoord(obj.conf.y, 'y', false));
-               obj.conf.x = obj.calcNewCoord(pos[0], 'x');
-               obj.conf.y = obj.calcNewCoord(pos[1], 'y');
+                var pos = coordsToGrid(obj.parseCoord(obj.conf.x, "x", false), obj.parseCoord(obj.conf.y, "y", false));
+                obj.conf.x = obj.calcNewCoord(pos[0], "x");
+                obj.conf.y = obj.calcNewCoord(pos[1], "y");
             }
             obj.place();
         }
 
         // Make relative when oParent set and not already relative
         if (isset(oParent))
-            if(oParent !== false)
-                obj.makeRelativeCoords(oParent, anchorId);
-            else
-                obj.makeAbsoluteCoords(anchorId);
+            if (oParent !== false) obj.makeRelativeCoords(oParent, anchorId);
+            else obj.makeAbsoluteCoords(anchorId);
 
         var x = obj.conf.x,
             y = obj.conf.y;
 
-        var parts = g_view.unproject(x.toString().split(','), y.toString().split(','));
-        x = parts[0].join(',');
-        y = parts[1].join(',');
+        var parts = g_view.unproject(x.toString().split(","), y.toString().split(","));
+        x = parts[0].join(",");
+        y = parts[1].join(",");
 
         // Now send the new attributes to the server for persistance
-        saveObjectAttr(obj.conf.object_id, { 'x': x, 'y': y});
+        saveObjectAttr(obj.conf.object_id, { x: x, y: y });
     },
 
-    highlight: function(show) {},
-    getStatefulMembers: function() {}
+    highlight: function (show) {},
+    getStatefulMembers: function () {}
 });

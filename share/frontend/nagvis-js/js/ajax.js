@@ -21,41 +21,48 @@
  *
  *****************************************************************************/
 
-function call_ajax(url, args)
-{
-    args = merge_args({
-        add_ajax_id      : true,
-        response_handler : null,
-        error_handler    : function(status_code, response, handler_data) {
-            if (response === null) {
-                response = {
-                    'type'    : 'error',
-                    'title'   : 'Network error',
-                    'message' : "Failed to execute ajax call. Maybe a network issue or webserver is not available."
-                          + "<div class=details>\n"
-                          + "HTTP-Status-Code: " + status_code + "<br />\n"
-                          + "Time: " + iNow + "<br />\n"
-                          + "URL: <code>" + url.replace(/</g, '&lt;') + "</code><br />\n"
-                          + "</div>"
-                };
-            }
-            frontendMessage(response, 'serverError');
+function call_ajax(url, args) {
+    args = merge_args(
+        {
+            add_ajax_id: true,
+            response_handler: null,
+            error_handler: function (status_code, response, handler_data) {
+                if (response === null) {
+                    response = {
+                        type: "error",
+                        title: "Network error",
+                        message:
+                            "Failed to execute ajax call. Maybe a network issue or webserver is not available." +
+                            "<div class=details>\n" +
+                            "HTTP-Status-Code: " +
+                            status_code +
+                            "<br />\n" +
+                            "Time: " +
+                            iNow +
+                            "<br />\n" +
+                            "URL: <code>" +
+                            url.replace(/</g, "&lt;") +
+                            "</code><br />\n" +
+                            "</div>"
+                    };
+                }
+                frontendMessage(response, "serverError");
+            },
+            handler_data: null,
+            method: "GET",
+            post_data: null,
+            sync: false,
+            decode_json: true
         },
-        handler_data     : null,
-        method           : "GET",
-        post_data        : null,
-        sync             : false,
-        decode_json      : true,
-    }, args);
+        args
+    );
 
-    var AJAX = window.XMLHttpRequest ? new XMLHttpRequest()
-                                     : new ActiveXObject("Microsoft.XMLHTTP");
-    if (!AJAX)
-        return null;
+    var AJAX = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+    if (!AJAX) return null;
 
     if (args.add_ajax_id) {
-        url += url.indexOf('\?') !== -1 ? "&" : "?";
-        url += "_ajaxid="+iNow;
+        url += url.indexOf("\?") !== -1 ? "&" : "?";
+        url += "_ajaxid=" + iNow;
     }
 
     AJAX.open(args.method, url, !args.sync);
@@ -64,32 +71,43 @@ function call_ajax(url, args)
         // Set post specific options. request might be a FormData object. In this case
         // the request is not using form-urlencoded data, instead it is automatically
         // set to multipart/form-data
-        if (typeof args.post_data !== 'object')
-            AJAX.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        if (typeof args.post_data !== "object")
+            AJAX.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     }
 
     if (!args.sync) {
-        AJAX.onreadystatechange = function() {
+        AJAX.onreadystatechange = function () {
             if (AJAX && AJAX.readyState == 4) {
                 if (AJAX.status == 200) {
                     // in case this is no error remove all frontend messages of type
                     // serverError which might have been shown by the default
                     // args.error_handler.
-                    frontendMessageRemove('serverError');
+                    frontendMessageRemove("serverError");
 
                     var response = AJAX.responseText;
                     if (args.decode_json) {
                         try {
                             response = JSON.parse(response);
-                        } catch(e) {
-                            args.error_handler(AJAX.status, {
-                                'type'    : 'error',
-                                'title'   : 'Error: Syntax Error',
-                                'message' : "Invalid JSON response<div class=details>\nTime: "
-                                      + iNow + "<br />\nURL: " + url.replace(/</g, '&lt;') + "<br />\n"
-                                      + "Response: <code>" + response + '</code></div>'
-                            }, 0, 'jsonError');
-                            return '';
+                        } catch (e) {
+                            args.error_handler(
+                                AJAX.status,
+                                {
+                                    type: "error",
+                                    title: "Error: Syntax Error",
+                                    message:
+                                        "Invalid JSON response<div class=details>\nTime: " +
+                                        iNow +
+                                        "<br />\nURL: " +
+                                        url.replace(/</g, "&lt;") +
+                                        "<br />\n" +
+                                        "Response: <code>" +
+                                        response +
+                                        "</code></div>"
+                                },
+                                0,
+                                "jsonError"
+                            );
+                            return "";
                         }
 
                         // The server might return a json object which is representing
@@ -100,29 +118,25 @@ function call_ajax(url, args)
                         // this kind of error data on their own.
                         if (isset(response.type) && isset(response.message)) {
                             args.error_handler(AJAX.status, response, args.handler_data);
-                            return '';
+                            return "";
                         }
                     }
 
-                    if (args.response_handler)
-                        args.response_handler(response, args.handler_data);
-                }
-                else if (AJAX.status == 401) {
+                    if (args.response_handler) args.response_handler(response, args.handler_data);
+                } else if (AJAX.status == 401) {
                     // This is reached when someone is not authenticated anymore
                     // but has some webservices running which are still fetching
                     // infos via AJAX. Reload the whole frameset or only the
                     // single page in that case.
                     document.location.reload();
-                }
-                else if (AJAX.status == 0) {
+                } else if (AJAX.status == 0) {
                     // this happens when a user aborts currently running ajax
                     // requests by reloading the page. simply ignore
-                }
-                else {
+                } else {
                     args.error_handler(AJAX.status, null, args.handler_data);
                 }
             }
-        }
+        };
     }
 
     AJAX.send(args.post_data);
@@ -139,66 +153,62 @@ function getFormParams(formId, skipHelperFields) {
         var formdata = true;
     } else {
         var formdata = false;
-        var data = '';
+        var data = "";
     }
 
-    var add_data = function(key, val) {
-        if (formdata)
-            data.append(key, val);
-        else
-            data += key + "=" + escapeUrlValues(val) + "&";
+    var add_data = function (key, val) {
+        if (formdata) data.append(key, val);
+        else data += key + "=" + escapeUrlValues(val) + "&";
     };
 
     // Read form contents
     var oForm = document.getElementById(formId);
-    if (typeof oForm === 'undefined')
-        return data;
+    if (typeof oForm === "undefined") return data;
 
     // Get relevant input elements
-    var aFields = oForm.querySelectorAll('input,textarea');
+    var aFields = oForm.querySelectorAll("input,textarea");
 
     for (var i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (if told to do so)
-        if (skipHelperFields && aFields[i].name.charAt(0) === '_')
-            continue;
+        if (skipHelperFields && aFields[i].name.charAt(0) === "_") continue;
 
         // Skip options which use the default value and where the value has
         // not been set before
-        var oFieldDefault    = document.getElementById('_'+aFields[i].name);
-        if (aFields[i] && oFieldDefault && !document.getElementById('_conf_'+aFields[i].name)) {
+        var oFieldDefault = document.getElementById("_" + aFields[i].name);
+        if (aFields[i] && oFieldDefault && !document.getElementById("_conf_" + aFields[i].name)) {
             if (aFields[i].value === oFieldDefault.value) {
                 continue;
             }
         }
         oFieldDefault = null;
 
-        if (aFields[i].type == "hidden"
-            || aFields[i].type == "text"
-            || aFields[i].type == "textarea"
-            || aFields[i].type == "password"
-            || aFields[i].type == "submit") {
+        if (
+            aFields[i].type == "hidden" ||
+            aFields[i].type == "text" ||
+            aFields[i].type == "textarea" ||
+            aFields[i].type == "password" ||
+            aFields[i].type == "submit"
+        ) {
             add_data(aFields[i].name, aFields[i].value);
-        }
-        else if (aFields[i].type == "checkbox") {
+        } else if (aFields[i].type == "checkbox") {
+            if (aFields[i].checked) {
+                add_data(aFields[i].name, aFields[i].value);
+            } else {
+                add_data(aFields[i].name, "");
+            }
+        } else if (aFields[i].type == "radio") {
             if (aFields[i].checked) {
                 add_data(aFields[i].name, aFields[i].value);
             }
-            else {
-                add_data(aFields[i].name, '');
-            }
-        }
-        else if (aFields[i].type == "radio") {
-            if (aFields[i].checked) {
-                add_data(aFields[i].name, aFields[i].value);
-            }
-        }
-        else if (aFields[i].type == "file") {
+        } else if (aFields[i].type == "file") {
             // Now handle the file upload elements (which lead to an error when not
             // using the form data mechanism)
             if (!formdata) {
-                throw new Error('File upload not supported with your browser. '
-                               +'This form can only be used when using a browser '
-                               +'which suports javascript file uploads (FormData).');
+                throw new Error(
+                    "File upload not supported with your browser. " +
+                        "This form can only be used when using a browser " +
+                        "which suports javascript file uploads (FormData)."
+                );
             }
 
             if (aFields[i].files.length > 0) {
@@ -206,27 +216,25 @@ function getFormParams(formId, skipHelperFields) {
                 data.append(aFields[i].name, file, file.name);
             }
         }
-
     }
 
     // Get relevant select elements
-    aFields = oForm.getElementsByTagName('select');
-    for(var i = 0, len = aFields.length; i < len; i++) {
+    aFields = oForm.getElementsByTagName("select");
+    for (var i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (NagVis WUI specific)
-        if (skipHelperFields && aFields[i].name.charAt(0) === '_')
-            continue;
+        if (skipHelperFields && aFields[i].name.charAt(0) === "_") continue;
 
         // Skip options which use the default value
-        var oFieldDefault = document.getElementById('_'+aFields[i].name);
-        if(aFields[i] && oFieldDefault) {
-            if(aFields[i].value === oFieldDefault.value) {
+        var oFieldDefault = document.getElementById("_" + aFields[i].name);
+        if (aFields[i] && oFieldDefault) {
+            if (aFields[i].value === oFieldDefault.value) {
                 continue;
             }
         }
         oFieldDefault = null;
 
         // Can't use the selectedIndex when using select fields with multiple
-        if(!aFields[i].multiple || aFields[i].multiple !== true) {
+        if (!aFields[i].multiple || aFields[i].multiple !== true) {
             // Skip fields where nothing is selected
             if (aFields[i].selectedIndex != -1) {
                 add_data(aFields[i].name, aFields[i].options[aFields[i].selectedIndex].value);
@@ -235,7 +243,7 @@ function getFormParams(formId, skipHelperFields) {
             for (var a = 0; a < aFields[i].options.length; a++) {
                 // Only add selected options
                 if (aFields[i].options[a].selected == true) {
-                    add_data(aFields[i].name+'[]', aFields[i].options[a].value);
+                    add_data(aFields[i].name + "[]", aFields[i].options[a].value);
                 }
             }
         }

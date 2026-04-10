@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 var NagVisContainer = NagVisStatelessObject.extend({
-    update: function() {
+    update: function () {
         this.clearElements();
         new ElementBox(this).addTo(this);
         this.base();
@@ -32,32 +32,30 @@ var NagVisContainer = NagVisStatelessObject.extend({
         this.base();
 
         var span = this.elements[0].dom_obj.childNodes[0];
-        span.style.display = 'block';
-        span.style.height = '100%';
+        span.style.display = "block";
+        span.style.height = "100%";
 
-        if (this.conf.view_type === 'inline') {
+        if (this.conf.view_type === "inline") {
             // Request data via ajax call and add it directly to the current page
             call_ajax(this.conf.url, {
-                response_handler: function(html, span) {
+                response_handler: function (html, span) {
                     span.innerHTML = html;
                 },
-                error_handler: function(status_code, response, span) {
-                    if (status_code === 200)
-                        span.innerHTML = 'Error: '+response;
-                    else
-                        span.innerHTML = 'Error: '+status_code;
+                error_handler: function (status_code, response, span) {
+                    if (status_code === 200) span.innerHTML = "Error: " + response;
+                    else span.innerHTML = "Error: " + status_code;
                 },
-                handler_data : span,
-                decode_json  : false,
-                add_ajax_id  : false,
+                handler_data: span,
+                decode_json: false,
+                add_ajax_id: false
             });
         } else {
             // Create an iframe element which holds the requested url
-            span.innerHTML = '';
-            var oIframe = document.createElement('iframe');
+            span.innerHTML = "";
+            var oIframe = document.createElement("iframe");
             oIframe.style.borderWidth = 0;
-            oIframe.style.width  = '100%';
-            oIframe.style.height = '100%';
+            oIframe.style.width = "100%";
+            oIframe.style.height = "100%";
             oIframe.src = this.conf.url;
             span.appendChild(oIframe);
             oIframe = null;
@@ -68,7 +66,7 @@ var NagVisContainer = NagVisStatelessObject.extend({
     // END OF PUBLIC METHODS
     //
 
-    getText: function() {
-        return '';
+    getText: function () {
+        return "";
     }
 });
