@@ -22,9 +22,9 @@
  *****************************************************************************/
 
 var NagVisShape = NagVisStatelessObject.extend({
-    update: function() {
+    update: function () {
         this.clearElements();
         new ElementShape(this).addTo(this);
         this.base();
-    },
+    }
 });

@@ -8,17 +8,16 @@
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *****************************************************************************/
 
-
 var favicon = {
     // -- "PUBLIC" ----------------------------------------------------------------
 
-    change: function(iconURL) {
+    change: function (iconURL) {
         this.addLink(iconURL, true);
     },
 
     // -- "PRIVATE" ---------------------------------------------------------------
 
-    addLink: function(iconURL) {
+    addLink: function (iconURL) {
         var docHead = document.getElementsByTagName("head")[0];
 
         var link = document.createElement("link");
@@ -34,14 +33,13 @@ var favicon = {
         docHead = null;
     },
 
-    removeLinkIfExists: function() {
+    removeLinkIfExists: function () {
         var docHead = document.getElementsByTagName("head")[0];
         var links = docHead.getElementsByTagName("link");
 
-        if(!docHead || !links)
-            return false;
+        if (!docHead || !links) return false;
 
-        for (var i=0, len = links.length; i<len; i++) {
+        for (var i = 0, len = links.length; i < len; i++) {
             if (links[i] && links[i].type == "image/x-icon" && links[i].rel == "shortcut icon") {
                 docHead.removeChild(links[i]);
             }

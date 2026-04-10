@@ -22,15 +22,15 @@
  *****************************************************************************/
 
 var ElementShape = Element.extend({
-    render: function() {
+    render: function () {
         this.renderShape();
         this.place();
     },
 
     // Moves the Shape to it's location as described by this js object
     place: function () {
-        this.dom_obj.style.top  = this.obj.parseCoord(this.obj.conf.y, 'y') + 'px';
-        this.dom_obj.style.left = this.obj.parseCoord(this.obj.conf.x, 'x') + 'px';
+        this.dom_obj.style.top = this.obj.parseCoord(this.obj.conf.y, "y") + "px";
+        this.dom_obj.style.left = this.obj.parseCoord(this.obj.conf.x, "x") + "px";
     },
 
     unlock: function () {
@@ -48,17 +48,17 @@ var ElementShape = Element.extend({
     //
 
     renderShape: function () {
-        var oIconDiv = document.createElement('div');
+        var oIconDiv = document.createElement("div");
         this.dom_obj = oIconDiv;
 
-        oIconDiv.setAttribute('id', this.obj.conf.object_id+'-icondiv');
-        oIconDiv.className = 'icondiv';
+        oIconDiv.setAttribute("id", this.obj.conf.object_id + "-icondiv");
+        oIconDiv.className = "icondiv";
         oIconDiv.style.zIndex = this.obj.conf.z;
 
-        var oIcon = document.createElement('img');
+        var oIcon = document.createElement("img");
         this.obj.trigger_obj = oIcon;
-        oIcon.setAttribute('id', this.obj.conf.object_id+'-icon');
-        oIcon.className = 'icon';
+        oIcon.setAttribute("id", this.obj.conf.object_id + "-icon");
+        oIcon.className = "icon";
 
         // When no icon size is configured, the native size of the image is used.
         // An icon size might be either one integer for even sized images or
@@ -72,22 +72,22 @@ var ElementShape = Element.extend({
                 var w = parseInt(size[0]),
                     h = parseInt(size[1]);
             }
-            oIcon.style.width = w + 'px';
-            oIcon.style.height = h + 'px';
+            oIcon.style.width = w + "px";
+            oIcon.style.height = h + "px";
         }
 
         // Construct the real url to fetch for this shape
         var img_url = null;
         if (this.obj.conf.icon.match(/^\[(.*)\]$/)) {
-            img_url = this.obj.conf.icon.replace(/^\[(.*)\]$/, '$1');
+            img_url = this.obj.conf.icon.replace(/^\[(.*)\]$/, "$1");
         } else {
             img_url = oGeneralProperties.path_shapes + this.obj.conf.icon;
         }
 
-        if (img_url.indexOf('?') !== -1) {
-            img_url += '&_t=' + iNow;
+        if (img_url.indexOf("?") !== -1) {
+            img_url += "&_t=" + iNow;
         } else {
-            img_url += '?_t=' + iNow;
+            img_url += "?_t=" + iNow;
         }
 
         addZoomHandler(oIcon);
@@ -95,8 +95,8 @@ var ElementShape = Element.extend({
         oIcon.src = img_url;
         oIcon.alt = this.obj.conf.type;
 
-        if (this.obj.conf.url && this.obj.conf.url !== '') {
-            var oIconLink = document.createElement('a');
+        if (this.obj.conf.url && this.obj.conf.url !== "") {
+            var oIconLink = document.createElement("a");
             oIconLink.href = this.obj.conf.url;
             oIconLink.target = this.obj.conf.url_target;
             oIconLink.appendChild(oIcon);

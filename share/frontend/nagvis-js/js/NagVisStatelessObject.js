@@ -23,5 +23,5 @@
  *****************************************************************************/
 
 var NagVisStatelessObject = NagVisObject.extend({
-    has_state: false,
+    has_state: false
 });

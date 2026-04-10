@@ -1,0 +1,2 @@
+# Vendor / third-party JS bundled with NagVis — do not reformat
+share/frontend/nagvis-js/js/Ext*.js

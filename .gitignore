@@ -58,3 +58,4 @@ var/*
 # Exclude IDE directories
 .idea/
 .vscode
+node_modules/

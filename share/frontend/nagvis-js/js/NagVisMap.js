@@ -25,20 +25,16 @@ var NagVisMap = NagVisStatefulObject.extend({
     update: function () {
         this.clearElements();
 
-        if (g_view.type == 'overview')
-            new ElementTile(this).addTo(this);
+        if (g_view.type == "overview") new ElementTile(this).addTo(this);
 
         this.base();
     },
 
     stateText: function () {
-        var substate = '';
-        if (this.conf.summary_in_downtime == 1)
-            substate = ' (downtime)';
-        else if (this.conf.summary_problem_has_been_acknowledged == 1)
-            substate = ' (ack)';
-        else if (this.conf.summary_stale)
-            substate = ' (stale)';
+        var substate = "";
+        if (this.conf.summary_in_downtime == 1) substate = " (downtime)";
+        else if (this.conf.summary_problem_has_been_acknowledged == 1) substate = " (ack)";
+        else if (this.conf.summary_stale) substate = " (stale)";
         return this.conf.summary_state + substate;
-    },
+    }
 });

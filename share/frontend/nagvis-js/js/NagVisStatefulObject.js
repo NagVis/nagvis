@@ -36,59 +36,59 @@ var NagVisStatefulObject = NagVisObject.extend({
     event_time_first: null,
     event_time_last: null,
 
-    constructor: function(oConf) {
+    constructor: function (oConf) {
         this.base(oConf);
     },
 
-    getMembers: function() {
+    getMembers: function () {
         // Clear member array on every launch
         this.members = [];
 
-        if(this.conf && this.conf.members && this.conf.members.length > 0) {
-            for(var i = 0, len = this.conf.members.length; i < len; i++) {
+        if (this.conf && this.conf.members && this.conf.members.length > 0) {
+            for (var i = 0, len = this.conf.members.length; i < len; i++) {
                 var oMember = this.conf.members[i];
                 var oObj;
 
                 switch (oMember.type) {
-                    case 'host':
+                    case "host":
                         oObj = new NagVisHost(oMember);
-                    break;
-                    case 'service':
+                        break;
+                    case "service":
                         oObj = new NagVisService(oMember);
-                    break;
-                    case 'hostgroup':
+                        break;
+                    case "hostgroup":
                         oObj = new NagVisHostgroup(oMember);
-                    break;
-                    case 'servicegroup':
+                        break;
+                    case "servicegroup":
                         oObj = new NagVisServicegroup(oMember);
-                    break;
-                    case 'dyngroup':
+                        break;
+                    case "dyngroup":
                         oObj = new NagVisDynGroup(oMember);
-                    break;
-                    case 'aggr':
+                        break;
+                    case "aggr":
                         oObj = new NagVisAggr(oMember);
-                    break;
-                    case 'map':
+                        break;
+                    case "map":
                         oObj = new NagVisMap(oMember);
-                    break;
-                    case 'textbox':
+                        break;
+                    case "textbox":
                         oObj = new NagVisTextbox(oMember);
-                    break;
-                    case 'container':
+                        break;
+                    case "container":
                         oObj = new NagVisContainer(oMember);
-                    break;
-                    case 'shape':
+                        break;
+                    case "shape":
                         oObj = new NagVisShape(oMember);
-                    break;
-                    case 'line':
+                        break;
+                    case "line":
                         oObj = new NagVisLine(oMember);
-                    break;
+                        break;
                     default:
-                        alert('Error: Unknown member object type ('+oMember.type+')');
-                    break;
+                        alert("Error: Unknown member object type (" + oMember.type + ")");
+                        break;
                 }
 
-                if(oObj !== null) {
+                if (oObj !== null) {
                     this.members.push(oObj);
                 }
 
@@ -98,7 +98,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         }
     },
 
-    getStatefulMembers: function() {
+    getStatefulMembers: function () {
         var stateful = [];
         for (var i = 0, len = this.members.length; i < len; i++) {
             if (this.members[i].has_state) {
@@ -115,14 +115,14 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    saveLastState: function() {
+    saveLastState: function () {
         this.last_state = {
-          'summary_state': this.conf.summary_state,
-            'summary_in_downtime': this.conf.summary_in_downtime,
-            'summary_stale': this.conf.summary_stale,
-            'summary_problem_has_been_acknowledged': this.conf.summary_problem_has_been_acknowledged,
-            'output': this.conf.output,
-            'perfdata': this.conf.perfdata
+            summary_state: this.conf.summary_state,
+            summary_in_downtime: this.conf.summary_in_downtime,
+            summary_stale: this.conf.summary_stale,
+            summary_problem_has_been_acknowledged: this.conf.summary_problem_has_been_acknowledged,
+            output: this.conf.output,
+            perfdata: this.conf.perfdata
         };
     },
 
@@ -133,11 +133,13 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    stateChanged: function() {
-        if(this.conf.summary_state != this.last_state.summary_state ||
-           this.conf.summary_problem_has_been_acknowledged != this.last_state.summary_problem_has_been_acknowledged ||
-           this.conf.summary_stale != this.last_state.summary_stale ||
-           this.conf.summary_in_downtime != this.last_state.summary_in_downtime) {
+    stateChanged: function () {
+        if (
+            this.conf.summary_state != this.last_state.summary_state ||
+            this.conf.summary_problem_has_been_acknowledged != this.last_state.summary_problem_has_been_acknowledged ||
+            this.conf.summary_stale != this.last_state.summary_stale ||
+            this.conf.summary_in_downtime != this.last_state.summary_in_downtime
+        ) {
             return true;
         } else {
             return false;
@@ -151,30 +153,33 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    stateChangedToWorse: function() {
-        var lastSubState = 'normal';
-        if(this.last_state.summary_problem_has_been_acknowledged && this.last_state.summary_problem_has_been_acknowledged == 1) {
-            lastSubState = 'ack';
-        } else if(this.last_state.summary_in_downtime && this.last_state.summary_in_downtime == 1) {
-            lastSubState = 'downtime';
-        } else if(this.last_state.summary_stale) {
-            lastSubState = 'stale';
+    stateChangedToWorse: function () {
+        var lastSubState = "normal";
+        if (
+            this.last_state.summary_problem_has_been_acknowledged &&
+            this.last_state.summary_problem_has_been_acknowledged == 1
+        ) {
+            lastSubState = "ack";
+        } else if (this.last_state.summary_in_downtime && this.last_state.summary_in_downtime == 1) {
+            lastSubState = "downtime";
+        } else if (this.last_state.summary_stale) {
+            lastSubState = "stale";
         }
 
         // If there is no "last state" return true here
-        if(!this.last_state.summary_state) {
+        if (!this.last_state.summary_state) {
             return true;
         }
 
         var lastWeight = oStates[this.last_state.summary_state][lastSubState];
 
-        var subState = 'normal';
-        if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
-            subState = 'ack';
-        } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
-            subState = 'downtime';
-        } else if(this.conf.summary_stale) {
-            subState = 'stale';
+        var subState = "normal";
+        if (this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
+            subState = "ack";
+        } else if (this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
+            subState = "downtime";
+        } else if (this.conf.summary_stale) {
+            subState = "stale";
         }
 
         var weight = oStates[this.conf.summary_state][subState];
@@ -185,18 +190,18 @@ var NagVisStatefulObject = NagVisObject.extend({
     /**
      * Returns true if the object is in non acked problem state
      */
-    hasProblematicState: function() {
+    hasProblematicState: function () {
         // In case of acked/downtimed states this is no problematic state
-        if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
+        if (this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
             return false;
-        } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
+        } else if (this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
             return false;
-        } else if(this.conf.summary_stale && this.conf.summary_stale) {
+        } else if (this.conf.summary_stale && this.conf.summary_stale) {
             return false;
         }
-        
-        var weight = oStates[this.conf.summary_state]['normal'];
-        return weight > oStates['UP']['normal'];
+
+        var weight = oStates[this.conf.summary_state]["normal"];
+        return weight > oStates["UP"]["normal"];
     },
 
     /**
@@ -206,7 +211,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    outputOrPerfdataChanged: function() {
+    outputOrPerfdataChanged: function () {
         return this.conf.output != this.last_state.output || this.conf.perfdata != this.last_state.perfdata;
     },
 
@@ -215,24 +220,24 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.getMembers();
         this.replaceMacros();
 
-        if (g_view.type === 'map') {
+        if (g_view.type === "map") {
             switch (this.conf.view_type) {
-                case 'line':
+                case "line":
                     new ElementLine(this).addTo(this);
-                break;
-                case 'gadget':
+                    break;
+                case "gadget":
                     new ElementGadget(this).addTo(this);
-                break;
+                    break;
                 default:
                     new ElementIcon(this).addTo(this);
-                break;
+                    break;
             }
         }
 
         this.base();
     },
 
-    updateAttrs: function(attrs, only_state) {
+    updateAttrs: function (attrs, only_state) {
         // Save old state for later "change detection"
         this.saveLastState();
 
@@ -245,8 +250,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         // When the config has not changed, but the state, rerender the whole object
         // the config update is handled within NagVisObject()
-        if (only_state && this.stateChanged())
-            this.render(); // erase, rerender and draw object
+        if (only_state && this.stateChanged()) this.render(); // erase, rerender and draw object
 
         if (this.stateChanged()) {
             /**
@@ -264,19 +268,17 @@ var NagVisStatefulObject = NagVisObject.extend({
                 this.initRepeatedEvents();
             }
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     },
 
-    transformAttributes: function() {
+    transformAttributes: function () {
         this.replaceMacros();
     },
 
-    updateMemberAttrs: function(attrs, only_state) {
-        if (!this.members || !attrs.members)
-            return;
+    updateMemberAttrs: function (attrs, only_state) {
+        if (!this.members || !attrs.members) return;
 
         // Update already existing objects
         for (var i = 0, len = attrs.members.length; i < len; i++) {
@@ -300,64 +302,136 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     raiseEvents: function (stateChanged) {
         // - Highlight (Flashing)
-        if (oPageProperties.event_highlight === '1') {
-            if (this.conf.view_type && this.conf.view_type === 'icon') {
+        if (oPageProperties.event_highlight === "1") {
+            if (this.conf.view_type && this.conf.view_type === "icon") {
                 // Detach the handler
-                setTimeout(function(obj_id) {
-                    return function() {
-                        flashIcon(obj_id, oPageProperties.event_highlight_duration,
-                                  oPageProperties.event_highlight_interval);
-                    };
-                }(this.conf.object_id), 0);
+                setTimeout(
+                    (function (obj_id) {
+                        return function () {
+                            flashIcon(
+                                obj_id,
+                                oPageProperties.event_highlight_duration,
+                                oPageProperties.event_highlight_interval
+                            );
+                        };
+                    })(this.conf.object_id),
+                    0
+                );
             } else {
                 // FIXME: Atm only flash icons, not lines or gadgets
             }
         }
-    
+
         // - Scroll to object
-        if (oPageProperties.event_scroll === '1') {
-            setTimeout(function(x, y) {
-                return function() {
-                    scrollSlow(x, y, 1);
-                };
-            }(this.parsedX(), this.parsedY()), 0);
+        if (oPageProperties.event_scroll === "1") {
+            setTimeout(
+                (function (x, y) {
+                    return function () {
+                        scrollSlow(x, y, 1);
+                    };
+                })(this.parsedX(), this.parsedY()),
+                0
+            );
         }
-    
+
         // - Eventlog
-        if (this.conf.type == 'service') {
+        if (this.conf.type == "service") {
             if (stateChanged) {
-                eventlog("state-change", "info", this.conf.type+" "+this.conf.name+" "+this.conf.service_description+": Old: "+this.last_state.summary_state+"/"+this.last_state.summary_problem_has_been_acknowledged+"/"+this.last_state.summary_in_downtime+" New: "+this.conf.summary_state+"/"+this.conf.summary_problem_has_been_acknowledged+"/"+this.conf.summary_in_downtime);
+                eventlog(
+                    "state-change",
+                    "info",
+                    this.conf.type +
+                        " " +
+                        this.conf.name +
+                        " " +
+                        this.conf.service_description +
+                        ": Old: " +
+                        this.last_state.summary_state +
+                        "/" +
+                        this.last_state.summary_problem_has_been_acknowledged +
+                        "/" +
+                        this.last_state.summary_in_downtime +
+                        " New: " +
+                        this.conf.summary_state +
+                        "/" +
+                        this.conf.summary_problem_has_been_acknowledged +
+                        "/" +
+                        this.conf.summary_in_downtime
+                );
+            } else {
+                eventlog(
+                    "state-log",
+                    "info",
+                    this.conf.type +
+                        " " +
+                        this.conf.name +
+                        " " +
+                        this.conf.service_description +
+                        ": State: " +
+                        this.conf.summary_state +
+                        "/" +
+                        this.conf.summary_problem_has_been_acknowledged +
+                        "/" +
+                        this.conf.summary_in_downtime
+                );
             }
-            else {
-                eventlog("state-log", "info", this.conf.type+" "+this.conf.name+" "+this.conf.service_description+": State: "+this.conf.summary_state+"/"+this.conf.summary_problem_has_been_acknowledged+"/"+this.conf.summary_in_downtime);
+        } else {
+            if (stateChanged) {
+                eventlog(
+                    "state-change",
+                    "info",
+                    this.conf.type +
+                        " " +
+                        this.conf.name +
+                        ": Old: " +
+                        this.last_state.summary_state +
+                        "/" +
+                        this.last_state.summary_problem_has_been_acknowledged +
+                        "/" +
+                        this.last_state.summary_in_downtime +
+                        " New: " +
+                        this.conf.summary_state +
+                        "/" +
+                        this.conf.summary_problem_has_been_acknowledged +
+                        "/" +
+                        this.conf.summary_in_downtime
+                );
+            } else {
+                eventlog(
+                    "state-log",
+                    "info",
+                    this.conf.type +
+                        " " +
+                        this.conf.name +
+                        ": State: " +
+                        this.conf.summary_state +
+                        "/" +
+                        this.conf.summary_problem_has_been_acknowledged +
+                        "/" +
+                        this.conf.summary_in_downtime
+                );
             }
         }
-        else {
-            if (stateChanged) {
-                eventlog("state-change", "info", this.conf.type+" "+this.conf.name+": Old: "+this.last_state.summary_state+"/"+this.last_state.summary_problem_has_been_acknowledged+"/"+this.last_state.summary_in_downtime+" New: "+this.conf.summary_state+"/"+this.conf.summary_problem_has_been_acknowledged+"/"+this.conf.summary_in_downtime);
-            }
-            else {
-                eventlog("state-log", "info", this.conf.type+" "+this.conf.name+": State: "+this.conf.summary_state+"/"+this.conf.summary_problem_has_been_acknowledged+"/"+this.conf.summary_in_downtime);
-            }
-        }
-    
+
         // - Sound
-        if (oPageProperties.event_sound === '1') {
-            setTimeout(function(obj_id) {
-                return function() {
-                    playSound(obj_id, 1);
-                };
-            }(this.conf.object_id), 0);
+        if (oPageProperties.event_sound === "1") {
+            setTimeout(
+                (function (obj_id) {
+                    return function () {
+                        playSound(obj_id, 1);
+                    };
+                })(this.conf.object_id),
+                0
+            );
         }
     },
 
     // Initializes repeated events (if configured to do so) after first event handling
     initRepeatedEvents: function () {
         // Are the events configured to be re-raised?
-        if(isset(oViewProperties.event_repeat_interval)
-           && oViewProperties.event_repeat_interval != 0) {
+        if (isset(oViewProperties.event_repeat_interval) && oViewProperties.event_repeat_interval != 0) {
             this.event_time_first = iNow;
-            this.event_time_last  = iNow;
+            this.event_time_last = iNow;
         }
     },
 
@@ -370,24 +444,24 @@ var NagVisStatefulObject = NagVisObject.extend({
         if (!this.hasProblematicState()) {
             // Terminate, reset vars
             this.event_time_first = null;
-            this.event_time_last  = null;
+            this.event_time_last = null;
             return;
         }
-    
+
         // Terminate repeated events after duration has been reached when
         // a limited duration has been configured
-        if (oViewProperties.event_repeat_duration != -1 
-           && this.event_time_first 
-              + oViewProperties.event_repeat_duration < iNow) {
+        if (
+            oViewProperties.event_repeat_duration != -1 &&
+            this.event_time_first + oViewProperties.event_repeat_duration < iNow
+        ) {
             // Terminate, reset vars
             this.event_time_first = null;
-            this.event_time_last  = null;
+            this.event_time_last = null;
             return;
         }
-        
+
         // Time for next event interval?
-        if (this.event_time_last
-           + oViewProperties.event_repeat_interval >= iNow) {
+        if (this.event_time_last + oViewProperties.event_repeat_interval >= iNow) {
             this.raiseEvents(false);
             this.event_time_last = iNow;
         }
@@ -399,66 +473,79 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     replaceMacros: function () {
-        var name = '';
-        if(this.conf.type == 'service') {
-            name = 'host_name';
+        var name = "";
+        if (this.conf.type == "service") {
+            name = "host_name";
         } else {
-            name = this.conf.type + '_name';
+            name = this.conf.type + "_name";
         }
 
-        if(this.conf.url && this.conf.url !== '') {
-            if(this.conf.htmlcgi && this.conf.htmlcgi !== '') {
-                this.conf.url = this.conf.url.replace(getRegEx('htmlcgi', '\\[htmlcgi\\]', 'g'), this.conf.htmlcgi);
+        if (this.conf.url && this.conf.url !== "") {
+            if (this.conf.htmlcgi && this.conf.htmlcgi !== "") {
+                this.conf.url = this.conf.url.replace(getRegEx("htmlcgi", "\\[htmlcgi\\]", "g"), this.conf.htmlcgi);
             } else {
-                this.conf.url = this.conf.url.replace(getRegEx('htmlcgi', '\\[htmlcgi\\]', 'g'), oGeneralProperties.path_cgi);
+                this.conf.url = this.conf.url.replace(
+                    getRegEx("htmlcgi", "\\[htmlcgi\\]", "g"),
+                    oGeneralProperties.path_cgi
+                );
             }
 
-            this.conf.url = this.conf.url.replace(getRegEx('htmlbase', '\\[htmlbase\\]', 'g'), oGeneralProperties.path_base);
+            this.conf.url = this.conf.url.replace(
+                getRegEx("htmlbase", "\\[htmlbase\\]", "g"),
+                oGeneralProperties.path_base
+            );
 
-            this.conf.url = this.conf.url.replace(getRegEx(name, '\\['+name+'\\]', 'g'), encodeURIComponent(this.conf.name));
-            if(this.conf.type == 'service') {
-                this.conf.url = this.conf.url.replace(getRegEx('service_description', '\\[service_description\\]', 'g'), encodeURIComponent(this.conf.service_description));
+            this.conf.url = this.conf.url.replace(
+                getRegEx(name, "\\[" + name + "\\]", "g"),
+                encodeURIComponent(this.conf.name)
+            );
+            if (this.conf.type == "service") {
+                this.conf.url = this.conf.url.replace(
+                    getRegEx("service_description", "\\[service_description\\]", "g"),
+                    encodeURIComponent(this.conf.service_description)
+                );
             }
 
-            if(this.conf.type != 'map') {
-                this.conf.url = this.conf.url.replace(getRegEx('backend_id', '\\[backend_id\\]', 'g'), encodeURIComponent(this.conf.backend_id));
+            if (this.conf.type != "map") {
+                this.conf.url = this.conf.url.replace(
+                    getRegEx("backend_id", "\\[backend_id\\]", "g"),
+                    encodeURIComponent(this.conf.backend_id)
+                );
             }
         }
     },
 
-    highlight: function(show) {
+    highlight: function (show) {
         // FIXME: Highlight lines in the future too
-        if(this.conf.view_type !== 'icon')
-            return;
+        if (this.conf.view_type !== "icon") return;
 
-        var oObjIcon = document.getElementById(this.conf.object_id + '-icon');
-        var oObjIconDiv = document.getElementById(this.conf.object_id + '-icondiv');
+        var oObjIcon = document.getElementById(this.conf.object_id + "-icon");
+        var oObjIconDiv = document.getElementById(this.conf.object_id + "-icondiv");
 
         var sColor = oStates[this.conf.summary_state].color;
 
         // Use these classes (icon-flashing-<state>) in your custom css to customise flashing icons
         // e.g. icon-flashing-critical, icondiv-flashing-critical
         // Note you may need to use '!important' to override the inline default
-        // 
-        var sFlashingClass = 'icon-flashing-' + this.conf.summary_state.toLowerCase();
-        var sFlashingDivClass = 'icondiv-flashing-' + this.conf.summary_state.toLowerCase();
+        //
+        var sFlashingClass = "icon-flashing-" + this.conf.summary_state.toLowerCase();
+        var sFlashingDivClass = "icondiv-flashing-" + this.conf.summary_state.toLowerCase();
 
         this.bIsFlashing = show;
-        if(show) {
-            oObjIcon.style.outline  = "5px solid " + sColor;
+        if (show) {
+            oObjIcon.style.outline = "5px solid " + sColor;
             oObjIcon.classList.add(sFlashingClass);
             oObjIconDiv.classList.add(sFlashingDivClass);
         } else {
-            oObjIcon.style.outline  = "none";
+            oObjIcon.style.outline = "none";
             oObjIcon.classList.remove(sFlashingClass);
             oObjIconDiv.classList.remove(sFlashingDivClass);
         }
 
-        sColor            = null;
-        sFlashingClass    = null;
+        sColor = null;
+        sFlashingClass = null;
         sFlashingDivClass = null;
-        oObjIconDiv       = null;
-        oObjIcon          = null;
+        oObjIconDiv = null;
+        oObjIcon = null;
     }
-
 });

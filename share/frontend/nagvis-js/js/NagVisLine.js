@@ -23,23 +23,23 @@
  *****************************************************************************/
 
 var NagVisLine = NagVisStatelessObject.extend({
-    constructor: function(oConf) {
+    constructor: function (oConf) {
         // Call parent constructor;
         this.base(oConf);
     },
 
-    update: function() {
+    update: function () {
         this.clearElements();
 
         var line = new ElementLine(this).addTo(this);
 
         // Apply line color configurations
-        line.calcColors = function(obj) {
-            return function() {
+        line.calcColors = (function (obj) {
+            return function () {
                 return [obj.conf.line_color, obj.conf.line_color_border];
             };
-        }(this);
+        })(this);
 
         this.base();
-    },
+    }
 });

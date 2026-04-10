@@ -28,7 +28,7 @@ function frontendMessagePresent(key) {
 }
 
 function frontendMessageRemove(key) {
-    if(frontendMessagePresent(key)) {
+    if (frontendMessagePresent(key)) {
         popupWindowClose();
         delete frontendMessages[key];
     }
@@ -43,35 +43,38 @@ function frontendMessage(oMessage, key) {
         throw "Could not display empty frontendMessage()";
     }
 
-    var sTitle = '';
-    if (typeof oMessage.title !== 'undefined')
-        sTitle = oMessage.title;
+    var sTitle = "";
+    if (typeof oMessage.title !== "undefined") sTitle = oMessage.title;
 
     var closable = true;
-    if (typeof oMessage.closable !== 'undefined')
-        closable = oMessage.closable;
+    if (typeof oMessage.closable !== "undefined") closable = oMessage.closable;
 
     // Skip processing when message with same key already shown
-    if (isset(key) && frontendMessagePresent(key))
-        return;
+    if (isset(key) && frontendMessagePresent(key)) return;
 
-    var container = popupWindow(sTitle, {'code': '<div class="'+oMessage.type.toLowerCase()+'">'
-                                 +oMessage.message+'</div>'}, 500, closable);
+    var container = popupWindow(
+        sTitle,
+        { code: '<div class="' + oMessage.type.toLowerCase() + '">' + oMessage.message + "</div>" },
+        500,
+        closable
+    );
     frontendMessageAdd(key, container);
 
     // Maybe there is a request for a reload/redirect
-    if (typeof oMessage.reloadTime !== 'undefined' && oMessage.reloadTime !== null) {
+    if (typeof oMessage.reloadTime !== "undefined" && oMessage.reloadTime !== null) {
         var sUrl = window.location.href;
 
         // Maybe enable redirect
-        if(typeof oMessage.reloadUrl !== 'undefined' && oMessage.reloadUrl !== null) {
+        if (typeof oMessage.reloadUrl !== "undefined" && oMessage.reloadUrl !== null) {
             sUrl = oMessage.reloadUrl;
         }
 
         // Remove # signs. Seems to prevent firefox from performing the reload
-        sUrl = sUrl.replace('#', '');
+        sUrl = sUrl.replace("#", "");
 
         // Register reload/redirect
-        window.setTimeout(function() { window.location.href = sUrl; }, oMessage.reloadTime*1000);
+        window.setTimeout(function () {
+            window.location.href = sUrl;
+        }, oMessage.reloadTime * 1000);
     }
 }

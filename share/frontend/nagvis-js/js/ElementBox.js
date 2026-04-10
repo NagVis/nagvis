@@ -22,25 +22,30 @@
  *****************************************************************************/
 
 var ElementBox = Element.extend({
-    render: function() {
+    render: function () {
         let scale = 1;
-        if (g_map && usesSource('worldmap') && this.obj.conf.scale_to_zoom == '1') {
+        if (g_map && usesSource("worldmap") && this.obj.conf.scale_to_zoom == "1") {
             let currentZoom = g_map.getZoom();
-            let one2oneZoom = Number(this.obj.conf.normal_size_at_zoom) || 19
+            let one2oneZoom = Number(this.obj.conf.normal_size_at_zoom) || 19;
             if (currentZoom < one2oneZoom) {
-                scale = 1 / Math.pow(2, one2oneZoom-currentZoom)
+                scale = 1 / Math.pow(2, one2oneZoom - currentZoom);
             }
             if (currentZoom > one2oneZoom) {
-                scale = Math.pow(2, currentZoom-one2oneZoom)
+                scale = Math.pow(2, currentZoom - one2oneZoom);
             }
         }
 
         this.dom_obj = renderNagVisTextbox(
-            this.obj.conf.object_id+'-label',
-            this.obj.conf.background_color, this.obj.conf.border_color,
-            0, 0, // coords are set by this.place()
-            this.obj.conf.z, this.obj.conf.w,
-            this.obj.conf.h, this.obj.getText(), this.obj.conf.style,
+            this.obj.conf.object_id + "-label",
+            this.obj.conf.background_color,
+            this.obj.conf.border_color,
+            0,
+            0, // coords are set by this.place()
+            this.obj.conf.z,
+            this.obj.conf.w,
+            this.obj.conf.h,
+            this.obj.getText(),
+            this.obj.conf.style,
             scale
         );
         this.obj.trigger_obj = this.dom_obj;
@@ -55,13 +60,13 @@ var ElementBox = Element.extend({
     lock: function () {
         // when locking the object while the cursor is a resize cursor,
         // it will stay as it is, when not removing them.
-        this.dom_obj.style.cursor = '';
+        this.dom_obj.style.cursor = "";
         makeUndragable(this.dom_obj);
         makeUnresizeable(this.dom_obj);
     },
 
     place: function () {
-        this.dom_obj.style.top  = this.obj.parseCoord(this.obj.conf.y, 'y') + 'px';
-        this.dom_obj.style.left = this.obj.parseCoord(this.obj.conf.x, 'x') + 'px';
+        this.dom_obj.style.top = this.obj.parseCoord(this.obj.conf.y, "y") + "px";
+        this.dom_obj.style.left = this.obj.parseCoord(this.obj.conf.x, "x") + "px";
     }
 });
