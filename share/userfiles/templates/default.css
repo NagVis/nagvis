@@ -509,7 +509,7 @@ div#popupWindow h1 {
 #popupWindowContent input, select {
     color: #555555;
     background-color: #fbfbfb;
-    border: 1px solid #e5e5e5;
+    border: 1px solid #bbb;
 }
 
 /* Header styling */
