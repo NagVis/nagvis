@@ -69,6 +69,7 @@ var ElementGadget = Element.extend({
 
     detectGadgetType: function (param_str) {
         var content = this.requestGadget(param_str);
+        // eslint-disable-next-line no-control-regex
         if (content.substring(0, 4) === "GIF8" || !/^[\x00-\x7F]*$/.test(content[0])) this.gadget_type = "img";
         else this.gadget_type = "html";
     },
@@ -99,7 +100,7 @@ var ElementGadget = Element.extend({
         if (this.obj.conf.type == "dyngroup") sParams += "&object_types=" + this.obj.conf.object_types;
 
         if (this.obj.conf.perfdata && this.obj.conf.perfdata != "")
-            sParams += "&perfdata=" + this.obj.conf.perfdata.replace(/\&quot\;|\&\#145\;/g, "%22");
+            sParams += "&perfdata=" + this.obj.conf.perfdata.replace(/&quot;|&#145;/g, "%22");
 
         // Process the optional gadget_opts param
         if (this.obj.conf.gadget_opts && this.obj.conf.gadget_opts != "")

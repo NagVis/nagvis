@@ -144,7 +144,7 @@ var ElementLabel = Element.extend({
     // Important: It is called from an event handler the 'this.' keyword can not be used here.
     dragLabel: function (trigger_obj, obj, event) {
         var isRelative = function (coord) {
-            return coord.toString().match(/^(?:\+|\-|center|bottom)/);
+            return coord.toString().match(/^(?:\+|-|center|bottom)/);
         };
 
         // Calculates relative/absolute coords depending on the current configured type
@@ -194,7 +194,7 @@ var ElementLabel = Element.extend({
             coord = obj_coord - diff;
         } else if (dir == "y" && coord && coord.toString() == "bottom") {
             coord = obj_coord + rmZoomFactor(this.obj.getObjHeight());
-        } else if (coord && coord.toString().match(/^(?:\+|\-)/)) {
+        } else if (coord && coord.toString().match(/^(?:\+|-)/)) {
             // If there is a presign it should be relative to the objects x/y
             coord = obj_coord + addZoomFactor(parseFloat(coord));
         } else if (!coord || coord === "0") {

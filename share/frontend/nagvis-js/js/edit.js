@@ -343,7 +343,7 @@ function dragObject(event) {
         newTop = posy - dragObjectOffset[1];
 
     // skip further handling when moving out of screen
-    if (typeof posx === "undefined" || typeof posy === undefined) return preventDefaultEvents(event);
+    if (typeof posx === "undefined" || typeof posy === "undefined") return preventDefaultEvents(event);
 
     draggingObject.style.position = "absolute";
     draggingObject.style.left = addZoomFactor(newLeft) + "px";

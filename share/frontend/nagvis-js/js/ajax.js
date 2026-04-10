@@ -61,7 +61,7 @@ function call_ajax(url, args) {
     if (!AJAX) return null;
 
     if (args.add_ajax_id) {
-        url += url.indexOf("\?") !== -1 ? "&" : "?";
+        url += url.indexOf("?") !== -1 ? "&" : "?";
         url += "_ajaxid=" + iNow;
     }
 

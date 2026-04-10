@@ -946,10 +946,10 @@ var ElementLine = Element.extend({
         if (!perfdata) return [];
 
         // Clean up perfdata
-        perfdata = perfdata.replace("/\s*=\s*/", "=");
+        perfdata = perfdata.replace(/\s*=\s*/, "=");
 
         // Break perfdata string into array of individual sets
-        var re = /([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/g;
+        var re = /([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/g; // eslint-disable-line no-useless-escape
         var perfdataMatches = perfdata.match(re);
 
         // Check for empty perfdata
@@ -959,7 +959,7 @@ var ElementLine = Element.extend({
         for (var i = 0; i < perfdataMatches.length; i++) {
             // Get parts of perfdata from string
             var tmpSetMatches = perfdataMatches[i].match(
-                /(&#145;)?([\w\s\=\'\-]*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/
+                /(&#145;)?([\w\s\=\'\-]*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/ // eslint-disable-line no-useless-escape
             );
 
             // Check if we got any perfdata

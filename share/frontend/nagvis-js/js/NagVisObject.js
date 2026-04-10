@@ -167,8 +167,9 @@ var NagVisObject = Base.extend({
         // Editing is only possible in maps
         if (g_view.type != "map") return;
 
-        if (!oUserProperties.hasOwnProperty("unlocked-" + oPageProperties.map_name)) return;
+        if (!oUserProperties.hasOwnProperty("unlocked-" + oPageProperties.map_name)) return; // eslint-disable-line no-prototype-builtins
 
+        // eslint-disable-next-line no-prototype-builtins
         if (oViewProperties.hasOwnProperty("edit_mode") && oViewProperties["edit_mode"] === true) {
             this.bIsLocked = false;
             return;
@@ -243,8 +244,10 @@ var NagVisObject = Base.extend({
             else this.elements[i].unlock();
 
         // Only save the user option when not using the edit_mode
+        // eslint-disable-next-line no-prototype-builtins
         if (!isset(lock) && (!oViewProperties.hasOwnProperty("edit_mode") || oViewProperties["edit_mode"] !== true)) {
             var unlocked = [];
+            // eslint-disable-next-line no-prototype-builtins
             if (oUserProperties.hasOwnProperty("unlocked-" + oPageProperties.map_name))
                 unlocked = oUserProperties["unlocked-" + oPageProperties.map_name].split(",");
 
