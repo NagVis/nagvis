@@ -135,7 +135,7 @@ var ElementGadget = Element.extend({
             if (this.obj.conf.type == "service") alt += "-" + this.obj.conf.service_description;
             oGadget.alt = alt;
         } else {
-            var oGadget = document.createElement("div");
+            oGadget = document.createElement("div");
             oGadget.innerHTML = this.requestGadget(sParams);
         }
         oGadget.setAttribute("id", this.obj.conf.object_id + "-icon");

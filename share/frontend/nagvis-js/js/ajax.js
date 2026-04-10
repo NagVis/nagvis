@@ -152,8 +152,8 @@ function getFormParams(formId, skipHelperFields) {
         var data = new FormData();
         var formdata = true;
     } else {
-        var formdata = false;
-        var data = "";
+        formdata = false;
+        data = "";
     }
 
     var add_data = function (key, val) {
@@ -220,12 +220,12 @@ function getFormParams(formId, skipHelperFields) {
 
     // Get relevant select elements
     aFields = oForm.getElementsByTagName("select");
-    for (var i = 0, len = aFields.length; i < len; i++) {
+    for (i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (NagVis WUI specific)
         if (skipHelperFields && aFields[i].name.charAt(0) === "_") continue;
 
         // Skip options which use the default value
-        var oFieldDefault = document.getElementById("_" + aFields[i].name);
+        oFieldDefault = document.getElementById("_" + aFields[i].name);
         if (aFields[i] && oFieldDefault) {
             if (aFields[i].value === oFieldDefault.value) {
                 continue;

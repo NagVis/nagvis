@@ -112,7 +112,7 @@ var NagVisObject = Base.extend({
         }
 
         if (!this.bIsLocked) {
-            for (var i = 0; i < this.elements.length; i++) {
+            for (i = 0; i < this.elements.length; i++) {
                 this.elements[i].unlock();
             }
         }
@@ -124,7 +124,7 @@ var NagVisObject = Base.extend({
         // to the dom before being able to calculate the correct coordinates
         // needed in place().
         if (this.conf.type == "line" || this.conf.view_type == "line")
-            for (var i = 0; i < this.elements.length; i++) this.elements[i].place();
+            for (i = 0; i < this.elements.length; i++) this.elements[i].place();
     },
 
     draw: function () {
@@ -358,12 +358,12 @@ var NagVisObject = Base.extend({
                 o.delChild(this);
             }
         } else {
-            var o = getMapObjByDomObjId(xParent);
+            o = getMapObjByDomObjId(xParent);
             // Don't remove when another coord is a child of this object
             if (o && Object.size(this.getRelativeCoordsUsingParent(xParent)) == 1) {
                 o.delChild(this);
             }
-            var o = getMapObjByDomObjId(yParent);
+            o = getMapObjByDomObjId(yParent);
             // Don't remove when another coord is a child of this object
             if (o && Object.size(this.getRelativeCoordsUsingParent(yParent)) == 1) {
                 o.delChild(this);
@@ -409,7 +409,7 @@ var NagVisObject = Base.extend({
                 }
             }
             if (yParent != oParent.conf.object_id) {
-                var o = getMapObjByDomObjId(yParent);
+                o = getMapObjByDomObjId(yParent);
                 if (o) {
                     o.delChild(this);
                     o = null;
@@ -473,7 +473,7 @@ var NagVisObject = Base.extend({
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     calcNewCoord: function (val, dir, num) {
-        if (!isset(num)) var num = -1;
+        if (!isset(num)) num = -1;
 
         var oldVal = num === -1 ? this.conf[dir] : this.conf[dir].split(",")[num];
         // Check if the current value is an integer or a relative coord
@@ -513,10 +513,11 @@ var NagVisObject = Base.extend({
     getParentObjectIds: function (num) {
         var parentIds = {};
 
+        var coords;
         if (isset(num)) {
-            var coords = (this.conf["x"].split(",")[num] + "," + this.conf["y"].split(",")[num]).split(",");
+            coords = (this.conf["x"].split(",")[num] + "," + this.conf["y"].split(",")[num]).split(",");
         } else if (isset(this.conf.x) && isset(this.conf.y)) {
-            var coords = (this.conf.x + "," + this.conf.y).split(",");
+            coords = (this.conf.x + "," + this.conf.y).split(",");
         } else {
             // Don't try to do strange things for objects not having coordinates. But
             // that should never happen anyways.
@@ -608,10 +609,11 @@ var NagVisObject = Base.extend({
      * coordinates have already been set
      */
     place: function () {
-        for (var i = 0, l = this.elements.length; i < l; i++) this.elements[i].place();
+        var i, l;
+        for (i = 0, l = this.elements.length; i < l; i++) this.elements[i].place();
 
         // Move child objects
-        for (var i = 0, l = this.childs.length; i < l; i++) this.childs[i].place();
+        for (i = 0, l = this.childs.length; i < l; i++) this.childs[i].place();
     },
 
     needsContextMenu: function () {
@@ -669,7 +671,7 @@ var NagVisObject = Base.extend({
 
             newPos = [obj.calcNewCoord(trigger_obj.x - offsetX, "x"), obj.calcNewCoord(trigger_obj.y - offsetY, "y")];
 
-            var parents = obj.getParentObjectIds();
+            parents = obj.getParentObjectIds();
         }
 
         obj.conf.x = newPos[0];
@@ -698,7 +700,7 @@ var NagVisObject = Base.extend({
                 obj.conf.x = obj.calcNewCoord(pos[0], "x", anchorId);
                 obj.conf.y = obj.calcNewCoord(pos[1], "y", anchorId);
             } else {
-                var pos = coordsToGrid(obj.parseCoord(obj.conf.x, "x", false), obj.parseCoord(obj.conf.y, "y", false));
+                pos = coordsToGrid(obj.parseCoord(obj.conf.x, "x", false), obj.parseCoord(obj.conf.y, "y", false));
                 obj.conf.x = obj.calcNewCoord(pos[0], "x");
                 obj.conf.y = obj.calcNewCoord(pos[1], "y");
             }

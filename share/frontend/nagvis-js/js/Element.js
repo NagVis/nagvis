@@ -21,6 +21,7 @@
  *
  *****************************************************************************/
 
+// eslint-disable-next-line no-redeclare
 var Element = Base.extend({
     // Holds the NagVis object which this element is associated with
     obj: null,
@@ -111,7 +112,7 @@ var Element = Base.extend({
         } else if (!enable) {
             if (this.obj.trigger_obj.parentNode.tagName == "A") {
                 this.obj.trigger_obj.parentNode.onclick = function (event) {
-                    var event = !event ? window.event : event;
+                    event = !event ? window.event : event;
                     if (event.stopPropagation) event.stopPropagation();
                     event.cancelBubble = true;
                     return false;

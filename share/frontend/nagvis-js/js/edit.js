@@ -874,7 +874,7 @@ function toggle_section(sec) {
 
     // update the navigation
     var nav_items = document.getElementById("nav").childNodes;
-    for (var i = 0; i < nav_items.length; i++) {
+    for (i = 0; i < nav_items.length; i++) {
         if (nav_items[i].id == "nav_" + sec) add_class(nav_items[i], "active");
         else remove_class(nav_items[i], "active");
     }

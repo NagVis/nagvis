@@ -102,7 +102,7 @@ var ViewMap = View.extend({
     handleMapInitError: function (status_code, response, handler_data) {
         hideStatusMessage();
         if (response === null) {
-            var response = {
+            response = {
                 type: "error",
                 title: "Error: Invalid response",
                 message:
@@ -245,7 +245,7 @@ var ViewMap = View.extend({
 
         // Store object dependencies
         if (parents) {
-            for (var parentObjId in parents) {
+            for (parentObjId in parents) {
                 if (isset(this.objects[parentObjId])) this.objects[parentObjId].addChild(obj);
             }
         }
@@ -274,7 +274,7 @@ var ViewMap = View.extend({
         // Then store the object position dependencies.
         // Before both can be done all objects need to be added
         // to the map objects list
-        for (var i in this.objects) this.renderObject(i);
+        for (i in this.objects) this.renderObject(i);
 
         eventlog("worker", "debug", "initializeObjects: End setting map objects");
     },
@@ -297,7 +297,7 @@ var ViewMap = View.extend({
         if (typeof sImage !== "undefined" && sImage !== "none" && sImage !== "") {
             // Use existing image or create new
             if (!oImage) {
-                var oImage = document.createElement("img");
+                oImage = document.createElement("img");
                 oImage.setAttribute("id", "backgroundImage");
                 document.getElementById("map").appendChild(oImage);
                 addZoomHandler(oImage, true);
@@ -394,7 +394,7 @@ var ViewMap = View.extend({
             gridRemove();
         } else {
             // In edit mode (for at least one object)
-            var o = document.getElementById("editIndicator");
+            o = document.getElementById("editIndicator");
             if (o) o.style.display = "";
 
             gridParse();

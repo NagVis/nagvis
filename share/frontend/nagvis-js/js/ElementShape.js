@@ -69,8 +69,8 @@ var ElementShape = Element.extend({
                 var w = parseInt(size),
                     h = parseInt(size);
             } else {
-                var w = parseInt(size[0]),
-                    h = parseInt(size[1]);
+                w = parseInt(size[0]);
+                h = parseInt(size[1]);
             }
             oIcon.style.width = w + "px";
             oIcon.style.height = h + "px";

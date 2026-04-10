@@ -363,7 +363,7 @@ var ElementContext = Element.extend({
         oSectionMacros["actions"] = "<!--\\sBEGIN\\saction_.+?\\s-->.+?<!--\\sEND\\saction_.+?\\s-->";
 
         // Loop and replace all unwanted section macros
-        for (var key in oSectionMacros) {
+        for (key in oSectionMacros) {
             var regex = getRegEx("section-" + key, oSectionMacros[key], "gm");
             this.template_html = this.template_html.replace(regex, "");
             regex = null;

@@ -24,11 +24,7 @@ export default [
             // rules produce too many false positives without explicit per-file global
             // declarations. Enable them again once the codebase is modularised.
             "no-undef": "off",
-            "no-unused-vars": "off",
-            // ES5 var redeclaration within the same function scope is valid syntax and
-            // is used extensively throughout the codebase. Disable until the codebase
-            // moves to let/const.
-            "no-redeclare": "off"
+            "no-unused-vars": "off"
         }
     }
 ];
