@@ -201,7 +201,6 @@ var ViewMap = View.extend({
             default:
                 console.error("Error: Unknown object type", attrs);
                 return;
-                break;
         }
 
         // Save the number of unlocked objects

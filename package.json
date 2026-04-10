@@ -2,9 +2,15 @@
     "private": true,
     "scripts": {
         "format": "prettier --write 'share/**/*.js'",
-        "format:check": "prettier --check 'share/**/*.js'"
+        "format:check": "prettier --check 'share/**/*.js'",
+        "lint": "eslint 'share/**/*.js'",
+        "lint:fix": "eslint --fix 'share/**/*.js'"
     },
     "devDependencies": {
+        "@eslint/js": "^9.0.0",
+        "eslint": "^9.0.0",
+        "eslint-config-prettier": "^10.0.0",
+        "globals": "^16.0.0",
         "prettier": "^3.0.0"
     }
 }

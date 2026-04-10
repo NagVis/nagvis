@@ -736,7 +736,7 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function escapeUrlValues(sStr) {
-    if (typeof sStr === undefined || sStr === null || sStr === "") {
+    if (typeof sStr === "undefined" || sStr === null || sStr === "") {
         return sStr;
     }
 
@@ -957,7 +957,7 @@ function handleException(e) {
 // Enable javascript error handler
 try {
     window.onerror = handleJSError;
-} catch (er) {}
+} catch (er) {} // eslint-disable-line no-empty
 
 /**
  * Cross browser mapper to add an event to an object
@@ -1274,7 +1274,7 @@ Object.size = function (obj) {
     var size = 0,
         key;
     for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
+        if (obj.hasOwnProperty(key)) size++; // eslint-disable-line no-prototype-builtins
     }
     return size;
 };
@@ -1345,7 +1345,7 @@ function getEffectiveStyle(e, attr) {
         return document.defaultView.getComputedStyle(e, null).getPropertyValue(attr);
     } else if (e.currentStyle) {
         // IE
-        var ie_attr = attr.replace(/\-(\w)/g, function (strMatch, p1) {
+        var ie_attr = attr.replace(/-(\w)/g, function (strMatch, p1) {
             return p1.toUpperCase();
         });
         var f = e.currentStyle[ie_attr];
