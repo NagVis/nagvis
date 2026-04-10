@@ -39,7 +39,7 @@ var g_view = null;
  * to check if the mainentance mode has finished
  */
 function inMaintenance(displayMsg) {
-    if (!isset(displayMsg)) var displayMsg = true;
+    if (!isset(displayMsg)) displayMsg = true;
     if (oPageProperties && oPageProperties.in_maintenance === "1") {
         hideStatusMessage();
         if (displayMsg)
@@ -212,7 +212,7 @@ function searchObjects(sMatch) {
     // Actions for the results:
     // When multiple found: highlight all
     // When single found: highlight and focus the object
-    for (var i = 0, len = aResults.length; i < len; i++) {
+    for (i = 0, len = aResults.length; i < len; i++) {
         var objectId = aResults[i];
 
         // - highlight the object
@@ -639,12 +639,13 @@ function renderZoombar() {
 function getViewParams(update, userParams) {
     if (!isset(userParams)) userParams = false;
 
+    var params;
     if (!userParams && isset(oViewProperties) && isset(oViewProperties["params"])) {
-        var params = oViewProperties["params"];
+        params = oViewProperties["params"];
     } else if (isset(oViewProperties) && isset(oViewProperties["user_params"])) {
-        var params = oViewProperties["user_params"];
+        params = oViewProperties["user_params"];
     } else if (update) {
-        var params = {};
+        params = {};
     } else {
         return "";
     }
@@ -665,7 +666,7 @@ function getViewParams(update, userParams) {
     }
 
     var sParams = "";
-    for (var param in params) {
+    for (param in params) {
         if (params[param] != "") {
             sParams += "&" + param + "=" + escapeUrlValues(params[param]);
         }

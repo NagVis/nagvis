@@ -144,7 +144,7 @@ function ddMenuToggle(event, id) {
 
 // Hide the given menus instant
 function ddMenuHide(close_menus) {
-    if (typeof close_menus === "undefined") var close_menus = open_menus.slice(); // copy open menus array
+    if (typeof close_menus === "undefined") close_menus = open_menus.slice(); // copy open menus array
 
     var h, index;
     for (var i = 0; i < close_menus.length; i++) {

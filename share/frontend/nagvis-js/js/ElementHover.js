@@ -363,7 +363,7 @@ var ElementHover = Element.extend({
         var hoverLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
 
         if (rightSide) var overhead = hoverLeft + this.dom_obj.clientWidth + this.spacing - pageWidth();
-        else var overhead = hoverLeft;
+        else overhead = hoverLeft;
         var widthAfterResize = this.dom_obj.clientWidth - overhead;
 
         // If width is larger than this.min_width resize it
@@ -391,7 +391,7 @@ var ElementHover = Element.extend({
         // Only create a new div when the hover menu does not exist
         var hoverMenu = document.getElementById(this.obj.conf.object_id + "-hover");
         if (!hoverMenu) {
-            var hoverMenu = document.createElement("div");
+            hoverMenu = document.createElement("div");
             this.dom_obj = hoverMenu;
             hoverMenu.setAttribute("id", this.obj.conf.object_id + "-hover");
             hoverMenu.className = "hover";
@@ -700,7 +700,7 @@ var ElementHover = Element.extend({
         // Re-add the clean child code
         // This workaround is needed cause the obj_name macro is replaced
         // by the parent objects macro in current progress
-        var regex = getRegEx("loopChild", "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
+        regex = getRegEx("loopChild", "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
         if (this.template_html.search(regex) !== -1)
             this.template_html = this.template_html.replace(
                 regex,
@@ -711,7 +711,7 @@ var ElementHover = Element.extend({
 
         // Search for images and append current timestamp to src (prevent caching of
         // images e.a. when some graphs should be fresh)
-        var regex = getRegEx("img", "<img.*src=['\"]?([^>'\"]*)['\"]?");
+        regex = getRegEx("img", "<img.*src=['\"]?([^>'\"]*)['\"]?");
         var results = regex.exec(this.template_html);
         if (results !== null) {
             for (var i = 0, len = results.length; i < len; i = i + 2) {

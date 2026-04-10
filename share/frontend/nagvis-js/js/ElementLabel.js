@@ -172,20 +172,21 @@ var ElementLabel = Element.extend({
     },
 
     parseLabelCoord: function (dir) {
+        var coord, obj_coord;
         if (dir === "x") {
-            var coord = this.obj.conf.label_x;
+            coord = this.obj.conf.label_x;
 
             if (this.obj.conf.view_type && this.obj.conf.view_type == "line") {
-                var obj_coord = this.obj.getLineMid(this.obj.conf.x, "x");
+                obj_coord = this.obj.getLineMid(this.obj.conf.x, "x");
             } else {
-                var obj_coord = addZoomFactor(this.obj.parseCoords(this.obj.conf.x, "x", false)[0], true);
+                obj_coord = addZoomFactor(this.obj.parseCoords(this.obj.conf.x, "x", false)[0], true);
             }
         } else {
-            var coord = this.obj.conf.label_y;
+            coord = this.obj.conf.label_y;
             if (this.obj.conf.view_type && this.obj.conf.view_type == "line") {
-                var obj_coord = this.obj.getLineMid(this.obj.conf.y, "y");
+                obj_coord = this.obj.getLineMid(this.obj.conf.y, "y");
             } else {
-                var obj_coord = addZoomFactor(this.obj.parseCoords(this.obj.conf.y, "y", false)[0], true);
+                obj_coord = addZoomFactor(this.obj.parseCoords(this.obj.conf.y, "y", false)[0], true);
             }
         }
 

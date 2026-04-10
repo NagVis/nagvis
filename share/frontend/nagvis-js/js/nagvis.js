@@ -26,7 +26,9 @@
  */
 
 /* Comments for jslint */
+// eslint-disable-next-line no-redeclare
 /*global document, location, navigator, window, setTimeout, ActiveXObject */
+// eslint-disable-next-line no-redeclare
 /*global XMLHttpRequest, alert */
 
 /*jslint evil: true, */
@@ -507,7 +509,7 @@ function makeuri(addparams) {
 
     // Build list of key/value pairs
     var aparams = [];
-    for (var key in params) {
+    for (key in params) {
         aparams.push(key + "=" + params[key]);
     }
 
@@ -935,7 +937,7 @@ addDOMLoadEvent = (function () {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function handleJSError(sMsg, sUrl, iLine) {
-    if (!isset(sUrl)) var sUrl = "<Empty URL>";
+    if (!isset(sUrl)) sUrl = "<Empty URL>";
 
     // Log to javascript eventlog
     eventlog("js-error", "critical", "JS-Error occured: " + sMsg + " " + sUrl + " (" + iLine + ")");
@@ -1106,7 +1108,7 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
                 var result = regex.exec(aOpt[0]);
 
                 if (result !== null) {
-                    for (var i = 1; i < result.length; i++) {
+                    for (i = 1; i < result.length; i++) {
                         var fixed = result[i].replace("-", "").toUpperCase();
                         sKey = sKey.replace(result[i], fixed);
                     }
@@ -1143,7 +1145,7 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
         } else {
             // Only take zoom into account if the fontSize is set in px
             if (fontSize.indexOf("px") !== -1) {
-                var fontSize = parseFloat(fontSize.replace("px", ""));
+                fontSize = parseFloat(fontSize.replace("px", ""));
                 oLabelSpan.style.fontSize = addZoomFactor(fontSize) + "px";
             } else {
                 eventlog(
@@ -1378,7 +1380,7 @@ function isZoomed() {
  * might be a coordinate or a dimension of an object
  */
 function addZoomFactor(coord, forced) {
-    if (typeof forced === "undefined") var forced = false;
+    if (typeof forced === "undefined") forced = false;
 
     if (!forced && oGeneralProperties.zoom_scale_objects && oGeneralProperties.zoom_scale_objects != 1)
         return parseInt(coord);
@@ -1387,7 +1389,7 @@ function addZoomFactor(coord, forced) {
 }
 
 function rmZoomFactor(coord, forced) {
-    if (typeof forced === "undefined") var forced = false;
+    if (typeof forced === "undefined") forced = false;
 
     if (!forced && oGeneralProperties.zoom_scale_objects && oGeneralProperties.zoom_scale_objects != 1)
         return parseInt(coord);
@@ -1400,7 +1402,7 @@ function zoomHandler(event, obj, forced_zoom) {
     // not the raising object
     if (obj == window) {
         if (event.srcElement) {
-            var obj = event.srcElement;
+            obj = event.srcElement;
         }
     }
 
@@ -1444,7 +1446,7 @@ function zoomHandler(event, obj, forced_zoom) {
 function addZoomHandler(oImage, forced_zoom) {
     if (!isZoomed()) return; // If not zoomed, no handler is needed
 
-    if (typeof forced_zoom == "undefined") var forced_zoom = false;
+    if (typeof forced_zoom == "undefined") forced_zoom = false;
 
     oImage.style.display = "none";
 

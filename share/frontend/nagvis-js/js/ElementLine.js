@@ -201,8 +201,8 @@ var ElementLineControls = Element.extend({
         }
 
         var parts = g_view.unproject(this.obj.conf.x.toString().split(","), this.obj.conf.y.toString().split(","));
-        var x = parts[0].join(",");
-        var y = parts[1].join(",");
+        x = parts[0].join(",");
+        y = parts[1].join(",");
 
         // send to server
         saveObjectAttr(this.obj.conf.object_id, { x: x, y: y });
@@ -306,7 +306,7 @@ var ElementLine = Element.extend({
             oLink.className = "linelink";
             this.obj.trigger_obj = oLink;
         } else {
-            var oLink = this.obj.trigger_obj;
+            oLink = this.obj.trigger_obj;
             this.clearActionContainer();
         }
         this.dom_obj.appendChild(oLink);
@@ -377,8 +377,8 @@ var ElementLine = Element.extend({
                     var xMid = middle(xStart, xEnd, cut);
                     var yMid = middle(yStart, yEnd, cut);
                 } else {
-                    var xMid = x[1];
-                    var yMid = y[1];
+                    xMid = x[1];
+                    yMid = y[1];
                 }
 
                 this.renderArrow(0, xStart, yStart, xMid, yMid, width);
@@ -509,7 +509,7 @@ var ElementLine = Element.extend({
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         var part;
-        for (var i = 0, len = this.parts.length; i < len; i++) {
+        for (i = 0, len = this.parts.length; i < len; i++) {
             part = this.parts[i];
 
             ctx.fillStyle = part[4][0];
