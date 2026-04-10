@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ElementIcon = Element.extend({
+const ElementIcon = Element.extend({
     render: function () {
         this.renderIcon();
     },
@@ -48,11 +48,11 @@ var ElementIcon = Element.extend({
 
     // Renders the object as icon and returns the icon container js object
     renderIcon: function () {
-        var alt = "";
+        let alt = "";
         if (this.obj.conf.type == "service") alt = this.obj.conf.name + "-" + this.obj.conf.service_description;
         else alt = this.obj.conf.name;
 
-        var oIcon = document.createElement("img");
+        const oIcon = document.createElement("img");
         oIcon.setAttribute("id", this.obj.conf.object_id + "-icon");
         oIcon.className = "icon";
         this.obj.trigger_obj = oIcon;
@@ -61,10 +61,11 @@ var ElementIcon = Element.extend({
         // An icon size might be either one integer for even sized images or
         // two integers for differen height/width images
         if (this.obj.conf.icon_size) {
-            var size = this.obj.conf.icon_size;
+            const size = this.obj.conf.icon_size;
+            let w, h;
             if (size.length == 1) {
-                var w = parseInt(size),
-                    h = parseInt(size);
+                w = parseInt(size);
+                h = parseInt(size);
             } else {
                 w = parseInt(size[0]);
                 h = parseInt(size[1]);
@@ -88,7 +89,7 @@ var ElementIcon = Element.extend({
 
         addZoomHandler(oIcon);
 
-        var oIconDiv = document.createElement("div");
+        const oIconDiv = document.createElement("div");
         this.dom_obj = oIconDiv;
         this.place();
 
@@ -101,7 +102,7 @@ var ElementIcon = Element.extend({
 
         // Parse link only when set
         if (this.obj.conf.url && this.obj.conf.url !== "" && this.obj.conf.url !== "#") {
-            var oIconLink = document.createElement("a");
+            const oIconLink = document.createElement("a");
             oIconLink.href = this.obj.conf.url;
             oIconLink.target = this.obj.conf.url_target;
             oIconLink.appendChild(oIcon);

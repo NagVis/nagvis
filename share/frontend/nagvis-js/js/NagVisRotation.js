@@ -25,32 +25,32 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-var NagVisRotation = NagVisStatelessObject.extend({
+const NagVisRotation = NagVisStatelessObject.extend({
     constructor: function (oConf) {
         this.base(oConf);
     },
 
     parseOverview: function () {
-        var container = document.getElementById("overviewRotations");
+        let container = document.getElementById("overviewRotations");
 
-        var oTable = document.createElement("table");
+        const oTable = document.createElement("table");
         oTable.className = "rotation";
         container.appendChild(oTable);
-        var oTbody = document.createElement("tbody");
+        const oTbody = document.createElement("tbody");
         oTable.appendChild(oTbody);
 
         /* Rotation title */
-        var oTr = document.createElement("tr");
-        var oTd = document.createElement("td");
+        let oTr = document.createElement("tr");
+        let oTd = document.createElement("td");
         oTd.className = "title";
         oTd.setAttribute("rowSpan", this.conf.num_steps);
         oTd.rowSpan = this.conf.num_steps;
 
         // Link
-        var oLink = document.createElement("a");
+        let oLink = document.createElement("a");
         oLink.href = this.conf.url;
 
-        var h3 = document.createElement("h3");
+        let h3 = document.createElement("h3");
         h3.appendChild(document.createTextNode(this.conf.name));
 
         oLink.appendChild(h3);
@@ -62,7 +62,7 @@ var NagVisRotation = NagVisStatelessObject.extend({
         oTd = null;
 
         /* Rotation steps */
-        for (var i = 0, len = this.conf.steps.length; i < len; i++) {
+        for (let i = 0, len = this.conf.steps.length; i < len; i++) {
             if (i !== 0) oTr = document.createElement("tr");
 
             oTd = document.createElement("td");

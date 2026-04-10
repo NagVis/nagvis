@@ -21,8 +21,8 @@
  *
  *****************************************************************************/
 
-var g_context_templates = {};
-var g_context_open = null;
+const g_context_templates = {};
+let g_context_open = null;
 
 // Hides the currently open context menu
 function contextHide() {
@@ -32,7 +32,7 @@ function contextHide() {
 function context_handle_global_mousedown(event) {
     event = event ? event : window.event; // IE FIX
     if (usesSource("worldmap")) event = event.originalEvent;
-    var target = getTargetRaw(event);
+    let target = getTargetRaw(event);
 
     while (target && !has_class(target, "context")) target = target.parentNode;
 
@@ -41,12 +41,12 @@ function context_handle_global_mousedown(event) {
         contextHide();
     } else {
         // Check for click on the context menu and do nothing in this case
-        var object_id = target.id.split("-")[0];
+        const object_id = target.id.split("-")[0];
         if (g_context_open && object_id == g_context_open.obj.conf.object_id) return preventDefaultEvents(event);
     }
 }
 
-var ElementContext = Element.extend({
+const ElementContext = Element.extend({
     template_html: null,
     spacing: 5, // px from screen border
     coords: null, // list of x, y coordinates of the hover menu top left corner
@@ -112,7 +112,7 @@ var ElementContext = Element.extend({
     //
 
     getTemplate: function () {
-        var name = this.obj.conf.context_template;
+        const name = this.obj.conf.context_template;
         if (!isset(g_context_templates[name])) {
             this.requestTemplate();
         } else if (g_context_templates[name] !== true) {
@@ -122,8 +122,8 @@ var ElementContext = Element.extend({
     },
 
     handleTemplate: function (templates) {
-        var name = templates[0]["name"];
-        var code = templates[0]["code"];
+        const name = templates[0]["name"];
+        const code = templates[0]["code"];
 
         g_context_templates[name] = code;
 
@@ -133,7 +133,7 @@ var ElementContext = Element.extend({
         if (isset(templates[0]["css_file"])) {
             // This is needed for some old browsers which do no load css files
             // which are included in such fetched html code
-            var oLink = document.createElement("link");
+            const oLink = document.createElement("link");
             oLink.href = templates[0]["css_file"];
             oLink.rel = "stylesheet";
             oLink.type = "text/css";
@@ -158,8 +158,8 @@ var ElementContext = Element.extend({
         hoverHide();
 
         // document.body.scrollTop does not work in IE
-        var scrollTop = document.body.scrollTop ? document.body.scrollTop : document.documentElement.scrollTop;
-        var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft : document.documentElement.scrollLeft;
+        const scrollTop = document.body.scrollTop ? document.body.scrollTop : document.documentElement.scrollTop;
+        const scrollLeft = document.body.scrollLeft ? document.body.scrollLeft : document.documentElement.scrollLeft;
 
         // hide the menu first to avoid an "up-then-over" visual effect
         this.dom_obj.style.display = "none";
@@ -169,13 +169,13 @@ var ElementContext = Element.extend({
 
         // Check if the context menu is "in screen".
         // When not: reposition
-        var contextLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
+        const contextLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
         if (contextLeft + this.dom_obj.clientWidth > pageWidth()) {
             // move the context menu to the left
             this.dom_obj.style.left = contextLeft - this.dom_obj.clientWidth + "px";
         }
 
-        var contextTop = parseInt(this.dom_obj.style.top.replace("px", ""));
+        const contextTop = parseInt(this.dom_obj.style.top.replace("px", ""));
         if (contextTop + this.dom_obj.clientHeight > pageHeight()) {
             // Only move the context menu to the top when the new top will not be
             // out of sight
@@ -201,7 +201,7 @@ var ElementContext = Element.extend({
     renderMenu: function () {
         // Only create a new div when the context menu does not exist
         // Create context menu div
-        var contextMenu = document.createElement("div");
+        const contextMenu = document.createElement("div");
         this.dom_obj = contextMenu;
         contextMenu.setAttribute("id", this.obj.conf.object_id + "-context");
         contextMenu.className = "context";
@@ -213,14 +213,14 @@ var ElementContext = Element.extend({
 
     // Replaces object configuration specific macros in the template code
     replaceStaticMacros: function () {
-        var oSectionMacros = {};
+        let oSectionMacros = {};
 
         // Break when no template code found
         if (!this.template_html || this.template_html === "") {
             return false;
         }
 
-        var oMacros = {
+        let oMacros = {
             obj_id: this.obj.conf.object_id,
             type: this.obj.conf.type,
             name: this.obj.conf.name,
@@ -300,10 +300,10 @@ var ElementContext = Element.extend({
 
         // Loop all registered actions, check wether or not this action should be shown for this object
         // and either add the replacement section or not
-        for (var key in oGeneralProperties.actions) {
+        for (const key in oGeneralProperties.actions) {
             if (key == "indexOf") continue; // skip indexOf prototype (seems to be looped in IE)
-            var action = oGeneralProperties.actions[key];
-            var hide = false;
+            let action = oGeneralProperties.actions[key];
+            let hide = false;
 
             // Check object type
             hide = action.obj_type.indexOf(this.obj.conf.type) == -1;
@@ -311,7 +311,7 @@ var ElementContext = Element.extend({
             // Only check the condition when not already hidden by another check before
             if (!hide && isset(action.client_os) && action.client_os.length > 0) {
                 // Check the client os
-                var os = navigator.platform.toLowerCase();
+                let os = navigator.platform.toLowerCase();
                 if (os.indexOf("win") !== -1) os = "win";
                 else if (os.indexOf("linux") !== -1) os = "lnx";
                 else if (os.indexOf("mac") !== -1) os = "mac";
@@ -321,19 +321,19 @@ var ElementContext = Element.extend({
 
             // Only check the condition when not already hidden by another check before
             if (!hide && isset(action.condition) && action.condition !== "") {
-                var cond = action.condition;
+                const cond = action.condition;
 
-                var op = "";
+                let op = "";
                 if (cond.indexOf("~") != -1) {
                     op = "~";
                 } else if (cond.indexOf("=") != -1) {
                     op = "=";
                 }
 
-                var parts = cond.split(op);
-                var attr = parts[0];
-                var val = parts[1];
-                var to_be_checked;
+                const parts = cond.split(op);
+                const attr = parts[0];
+                const val = parts[1];
+                let to_be_checked;
                 if (isset(this.obj.conf.custom_variables) && isset(this.obj.conf.custom_variables[attr])) {
                     to_be_checked = this.obj.conf.custom_variables[attr];
                 } else if (isset(this.obj.conf[attr])) {
@@ -355,7 +355,6 @@ var ElementContext = Element.extend({
             if (!hide) {
                 oSectionMacros["action_" + key] = "<!--\\s(BEGIN|END)\\saction_" + key + "\\s-->";
             }
-            cond = null;
             action = null;
         }
 
@@ -363,8 +362,8 @@ var ElementContext = Element.extend({
         oSectionMacros["actions"] = "<!--\\sBEGIN\\saction_.+?\\s-->.+?<!--\\sEND\\saction_.+?\\s-->";
 
         // Loop and replace all unwanted section macros
-        for (key in oSectionMacros) {
-            var regex = getRegEx("section-" + key, oSectionMacros[key], "gm");
+        for (const key in oSectionMacros) {
+            let regex = getRegEx("section-" + key, oSectionMacros[key], "gm");
             this.template_html = this.template_html.replace(regex, "");
             regex = null;
         }

@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ViewUrl = View.extend({
+const ViewUrl = View.extend({
     type: "url",
     constructor: function (id) {
         this.base(id);
@@ -43,7 +43,7 @@ var ViewUrl = View.extend({
 
     // Fetches the contents of the given url and prints it on the current page
     render: function () {
-        var url = oPageProperties.url;
+        const url = oPageProperties.url;
         this.dom_obj = document.getElementById("url");
         if (this.dom_obj.tagName == "DIV") {
             // Fetch contents from server

@@ -25,7 +25,7 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-var NagVisService = NagVisStatefulObject.extend({
+const NagVisService = NagVisStatefulObject.extend({
     constructor: function (oConf) {
         this.base(oConf);
     }

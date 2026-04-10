@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ViewMap = View.extend({
+const ViewMap = View.extend({
     type: "map",
     // is set to true on first rendering
     rendered: false,
@@ -46,7 +46,7 @@ var ViewMap = View.extend({
     },
 
     update: function () {
-        var to_update = this.getObjectsToUpdate();
+        const to_update = this.getObjectsToUpdate();
 
         if (to_update[0].length > 0) {
             this.base({
@@ -76,7 +76,7 @@ var ViewMap = View.extend({
         // Block updates of the current map
         this.blockUpdates = true;
 
-        var wasInMaintenance = inMaintenance(false);
+        let wasInMaintenance = inMaintenance(false);
 
         // Get new map properties from server on changed map cfg
         if (this.rendered) this.updateProperties();
@@ -123,8 +123,8 @@ var ViewMap = View.extend({
         }
 
         // Remove all old objects
-        for (var i in this.objects) {
-            var obj = this.objects[i];
+        for (const i in this.objects) {
+            const obj = this.objects[i];
             if (obj && typeof obj.remove === "function") {
                 // Remove parsed object from map
                 obj.remove();
@@ -163,7 +163,7 @@ var ViewMap = View.extend({
     },
 
     addObject: function (attrs) {
-        var obj;
+        let obj;
         switch (attrs.type) {
             case "host":
                 obj = new NagVisHost(attrs);
@@ -211,17 +211,17 @@ var ViewMap = View.extend({
     },
 
     erase: function () {
-        for (var i in this.objects) {
+        for (const i in this.objects) {
             this.objects[i].erase();
         }
     },
 
     renderObject: function (object_id) {
-        var obj = this.objects[object_id];
-        var parents = obj.getParentObjectIds();
+        const obj = this.objects[object_id];
+        const parents = obj.getParentObjectIds();
 
         if (parents && usesSource("automap")) {
-            for (var parentObjId in parents) {
+            for (const parentObjId in parents) {
                 if (!this.objects[parentObjId]) {
                     return;
                 }
@@ -245,7 +245,7 @@ var ViewMap = View.extend({
 
         // Store object dependencies
         if (parents) {
-            for (parentObjId in parents) {
+            for (const parentObjId in parents) {
                 if (isset(this.objects[parentObjId])) this.objects[parentObjId].addChild(obj);
             }
         }
@@ -268,20 +268,20 @@ var ViewMap = View.extend({
         // Don't loop the first object - that is the summary of the current map
         this.sum_obj = new NagVisMap(aMapObjectConf[0]);
 
-        for (var i = 1, len = aMapObjectConf.length; i < len; i++) this.addObject(aMapObjectConf[i]);
+        for (let i = 1, len = aMapObjectConf.length; i < len; i++) this.addObject(aMapObjectConf[i]);
 
         // First parse the objects on the map
         // Then store the object position dependencies.
         // Before both can be done all objects need to be added
         // to the map objects list
-        for (i in this.objects) this.renderObject(i);
+        for (const i in this.objects) this.renderObject(i);
 
         eventlog("worker", "debug", "initializeObjects: End setting map objects");
     },
 
     // Sets basic information like background image
     renderMapBasics: function () {
-        var title = oPageProperties.alias;
+        let title = oPageProperties.alias;
         if (this.sum_obj && this.sum_obj.conf) title += " (" + this.sum_obj.conf.summary_state + ")";
         title += " :: " + oGeneralProperties.internal_title;
         oPageProperties.page_title = title;
@@ -291,9 +291,9 @@ var ViewMap = View.extend({
     },
 
     renderBackgroundImage: function () {
-        var sImage = oPageProperties.background_image;
+        const sImage = oPageProperties.background_image;
 
-        var oImage = document.getElementById("backgroundImage");
+        let oImage = document.getElementById("backgroundImage");
         if (typeof sImage !== "undefined" && sImage !== "none" && sImage !== "") {
             // Use existing image or create new
             if (!oImage) {
@@ -357,11 +357,11 @@ var ViewMap = View.extend({
      * handling as they are reloaded by being reparsed.
      */
     rerenderStatelessObjects: function (objects) {
-        for (var i = 0, len = objects.length; i < len; i++) this.objects[objects[i]].render();
+        for (let i = 0, len = objects.length; i < len; i++) this.objects[objects[i]].render();
     },
 
     removeObject: function (object_id) {
-        var obj = this.objects[object_id];
+        const obj = this.objects[object_id];
 
         obj.detachChilds();
         saveObjectRemove(object_id);
@@ -388,13 +388,13 @@ var ViewMap = View.extend({
         this.num_unlocked += num;
         if (this.num_unlocked == 0) {
             // Not in edit mode anymore
-            var o = document.getElementById("editIndicator");
+            const o = document.getElementById("editIndicator");
             if (o) o.style.display = "none";
 
             gridRemove();
         } else {
             // In edit mode (for at least one object)
-            o = document.getElementById("editIndicator");
+            const o = document.getElementById("editIndicator");
             if (o) o.style.display = "";
 
             gridParse();

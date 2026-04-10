@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var NagVisTextbox = NagVisStatelessObject.extend({
+const NagVisTextbox = NagVisStatelessObject.extend({
     update: function () {
         this.clearElements();
         new ElementBox(this).addTo(this);

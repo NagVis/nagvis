@@ -8,7 +8,7 @@
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *****************************************************************************/
 
-var favicon = {
+const favicon = {
     // -- "PUBLIC" ----------------------------------------------------------------
 
     change: function (iconURL) {
@@ -18,9 +18,9 @@ var favicon = {
     // -- "PRIVATE" ---------------------------------------------------------------
 
     addLink: function (iconURL) {
-        var docHead = document.getElementsByTagName("head")[0];
+        let docHead = document.getElementsByTagName("head")[0];
 
-        var link = document.createElement("link");
+        let link = document.createElement("link");
         link.type = "image/x-icon";
         link.rel = "shortcut icon";
         link.href = iconURL;
@@ -34,12 +34,12 @@ var favicon = {
     },
 
     removeLinkIfExists: function () {
-        var docHead = document.getElementsByTagName("head")[0];
-        var links = docHead.getElementsByTagName("link");
+        let docHead = document.getElementsByTagName("head")[0];
+        let links = docHead.getElementsByTagName("link");
 
         if (!docHead || !links) return false;
 
-        for (var i = 0, len = links.length; i < len; i++) {
+        for (let i = 0, len = links.length; i < len; i++) {
             if (links[i] && links[i].type == "image/x-icon" && links[i].rel == "shortcut icon") {
                 docHead.removeChild(links[i]);
             }

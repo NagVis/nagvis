@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ViewOverview = View.extend({
+const ViewOverview = View.extend({
     type: "overview",
     rendered_maps: 0,
     processed_maps: 0,
@@ -39,7 +39,7 @@ var ViewOverview = View.extend({
     },
 
     update: function () {
-        var to_update = this.getObjectsToUpdate();
+        const to_update = this.getObjectsToUpdate();
         if (to_update[0].length > 0) {
             this.base({
                 mod: "Overview",
@@ -56,17 +56,17 @@ var ViewOverview = View.extend({
         this.dom_obj = document.getElementById("overview");
 
         // Render maps and the rotations when enabled
-        var types = [
+        const types = [
             [oPageProperties.showmaps, "overviewMaps", oPageProperties.lang_mapIndex],
             [oPageProperties.showrotations, "overviewRotations", oPageProperties.lang_rotationPools]
         ];
-        for (var i = 0; i < types.length; i++) {
+        for (let i = 0; i < types.length; i++) {
             if (types[i][0] === 1) {
-                var h2 = document.createElement("h2");
+                const h2 = document.createElement("h2");
                 h2.innerHTML = types[i][2];
                 this.dom_obj.appendChild(h2);
 
-                var container = document.createElement("div");
+                const container = document.createElement("div");
                 container.setAttribute("id", types[i][1]);
                 container.className = "infobox";
                 this.dom_obj.appendChild(container);
@@ -77,19 +77,19 @@ var ViewOverview = View.extend({
 
     // Add the objects dom_obj to the maps dom_obj
     drawObject: function (obj) {
-        var container = document.getElementById("overviewMaps");
+        const container = document.getElementById("overviewMaps");
         container.appendChild(obj.dom_obj);
     },
 
     // Removes the given objects dom_obj from the maps dom_obj
     eraseObject: function (obj) {
-        var container = document.getElementById("overviewMaps");
+        const container = document.getElementById("overviewMaps");
         if (obj.dom_obj.parentNode == container) container.removeChild(obj.dom_obj);
     },
 
     // Adds a single map to the overview map list
     addMap: function (objects, data) {
-        var map_name = data[0],
+        const map_name = data[0],
             worldmap_has_bbox = data[1];
 
         this.processed_maps += 1;
@@ -104,14 +104,14 @@ var ViewOverview = View.extend({
             if (this.processed_maps == g_map_names.length) finishOverviewMaps();
             return false;
         }
-        var map_conf = objects[0];
+        const map_conf = objects[0];
 
         // The worldmap preview summary state should reflect the state shown by the worldmap
         // when the user opens it. This means it is needed to calculate which area of the worldmap
         // will be shown to the user and then only deal with the objects within this area.
         // Bad here: For the worldmaps we need to do a second HTTP request which should be avoided
         if (!worldmap_has_bbox && map_conf["sources"] && map_conf["sources"].indexOf("worldmap") !== -1) {
-            var worldmap = L.map("overview", {
+            const worldmap = L.map("overview", {
                 markerZoomAnimation: false,
                 maxBounds: [
                     [-85, -180.0],
@@ -123,7 +123,7 @@ var ViewOverview = View.extend({
             worldmap.remove();
 
             // leaflet does not clean up everything. We do it on our own.
-            var overview = document.getElementById("overview");
+            const overview = document.getElementById("overview");
             remove_class(overview, "leaflet-container");
             remove_class(overview, "leaflet-retina");
             remove_class(overview, "leaflet-fade-anim");
@@ -145,12 +145,12 @@ var ViewOverview = View.extend({
 
         this.rendered_maps += 1; // also count errors
 
-        var container = document.getElementById("overviewMaps");
+        const container = document.getElementById("overviewMaps");
 
         // Find the map placeholder div (replace it to keep sorting)
-        var mapdiv = null;
-        var child = null;
-        for (var i = 0; i < container.childNodes.length; i++) {
+        let mapdiv = null;
+        let child = null;
+        for (let i = 0; i < container.childNodes.length; i++) {
             child = container.childNodes[i];
             if (child.id == map_name) {
                 mapdiv = child;
@@ -159,7 +159,7 @@ var ViewOverview = View.extend({
         }
 
         // render the map object
-        var obj = new NagVisMap(map_conf);
+        const obj = new NagVisMap(map_conf);
         // Save object to map objects array
         this.objects[obj.conf.object_id] = obj;
         obj.update();
@@ -179,12 +179,12 @@ var ViewOverview = View.extend({
     // Does initial parsing of rotations on the overview page
     addRotations: function (rotations) {
         if (oPageProperties.showrotations === 1 && rotations.length > 0) {
-            for (var i = 0, len = rotations.length; i < len; i++) {
+            for (let i = 0, len = rotations.length; i < len; i++) {
                 new NagVisRotation(rotations[i]).parseOverview();
             }
         } else {
             // Hide the rotations container
-            var container = document.getElementById("overviewRotations");
+            const container = document.getElementById("overviewRotations");
             if (container) {
                 container.style.display = "none";
             }
@@ -193,7 +193,7 @@ var ViewOverview = View.extend({
 
     // Fetches all maps to be shown on the overview page
     loadMaps: function () {
-        var map_container = document.getElementById("overviewMaps");
+        const map_container = document.getElementById("overviewMaps");
 
         if (oPageProperties.showmaps !== 1 || g_map_names.length == 0) {
             if (map_container) map_container.parentNode.style.display = "none";
@@ -201,8 +201,8 @@ var ViewOverview = View.extend({
             return false;
         }
 
-        for (var i = 0, len = g_map_names.length; i < len; i++) {
-            var mapdiv = document.createElement("div");
+        for (let i = 0, len = g_map_names.length; i < len; i++) {
+            const mapdiv = document.createElement("div");
             mapdiv.setAttribute("id", g_map_names[i]);
             map_container.appendChild(mapdiv);
             call_ajax(

@@ -44,7 +44,7 @@ function checkHideMenu(event) {
     if (!event) event = window.event;
 
     // Check whether or not a parent has the class "dropdown"
-    var target = getTargetRaw(event);
+    let target = getTargetRaw(event);
     while (target) {
         if (has_class(target, "dropdown")) return; // found the menu object, no further action
         target = target.parentNode;
@@ -55,10 +55,10 @@ function checkHideMenu(event) {
 }
 
 function toggleHeader(store) {
-    var header = document.getElementById("header");
-    var spacer = document.getElementById("headerspacer");
-    var show = document.getElementById("headershow");
-    var state = true;
+    let header = document.getElementById("header");
+    let spacer = document.getElementById("headerspacer");
+    let show = document.getElementById("headershow");
+    let state = true;
 
     // Reset the header height cache
     g_header_height_cache = null;
@@ -92,9 +92,9 @@ function headerUpdateState(map_conf) {
         return false;
     }
 
-    var map = map_conf[0];
+    const map = map_conf[0];
 
-    var side = document.getElementById("side-state-" + map["name"]);
+    let side = document.getElementById("side-state-" + map["name"]);
     if (side) {
         side.className = "statediv s" + map["summary_state"];
         if (map["summary_problem_has_been_acknowledged"] == 1) {
@@ -111,7 +111,7 @@ open_menus = [];
 
 // Is called to initialize fetching states for the header/sidebar menu
 function headerUpdateStates() {
-    for (var i = 0; i < g_map_names.length; i++) {
+    for (let i = 0; i < g_map_names.length; i++) {
         call_ajax(
             oGeneralProperties.path_server +
                 "?mod=Overview&act=getObjectStates" +
@@ -127,8 +127,8 @@ function headerUpdateStates() {
 
 function ddMenuToggle(event, id) {
     event = event || window.event;
-    var this_open = false;
-    for (var i = 0; i < open_menus.length; i++) {
+    let this_open = false;
+    for (let i = 0; i < open_menus.length; i++) {
         if (open_menus[i] == id) {
             this_open = true;
             break;
@@ -146,8 +146,8 @@ function ddMenuToggle(event, id) {
 function ddMenuHide(close_menus) {
     if (typeof close_menus === "undefined") close_menus = open_menus.slice(); // copy open menus array
 
-    var h, index;
-    for (var i = 0; i < close_menus.length; i++) {
+    let h, index;
+    for (let i = 0; i < close_menus.length; i++) {
         h = document.getElementById(close_menus[i] + "-ddcontent");
         h.style.display = "none";
 
@@ -162,8 +162,8 @@ function ddMenuHide(close_menus) {
 // main function to handle the mouse events //
 function ddMenu(id, reposition) {
     // Hide all other open menus (which have not the id of the current menu in their id)
-    for (var i = 0; i < open_menus.length; i++) {
-        var other_id = open_menus[i];
+    for (let i = 0; i < open_menus.length; i++) {
+        const other_id = open_menus[i];
         if (id.indexOf("-") === -1) {
             // main level menus (no minus in name) only hide other main level menus
             if (other_id.indexOf(id) !== 0) ddMenuHide([other_id]);
@@ -175,8 +175,8 @@ function ddMenu(id, reposition) {
         }
     }
 
-    var h = document.getElementById(id + "-ddheader");
-    var c = document.getElementById(id + "-ddcontent");
+    const h = document.getElementById(id + "-ddheader");
+    const c = document.getElementById(id + "-ddcontent");
 
     if (open_menus.indexOf(id) === -1) open_menus.push(id);
 
@@ -196,10 +196,10 @@ function ddMenu(id, reposition) {
 // ------------------------------
 
 function toggleSidebar(store) {
-    var sidebar = document.getElementById("sidebar");
-    var toggle = document.getElementById("sidetoggle");
-    var content = document.getElementById("map");
-    var is_overview = false;
+    let sidebar = document.getElementById("sidebar");
+    const toggle = document.getElementById("sidetoggle");
+    let content = document.getElementById("map");
+    let is_overview = false;
     if (content == null) {
         content = document.getElementById("overview");
         is_overview = true;
@@ -209,7 +209,7 @@ function toggleSidebar(store) {
     // will not be available in undefined views like the WUI
     if (content == null) return false;
 
-    var state = 1;
+    let state = 1;
     if (sidebarOpen()) {
         sidebar.style.display = "none";
         if (is_overview === false) {
@@ -246,7 +246,7 @@ function toggleSidebar(store) {
 }
 
 function sidebarOpen() {
-    var o = document.getElementById("sidebar");
+    const o = document.getElementById("sidebar");
     if (!o) return false;
     return !(o.style.display == "none" || o.style.display == "");
 }
@@ -269,9 +269,9 @@ function sidebarDraw() {
     // If no nodes are open don't try to open some
     if (oUserProperties.sidebarOpenNodes === "") return;
 
-    var openNodes = oUserProperties.sidebarOpenNodes.split(",");
-    for (var i = 0, len = openNodes.length; i < len; i++) {
-        var node = document.getElementById(openNodes[i] + "-childs");
+    const openNodes = oUserProperties.sidebarOpenNodes.split(",");
+    for (let i = 0, len = openNodes.length; i < len; i++) {
+        let node = document.getElementById(openNodes[i] + "-childs");
         if (node) {
             node.style.display = "block";
             add_class(node.parentNode, "open");
@@ -282,13 +282,13 @@ function sidebarDraw() {
 }
 
 function sidebarUpdatePosition() {
-    var sidebar = document.getElementById("sidebar");
+    const sidebar = document.getElementById("sidebar");
     if (sidebar && sidebarOpen()) sidebar.style.top = getHeaderHeight() + "px";
 }
 
 function sidebarDrawSubtree(node, index) {
     // Check if this node is expanded
-    for (var i = 0, len = oUserProperties.sidebarOpenNodes.length; i < len; i++)
+    for (let i = 0, len = oUserProperties.sidebarOpenNodes.length; i < len; i++)
         if (oUserProperties.sidebarOpenNodes[i] == index) return;
 
     // Hide sidebar when not in openNodes
@@ -296,14 +296,14 @@ function sidebarDrawSubtree(node, index) {
 }
 
 function sidebarToggleSubtree(oTitle) {
-    var oList = sidebarGetListByTitle(oTitle);
-    var this_id = oTitle.id;
-    var state = 1;
-    var openNodes;
+    let oList = sidebarGetListByTitle(oTitle);
+    const this_id = oTitle.id;
+    let state = 1;
+    let openNodes;
     if (oUserProperties.sidebarOpenNodes === "") openNodes = [];
     else openNodes = oUserProperties.sidebarOpenNodes.split(",");
 
-    var oListItem = oTitle.parentNode.parentNode;
+    let oListItem = oTitle.parentNode.parentNode;
     if (oList.style.display == "none" || oList.style.display == "") {
         // Make the sublist visible
         oList.style.display = "block";
@@ -323,13 +323,13 @@ function sidebarToggleSubtree(oTitle) {
 
     // Loop all currently open nodes to check wether they still exist or not
     // Remove not existing nodes -> cleanup data
-    for (var i = openNodes.length; i >= 0; i--) {
-        var node = document.getElementById(openNodes[i]);
+    for (let i = openNodes.length; i >= 0; i--) {
+        const node = document.getElementById(openNodes[i]);
         if (!node) openNodes.splice(i, 1);
     }
 
     // Is it visible at the moment? Search for the index in openNodes list
-    var open = openNodes.indexOf(this_id);
+    let open = openNodes.indexOf(this_id);
 
     // When the new state is "closed" remove it from the openNodes list
     // When the node is visible and is not in the list yet, append it

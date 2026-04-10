@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ElementGadget = Element.extend({
+const ElementGadget = Element.extend({
     gadget_type: null,
 
     updateAttrs: function (only_state) {
@@ -58,7 +58,7 @@ var ElementGadget = Element.extend({
     //
 
     requestGadget: function (param_str) {
-        var data = "members=" + escape(JSON.stringify(this.obj.conf.members));
+        const data = "members=" + escape(JSON.stringify(this.obj.conf.members));
         // FIXME: Change to async?
         return call_ajax(this.obj.conf.gadget_url + param_str, {
             method: "POST",
@@ -68,7 +68,7 @@ var ElementGadget = Element.extend({
     },
 
     detectGadgetType: function (param_str) {
-        var content = this.requestGadget(param_str);
+        const content = this.requestGadget(param_str);
         // eslint-disable-next-line no-control-regex
         if (content.substring(0, 4) === "GIF8" || !/^[\x00-\x7F]*$/.test(content[0])) this.gadget_type = "img";
         else this.gadget_type = "html";
@@ -78,7 +78,7 @@ var ElementGadget = Element.extend({
      * Parses the object as gadget
      */
     renderGadget: function () {
-        var sParams = "name1=" + this.obj.conf.name;
+        let sParams = "name1=" + this.obj.conf.name;
         if (this.obj.conf.type == "service") sParams += "&name2=" + escapeUrlValues(this.obj.conf.service_description);
 
         sParams +=
@@ -112,7 +112,7 @@ var ElementGadget = Element.extend({
 
         this.detectGadgetType(sParams);
         if (this.gadget_type === "img") {
-            var oGadget = document.createElement("img");
+            const oGadget = document.createElement("img");
 
             // Register controls reposition handler to handle resizes during
             // loading the image (from alt="" text to the real image)
@@ -131,7 +131,7 @@ var ElementGadget = Element.extend({
 
             oGadget.src = this.obj.conf.gadget_url + sParams + "&cache=" + new Date().getTime();
 
-            var alt = this.obj.conf.type + "-" + this.obj.conf.name;
+            let alt = this.obj.conf.type + "-" + this.obj.conf.name;
             if (this.obj.conf.type == "service") alt += "-" + this.obj.conf.service_description;
             oGadget.alt = alt;
         } else {
@@ -141,7 +141,7 @@ var ElementGadget = Element.extend({
         oGadget.setAttribute("id", this.obj.conf.object_id + "-icon");
         this.obj.trigger_obj = oGadget;
 
-        var oIconDiv = document.createElement("div");
+        const oIconDiv = document.createElement("div");
         this.dom_obj = oIconDiv;
         oIconDiv.setAttribute("id", this.obj.conf.object_id + "-icondiv");
         oIconDiv.className = "icondiv";
@@ -149,7 +149,7 @@ var ElementGadget = Element.extend({
 
         // Parse link only when set
         if (this.obj.conf.url && this.obj.conf.url !== "") {
-            var oIconLink = document.createElement("a");
+            const oIconLink = document.createElement("a");
             oIconLink.href = this.obj.conf.url;
             oIconLink.target = this.obj.conf.url_target;
             oIconLink.appendChild(oGadget);

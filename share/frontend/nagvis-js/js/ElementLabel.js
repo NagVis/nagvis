@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ElementLabel = Element.extend({
+const ElementLabel = Element.extend({
     label_text: null,
 
     update: function () {
@@ -29,7 +29,7 @@ var ElementLabel = Element.extend({
 
         // Replace configuration based macros in label_text when needed
         if (this.label_text && this.label_text !== "") {
-            var objName;
+            let objName;
             // For maps use the alias as display string
             if (this.obj.conf.type == "map") {
                 objName = this.obj.conf.alias;
@@ -120,7 +120,7 @@ var ElementLabel = Element.extend({
 
     // Returns the label with even state based macros replaced
     getText: function () {
-        var text = this.label_text;
+        let text = this.label_text;
 
         // Replace static macros in label_text when needed
         if (text && text !== "") {
@@ -143,14 +143,14 @@ var ElementLabel = Element.extend({
      */
     // Important: It is called from an event handler the 'this.' keyword can not be used here.
     dragLabel: function (trigger_obj, obj, event) {
-        var isRelative = function (coord) {
+        const isRelative = function (coord) {
             return coord.toString().match(/^(?:\+|-|center|bottom)/);
         };
 
         // Calculates relative/absolute coords depending on the current configured type
-        var calcNewLabelCoord = function (labelCoord, coord, newCoord) {
+        const calcNewLabelCoord = function (labelCoord, coord, newCoord) {
             if (isRelative(labelCoord)) {
-                var ret = newCoord - coord;
+                const ret = newCoord - coord;
                 if (ret >= 0) return "+" + ret;
                 return ret;
             } else return newCoord;
@@ -172,7 +172,7 @@ var ElementLabel = Element.extend({
     },
 
     parseLabelCoord: function (dir) {
-        var coord, obj_coord;
+        let coord, obj_coord;
         if (dir === "x") {
             coord = this.obj.conf.label_x;
 
@@ -191,7 +191,7 @@ var ElementLabel = Element.extend({
         }
 
         if (dir == "x" && coord && coord.toString() == "center") {
-            var diff = parseInt(parseInt(this.dom_obj.clientWidth) - rmZoomFactor(this.obj.getObjWidth())) / 2;
+            const diff = parseInt(parseInt(this.dom_obj.clientWidth) - rmZoomFactor(this.obj.getObjWidth())) / 2;
             coord = obj_coord - diff;
         } else if (dir == "y" && coord && coord.toString() == "bottom") {
             coord = obj_coord + rmZoomFactor(this.obj.getObjHeight());

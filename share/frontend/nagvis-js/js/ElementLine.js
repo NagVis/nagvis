@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ElementLineControls = Element.extend({
+const ElementLineControls = Element.extend({
     render: function () {
         // don't render the controls during normal render calls. We
         // want to keep the number of DOM objects low, so only render
@@ -62,15 +62,15 @@ var ElementLineControls = Element.extend({
     },
 
     _render: function () {
-        var container = document.createElement("div");
+        const container = document.createElement("div");
         container.setAttribute("id", this.obj.conf.object_id + "-controls");
         this.dom_obj = container;
 
-        var x = this.obj.parseCoords(this.obj.conf.x, "x");
-        var y = this.obj.parseCoords(this.obj.conf.y, "y");
-        var size = 10;
+        const x = this.obj.parseCoords(this.obj.conf.x, "x");
+        const y = this.obj.parseCoords(this.obj.conf.y, "y");
+        const size = 10;
 
-        for (var i = 0, l = x.length; i < l; i++) this.renderDragger(i, x[i], y[i], -size / 2, -size / 2, size);
+        for (let i = 0, l = x.length; i < l; i++) this.renderDragger(i, x[i], y[i], -size / 2, -size / 2, size);
 
         if (this.hasTwoParts())
             this.renderMidToggle(
@@ -94,7 +94,7 @@ var ElementLineControls = Element.extend({
     },
 
     renderDragger: function (num, objX, objY, offX, offY, size) {
-        var ctl = document.createElement("div");
+        const ctl = document.createElement("div");
         this.dom_obj.appendChild(ctl);
         ctl.setAttribute("id", this.obj.conf.object_id + "-drag-" + num);
         ctl.className = "control drag";
@@ -108,7 +108,7 @@ var ElementLineControls = Element.extend({
         ctl.objOffsetX = offX;
         ctl.objOffsetY = offY;
 
-        var img = document.createElement("img");
+        const img = document.createElement("img");
         img.src = "../../frontend/nagvis-js/images/internal/control_drag.png";
         img.style.width = addZoomFactor(size) + "px";
         img.style.height = addZoomFactor(size) + "px";
@@ -119,7 +119,7 @@ var ElementLineControls = Element.extend({
 
     // Adds the modify button to the controls including all eventhandlers
     renderMidToggle: function (num, objX, objY, offX, offY, size) {
-        var ctl = document.createElement("div");
+        let ctl = document.createElement("div");
         this.dom_obj.appendChild(ctl);
         ctl.setAttribute("id", this.obj.conf.object_id + "-togglemid-" + num);
         ctl.className = "control togglemid";
@@ -134,7 +134,7 @@ var ElementLineControls = Element.extend({
         ctl.objOffsetX = offX;
         ctl.objOffsetY = offY;
 
-        var img = document.createElement("img");
+        const img = document.createElement("img");
         if (this.isMidLocked()) img.src = "../../frontend/nagvis-js/images/internal/control_locked.png";
         else img.src = "../../frontend/nagvis-js/images/internal/control_unlocked.png";
         img.style.width = addZoomFactor(size) + "px";
@@ -167,8 +167,8 @@ var ElementLineControls = Element.extend({
      */
     toggleMidLock: function () {
         // What is the current state?
-        var x = this.obj.conf.x.split(",");
-        var y = this.obj.conf.y.split(",");
+        let x = this.obj.conf.x.split(",");
+        let y = this.obj.conf.y.split(",");
 
         if (this.isMidLocked()) {
             // The line has 2 coords configured
@@ -200,7 +200,7 @@ var ElementLineControls = Element.extend({
             this.obj.conf.y = [y[0], y[2]].join(",");
         }
 
-        var parts = g_view.unproject(this.obj.conf.x.toString().split(","), this.obj.conf.y.toString().split(","));
+        const parts = g_view.unproject(this.obj.conf.x.toString().split(","), this.obj.conf.y.toString().split(","));
         x = parts[0].join(",");
         y = parts[1].join(",");
 
@@ -212,7 +212,7 @@ var ElementLineControls = Element.extend({
     }
 });
 
-var ElementLine = Element.extend({
+const ElementLine = Element.extend({
     line_container: null,
     parts: null,
     canvas: null,
@@ -244,13 +244,13 @@ var ElementLine = Element.extend({
     render: function () {
         if (this.isWeathermapLine()) this.parsePerfdata();
 
-        var container = document.createElement("div");
+        const container = document.createElement("div");
         container.setAttribute("id", this.obj.conf.object_id + "-linediv");
         container.className = "line";
         this.dom_obj = container;
 
         // Create line div
-        var oLineDiv = document.createElement("div");
+        const oLineDiv = document.createElement("div");
         this.line_container = oLineDiv;
         container.appendChild(oLineDiv);
         oLineDiv.setAttribute("id", this.obj.conf.object_id + "-line");
@@ -284,7 +284,7 @@ var ElementLine = Element.extend({
     redrawLine: function () {
         // Totally redraw the line when moving the line anchors arround. But keep the trigger
         // object because it saves the attached event handlers
-        var trigger_obj = this.obj.trigger_obj;
+        const trigger_obj = this.obj.trigger_obj;
         trigger_obj.parentNode.removeChild(trigger_obj);
         this.clearActionContainer();
 
@@ -300,8 +300,9 @@ var ElementLine = Element.extend({
         // the line is using erase(), render(), draw() within place() which is called while
         // the user moves the object, this dom node must not be re-created, because this
         // would remove all event handlers
+        let oLink;
         if (!this.obj.trigger_obj) {
-            var oLink = document.createElement("a");
+            oLink = document.createElement("a");
             oLink.setAttribute("id", this.obj.conf.object_id + "-linelink");
             oLink.className = "linelink";
             this.obj.trigger_obj = oLink;
@@ -331,21 +332,21 @@ var ElementLine = Element.extend({
     calcLineParts: function () {
         this.parts = [];
 
-        var x = this.obj.parseCoords(this.obj.conf.x, "x");
-        var y = this.obj.parseCoords(this.obj.conf.y, "y");
+        const x = this.obj.parseCoords(this.obj.conf.x, "x");
+        const y = this.obj.parseCoords(this.obj.conf.y, "y");
 
         // Convert all coords to int
-        for (var i = 0; i < x.length; i++) {
+        for (let i = 0; i < x.length; i++) {
             x[i] = parseInt(x[i], 10);
             y[i] = parseInt(y[i], 10);
         }
 
-        var xStart = x[0];
-        var yStart = y[0];
-        var xEnd = x[x.length - 1];
-        var yEnd = y[y.length - 1];
+        let xStart = x[0];
+        let yStart = y[0];
+        let xEnd = x[x.length - 1];
+        let yEnd = y[y.length - 1];
 
-        let adjustedPoints = this.cutLineBeyondViewport(xStart, yStart, xEnd, yEnd);
+        const adjustedPoints = this.cutLineBeyondViewport(xStart, yStart, xEnd, yEnd);
         if (adjustedPoints === null) {
             return; // Line won't be visible -> this.parts left empty -> no rendering
         }
@@ -355,11 +356,11 @@ var ElementLine = Element.extend({
         xEnd = adjustedPoints[2];
         yEnd = adjustedPoints[3];
 
-        var width = addZoomFactor(this.obj.conf.line_width);
+        let width = addZoomFactor(this.obj.conf.line_width);
         if (width <= 0) width = 1; // minimal width for lines
 
         // Lines meeting point position
-        var cut = this.obj.conf.line_cut;
+        const cut = this.obj.conf.line_cut;
 
         switch (this.obj.conf.line_type) {
             case "11": // ---> lines
@@ -371,11 +372,12 @@ var ElementLine = Element.extend({
             case "10":
             case "13":
             case "14":
-            case "15":
+            case "15": {
                 // two part lines
+                let xMid, yMid;
                 if (x.length == 2) {
-                    var xMid = middle(xStart, xEnd, cut);
-                    var yMid = middle(yStart, yEnd, cut);
+                    xMid = middle(xStart, xEnd, cut);
+                    yMid = middle(yStart, yEnd, cut);
                 } else {
                     xMid = x[1];
                     yMid = y[1];
@@ -384,6 +386,7 @@ var ElementLine = Element.extend({
                 this.renderArrow(0, xStart, yStart, xMid, yMid, width);
                 this.renderArrow(1, xEnd, yEnd, xMid, yMid, width);
                 break;
+            }
             default:
                 alert("Error: Unknown line type");
         }
@@ -391,8 +394,8 @@ var ElementLine = Element.extend({
 
     // Calculates the colors of a line part
     calcColors: function (id) {
-        var color = "#FFCC66";
-        var border_color = "#000000";
+        let color = "#FFCC66";
+        const border_color = "#000000";
 
         // Get the fill color depending on the object state
         switch (this.obj.conf.summary_state) {
@@ -441,19 +444,19 @@ var ElementLine = Element.extend({
             return;
         }
 
-        var allX = [],
+        let allX = [],
             allY = [];
-        for (var i = 0, len = this.parts.length; i < len; i++) {
+        for (let i = 0, len = this.parts.length; i < len; i++) {
             allX = allX.concat(this.parts[i][2]);
             allY = allY.concat(this.parts[i][3]);
         }
-        var xMin = min(allX);
-        var yMin = min(allY);
-        var xMax = max(allX);
-        var yMax = max(allY);
-        var border = 5;
+        const xMin = min(allX);
+        const yMin = min(allY);
+        const xMax = max(allX);
+        const yMax = max(allY);
+        const border = 5;
 
-        var canvas = document.createElement("canvas");
+        const canvas = document.createElement("canvas");
         this.canvas = canvas;
 
         if (!canvas.getContext) return; // FIXME: Show an error message?
@@ -472,25 +475,25 @@ var ElementLine = Element.extend({
 
         addEvent(canvas, "mousemove", this.handleMouseMove.bind(this));
 
-        var ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d");
         if (!ctx) return; // silently skip
 
         // On high resolution devices like e.g. 4k screens where
         // the page is not rendered 1:1 but instead shown scaled,
         // the renderd lines look bad if they had been rendered 1:1.
         // Fix this by scaling the whole canvas.
-        var devicePixelRatio = window.devicePixelRatio || 1;
-        var backingStoreRatio =
+        const devicePixelRatio = window.devicePixelRatio || 1;
+        const backingStoreRatio =
             ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
             ctx.oBackingStorePixelRatio ||
             ctx.backingStorePixelRatio ||
             1;
-        var ratio = devicePixelRatio / backingStoreRatio;
+        const ratio = devicePixelRatio / backingStoreRatio;
         if (devicePixelRatio !== backingStoreRatio) {
-            var oldWidth = canvas.width;
-            var oldHeight = canvas.height;
+            const oldWidth = canvas.width;
+            const oldHeight = canvas.height;
 
             canvas.width = oldWidth * ratio;
             canvas.height = oldHeight * ratio;
@@ -508,8 +511,8 @@ var ElementLine = Element.extend({
         // Then start painting the single line parts
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        var part;
-        for (i = 0, len = this.parts.length; i < len; i++) {
+        let part;
+        for (let i = 0, len = this.parts.length; i < len; i++) {
             part = this.parts[i];
 
             ctx.fillStyle = part[4][0];
@@ -517,7 +520,7 @@ var ElementLine = Element.extend({
             ctx.beginPath();
             ctx.moveTo(part[2][0] - xMin + border, part[3][0] - yMin + border);
 
-            for (var a = 1, len2 = part[2].length; a < len2; a++)
+            for (let a = 1, len2 = part[2].length; a < len2; a++)
                 ctx.lineTo(part[2][a] - xMin + border, part[3][a] - yMin + border);
 
             ctx.fill();
@@ -532,7 +535,7 @@ var ElementLine = Element.extend({
     // This function renders an arrow like it is used on NagVis maps
     // It renders following line types: --->
     renderArrow: function (id, x1, y1, x2, y2, w) {
-        var xCoord = [
+        const xCoord = [
             x1 + newX(x2 - x1, y2 - y1, 0, w),
             x2 + newX(x2 - x1, y2 - y1, -4 * w, w),
             x2 + newX(x2 - x1, y2 - y1, -4 * w, 2 * w),
@@ -542,7 +545,7 @@ var ElementLine = Element.extend({
             x1 + newX(x2 - x1, y2 - y1, 0, -w),
             x1 + newX(x2 - x1, y2 - y1, 0, w)
         ];
-        var yCoord = [
+        const yCoord = [
             y1 + newY(x2 - x1, y2 - y1, 0, w),
             y2 + newY(x2 - x1, y2 - y1, -4 * w, w),
             y2 + newY(x2 - x1, y2 - y1, -4 * w, 2 * w),
@@ -558,14 +561,14 @@ var ElementLine = Element.extend({
 
     // This function renders simple lines (without arrow)
     renderSimpleLine: function (id, x1, y1, x2, y2, w) {
-        var xCoord = [
+        const xCoord = [
             x1 + newX(x2 - x1, y2 - y1, 0, w),
             x2 + newX(x2 - x1, y2 - y1, w, w),
             x2 + newX(x2 - x1, y2 - y1, w, -w),
             x1 + newX(x2 - x1, y2 - y1, 0, -w),
             x1 + newX(x2 - x1, y2 - y1, 0, w)
         ];
-        var yCoord = [
+        const yCoord = [
             y1 + newY(x2 - x1, y2 - y1, 0, w),
             y2 + newY(x2 - x1, y2 - y1, w, w),
             y2 + newY(x2 - x1, y2 - y1, w, -w),
@@ -586,16 +589,16 @@ var ElementLine = Element.extend({
         if (getTargetRaw(event).tagName !== "CANVAS") return true;
 
         // document.body.scrollTop does not work in IE
-        var scrollTop = document.body.scrollTop ? document.body.scrollTop : document.documentElement.scrollTop;
-        var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft : document.documentElement.scrollLeft;
+        const scrollTop = document.body.scrollTop ? document.body.scrollTop : document.documentElement.scrollTop;
+        const scrollLeft = document.body.scrollLeft ? document.body.scrollLeft : document.documentElement.scrollLeft;
 
         // Get the mouse position relative to window
-        var x = event.clientX - getSidebarWidth() + scrollLeft;
-        var y = event.clientY - getHeaderHeight() + scrollTop;
+        const x = event.clientX - getSidebarWidth() + scrollLeft;
+        const y = event.clientY - getHeaderHeight() + scrollTop;
 
         // Check whether or not the given coord is within the line part coords
-        var pnpoly = function (nvert, vertx, verty, testx, testy) {
-            var i,
+        const pnpoly = function (nvert, vertx, verty, testx, testy) {
+            let i,
                 j,
                 c = false;
             for (i = 0, j = nvert - 1; i < nvert; j = i++) {
@@ -609,9 +612,9 @@ var ElementLine = Element.extend({
             return c;
         };
 
-        var part = null,
+        let part = null,
             over = false;
-        for (var i = 0, len = this.parts.length; i < len; i++) {
+        for (let i = 0, len = this.parts.length; i < len; i++) {
             part = this.parts[i];
             if (pnpoly(part[2].length, part[2], part[3], x, y)) {
                 over = true;
@@ -653,19 +656,19 @@ var ElementLine = Element.extend({
         if (this.parts.length === 0) return;
         if (this.perfdata === null) return;
 
-        var y_offset = parseInt(this.obj.conf.line_label_y_offset);
+        const y_offset = parseInt(this.obj.conf.line_label_y_offset);
 
-        var x1 = this.parts[id][0][0],
+        const x1 = this.parts[id][0][0],
             y1 = this.parts[id][0][1],
             x2 = this.parts[id][1][0],
             y2 = this.parts[id][1][1];
 
-        var cut = id == 0 ? this.obj.conf.line_label_pos_in : this.obj.conf.line_label_pos_out;
+        const cut = id == 0 ? this.obj.conf.line_label_pos_in : this.obj.conf.line_label_pos_out;
 
-        var x = middle(x1, x2, cut),
+        const x = middle(x1, x2, cut),
             y = middle(y1, y2, cut) + y_offset;
 
-        var txt;
+        let txt;
         if (this.obj.conf.line_type == 13 || this.obj.conf.line_type == 14) {
             // Show percentage label
             txt = this.perfdata[id][1] + this.perfdata[id][2];
@@ -675,8 +678,8 @@ var ElementLine = Element.extend({
         }
 
         // Maybe use function to detect the real height in future
-        var labelHeight = 21,
-            labelWidth = this.getLabelWidth(txt);
+        const labelHeight = 21;
+        let labelWidth = this.getLabelWidth(txt);
 
         this.obj.trigger_obj.appendChild(
             renderNagVisTextbox(
@@ -713,7 +716,7 @@ var ElementLine = Element.extend({
     },
 
     renderLinkArea: function () {
-        var div = document.createElement("div");
+        const div = document.createElement("div");
         this.link_area = div;
         div.setAttribute("id", this.obj.conf.object_id + "-link");
         div.style.position = "absolute";
@@ -739,7 +742,7 @@ var ElementLine = Element.extend({
            5 = minimum
            6 = maximum
         */
-        var perf = this.parsePerfdataString();
+        let perf = this.parsePerfdataString();
 
         if (!perf) {
             this.addWeathermapLineError("Perfdata string is empty");
@@ -802,11 +805,11 @@ var ElementLine = Element.extend({
      * given percentage usage and on the configured options for this object
      */
     getColorFill: function (perc) {
-        var ranges = this.obj.conf.line_weather_colors.split(",");
+        let ranges = this.obj.conf.line_weather_colors.split(",");
         // 0 contains the percentage until this color is used
         // 1 contains the color to be used
-        for (var i = 0; i < ranges.length; i++) {
-            var parts = ranges[i].split(":");
+        for (let i = 0; i < ranges.length; i++) {
+            let parts = ranges[i].split(":");
             if (parseFloat(perc) <= parts[0]) return parts[1];
             parts = null;
         }
@@ -820,14 +823,14 @@ var ElementLine = Element.extend({
      * for calculating the percentage usage and also the current usage.
      */
     calculateUsage: function (oldPerfdata, output) {
-        var newPerfdata = [];
-        var foundNew = false;
-        var line_label_in = "in";
-        var line_label_out = "out";
+        const newPerfdata = [];
+        let foundNew = false;
+        let line_label_in = "in";
+        let line_label_out = "out";
 
         // Checkmk if/if64 checks support switching between bytes/bits.
-        var display_bits = false;
-        var reBits =
+        let display_bits = false;
+        const reBits =
             /\bIn(?:\s+average\s+[^:]+)?:\s*[0-9][0-9.,]*\s*\S*Bit\/s\b[\s\S]*?\bOut(?:\s+average\s+[^:]+)?:\s*[0-9][0-9.,]*\s*\S*Bit\/s\b/i;
 
         if (output.match(reBits)) {
@@ -842,7 +845,7 @@ var ElementLine = Element.extend({
         if (typeof this.obj.conf.line_label_out !== "undefined") {
             line_label_out = this.obj.conf.line_label_out;
         }
-        for (var i = 0; i < oldPerfdata.length; i++) {
+        for (let i = 0; i < oldPerfdata.length; i++) {
             if (oldPerfdata[i][0] == line_label_in && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === "")) {
                 newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
                 if (!display_bits) {
@@ -872,9 +875,9 @@ var ElementLine = Element.extend({
      * Transform bits in a perfdata set to a human readable value
      */
     perfdataCalcBitsReadable: function (set, kiloMultiplier = 1000) {
-        var KB = kiloMultiplier;
-        var MB = kiloMultiplier * kiloMultiplier;
-        var GB = kiloMultiplier * kiloMultiplier * kiloMultiplier;
+        const KB = kiloMultiplier;
+        const MB = kiloMultiplier * kiloMultiplier;
+        const GB = kiloMultiplier * kiloMultiplier * kiloMultiplier;
         if (set[1] > GB) {
             set[1] /= GB;
             set[2] = "Gbit/s";
@@ -895,9 +898,9 @@ var ElementLine = Element.extend({
      * Transform bytes in a perfdata set to a human readable value
      */
     perfdataCalcBytesReadable: function (set, kiloMultiplier = 1000) {
-        var KB = kiloMultiplier;
-        var MB = kiloMultiplier * kiloMultiplier;
-        var GB = kiloMultiplier * kiloMultiplier * kiloMultiplier;
+        const KB = kiloMultiplier;
+        const MB = kiloMultiplier * kiloMultiplier;
+        const GB = kiloMultiplier * kiloMultiplier * kiloMultiplier;
         if (set[1] > GB) {
             set[1] /= GB;
             set[2] = "GB/s";
@@ -940,25 +943,25 @@ var ElementLine = Element.extend({
      *
      */
     parsePerfdataString: function () {
-        var parsed = [];
+        const parsed = [];
 
-        var perfdata = this.obj.conf.perfdata;
+        let perfdata = this.obj.conf.perfdata;
         if (!perfdata) return [];
 
         // Clean up perfdata
         perfdata = perfdata.replace(/\s*=\s*/, "=");
 
         // Break perfdata string into array of individual sets
-        var re = /([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/g; // eslint-disable-line no-useless-escape
-        var perfdataMatches = perfdata.match(re);
+        const re = /([^=]+)=([\d\.\-]+)([\w%]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/g; // eslint-disable-line no-useless-escape
+        const perfdataMatches = perfdata.match(re);
 
         // Check for empty perfdata
         if (perfdataMatches == null) return [];
 
         // Break perfdata parts into array
-        for (var i = 0; i < perfdataMatches.length; i++) {
+        for (let i = 0; i < perfdataMatches.length; i++) {
             // Get parts of perfdata from string
-            var tmpSetMatches = perfdataMatches[i].match(
+            const tmpSetMatches = perfdataMatches[i].match(
                 /(&#145;)?([\w\s\=\'\-]*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/ // eslint-disable-line no-useless-escape
             );
 
@@ -992,7 +995,7 @@ var ElementLine = Element.extend({
     cutLineBeyondViewport: function (xA, yA, xB, yB) {
         if (!g_map) return [xA, yA, xB, yB]; // no viewport - no clipping
 
-        let viewport_size = g_map.getSize();
+        const viewport_size = g_map.getSize();
         const xMax = viewport_size.x; // 1920
         const yMax = viewport_size.y; // 1080
         const xTolerance = xMax * 0.95; // 1824 (95%)
@@ -1014,7 +1017,7 @@ var ElementLine = Element.extend({
         const y_max = yMax + yTolerance;
 
         // Function to compute region code
-        let regionCode = function (x, y) {
+        const regionCode = function (x, y) {
             let code = INSIDE;
 
             if (x < x_min)
@@ -1033,7 +1036,7 @@ var ElementLine = Element.extend({
             return code;
         };
 
-        let cohenSutherlandClip = function (x1, y1, x2, y2) {
+        const cohenSutherlandClip = function (x1, y1, x2, y2) {
             let code1 = regionCode(x1, y1);
             let code2 = regionCode(x2, y2);
 

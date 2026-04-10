@@ -3,8 +3,8 @@ function getMidOfAnchor(oObj) {
 }
 
 function saveObjectAttr(objId, attr) {
-    var urlPart = "";
-    for (var key in attr)
+    let urlPart = "";
+    for (const key in attr)
         // parseInt() returned NaN, because value was set to "auto";
         // but also allow relative coordinate strings (contain '%')
         if (!isNaN(attr[key]) || isRelativeCoord(attr[key])) urlPart += "&" + key + "=" + escapeUrlValues(attr[key]);

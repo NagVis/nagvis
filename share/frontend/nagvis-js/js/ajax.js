@@ -57,7 +57,7 @@ function call_ajax(url, args) {
         args
     );
 
-    var AJAX = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+    const AJAX = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
     if (!AJAX) return null;
 
     if (args.add_ajax_id) {
@@ -84,7 +84,7 @@ function call_ajax(url, args) {
                     // args.error_handler.
                     frontendMessageRemove("serverError");
 
-                    var response = AJAX.responseText;
+                    let response = AJAX.responseText;
                     if (args.decode_json) {
                         try {
                             response = JSON.parse(response);
@@ -148,33 +148,34 @@ function call_ajax(url, args) {
  * which is then be used as request data in ajax queries
  */
 function getFormParams(formId, skipHelperFields) {
+    let data, formdata;
     if (window.FormData) {
-        var data = new FormData();
-        var formdata = true;
+        data = new FormData();
+        formdata = true;
     } else {
         formdata = false;
         data = "";
     }
 
-    var add_data = function (key, val) {
+    const add_data = function (key, val) {
         if (formdata) data.append(key, val);
         else data += key + "=" + escapeUrlValues(val) + "&";
     };
 
     // Read form contents
-    var oForm = document.getElementById(formId);
+    let oForm = document.getElementById(formId);
     if (typeof oForm === "undefined") return data;
 
     // Get relevant input elements
-    var aFields = oForm.querySelectorAll("input,textarea");
+    let aFields = oForm.querySelectorAll("input,textarea");
 
-    for (var i = 0, len = aFields.length; i < len; i++) {
+    for (let i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (if told to do so)
         if (skipHelperFields && aFields[i].name.charAt(0) === "_") continue;
 
         // Skip options which use the default value and where the value has
         // not been set before
-        var oFieldDefault = document.getElementById("_" + aFields[i].name);
+        let oFieldDefault = document.getElementById("_" + aFields[i].name);
         if (aFields[i] && oFieldDefault && !document.getElementById("_conf_" + aFields[i].name)) {
             if (aFields[i].value === oFieldDefault.value) {
                 continue;
@@ -212,7 +213,7 @@ function getFormParams(formId, skipHelperFields) {
             }
 
             if (aFields[i].files.length > 0) {
-                var file = aFields[i].files[0];
+                const file = aFields[i].files[0];
                 data.append(aFields[i].name, file, file.name);
             }
         }
@@ -220,7 +221,7 @@ function getFormParams(formId, skipHelperFields) {
 
     // Get relevant select elements
     aFields = oForm.getElementsByTagName("select");
-    for (i = 0, len = aFields.length; i < len; i++) {
+    for (let i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (NagVis WUI specific)
         if (skipHelperFields && aFields[i].name.charAt(0) === "_") continue;
 
@@ -240,7 +241,7 @@ function getFormParams(formId, skipHelperFields) {
                 add_data(aFields[i].name, aFields[i].options[aFields[i].selectedIndex].value);
             }
         } else {
-            for (var a = 0; a < aFields[i].options.length; a++) {
+            for (let a = 0; a < aFields[i].options.length; a++) {
                 // Only add selected options
                 if (aFields[i].options[a].selected == true) {
                     add_data(aFields[i].name + "[]", aFields[i].options[a].value);

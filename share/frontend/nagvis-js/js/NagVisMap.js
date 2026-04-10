@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var NagVisMap = NagVisStatefulObject.extend({
+const NagVisMap = NagVisStatefulObject.extend({
     update: function () {
         this.clearElements();
 
@@ -31,7 +31,7 @@ var NagVisMap = NagVisStatefulObject.extend({
     },
 
     stateText: function () {
-        var substate = "";
+        let substate = "";
         if (this.conf.summary_in_downtime == 1) substate = " (downtime)";
         else if (this.conf.summary_problem_has_been_acknowledged == 1) substate = " (ack)";
         else if (this.conf.summary_stale) substate = " (stale)";

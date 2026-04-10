@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var NagVisContainer = NagVisStatelessObject.extend({
+const NagVisContainer = NagVisStatelessObject.extend({
     update: function () {
         this.clearElements();
         new ElementBox(this).addTo(this);
@@ -31,7 +31,7 @@ var NagVisContainer = NagVisStatelessObject.extend({
     render: function () {
         this.base();
 
-        var span = this.elements[0].dom_obj.childNodes[0];
+        const span = this.elements[0].dom_obj.childNodes[0];
         span.style.display = "block";
         span.style.height = "100%";
 
@@ -52,7 +52,7 @@ var NagVisContainer = NagVisStatelessObject.extend({
         } else {
             // Create an iframe element which holds the requested url
             span.innerHTML = "";
-            var oIframe = document.createElement("iframe");
+            let oIframe = document.createElement("iframe");
             oIframe.style.borderWidth = 0;
             oIframe.style.width = "100%";
             oIframe.style.height = "100%";

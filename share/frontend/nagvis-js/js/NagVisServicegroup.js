@@ -22,7 +22,7 @@
  *
  *****************************************************************************/
 
-var NagVisServicegroup = NagVisStatefulObject.extend({
+const NagVisServicegroup = NagVisStatefulObject.extend({
     constructor: function (oConf) {
         this.base(oConf);
     }

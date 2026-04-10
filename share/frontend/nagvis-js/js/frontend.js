@@ -23,15 +23,17 @@
  *****************************************************************************/
 
 // Contains the number of pixels the header menu currently consumes
-var g_header_height_cache = null;
+let g_header_height_cache = null;
 // Points to the timer object of the worker timer
-var g_worker_id = null;
+let g_worker_id = null;
 // Holds the global JS map object (e.g. leaflet js map object)
-var g_map = null;
+// eslint-disable-next-line prefer-const
+let g_map = null;
 // Holds all map objects
-var g_map_objects = null;
+// eslint-disable-next-line prefer-const
+let g_map_objects = null;
 // Holds the view management object
-var g_view = null;
+let g_view = null;
 
 /**
  * Checks if a view is in maintenance mode and shows a message if
@@ -63,9 +65,9 @@ function inMaintenance(displayMsg) {
 function getHeaderHeight() {
     // Only gather the header height once.
     if (g_header_height_cache === null) {
-        var ret = 0;
+        let ret = 0;
 
-        var oHeader = document.getElementById("header");
+        const oHeader = document.getElementById("header");
         if (oHeader) {
             // Only return header height when header is shown
             if (oHeader.style.display != "none") ret = oHeader.clientHeight;
@@ -91,7 +93,7 @@ function logout() {
  * And simply reprints the response in the currently open window
  */
 function submitForm(sUrl, sFormId) {
-    var oResult = call_ajax(sUrl, {
+    const oResult = call_ajax(sUrl, {
         method: "POST",
         post_data: getFormParams(sFormId, false),
         response_handler: function (oResult) {
@@ -145,7 +147,7 @@ function showFrontendDialog(sUrl, sTitle, sWidth) {
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function searchObjectsKeyCheck(sMatch, e) {
-    var charCode;
+    let charCode;
 
     if (e && e.which) {
         charCode = e.which;
@@ -169,15 +171,15 @@ function searchObjectsKeyCheck(sMatch, e) {
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function searchObjects(sMatch) {
-    var aResults = [];
-    var bMatch = false;
+    const aResults = [];
+    let bMatch = false;
 
     // Skip empty searches or searches on non initialized views
     if (sMatch === "" || g_view === null) return false;
 
     // Loop all map objects and search the matching attributes
-    var obj;
-    for (var i in g_view.objects) {
+    let obj;
+    for (const i in g_view.objects) {
         obj = g_view.objects[i];
         // Don't search shapes/textboxes/lines
         if (
@@ -187,7 +189,7 @@ function searchObjects(sMatch) {
             obj.conf.type != "line"
         ) {
             bMatch = false;
-            var regex = new RegExp(sMatch, "g");
+            let regex = new RegExp(sMatch, "g");
 
             // Current matching attributes:
             // - type
@@ -212,8 +214,8 @@ function searchObjects(sMatch) {
     // Actions for the results:
     // When multiple found: highlight all
     // When single found: highlight and focus the object
-    for (i = 0, len = aResults.length; i < len; i++) {
-        var objectId = aResults[i];
+    for (let i = 0, len = aResults.length; i < len; i++) {
+        let objectId = aResults[i];
 
         // - highlight the object
         if (g_view.objects[objectId].conf.view_type && g_view.objects[objectId].conf.view_type === "icon") {
@@ -288,9 +290,9 @@ function refreshMapObject(event, objectId, only_state) {
     if (typeof only_state === "undefined") only_state = true;
 
     // Only append map param if it is a known map
-    var sMapPart = "";
-    var sMod = "";
-    var sAddPart = "";
+    let sMapPart = "";
+    let sMod = "";
+    let sAddPart = "";
     if (g_view.type === "map") {
         sMod = "Map";
         sMapPart = "&show=" + escapeUrlValues(g_view.id);
@@ -300,7 +302,7 @@ function refreshMapObject(event, objectId, only_state) {
         sMapPart = "";
     }
 
-    var ty = only_state ? "state" : "full";
+    const ty = only_state ? "state" : "full";
 
     // Start the ajax request to update this single object
     call_ajax(
@@ -336,9 +338,9 @@ function refreshMapObject(event, objectId, only_state) {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function playSound(objectId, iNumTimes) {
-    var sSound = "";
-    var id = g_view.objects[objectId].dom_obj.id;
-    var sState = g_view.objects[objectId].conf.summary_state;
+    let sSound = "";
+    const id = g_view.objects[objectId].dom_obj.id;
+    const sState = g_view.objects[objectId].conf.summary_state;
 
     if (oStates[sState] && oStates[sState].sound && oStates[sState].sound !== "") {
         sSound = oStates[sState].sound;
@@ -382,7 +384,7 @@ function flashIcon(objectId, iDuration, iInterval) {
     if (isset(g_view.objects[objectId])) {
         g_view.objects[objectId].highlight(!g_view.objects[objectId].bIsFlashing);
 
-        var iDurationNew = iDuration - iInterval;
+        const iDurationNew = iDuration - iInterval;
 
         // Flash again until timer counted down and the border is hidden
         if (iDurationNew > 0 || (iDurationNew <= 0 && g_view.objects[objectId].bIsFlashing === true))
@@ -400,13 +402,13 @@ function flashIcon(objectId, iDuration, iInterval) {
  * viewport, this function calculates the correct zoom factor.
  */
 function set_fill_zoom_factor() {
-    var obj, zoom;
-    var c_top = null,
+    let obj, zoom;
+    let c_top = null,
         c_left = null,
         c_bottom = null,
         c_right = null;
-    var o_top, o_left, o_bottom, o_right;
-    for (var i in g_view.objects) {
+    let o_top, o_left, o_bottom, o_right;
+    for (const i in g_view.objects) {
         obj = g_view.objects[i];
         if (obj && obj.getObjLeft && obj.getObjTop && obj.getObjHeight && obj.getObjWidth) {
             o_top = obj.getObjTop();
@@ -426,9 +428,9 @@ function set_fill_zoom_factor() {
     // In both cases c_bottom / c_right are null or 0, making the division below produce
     // NaN or Infinity which would corrupt the URL (zoom=NaN) and break the next load.
     if (!c_bottom || !c_right) return;
-    var border = 40; // border per side in px * 2
-    var zoom_y = parseInt(((pageHeight() - border - getHeaderHeight()) / parseFloat(c_bottom)) * 100);
-    var zoom_x = parseInt(((pageWidth() - border - getSidebarWidth()) / parseFloat(c_right)) * 100);
+    const border = 40; // border per side in px * 2
+    const zoom_y = parseInt(((pageHeight() - border - getHeaderHeight()) / parseFloat(c_bottom)) * 100);
+    const zoom_x = parseInt(((pageWidth() - border - getSidebarWidth()) / parseFloat(c_right)) * 100);
     if (!isFinite(zoom_y) || !isFinite(zoom_x)) return;
     set_zoom(Math.min(zoom_y, zoom_x));
 }
@@ -440,10 +442,10 @@ function set_zoom(val) {
 }
 
 function zoom(how) {
-    var cur_zoom = getZoomFactor();
+    let cur_zoom = getZoomFactor();
     // This is not really correct. Assume
     if (cur_zoom == "fill") cur_zoom = 100;
-    var new_zoom = 100;
+    let new_zoom = 100;
     if (how != 0) {
         new_zoom = cur_zoom + how;
 
@@ -458,7 +460,7 @@ function zoom(how) {
 function wheel_zoom(event) {
     if (!event) event = window.event;
 
-    var delta = 0;
+    let delta = 0;
 
     if (!event.altKey) return; // only proceed with pressed ALT
 
@@ -479,7 +481,7 @@ function wheel_zoom(event) {
     return preventDefaultEvents(event);
 }
 
-var g_drag_ind = null;
+let g_drag_ind = null;
 
 function zoombarDragStart(event) {
     if (!event) event = window.event;
@@ -501,9 +503,9 @@ function zoombarDrag(event) {
         return;
     }
 
-    var top_offset = 62;
-    var ind_offset = 3; // height / 2
-    var pos = event.clientY - top_offset;
+    const top_offset = 62;
+    const ind_offset = 3; // height / 2
+    let pos = event.clientY - top_offset;
 
     if (pos > g_drag_ind.parentNode.clientHeight) {
         pos = g_drag_ind.parentNode.clientHeight;
@@ -524,8 +526,8 @@ function zoombarDragStop(event) {
     g_left_clicked = false;
 
     // Get the zoom value
-    var zoom = getZoomFactor();
-    var val = parseInt(((100 - (parseInt(g_drag_ind.style.top.replace("px", "")) + 3)) / 100) * 200);
+    const zoom = getZoomFactor();
+    let val = parseInt(((100 - (parseInt(g_drag_ind.style.top.replace("px", "")) + 3)) / 100) * 200);
     if (val != zoom) {
         if (val <= 0) val = 10;
         set_zoom(val);
@@ -535,7 +537,7 @@ function zoombarDragStop(event) {
     return preventDefaultEvents(event);
 }
 
-var g_left_clicked = false;
+let g_left_clicked = false;
 
 function mouse_click(event) {
     if (!event) event = window.event;
@@ -556,8 +558,8 @@ function mouse_release(event) {
 }
 
 function updateZoomIndicator() {
-    var zoom = getZoomFactor();
-    var ind = document.getElementById("zoombar-drag_ind");
+    const zoom = getZoomFactor();
+    let ind = document.getElementById("zoombar-drag_ind");
 
     // zoom is 0 to 200, the bar is 0px to 100px, the
     // indicator has a heihgt of 6px
@@ -571,10 +573,10 @@ function updateZoomIndicator() {
 function renderZoombar() {
     if (getViewParam("zoombar") == 0) return;
 
-    var bar = document.createElement("div");
+    const bar = document.createElement("div");
     bar.setAttribute("id", "zoombar");
 
-    var plus = document.createElement("a");
+    const plus = document.createElement("a");
     plus.setAttribute("id", "zoombar-plus");
     plus.setAttribute("class", "plus");
     plus.appendChild(document.createTextNode("+"));
@@ -583,12 +585,12 @@ function renderZoombar() {
     };
     bar.appendChild(plus);
 
-    var drag = document.createElement("div");
+    const drag = document.createElement("div");
     drag.setAttribute("id", "zoombar-drag");
     drag.setAttribute("class", "drag");
     bar.appendChild(drag);
 
-    var drag_ind = document.createElement("div");
+    const drag_ind = document.createElement("div");
     drag_ind.setAttribute("id", "zoombar-drag_ind");
     drag_ind.setAttribute("class", "drag_ind");
     addEvent(drag_ind, "mousedown", zoombarDragStart);
@@ -596,7 +598,7 @@ function renderZoombar() {
     addEvent(drag, "mouseup", zoombarDragStop);
     drag.appendChild(drag_ind);
 
-    var minus = document.createElement("a");
+    const minus = document.createElement("a");
     minus.setAttribute("id", "zoombar-minus");
     minus.setAttribute("class", "minus");
     minus.appendChild(document.createTextNode("-"));
@@ -605,7 +607,7 @@ function renderZoombar() {
     };
     bar.appendChild(minus);
 
-    var norm = document.createElement("a");
+    const norm = document.createElement("a");
     norm.setAttribute("class", "norm");
     norm.appendChild(document.createTextNode("o"));
     norm.onclick = function () {
@@ -614,7 +616,7 @@ function renderZoombar() {
     bar.appendChild(norm);
 
     // Register scroll events (mouse wheel)
-    var wheel_event = /Firefox/i.test(navigator.userAgent) ? "DOMMouseScroll" : "mousewheel";
+    const wheel_event = /Firefox/i.test(navigator.userAgent) ? "DOMMouseScroll" : "mousewheel";
     addEvent(document, wheel_event, wheel_zoom);
     addEvent(document, "mousedown", mouse_click);
     addEvent(document, "mouseup", mouse_release);
@@ -639,7 +641,7 @@ function renderZoombar() {
 function getViewParams(update, userParams) {
     if (!isset(userParams)) userParams = false;
 
-    var params;
+    let params;
     if (!userParams && isset(oViewProperties) && isset(oViewProperties["params"])) {
         params = oViewProperties["params"];
     } else if (isset(oViewProperties) && isset(oViewProperties["user_params"])) {
@@ -652,7 +654,7 @@ function getViewParams(update, userParams) {
 
     // Udate the params before processing url
     if (isset(update)) {
-        for (var param in update) {
+        for (const param in update) {
             params[param] = update[param];
         }
     }
@@ -665,8 +667,8 @@ function getViewParams(update, userParams) {
         params["bbox"] = bounds.toBBoxString();
     }
 
-    var sParams = "";
-    for (param in params) {
+    let sParams = "";
+    for (const param in params) {
         if (params[param] != "") {
             sParams += "&" + param + "=" + escapeUrlValues(params[param]);
         }
@@ -705,7 +707,7 @@ function usesSource(source) {
 // features. If not, an error message is shown and further page processing
 // will be terminated.
 function hasNeededJSFeatures() {
-    var msg = null;
+    let msg = null;
     if (typeof JSON === "undefined") {
         msg =
             "It seems you are using an outdated browser to access NagVis. " +

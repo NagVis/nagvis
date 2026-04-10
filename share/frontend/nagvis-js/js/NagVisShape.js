@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var NagVisShape = NagVisStatelessObject.extend({
+const NagVisShape = NagVisStatelessObject.extend({
     update: function () {
         this.clearElements();
         new ElementShape(this).addTo(this);

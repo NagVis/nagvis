@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ViewWorldmap = ViewMap.extend({
+const ViewWorldmap = ViewMap.extend({
     constructor: function (id) {
         this.base(id);
     },
@@ -32,7 +32,7 @@ var ViewWorldmap = ViewMap.extend({
     },
 
     drawObject: function (obj) {
-        var latlng = g_map.containerPointToLatLng(L.point(0, 0));
+        const latlng = g_map.containerPointToLatLng(L.point(0, 0));
         L.nagVisMarker(latlng, {
             icon: L.nagVisObj({ node: obj.dom_obj, obj: obj }),
             // prevent using leaflets event handlers
@@ -55,7 +55,7 @@ var ViewWorldmap = ViewMap.extend({
 
     initWorldmap: function () {
         L.Icon.Default.imagePath = oGeneralProperties.path_base + "/frontend/nagvis-js/images/leaflet";
-        var layers = {
+        const layers = {
             map: L.tileLayer(oGeneralProperties.worldmap_tiles_url, {
                 attribution: oGeneralProperties.worldmap_tiles_attribution,
                 noWrap: true, // don't repeat the world on horizontal axis
@@ -82,7 +82,7 @@ var ViewWorldmap = ViewMap.extend({
             layers: [layers.map]
         });
 
-        let restored_coordinates = window.location.hash.substr(1).split("/");
+        const restored_coordinates = window.location.hash.substr(1).split("/");
         if (restored_coordinates.length === 3) {
             // place the map view according to location hash (#lat/lon/zoom) - consistent page reloads
             g_map.setView([restored_coordinates[1], restored_coordinates[0]], restored_coordinates[2]);
@@ -108,8 +108,8 @@ var ViewWorldmap = ViewMap.extend({
         g_map.on("mousedown", context_handle_global_mousedown);
 
         // dim the colors of map background so that red motorways don't distract
-        let saturate_percentage = getViewParam("worldmap_tiles_saturate");
-        let ltp = document.getElementsByClassName("leaflet-tile-pane");
+        const saturate_percentage = getViewParam("worldmap_tiles_saturate");
+        const ltp = document.getElementsByClassName("leaflet-tile-pane");
         if (ltp && saturate_percentage !== "") ltp[0].style.filter = "saturate(" + saturate_percentage + "%)";
     },
 
@@ -120,14 +120,14 @@ var ViewWorldmap = ViewMap.extend({
     // Is used to update the objects to show on the worldmap
     handleMoveEnd: function (lEvent) {
         // Update the related view properties
-        var ll = g_map.getCenter();
+        const ll = g_map.getCenter();
         setViewParam("worldmap_center", ll.lat + "," + ll.lng);
         setViewParam("worldmap_zoom", g_map.getZoom());
 
         this.render(); // re-render the whole map
 
         // Put the new map view coords into URL (location) - consistent reloads
-        var new_center = g_map.getCenter();
+        const new_center = g_map.getCenter();
         window.location.hash = new_center.lng + "/" + new_center.lat + "/" + g_map.getZoom();
     },
 
@@ -156,10 +156,10 @@ var ViewWorldmap = ViewMap.extend({
     },
 
     project: function (lat, lng) {
-        var new_coord,
-            x = [],
+        let new_coord;
+        const x = [],
             y = [];
-        for (var i = 0; i < lat.length; i++) {
+        for (let i = 0; i < lat.length; i++) {
             if (isRelativeCoord(lat[i]) || isRelativeCoord(lng[i])) {
                 // do not convert relative positioned objects
                 x.push(lat[i]);
@@ -181,10 +181,10 @@ var ViewWorldmap = ViewMap.extend({
             y = [y];
         }
 
-        var latlng,
-            lat = [],
+        let latlng;
+        const lat = [],
             lng = [];
-        for (var i = 0, l = x.length; i < l; i++) {
+        for (let i = 0, l = x.length; i < l; i++) {
             if (isRelativeCoord(x[i]) || isRelativeCoord(y[i])) {
                 // do not convert relative positioned objects
                 lat[i] = x[i];
@@ -213,11 +213,11 @@ L.NagVisObj = L.Icon.extend({
     },
 
     createIcon: function (oldIcon) {
-        var div = oldIcon && oldIcon.tagName === "DIV" ? oldIcon : document.createElement("div"),
+        const div = oldIcon && oldIcon.tagName === "DIV" ? oldIcon : document.createElement("div"),
             options = this.options;
 
         // remove all existing childs
-        for (var i = div.childNodes.length; i > 0; i--) div.removeChild(div.childNodes[0]);
+        for (let i = div.childNodes.length; i > 0; i--) div.removeChild(div.childNodes[0]);
 
         if (options.node !== null) {
             div.appendChild(options.node);
@@ -231,7 +231,7 @@ L.NagVisObj = L.Icon.extend({
     _applyOffset: function () {
         // Fix icon position which is not automatically fixed by this._setIconStyles because we
         // enforce iconAnchor: [0, 0].
-        var offset = L.point(this.options.iconSize);
+        const offset = L.point(this.options.iconSize);
         offset._divideBy(2);
         this.options.obj.trigger_obj.style.marginLeft = -offset.x + "px";
         this.options.obj.trigger_obj.style.marginTop = -offset.y + "px";
@@ -250,7 +250,7 @@ L.NagVisMarker = L.Marker.extend({
     initialize: function (latlng, options) {
         L.Marker.prototype.initialize.call(this, latlng, options);
 
-        var obj = options.icon.options.obj;
+        const obj = options.icon.options.obj;
 
         // add reference to the marker object to the nagvis object
         obj.marker = this;
@@ -269,7 +269,7 @@ L.NagVisMarker = L.Marker.extend({
 
     // Update the size off the icon to make the object being centered
     _onAdd: function (lEvent) {
-        var icon = this.options.icon,
+        const icon = this.options.icon,
             trigger_obj = icon.options.obj.trigger_obj,
             w = pxToInt(trigger_obj.style.width),
             h = pxToInt(trigger_obj.style.height);

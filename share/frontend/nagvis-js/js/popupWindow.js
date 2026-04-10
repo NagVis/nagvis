@@ -25,10 +25,10 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-var popupNN6 = document.getElementById && !document.all;
-var bDragging = false;
-var pwX, pwY, pwTx, pwTy;
-var dragObj = null;
+const popupNN6 = document.getElementById && !document.all;
+let bDragging = false;
+let pwX, pwY, pwTx, pwTy;
+let dragObj = null;
 
 /**
  * movemouse()
@@ -77,7 +77,7 @@ function selectmouse(e) {
 }
 
 function popupWindowClose() {
-    var w = document.getElementById("popupWindow");
+    const w = document.getElementById("popupWindow");
     if (w) document.body.removeChild(w);
 
     // Some windows use the jscolor color picker. It might be visible while
@@ -92,7 +92,7 @@ function popupWindowPutContent(oContent) {
         return false;
     }
 
-    var oCell = document.getElementById("popupWindowContent");
+    const oCell = document.getElementById("popupWindowContent");
     if (oCell) {
         oCell.innerHTML = oContent.code;
         executeJS(oCell);
@@ -109,10 +109,10 @@ function popupWindow(title, oContent, sWidth, closable) {
     popupWindowClose();
 
     // Default window position
-    var posX = getScrollLeft() + (pageWidth() / 2 - sWidth / 2);
-    var posY = getScrollTop() + 50;
+    const posX = getScrollLeft() + (pageWidth() / 2 - sWidth / 2);
+    const posY = getScrollTop() + 50;
 
-    var oContainerDiv = document.createElement("div");
+    const oContainerDiv = document.createElement("div");
     oContainerDiv.setAttribute("id", "popupWindow");
     oContainerDiv.style.left = posX + "px";
     oContainerDiv.style.top = posY + "px";
@@ -122,7 +122,7 @@ function popupWindow(title, oContent, sWidth, closable) {
 
     // Render the close button
     if (closable) {
-        var oClose = document.createElement("div");
+        let oClose = document.createElement("div");
         oClose.className = "close";
 
         oClose.onclick = function () {
@@ -136,7 +136,7 @@ function popupWindow(title, oContent, sWidth, closable) {
     }
 
     // Render the window title
-    var oTitle = document.createElement("h1");
+    let oTitle = document.createElement("h1");
     oTitle.appendChild(document.createTextNode(title));
 
     // Make title the drag window handler
@@ -148,7 +148,7 @@ function popupWindow(title, oContent, sWidth, closable) {
     oContainerDiv.appendChild(oTitle);
     oTitle = null;
 
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.setAttribute("id", "popupWindowContent");
     oContainerDiv.appendChild(content);
     content = null;
