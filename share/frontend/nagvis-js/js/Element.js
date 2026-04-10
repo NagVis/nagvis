@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 // eslint-disable-next-line no-redeclare
-var Element = Base.extend({
+const Element = Base.extend({
     // Holds the NagVis object which this element is associated with
     obj: null,
     // Holds the root dom object of this element

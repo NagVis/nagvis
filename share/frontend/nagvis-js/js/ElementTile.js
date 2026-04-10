@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ElementTile = Element.extend({
+const ElementTile = Element.extend({
     render: function () {
         this.renderTile();
     },
@@ -32,11 +32,11 @@ var ElementTile = Element.extend({
 
     // Renders the DOM nodes of the object to show it on the overview page
     renderTile: function () {
-        var alt = "";
+        let alt = "";
         if (this.type == "service") alt = this.obj.conf.name + "-" + this.obj.conf.service_description;
         else alt = this.obj.conf.name;
 
-        var div = document.createElement("div");
+        const div = document.createElement("div");
         this.dom_obj = div;
         this.obj.trigger_obj = div;
         div.setAttribute("id", this.obj.conf.object_id);
@@ -44,7 +44,7 @@ var ElementTile = Element.extend({
 
         // needed for IE. It seems as the IE does not really know what to do
         // with the link definied below ... strange one
-        var url = this.obj.conf.overview_url;
+        const url = this.obj.conf.overview_url;
         div.onclick = function () {
             location.href = url;
             return false;
@@ -54,7 +54,7 @@ var ElementTile = Element.extend({
         if (oPageProperties.showmapthumbs == 1) div.style.height = "200px";
 
         // Link
-        var oLink = document.createElement("a");
+        const oLink = document.createElement("a");
         oLink.setAttribute("id", this.obj.conf.object_id + "-icon");
         oLink.style.display = "block";
         oLink.style.width = "100%";
@@ -63,7 +63,7 @@ var ElementTile = Element.extend({
 
         // Status image
         if (this.obj.conf.icon !== null && this.obj.conf.icon !== "") {
-            var oImg = document.createElement("img");
+            const oImg = document.createElement("img");
             oImg.className = "state";
             oImg.align = "right";
             oImg.src = oGeneralProperties.path_iconsets + this.obj.conf.icon;
@@ -75,7 +75,7 @@ var ElementTile = Element.extend({
         }
 
         // Title
-        var h3 = document.createElement("h3");
+        const h3 = document.createElement("h3");
         h3.appendChild(document.createTextNode(this.obj.conf.alias));
         oLink.appendChild(h3);
 

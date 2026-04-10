@@ -22,7 +22,7 @@
  *
  *****************************************************************************/
 
-var NagVisLine = NagVisStatelessObject.extend({
+const NagVisLine = NagVisStatelessObject.extend({
     constructor: function (oConf) {
         // Call parent constructor;
         this.base(oConf);
@@ -31,7 +31,7 @@ var NagVisLine = NagVisStatelessObject.extend({
     update: function () {
         this.clearElements();
 
-        var line = new ElementLine(this).addTo(this);
+        const line = new ElementLine(this).addTo(this);
 
         // Apply line color configurations
         line.calcColors = (function (obj) {

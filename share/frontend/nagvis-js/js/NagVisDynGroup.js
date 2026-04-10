@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var NagVisDynGroup = NagVisStatefulObject.extend({
+const NagVisDynGroup = NagVisStatefulObject.extend({
     constructor: function (oConf) {
         this.base(oConf);
     }

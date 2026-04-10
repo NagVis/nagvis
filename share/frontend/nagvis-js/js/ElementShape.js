@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var ElementShape = Element.extend({
+const ElementShape = Element.extend({
     render: function () {
         this.renderShape();
         this.place();
@@ -48,14 +48,14 @@ var ElementShape = Element.extend({
     //
 
     renderShape: function () {
-        var oIconDiv = document.createElement("div");
+        const oIconDiv = document.createElement("div");
         this.dom_obj = oIconDiv;
 
         oIconDiv.setAttribute("id", this.obj.conf.object_id + "-icondiv");
         oIconDiv.className = "icondiv";
         oIconDiv.style.zIndex = this.obj.conf.z;
 
-        var oIcon = document.createElement("img");
+        const oIcon = document.createElement("img");
         this.obj.trigger_obj = oIcon;
         oIcon.setAttribute("id", this.obj.conf.object_id + "-icon");
         oIcon.className = "icon";
@@ -64,10 +64,11 @@ var ElementShape = Element.extend({
         // An icon size might be either one integer for even sized images or
         // two integers for differen height/width images
         if (this.obj.conf.icon_size) {
-            var size = this.obj.conf.icon_size;
+            const size = this.obj.conf.icon_size;
+            let w, h;
             if (size.length == 1) {
-                var w = parseInt(size),
-                    h = parseInt(size);
+                w = parseInt(size);
+                h = parseInt(size);
             } else {
                 w = parseInt(size[0]);
                 h = parseInt(size[1]);
@@ -77,7 +78,7 @@ var ElementShape = Element.extend({
         }
 
         // Construct the real url to fetch for this shape
-        var img_url = null;
+        let img_url = null;
         if (this.obj.conf.icon.match(/^\[(.*)\]$/)) {
             img_url = this.obj.conf.icon.replace(/^\[(.*)\]$/, "$1");
         } else {
@@ -96,7 +97,7 @@ var ElementShape = Element.extend({
         oIcon.alt = this.obj.conf.type;
 
         if (this.obj.conf.url && this.obj.conf.url !== "") {
-            var oIconLink = document.createElement("a");
+            const oIconLink = document.createElement("a");
             oIconLink.href = this.obj.conf.url;
             oIconLink.target = this.obj.conf.url_target;
             oIconLink.appendChild(oIcon);

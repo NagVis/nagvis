@@ -21,12 +21,12 @@
  *
  *****************************************************************************/
 
-var ElementBox = Element.extend({
+const ElementBox = Element.extend({
     render: function () {
         let scale = 1;
         if (g_map && usesSource("worldmap") && this.obj.conf.scale_to_zoom == "1") {
-            let currentZoom = g_map.getZoom();
-            let one2oneZoom = Number(this.obj.conf.normal_size_at_zoom) || 19;
+            const currentZoom = g_map.getZoom();
+            const one2oneZoom = Number(this.obj.conf.normal_size_at_zoom) || 19;
             if (currentZoom < one2oneZoom) {
                 scale = 1 / Math.pow(2, one2oneZoom - currentZoom);
             }

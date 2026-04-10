@@ -25,9 +25,9 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-var _eventlog = null;
+let _eventlog = null;
 
-var oSeverity = {
+const oSeverity = {
     debug: 4,
     info: 3,
     warning: 2,
@@ -36,8 +36,8 @@ var oSeverity = {
 };
 
 function eventlogToggle(store) {
-    var oLog = document.getElementById("eventlog");
-    var oLogControl = document.getElementById("eventlogControl");
+    let oLog = document.getElementById("eventlog");
+    const oLogControl = document.getElementById("eventlogControl");
 
     if (store === true) storeUserOption("eventlog", oLog.style.display == "none");
 
@@ -61,13 +61,13 @@ function eventlogToggle(store) {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function eventlogInitialize() {
-    var doc = document;
-    var oEventlog = doc.createElement("div");
+    let doc = document;
+    let oEventlog = doc.createElement("div");
     oEventlog.setAttribute("id", "eventlog");
     oEventlog.style.overflow = "auto";
     oEventlog.style.height = oPageProperties.event_log_height + "px";
 
-    var oEventlogControl = doc.createElement("div");
+    let oEventlogControl = doc.createElement("div");
     oEventlogControl.setAttribute("id", "eventlogControl");
     oEventlogControl.style.bottom = parseInt(oPageProperties.event_log_height, 10) + 5 + "px";
     oEventlogControl.appendChild(doc.createTextNode("_"));
@@ -119,13 +119,13 @@ function eventlog(sComponent, sSeverity, sText) {
         oPageProperties.event_log &&
         oPageProperties.event_log != "0"
     ) {
-        var doc = document;
+        let doc = document;
 
         if (_eventlog === null) {
             eventlogInitialize();
             eventlog("eventlog", "info", "Eventlog initialized (Level: " + oPageProperties.event_log_level + ")");
         }
-        var oEventlog = _eventlog;
+        let oEventlog = _eventlog;
 
         if (typeof oSeverity[sSeverity] === "undefined") {
             eventlog(
@@ -148,7 +148,7 @@ function eventlog(sComponent, sSeverity, sText) {
             }
 
             // Format the new log entry
-            var oEntry = doc.createTextNode(getCurrentTime() + " " + sSeverity + " " + sComponent + ": " + sText);
+            let oEntry = doc.createTextNode(getCurrentTime() + " " + sSeverity + " " + sComponent + ": " + sText);
 
             // Append new message to log
             oEventlog.appendChild(oEntry);

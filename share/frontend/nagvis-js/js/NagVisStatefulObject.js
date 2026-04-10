@@ -25,7 +25,7 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-var NagVisStatefulObject = NagVisObject.extend({
+const NagVisStatefulObject = NagVisObject.extend({
     has_state: true,
 
     // Stores the information from last refresh (Needed for change detection)
@@ -45,9 +45,9 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.members = [];
 
         if (this.conf && this.conf.members && this.conf.members.length > 0) {
-            for (var i = 0, len = this.conf.members.length; i < len; i++) {
-                var oMember = this.conf.members[i];
-                var oObj;
+            for (let i = 0, len = this.conf.members.length; i < len; i++) {
+                let oMember = this.conf.members[i];
+                let oObj;
 
                 switch (oMember.type) {
                     case "host":
@@ -99,8 +99,8 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     getStatefulMembers: function () {
-        var stateful = [];
-        for (var i = 0, len = this.members.length; i < len; i++) {
+        const stateful = [];
+        for (let i = 0, len = this.members.length; i < len; i++) {
             if (this.members[i].has_state) {
                 stateful.push(this.members[i]);
             }
@@ -154,7 +154,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     stateChangedToWorse: function () {
-        var lastSubState = "normal";
+        let lastSubState = "normal";
         if (
             this.last_state.summary_problem_has_been_acknowledged &&
             this.last_state.summary_problem_has_been_acknowledged == 1
@@ -171,9 +171,9 @@ var NagVisStatefulObject = NagVisObject.extend({
             return true;
         }
 
-        var lastWeight = oStates[this.last_state.summary_state][lastSubState];
+        const lastWeight = oStates[this.last_state.summary_state][lastSubState];
 
-        var subState = "normal";
+        let subState = "normal";
         if (this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
             subState = "ack";
         } else if (this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
@@ -182,7 +182,7 @@ var NagVisStatefulObject = NagVisObject.extend({
             subState = "stale";
         }
 
-        var weight = oStates[this.conf.summary_state][subState];
+        const weight = oStates[this.conf.summary_state][subState];
 
         return lastWeight < weight;
     },
@@ -200,7 +200,7 @@ var NagVisStatefulObject = NagVisObject.extend({
             return false;
         }
 
-        var weight = oStates[this.conf.summary_state]["normal"];
+        const weight = oStates[this.conf.summary_state]["normal"];
         return weight > oStates["UP"]["normal"];
     },
 
@@ -281,12 +281,12 @@ var NagVisStatefulObject = NagVisObject.extend({
         if (!this.members || !attrs.members) return;
 
         // Update already existing objects
-        for (var i = 0, len = attrs.members.length; i < len; i++) {
-            var member_attrs = attrs.members[i],
+        for (let i = 0, len = attrs.members.length; i < len; i++) {
+            const member_attrs = attrs.members[i],
                 updated = false;
 
-            for (var a = 0, len2 = this.members.length; a < len2; a++) {
-                var member = this.members[a];
+            for (let a = 0, len2 = this.members.length; a < len2; a++) {
+                const member = this.members[a];
                 if (member_attrs.object_id == member.conf.object_id) {
                     member.updateAttrs(member_attrs, only_state);
                     break;
@@ -473,7 +473,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     replaceMacros: function () {
-        var name = "";
+        let name = "";
         if (this.conf.type == "service") {
             name = "host_name";
         } else {
@@ -519,17 +519,17 @@ var NagVisStatefulObject = NagVisObject.extend({
         // FIXME: Highlight lines in the future too
         if (this.conf.view_type !== "icon") return;
 
-        var oObjIcon = document.getElementById(this.conf.object_id + "-icon");
-        var oObjIconDiv = document.getElementById(this.conf.object_id + "-icondiv");
+        let oObjIcon = document.getElementById(this.conf.object_id + "-icon");
+        let oObjIconDiv = document.getElementById(this.conf.object_id + "-icondiv");
 
-        var sColor = oStates[this.conf.summary_state].color;
+        let sColor = oStates[this.conf.summary_state].color;
 
         // Use these classes (icon-flashing-<state>) in your custom css to customise flashing icons
         // e.g. icon-flashing-critical, icondiv-flashing-critical
         // Note you may need to use '!important' to override the inline default
         //
-        var sFlashingClass = "icon-flashing-" + this.conf.summary_state.toLowerCase();
-        var sFlashingDivClass = "icondiv-flashing-" + this.conf.summary_state.toLowerCase();
+        let sFlashingClass = "icon-flashing-" + this.conf.summary_state.toLowerCase();
+        let sFlashingDivClass = "icondiv-flashing-" + this.conf.summary_state.toLowerCase();
 
         this.bIsFlashing = show;
         if (show) {

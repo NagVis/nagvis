@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var NagVisHost = NagVisStatefulObject.extend({
+const NagVisHost = NagVisStatefulObject.extend({
     constructor: function (oConf) {
         this.base(oConf);
     }

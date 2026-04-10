@@ -24,7 +24,9 @@ export default [
             // rules produce too many false positives without explicit per-file global
             // declarations. Enable them again once the codebase is modularised.
             "no-undef": "off",
-            "no-unused-vars": "off"
+            "no-unused-vars": "off",
+            "no-var": "error",
+            "prefer-const": "error"
         }
     }
 ];

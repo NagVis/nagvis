@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var View = Base.extend({
+const View = Base.extend({
     id: null,
     dom_obj: null,
     sum_obj: null,
@@ -33,10 +33,10 @@ var View = Base.extend({
     },
 
     update: function (args) {
-        var show = isset(args.show) ? "&show=" + args.show : "";
+        const show = isset(args.show) ? "&show=" + args.show : "";
 
-        var data = [];
-        for (var i = 0, len = args.data.length; i < len; i++) data.push("i[]=" + args.data[i]);
+        const data = [];
+        for (let i = 0, len = args.data.length; i < len; i++) data.push("i[]=" + args.data[i]);
 
         // Get the updated objects via bulk request
         call_ajax(
@@ -88,9 +88,9 @@ var View = Base.extend({
 
         // Procees the "config changed" responses
         if (isset(o["status"]) && o["status"] == "CHANGED") {
-            var oChanged = o["data"];
+            const oChanged = o["data"];
 
-            for (var key in oChanged) {
+            for (const key in oChanged) {
                 if (key == "maincfg") {
                     eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
                     // Clear the scheduling timeout to prevent problems with FF4 bugs
@@ -126,16 +126,16 @@ var View = Base.extend({
     },
 
     updateFileAges: function (data) {
-        for (var key in data) oFileAges[key] = data[key];
+        for (const key in data) oFileAges[key] = data[key];
     },
 
     // Bulk update object states (and possibly configs) and then visualize changes
     updateObjects: function (attrs, only_state) {
-        var at_least_one_changed = false;
+        let at_least_one_changed = false;
 
         // Loop all object which have new information
-        for (var i = 0, len = attrs.length; i < len; i++) {
-            var objectId = attrs[i].object_id;
+        for (let i = 0, len = attrs.length; i < len; i++) {
+            const objectId = attrs[i].object_id;
 
             // Object not found. This should only be happen for new objects which have
             // just been added to the map by the user. In this case we always have "full"
@@ -165,7 +165,7 @@ var View = Base.extend({
      */
     handleRepeatEvents: function () {
         eventlog("worker", "debug", "handleRepeatEvents: Start");
-        for (var i in this.objects) {
+        for (const i in this.objects) {
             // Trigger repeated event checking/raising for eacht stateful object which
             // has event_time_first set (means there was an event before which is
             // required to be repeated some time)
@@ -177,7 +177,7 @@ var View = Base.extend({
     },
 
     getFileAgeParams: function () {
-        var addParams = "";
+        let addParams = "";
         if (g_view.type === "map" && this.id !== false) addParams = "&f[]=map," + this.id + "," + oFileAges[this.id];
         return "&f[]=maincfg,maincfg," + oFileAges["maincfg"] + addParams;
     },
@@ -185,11 +185,11 @@ var View = Base.extend({
     // Detects objects with deprecated state information
     getObjectsToUpdate: function () {
         eventlog("worker", "debug", "getObjectsToUpdate: Start");
-        var stateful = [],
+        const stateful = [],
             stateless = [];
 
         // Assign all object which need an update indexes to return Array
-        for (var i in this.objects) {
+        for (const i in this.objects) {
             if (this.objects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states) {
                 if (this.objects[i] instanceof NagVisStatefulObject) {
                     stateful.push(i);
@@ -222,7 +222,7 @@ var View = Base.extend({
         if (!oPageProperties.event_background || oPageProperties.event_background != "1")
             return oPageProperties.background_color;
 
-        var sColor;
+        let sColor;
         // When state is PENDING, OK, UP, set default background color
         if (
             !oObj.summary_state ||
@@ -255,7 +255,7 @@ var View = Base.extend({
 
     // Gets the favicon of the page representating the state of the view
     getFaviconImage: function (oObj) {
-        var sFavicon;
+        let sFavicon;
 
         if (oObj.summary_in_downtime && oObj.summary_in_downtime == 1) sFavicon = "downtime";
         else if (oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged == 1)
@@ -277,11 +277,11 @@ var View = Base.extend({
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     scaleView: function () {
-        var header = document.getElementById("header");
-        var content = this.dom_obj;
+        const header = document.getElementById("header");
+        const content = this.dom_obj;
         if (!content) return;
 
-        var headerSpacer = document.getElementById("headerspacer");
+        let headerSpacer = document.getElementById("headerspacer");
         if (header) {
             header.style.width = pageWidth() + "px";
             if (headerSpacer) {

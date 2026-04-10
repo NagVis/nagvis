@@ -34,26 +34,27 @@
 /*jslint evil: true, */
 
 /* Initiate global vars which are set later in the parsed HTML */
-var oWorkerProperties, oGeneralProperties, oRotationProperties;
-var oViewProperties;
-var oPageProperties = {};
-var oFileAges;
-var oStatusMessageTimer;
-var oMapObjects = {};
-var regexCache = {};
+let oWorkerProperties, oGeneralProperties, oRotationProperties;
+let oViewProperties;
+// eslint-disable-next-line prefer-const
+let oPageProperties = {};
+let oFileAges;
+let oStatusMessageTimer;
+const oMapObjects = {};
+const regexCache = {};
 
 // Initialize and define some other basic vars
-var iNow = Math.floor(Date.parse(new Date()) / 1000);
+const iNow = Math.floor(Date.parse(new Date()) / 1000);
 
 // Define some state options
-var oStates = {};
+const oStates = {};
 
-var isIE = navigator.appVersion.indexOf("MSIE") != -1;
+const isIE = navigator.appVersion.indexOf("MSIE") != -1;
 
 // These vars are used to stop earlier scrollings that mess between
-var crawlX = 0;
-var crawlY = 0;
-var crawling = 0;
+let crawlX = 0;
+let crawlY = 0;
+let crawling = 0;
 
 // This is a dummy fucntion which is overwritten by the definition in
 // the header template when it is enabled.
@@ -115,55 +116,53 @@ function date(format, timestamp) {
     // *     returns 8: '52'
     // *     example 9: date('W Y-m-d', 1293974054); // 2011-01-02
     // *     returns 9: '52 2011-01-02'
-    var that = this,
-        jsdate,
-        f,
-        formatChr = /\\?([a-z])/gi,
-        formatChrCb,
-        // Keep this here (works, but for code commented-out
-        // below for file size reasons)
-        //, tal= [],
-        _pad = function (n, c) {
-            if ((n = n + "").length < c) {
-                return new Array(++c - n.length).join("0") + n;
-            } else {
-                return n;
-            }
-        },
-        txt_words = [
-            "Sun",
-            "Mon",
-            "Tues",
-            "Wednes",
-            "Thurs",
-            "Fri",
-            "Satur",
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-        ],
-        txt_ordin = {
-            1: "st",
-            2: "nd",
-            3: "rd",
-            21: "st",
-            22: "nd",
-            23: "rd",
-            31: "st"
-        };
-    formatChrCb = function (t, s) {
+    let that = this;
+    let jsdate;
+    const formatChr = /\\?([a-z])/gi;
+    const formatChrCb = function (t, s) {
         return f[t] ? f[t]() : s;
     };
-    f = {
+    // Keep this here (works, but for code commented-out
+    // below for file size reasons)
+    //, tal= [],
+    const _pad = function (n, c) {
+        if ((n = n + "").length < c) {
+            return new Array(++c - n.length).join("0") + n;
+        } else {
+            return n;
+        }
+    };
+    const txt_words = [
+        "Sun",
+        "Mon",
+        "Tues",
+        "Wednes",
+        "Thurs",
+        "Fri",
+        "Satur",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+    const txt_ordin = {
+        1: "st",
+        2: "nd",
+        3: "rd",
+        21: "st",
+        22: "nd",
+        23: "rd",
+        31: "st"
+    };
+    const f = {
         // Day
         d: function () {
             // Day of month w/leading 0; 01..31
@@ -195,7 +194,7 @@ function date(format, timestamp) {
         },
         z: function () {
             // Day of year; 0..365
-            var a = new Date(f.Y(), f.n() - 1, f.j()),
+            const a = new Date(f.Y(), f.n() - 1, f.j()),
                 b = new Date(f.Y(), 0, 1);
             return Math.round((a - b) / 864e5) + 1;
         },
@@ -203,7 +202,7 @@ function date(format, timestamp) {
         // Week
         W: function () {
             // ISO-8601 week number
-            var a = new Date(f.Y(), f.n() - 1, f.j() - f.N() + 3),
+            const a = new Date(f.Y(), f.n() - 1, f.j() - f.N() + 3),
                 b = new Date(a.getFullYear(), 0, 4);
             return 1 + Math.round((a - b) / 864e5 / 7);
         },
@@ -237,7 +236,7 @@ function date(format, timestamp) {
         },
         o: function () {
             // ISO-8601 year
-            var n = f.n(),
+            const n = f.n(),
                 W = f.W(),
                 Y = f.Y();
             return Y + (n === 12 && W < 9 ? -1 : n === 1 && W > 9);
@@ -262,7 +261,7 @@ function date(format, timestamp) {
         },
         B: function () {
             // Swatch Internet time; 000..999
-            var H = jsdate.getUTCHours() * 36e2, // Hours
+            const H = jsdate.getUTCHours() * 36e2, // Hours
                 i = jsdate.getUTCMinutes() * 60, // Minutes
                 s = jsdate.getUTCSeconds(); // Seconds
             return _pad(Math.floor((H + i + s + 36e2) / 86.4) % 1e3, 3);
@@ -309,7 +308,7 @@ function date(format, timestamp) {
             // DST observed?; 0 or 1
             // Compares Jan 1 minus Jan 1 UTC to Jul 1 minus Jul 1 UTC.
             // If they are not equal, then DST is observed.
-            var a = new Date(f.Y(), 0), // Jan 1
+            const a = new Date(f.Y(), 0), // Jan 1
                 c = Date.UTC(f.Y(), 0), // Jan 1 UTC
                 b = new Date(f.Y(), 6), // Jul 1
                 d = Date.UTC(f.Y(), 6); // Jul 1 UTC
@@ -317,12 +316,12 @@ function date(format, timestamp) {
         },
         O: function () {
             // Difference to GMT in hour format; e.g. +0200
-            var a = jsdate.getTimezoneOffset();
+            const a = jsdate.getTimezoneOffset();
             return (a > 0 ? "-" : "+") + _pad(Math.abs((a / 60) * 100), 4);
         },
         P: function () {
             // Difference to GMT w/colon; e.g. +02:00
-            var O = f.O();
+            const O = f.O();
             return O.substr(0, 3) + ":" + O.substr(3, 2);
         },
         T: function () {
@@ -392,7 +391,7 @@ function date(format, timestamp) {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function updateWorkerCounter() {
-    var oWorkerCounter = document.getElementById("workerLastRunCounter");
+    let oWorkerCounter = document.getElementById("workerLastRunCounter");
     // write the time to refresh to header counter
     if (oWorkerCounter) {
         if (oWorkerProperties.last_run) {
@@ -442,14 +441,14 @@ function rotationCountdown() {
         if (oRotationProperties.nextStepTime <= 0) {
             return rotatePage();
         } else {
-            var oRefCountHead = document.getElementById("refreshCounterHead");
+            let oRefCountHead = document.getElementById("refreshCounterHead");
             // write the time to refresh to header counter
             if (oRefCountHead) {
                 oRefCountHead.innerHTML = oRotationProperties.nextStepTime;
                 oRefCountHead = null;
             }
 
-            var oRefCount = document.getElementById("refreshCounter");
+            let oRefCount = document.getElementById("refreshCounter");
             // write the time to refresh to the normal counter
             if (oRefCount) {
                 oRefCount.innerHTML = oRotationProperties.nextStepTime;
@@ -466,10 +465,10 @@ function rotationCountdown() {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function getUrlParam(name) {
-    var name2 = name.replace("[", "\\[").replace("]", "\\]");
-    var regexS = "[\\?&]" + name2 + "=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(window.location);
+    const name2 = name.replace("[", "\\[").replace("]", "\\]");
+    const regexS = "[\\?&]" + name2 + "=([^&#]*)";
+    const regex = new RegExp(regexS);
+    const results = regex.exec(window.location);
     if (results === null) {
         return "";
     } else {
@@ -483,15 +482,15 @@ function getUrlParam(name) {
  * - Can remove parameters by adding "null" values
  */
 function makeuri(addparams) {
-    var tmp = window.location.href.split("?");
-    var base = tmp[0];
+    let tmp = window.location.href.split("?");
+    const base = tmp[0];
     tmp = tmp[1].split("#");
     tmp = tmp[0].split("&");
-    var len = tmp.length;
-    var params = {};
-    var pair = null;
+    const len = tmp.length;
+    const params = {};
+    let pair = null;
 
-    for (var i = 0; i < tmp.length; i++) {
+    for (let i = 0; i < tmp.length; i++) {
         pair = tmp[i].split("=");
 
         // Skip unwanted params
@@ -501,15 +500,15 @@ function makeuri(addparams) {
     }
 
     // Add new params to the existing params. Overwrite duplicates
-    for (var key in addparams) {
+    for (const key in addparams) {
         if (addparams[key] != null) {
             params[key] = addparams[key];
         }
     }
 
     // Build list of key/value pairs
-    var aparams = [];
-    for (key in params) {
+    const aparams = [];
+    for (const key in params) {
         aparams.push(key + "=" + params[key]);
     }
 
@@ -549,12 +548,12 @@ function switchRotation() {
 }
 
 function getCurrentTime() {
-    var oDate = new Date();
-    var sHours = oDate.getHours();
+    const oDate = new Date();
+    let sHours = oDate.getHours();
     sHours = sHours < 10 ? "0" + sHours : sHours;
-    var sMinutes = oDate.getMinutes();
+    let sMinutes = oDate.getMinutes();
     sMinutes = sMinutes < 10 ? "0" + sMinutes : sMinutes;
-    var sSeconds = oDate.getSeconds();
+    let sSeconds = oDate.getSeconds();
     sSeconds = sSeconds < 10 ? "0" + sSeconds : sSeconds;
 
     return sHours + ":" + sMinutes + ":" + sSeconds;
@@ -577,7 +576,7 @@ function getRandom(min, max) {
 }
 
 function pageWidth() {
-    var w;
+    let w;
 
     if (window.innerWidth !== null && typeof window.innerWidth !== "undefined") {
         w = window.innerWidth;
@@ -593,7 +592,7 @@ function pageWidth() {
 }
 
 function pageHeight() {
-    var h;
+    let h;
 
     if (window.innerHeight !== null && typeof window.innerHeight !== "undefined") {
         h = window.innerHeight;
@@ -628,15 +627,13 @@ function getScrollLeft() {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function scrollSlow(iTargetX, iTargetY, iSpeed) {
-    var currentScrollTop = getScrollTop();
-    var currentScrollLeft = getScrollLeft();
-    var iMapOffsetTop;
-    var scrollTop;
-    var scrollLeft;
-    var iWidth;
-    var iHeight;
+    const currentScrollTop = getScrollTop();
+    const currentScrollLeft = getScrollLeft();
+    let iMapOffsetTop;
+    let scrollTop;
+    let scrollLeft;
 
-    var iStep = 10;
+    const iStep = 10;
 
     iTargetX = parseInt(iTargetX);
     iTargetY = parseInt(iTargetY);
@@ -649,7 +646,7 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
     }
 
     // Get offset of the map div
-    var oMap = document.getElementById("map");
+    let oMap = document.getElementById("map");
     if (oMap && oMap.offsetTop) {
         iMapOffsetTop = oMap.offsetTop;
     } else {
@@ -658,8 +655,8 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
     oMap = null;
 
     // Get measure of the screen
-    iWidth = pageWidth();
-    iHeight = pageHeight() - iMapOffsetTop;
+    const iWidth = pageWidth();
+    const iHeight = pageHeight() - iMapOffsetTop;
 
     if (
         (iTargetY < currentScrollTop + iHeight / 2 + iStep && iTargetY >= currentScrollTop + iHeight / 2 - iStep) ||
@@ -805,13 +802,13 @@ function oDump(object, depth, max) {
         return false;
     }
 
-    var indent = "";
-    for (var i = 0; i < depth; i++) {
+    let indent = "";
+    for (let i = 0; i < depth; i++) {
         indent += "  ";
     }
 
-    var output = "";
-    for (var key in object) {
+    let output = "";
+    for (const key in object) {
         output += "\n" + indent + key + ": ";
         switch (typeof object[key]) {
             case "object":
@@ -832,8 +829,8 @@ function oDump(object, depth, max) {
  * This counts the elements in an object
  */
 function oLength(object) {
-    var c = 0;
-    for (var key in object) c++;
+    let c = 0;
+    for (const key in object) c++;
     return c;
 }
 
@@ -867,27 +864,23 @@ function isFirefox() {
  */
 addDOMLoadEvent = (function () {
     // create event function stack
-    var load_events = [],
-        load_timer,
-        script,
-        done,
-        exec,
-        old_onload,
-        init = function () {
-            done = true;
+    const load_events = [];
+    let load_timer, script, done, exec, old_onload;
+    const init = function () {
+        done = true;
 
-            // kill the timer
-            clearInterval(load_timer);
+        // kill the timer
+        clearInterval(load_timer);
 
-            // execute each function in the stack in the order they were added
-            //
-            // LM: This small timeout seems to be needed for chrome to have the
-            // clientWidth attribute calculated which is needed by the controls
-            // of the map objects.
-            while ((exec = load_events.shift())) setTimeout(exec, 50);
+        // execute each function in the stack in the order they were added
+        //
+        // LM: This small timeout seems to be needed for chrome to have the
+        // clientWidth attribute calculated which is needed by the controls
+        // of the map objects.
+        while ((exec = load_events.shift())) setTimeout(exec, 50);
 
-            if (script) script.onreadystatechange = "";
-        };
+        if (script) script.onreadystatechange = "";
+    };
 
     return function (func) {
         // if the init function was already ran, just run this function now and stop
@@ -951,7 +944,7 @@ function handleJSError(sMsg, sUrl, iLine) {
 }
 
 function handleException(e) {
-    var msg = e.name + ": " + e.message;
+    let msg = e.name + ": " + e.message;
     if (e.stack) msg += "<br><code>" + e.stack + "</code>";
     handleJSError(msg, e.fileName, e.lineNumber);
 }
@@ -996,9 +989,9 @@ function preventDefaultEvents(event) {
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function displayStatusMessage(msg, type, hold) {
-    var iMessageTime = 5000;
+    const iMessageTime = 5000;
 
-    var oMessage = document.getElementById("statusMessage");
+    let oMessage = document.getElementById("statusMessage");
 
     // Initialize when not yet done
     if (!oMessage) {
@@ -1014,7 +1007,7 @@ function displayStatusMessage(msg, type, hold) {
         clearTimeout(oStatusMessageTimer);
     }
 
-    var cont = msg;
+    let cont = msg;
     if (type) {
         cont = '<div class="' + type + '">' + cont + "</div>";
     }
@@ -1040,7 +1033,7 @@ function displayStatusMessage(msg, type, hold) {
 
 // make a message row disapear
 function hideStatusMessage() {
-    var oMessage = document.getElementById("statusMessage");
+    const oMessage = document.getElementById("statusMessage");
 
     // Only hide when initialized
     if (oMessage) {
@@ -1056,7 +1049,7 @@ function hideStatusMessage() {
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, customStyle, scale) {
-    var oLabelDiv = document.createElement("div");
+    const oLabelDiv = document.createElement("div");
     oLabelDiv.setAttribute("id", id);
     oLabelDiv.className = "box";
     oLabelDiv.style.background = bgColor;
@@ -1084,7 +1077,7 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
     else oLabelDiv.style.borderStyle = "solid";
 
     // Create span for text and add label text
-    var oLabelSpan = null;
+    let oLabelSpan = null;
     if (oLabelDiv.childNodes.length == 0) oLabelSpan = document.createElement("span");
     else oLabelSpan = oLabelDiv.childNodes[0];
 
@@ -1096,20 +1089,20 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
     // JS. So parse the string and apply the options manually.
     if (customStyle && customStyle !== "") {
         // Split up the coustom style string to apply the attributes
-        var aStyle = customStyle.split(";");
-        for (var i in aStyle) {
+        let aStyle = customStyle.split(";");
+        for (const i in aStyle) {
             if (typeof aStyle[i] !== "string") continue;
-            var aOpt = aStyle[i].split(":");
+            let aOpt = aStyle[i].split(":");
 
             if (aOpt[0] && aOpt[0] != "" && aOpt[1] && aOpt[1] != "") {
-                var sKey = aOpt[0].replace(/(-[a-zA-Z])/g, "$1");
+                let sKey = aOpt[0].replace(/(-[a-zA-Z])/g, "$1");
 
-                var regex = /(-[a-zA-Z])/;
-                var result = regex.exec(aOpt[0]);
+                const regex = /(-[a-zA-Z])/;
+                const result = regex.exec(aOpt[0]);
 
                 if (result !== null) {
-                    for (i = 1; i < result.length; i++) {
-                        var fixed = result[i].replace("-", "").toUpperCase();
+                    for (let i = 1; i < result.length; i++) {
+                        const fixed = result[i].replace("-", "").toUpperCase();
                         sKey = sKey.replace(result[i], fixed);
                     }
                 }
@@ -1121,9 +1114,9 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
         aStyle = null;
     }
 
-    let a_regex = /<a href="([^"]*)".*>.*<\/a>/g;
-    let a_match = a_regex.exec(text);
-    let a_schema = a_match ? a_match[1].split(":")[0] : null;
+    const a_regex = /<a href="([^"]*)".*>.*<\/a>/g;
+    const a_match = a_regex.exec(text);
+    const a_schema = a_match ? a_match[1].split(":")[0] : null;
     const allowed_url_schemas = ["http", "https"];
     if (!a_schema || allowed_url_schemas.includes(a_schema)) {
         oLabelSpan.innerHTML = text;
@@ -1139,7 +1132,7 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
         oLabelDiv.width = addZoomFactor(oLabelDiv.width);
         oLabelDiv.height = addZoomFactor(oLabelDiv.height);
 
-        var fontSize = getEffectiveStyle(oLabelSpan, "font-size");
+        let fontSize = getEffectiveStyle(oLabelSpan, "font-size");
         if (fontSize === null) {
             eventlog("renderNagVisTextbox", "critical", "Unable to fetch font-size attribute for textbox");
         } else {
@@ -1168,9 +1161,9 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function lightenColor(code, rD, gD, bD) {
-    var r = parseInt(code.substring(1, 3), 16);
-    var g = parseInt(code.substring(3, 5), 16);
-    var b = parseInt(code.substring(5, 7), 16);
+    let r = parseInt(code.substring(1, 3), 16);
+    let g = parseInt(code.substring(3, 5), 16);
+    let b = parseInt(code.substring(5, 7), 16);
 
     r += rD;
     if (r > 255) r = 255;
@@ -1273,7 +1266,7 @@ function isRelativeCoord(v) {
 
 // Helper function to determine the number of entries in an object
 Object.size = function (obj) {
-    var size = 0,
+    let size = 0,
         key;
     for (key in obj) {
         if (obj.hasOwnProperty(key)) size++; // eslint-disable-line no-prototype-builtins
@@ -1291,7 +1284,7 @@ if (!Function.prototype.bind) {
             throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
         }
 
-        var aArgs = Array.prototype.slice.call(arguments, 1),
+        const aArgs = Array.prototype.slice.call(arguments, 1),
             fToBind = this,
             fNOP = function () {},
             fBound = function () {
@@ -1316,11 +1309,11 @@ if (!Array.prototype.indexOf) {
         "use strict";
         if (this === void 0 || this === null) throw new TypeError();
 
-        var t = Object(this);
-        var len = t.length >>> 0;
+        const t = Object(this);
+        const len = t.length >>> 0;
         if (len === 0) return -1;
 
-        var n = 0;
+        let n = 0;
         if (arguments.length > 0) {
             n = Number(arguments[1]);
             if (n !== n) n = 0;
@@ -1329,7 +1322,7 @@ if (!Array.prototype.indexOf) {
 
         if (n >= len) return -1;
 
-        var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+        let k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
 
         for (; k < len; k++) {
             if (k in t && t[k] === searchElement) return k;
@@ -1347,10 +1340,10 @@ function getEffectiveStyle(e, attr) {
         return document.defaultView.getComputedStyle(e, null).getPropertyValue(attr);
     } else if (e.currentStyle) {
         // IE
-        var ie_attr = attr.replace(/-(\w)/g, function (strMatch, p1) {
+        const ie_attr = attr.replace(/-(\w)/g, function (strMatch, p1) {
             return p1.toUpperCase();
         });
-        var f = e.currentStyle[ie_attr];
+        const f = e.currentStyle[ie_attr];
         if (f.length > 0) {
             return f;
         }
@@ -1358,11 +1351,11 @@ function getEffectiveStyle(e, attr) {
     return null;
 }
 
-var g_zoom_factor = null;
+let g_zoom_factor = null;
 function getZoomFactor() {
     if (g_zoom_factor !== null) return g_zoom_factor; // only compute once
 
-    var zoom = getViewParam("zoom");
+    const zoom = getViewParam("zoom");
     // Fill: At first use 100% zoom. Later, when everything has been rendered,
     // calculate the fill zoom factor and re-render with this option.
     if (zoom === null || zoom == "fill") g_zoom_factor = 100;
@@ -1415,8 +1408,8 @@ function zoomHandler(event, obj, forced_zoom) {
     // because IE can not tell us anything about the dimensions when
     // the object is not visible
     obj.style.display = "block";
-    var width = addZoomFactor(obj.width, forced_zoom);
-    var height = addZoomFactor(obj.height, forced_zoom);
+    const width = addZoomFactor(obj.width, forced_zoom);
+    const height = addZoomFactor(obj.height, forced_zoom);
 
     obj.style.display = "none";
 
@@ -1426,8 +1419,8 @@ function zoomHandler(event, obj, forced_zoom) {
     obj.style.display = "block";
 
     // Fix also the label position on e.g. automap nodes
-    var arr = obj.id.split("-");
-    var map_obj = getMapObjByDomObjId(arr[0]);
+    const arr = obj.id.split("-");
+    let map_obj = getMapObjByDomObjId(arr[0]);
     if (map_obj && typeof map_obj.updateLabel == "function") {
         map_obj.updateLabel();
     }
@@ -1483,7 +1476,7 @@ function _(s, replace) {
 
     // optional replace of macros
     if (typeof replace != "undefined") {
-        for (var i = 0; i < replace.length; i++) {
+        for (let i = 0; i < replace.length; i++) {
             s = s.replace("[" + replace[i][0] + "]", replace[i][1]);
         }
     }
@@ -1497,9 +1490,9 @@ function has_class(o, cn) {
 }
 
 function remove_class(o, cn) {
-    var parts = o.className.split(" ");
-    var new_parts = Array();
-    for (var x = 0; x < parts.length; x++) {
+    const parts = o.className.split(" ");
+    const new_parts = Array();
+    for (let x = 0; x < parts.length; x++) {
         if (parts[x] != cn) new_parts.push(parts[x]);
     }
     o.className = new_parts.join(" ");
@@ -1521,9 +1514,9 @@ function middle(x1, x2, cut) {
 
 // Returns the maximum value in an array
 function max(arr) {
-    var max = arr[0];
+    let max = arr[0];
 
-    for (var i = 1, len = arr.length; i < len; i++) {
+    for (let i = 1, len = arr.length; i < len; i++) {
         if (arr[i] > max) {
             max = arr[i];
         }
@@ -1534,9 +1527,9 @@ function max(arr) {
 
 // Returns the minimum value in an array
 function min(arr) {
-    var min = arr[0];
+    let min = arr[0];
 
-    for (var i = 1, len = arr.length; i < len; i++) {
+    for (let i = 1, len = arr.length; i < len; i++) {
         if (arr[i] < min) {
             min = arr[i];
         }
@@ -1565,19 +1558,19 @@ function newY(a, b, x, y) {
 //   'arg3': 'val3',
 // })
 function merge_args() {
-    var defaults = arguments[0];
-    var args = arguments[1] || {};
+    const defaults = arguments[0];
+    const args = arguments[1] || {};
 
-    for (var name in args) defaults[name] = args[name];
+    for (const name in args) defaults[name] = args[name];
 
     return defaults;
 }
 
 function executeJS(obj) {
-    var aScripts = obj.getElementsByTagName("script");
-    for (var i = 0; i < aScripts.length; i++) {
+    const aScripts = obj.getElementsByTagName("script");
+    for (let i = 0; i < aScripts.length; i++) {
         if (aScripts[i].src && aScripts[i].src !== "") {
-            var oScr = document.createElement("script");
+            const oScr = document.createElement("script");
             oScr.src = aScripts[i].src;
             document.getElementsByTagName("HEAD")[0].appendChild(oScr);
         } else {

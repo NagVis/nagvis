@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-var frontendMessages = {};
+const frontendMessages = {};
 
 function frontendMessagePresent(key) {
     return isset(frontendMessages[key]);
@@ -43,16 +43,16 @@ function frontendMessage(oMessage, key) {
         throw "Could not display empty frontendMessage()";
     }
 
-    var sTitle = "";
+    let sTitle = "";
     if (typeof oMessage.title !== "undefined") sTitle = oMessage.title;
 
-    var closable = true;
+    let closable = true;
     if (typeof oMessage.closable !== "undefined") closable = oMessage.closable;
 
     // Skip processing when message with same key already shown
     if (isset(key) && frontendMessagePresent(key)) return;
 
-    var container = popupWindow(
+    const container = popupWindow(
         sTitle,
         { code: '<div class="' + oMessage.type.toLowerCase() + '">' + oMessage.message + "</div>" },
         500,
@@ -62,7 +62,7 @@ function frontendMessage(oMessage, key) {
 
     // Maybe there is a request for a reload/redirect
     if (typeof oMessage.reloadTime !== "undefined" && oMessage.reloadTime !== null) {
-        var sUrl = window.location.href;
+        let sUrl = window.location.href;
 
         // Maybe enable redirect
         if (typeof oMessage.reloadUrl !== "undefined" && oMessage.reloadUrl !== null) {

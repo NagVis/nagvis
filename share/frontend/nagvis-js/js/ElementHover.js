@@ -21,17 +21,17 @@
  *
  *****************************************************************************/
 
-var g_hover_templates = {};
-var g_hover_template_childs = {};
-var g_hover_urls = {};
-var g_hover_open = null;
+const g_hover_templates = {};
+const g_hover_template_childs = {};
+const g_hover_urls = {};
+let g_hover_open = null;
 
 // Hides the currently open hover menu
 function hoverHide() {
     if (g_hover_open !== null) g_hover_open.hide();
 }
 
-var ElementHover = Element.extend({
+const ElementHover = Element.extend({
     hover_url: null, // configured url with eventual replaced macros
     template_html: null, // hover HTML code with replaced config related macros
     coords: null, // list of x, y coordinates of the hover menu top left corner
@@ -117,7 +117,7 @@ var ElementHover = Element.extend({
                 this.template_html = g_hover_urls[this.hover_url];
             }
         } else {
-            var name = this.obj.conf.hover_template;
+            const name = this.obj.conf.hover_template;
             if (!isset(g_hover_templates[name])) {
                 this.requestTemplate();
             } else if (g_hover_templates[name] !== true) {
@@ -147,15 +147,15 @@ var ElementHover = Element.extend({
 
     // Extracts the childs code from the hover templates
     getChildCode: function (template_html) {
-        var regex = getRegEx("loopChild", "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
-        var results = regex.exec(template_html);
+        const regex = getRegEx("loopChild", "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
+        const results = regex.exec(template_html);
         if (results !== null) return results[1];
         else return "";
     },
 
     handleTemplate: function (templates) {
-        var name = templates[0]["name"];
-        var code = templates[0]["code"];
+        const name = templates[0]["name"];
+        const code = templates[0]["code"];
 
         g_hover_templates[name] = code;
         g_hover_template_childs[name] = this.getChildCode(code);
@@ -166,7 +166,7 @@ var ElementHover = Element.extend({
         if (isset(templates[0]["css_file"])) {
             // This is needed for some old browsers which do no load css files
             // which are included in such fetched html code
-            var oLink = document.createElement("link");
+            const oLink = document.createElement("link");
             oLink.href = templates[0]["css_file"];
             oLink.rel = "stylesheet";
             oLink.type = "text/css";
@@ -218,7 +218,7 @@ var ElementHover = Element.extend({
         // has not been drawn yet. Do it now.
         if (this.dom_obj === null) this.draw();
 
-        var hover_delay = parseInt(this.obj.conf.hover_delay);
+        const hover_delay = parseInt(this.obj.conf.hover_delay);
 
         // Only show up hover menu when no context menu is opened
         // and only handle the events when no timer is in schedule at the moment to
@@ -266,10 +266,10 @@ var ElementHover = Element.extend({
 
     showAndPositionMenu: function () {
         // document.body.scrollTop does not work in IE
-        var scrollTop = document.body.scrollTop ? document.body.scrollTop : document.documentElement.scrollTop;
-        var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft : document.documentElement.scrollLeft;
+        const scrollTop = document.body.scrollTop ? document.body.scrollTop : document.documentElement.scrollTop;
+        const scrollLeft = document.body.scrollLeft ? document.body.scrollLeft : document.documentElement.scrollLeft;
 
-        var x = this.coords[0],
+        const x = this.coords[0],
             y = this.coords[1];
 
         // hide the menu first to avoid an "up-then-over" visual effect
@@ -296,9 +296,9 @@ var ElementHover = Element.extend({
          *  - If that is not possible try to reposition the hover menu
          */
 
-        var hoverLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
-        var screenWidth = pageWidth();
-        var hoverPosAndSizeOk = true;
+        const hoverLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
+        const screenWidth = pageWidth();
+        let hoverPosAndSizeOk = true;
         if (!this.isOnScreen()) {
             hoverPosAndSizeOk = false;
             if (this.tryResize()) hoverPosAndSizeOk = true;
@@ -330,7 +330,7 @@ var ElementHover = Element.extend({
             this.dom_obj.style.width = pageWidth() - 2 * this.spacing + "px";
         }
 
-        var hoverTop = parseInt(this.dom_obj.style.top.replace("px", ""));
+        let hoverTop = parseInt(this.dom_obj.style.top.replace("px", ""));
         // Only move the menu to the top when the new top will not be
         // out of sight
         if (hoverTop + this.dom_obj.clientHeight > pageHeight() && hoverTop - this.dom_obj.clientHeight >= 0)
@@ -339,15 +339,15 @@ var ElementHover = Element.extend({
     },
 
     isOnScreen: function () {
-        var hoverLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
-        var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft : document.documentElement.scrollLeft;
+        const hoverLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
+        const scrollLeft = document.body.scrollLeft ? document.body.scrollLeft : document.documentElement.scrollLeft;
 
         if (hoverLeft < scrollLeft) return false;
 
         // The most right px of the hover menu
-        var hoverRight = hoverLeft + this.dom_obj.clientWidth - scrollLeft;
+        const hoverRight = hoverLeft + this.dom_obj.clientWidth - scrollLeft;
         // The most right px of the viewport
-        var viewRight = pageWidth();
+        const viewRight = pageWidth();
 
         if (hoverRight > viewRight) return false;
 
@@ -358,13 +358,15 @@ var ElementHover = Element.extend({
     },
 
     tryResize: function (rightSide) {
-        if (!isset(rightSide)) var reposition = false;
+        let reposition;
+        if (!isset(rightSide)) reposition = false;
 
-        var hoverLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
+        const hoverLeft = parseInt(this.dom_obj.style.left.replace("px", ""));
 
-        if (rightSide) var overhead = hoverLeft + this.dom_obj.clientWidth + this.spacing - pageWidth();
+        let overhead;
+        if (rightSide) overhead = hoverLeft + this.dom_obj.clientWidth + this.spacing - pageWidth();
         else overhead = hoverLeft;
-        var widthAfterResize = this.dom_obj.clientWidth - overhead;
+        const widthAfterResize = this.dom_obj.clientWidth - overhead;
 
         // If width is larger than this.min_width resize it
         if (widthAfterResize > this.min_width) {
@@ -382,14 +384,14 @@ var ElementHover = Element.extend({
     },
 
     renderMenu: function () {
-        var template_html = this.template_html;
+        let template_html = this.template_html;
         if (!this.obj.conf.hover_url || this.obj.conf.hover_url === "") {
             // Replace dynamic (state dependent) macros
             if (isset(this.obj.conf.hover_template)) template_html = this.replaceDynamicMacros(template_html);
         }
 
         // Only create a new div when the hover menu does not exist
-        var hoverMenu = document.getElementById(this.obj.conf.object_id + "-hover");
+        let hoverMenu = document.getElementById(this.obj.conf.object_id + "-hover");
         if (!hoverMenu) {
             hoverMenu = document.createElement("div");
             this.dom_obj = hoverMenu;
@@ -406,15 +408,15 @@ var ElementHover = Element.extend({
     },
 
     replaceChildMacros: function (template_html) {
-        var childs_html = "";
-        var regex = "";
+        let childs_html = "";
+        let regex = "";
 
-        var row_tmpl = g_hover_template_childs[this.obj.conf.hover_template];
-        var stateful_members = this.obj.getStatefulMembers();
+        const row_tmpl = g_hover_template_childs[this.obj.conf.hover_template];
+        const stateful_members = this.obj.getStatefulMembers();
         if (typeof row_tmpl != "undefined" && row_tmpl != "" && stateful_members.length > 0) {
             // Loop all child objects until all looped or the child limit is reached
             for (
-                var i = 0, len1 = this.obj.conf.hover_childs_limit, len2 = stateful_members.length;
+                let i = 0, len1 = this.obj.conf.hover_childs_limit, len2 = stateful_members.length;
                 (len1 == -1 || (len1 >= 0 && i <= len1)) && i < len2;
                 i++
             ) {
@@ -426,7 +428,7 @@ var ElementHover = Element.extend({
                     childs_html += this.replaceMacrosOfChild(stateful_members[i], row_tmpl);
                 } else {
                     // Create an end line which shows the number of hidden child items
-                    var member = {
+                    const member = {
                         conf: {
                             type: "host",
                             name: "",
@@ -451,7 +453,7 @@ var ElementHover = Element.extend({
     },
 
     replaceMacrosOfChild: function (member_obj, template_html) {
-        var oMacros = {
+        const oMacros = {
             obj_summary_state: member_obj.conf.summary_state,
             obj_summary_output: member_obj.conf.summary_output,
             obj_display_name: member_obj.conf.display_name
@@ -479,7 +481,7 @@ var ElementHover = Element.extend({
         )
             oMacros.obj_name1 = member_obj.conf.name;
         else {
-            var regex = getRegEx(
+            const regex = getRegEx(
                 "section-sgchild",
                 "<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->",
                 "gm"
@@ -495,7 +497,7 @@ var ElementHover = Element.extend({
     },
 
     replaceDynamicMacros: function (template_html) {
-        var oMacros = {};
+        const oMacros = {};
 
         if (g_view.type === "map") oMacros.map_name = oPageProperties.map_name;
 
@@ -541,7 +543,7 @@ var ElementHover = Element.extend({
         // On a update the image url replacement is easier. Just replace the old
         // timestamp with the current
         if (this.obj.firstUpdate !== null) {
-            var regex = getRegEx("img_timestamp", "_t=" + this.obj.firstUpdate, "g");
+            const regex = getRegEx("img_timestamp", "_t=" + this.obj.firstUpdate, "g");
             // Search before matching - saves some time
             if (template_html.search(regex) !== -1)
                 template_html = template_html.replace(regex, "_t=" + this.obj.lastUpdate);
@@ -559,8 +561,8 @@ var ElementHover = Element.extend({
     },
 
     replaceStaticMacros: function () {
-        var oMacros = {};
-        var oSectionMacros = {};
+        const oMacros = {};
+        const oSectionMacros = {};
 
         if (this.obj.conf.type && this.obj.conf.type != "") oMacros.obj_type = this.obj.conf.type;
 
@@ -633,8 +635,8 @@ var ElementHover = Element.extend({
             oMacros.obj_tags = this.obj.conf.tags.join(", ");
 
             // Add taggroup information
-            for (var group_id in this.obj.conf.taggroups) {
-                var group = this.obj.conf.taggroups[group_id];
+            for (const group_id in this.obj.conf.taggroups) {
+                const group = this.obj.conf.taggroups[group_id];
                 oMacros["obj_taggroup_" + group_id + "_title"] = group.title;
                 oMacros["obj_taggroup_" + group_id + "_topic"] = group.topic;
                 if (group.value) {
@@ -686,8 +688,8 @@ var ElementHover = Element.extend({
             oSectionMacros.childs = "<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->";
 
         // Loop and replace all unwanted section macros
-        for (var key in oSectionMacros) {
-            var regex = getRegEx("section-" + key, oSectionMacros[key], "gm");
+        for (const key in oSectionMacros) {
+            let regex = getRegEx("section-" + key, oSectionMacros[key], "gm");
             if (this.template_html.search(regex) !== -1) this.template_html = this.template_html.replace(regex, "");
             regex = null;
         }
@@ -700,10 +702,13 @@ var ElementHover = Element.extend({
         // Re-add the clean child code
         // This workaround is needed cause the obj_name macro is replaced
         // by the parent objects macro in current progress
-        regex = getRegEx("loopChild", "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
-        if (this.template_html.search(regex) !== -1)
+        const regexLoopChild = getRegEx(
+            "loopChild",
+            "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->"
+        );
+        if (this.template_html.search(regexLoopChild) !== -1)
             this.template_html = this.template_html.replace(
-                regex,
+                regexLoopChild,
                 "<!-- BEGIN loop_child -->" +
                     g_hover_template_childs[this.obj.conf.hover_template] +
                     "<!-- END loop_child -->"
@@ -711,12 +716,12 @@ var ElementHover = Element.extend({
 
         // Search for images and append current timestamp to src (prevent caching of
         // images e.a. when some graphs should be fresh)
-        regex = getRegEx("img", "<img.*src=['\"]?([^>'\"]*)['\"]?");
-        var results = regex.exec(this.template_html);
+        const regexImg = getRegEx("img", "<img.*src=['\"]?([^>'\"]*)['\"]?");
+        const results = regexImg.exec(this.template_html);
         if (results !== null) {
-            for (var i = 0, len = results.length; i < len; i = i + 2) {
+            for (let i = 0, len = results.length; i < len; i = i + 2) {
                 // Replace src value
-                var sTmp = results[i].replace(results[i + 1], results[i + 1] + "&_t=" + this.obj.firstUpdate);
+                const sTmp = results[i].replace(results[i + 1], results[i + 1] + "&_t=" + this.obj.firstUpdate);
 
                 // replace image code
                 this.template_html = this.template_html.replace(results[i], sTmp);
