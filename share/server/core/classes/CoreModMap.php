@@ -52,6 +52,7 @@ class CoreModMap extends CoreModule
             'getMapProperties' => 'view',
             'getMapObjects' => 'view',
             'getObjectStates' => 'view',
+            'getObjectMembers' => 'view',
 
             'manage' => REQUIRES_AUTHORISATION,
             'doExportMap' => 'edit',
@@ -81,6 +82,7 @@ class CoreModMap extends CoreModule
             case 'getMapProperties':
             case 'getMapObjects':
             case 'getObjectStates':
+            case 'getObjectMembers':
             case 'manageTmpl':
             case 'addModify':
             case 'doExportMap':
@@ -138,6 +140,9 @@ class CoreModMap extends CoreModule
                     break;
                 case 'getObjectStates':
                     $sReturn = $this->getObjectStates();
+                    break;
+                case 'getObjectMembers':
+                    $sReturn = $this->getObjectMembersById();
                     break;
                 case 'manage':
                     $VIEW = new ViewManageMaps();
@@ -409,6 +414,43 @@ class CoreModMap extends CoreModule
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns the members of a single map object, identified by its object_id.
+     * Only the requested object is loaded from the backend to keep memory usage low.
+     *
+     * @return string JSON-encoded array of member objects
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
+    private function getObjectMembersById()
+    {
+        $aOpts = ['i' => MATCH_STRING_NO_SPACE_EMPTY];
+        $aVals = $this->getCustomOptions($aOpts, [], true);
+        $object_id = $aVals['i'];
+
+        if (!isset($object_id) || $object_id === '') {
+            return json_encode([]);
+        }
+
+        $MAPCFG = new GlobalMapCfg($this->name);
+        $MAPCFG->readMapConfig();
+        // Only load the one requested object to avoid loading the full map
+        $MAPCFG->filterMapObjects([$object_id]);
+
+        $MAP = new NagVisMap($MAPCFG, GET_STATE, IS_VIEW);
+
+        $map_members = $MAP->MAPOBJ->getMembers();
+        if (empty($map_members)) {
+            return json_encode([]);
+        }
+
+        $members = [];
+        foreach (reset($map_members)->getSortedObjectMembers() as $MEMBER) {
+            $members[] = $MEMBER->fetchObjectAsChild();
+        }
+        return json_encode($members);
     }
 
     /**

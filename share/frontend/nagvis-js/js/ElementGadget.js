@@ -58,7 +58,7 @@ const ElementGadget = Element.extend({
     //
 
     requestGadget: function (param_str) {
-        const data = "members=" + escape(JSON.stringify(this.obj.conf.members));
+        const data = "members=" + escape(JSON.stringify(this.obj.conf.members || []));
         // FIXME: Change to async?
         return call_ajax(this.obj.conf.gadget_url + param_str, {
             method: "POST",

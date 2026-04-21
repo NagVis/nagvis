@@ -106,7 +106,11 @@ const ElementHover = Element.extend({
         if (this.template_html === null || this.template_html === true) {
             return false; // template not available yet, skip rendering
         }
-        this.renderMenu();
+        if (this.obj.conf.num_members > 0 && (!this.obj.conf.members || this.obj.conf.members.length === 0)) {
+            this.obj.fetchMembers(this.renderMenu.bind(this));
+        } else {
+            this.renderMenu();
+        }
     },
 
     getTemplate: function () {

@@ -108,6 +108,45 @@ const NagVisStatefulObject = NagVisObject.extend({
         return stateful;
     },
 
+    // Fetches member objects lazily from the server if not yet loaded, then calls callback.
+    fetchMembers: function (callback) {
+        if (this.conf.members && this.conf.members.length > 0) {
+            this.getMembers();
+            callback();
+            return;
+        }
+        if (!this.conf.num_members || this.conf.num_members == 0) {
+            callback();
+            return;
+        }
+        // Guard against concurrent fetches: queue the callback and let the
+        // in-flight request handle it.
+        if (this._members_loading) {
+            this._members_pending_cb = callback;
+            return;
+        }
+        this._members_loading = true;
+        call_ajax(
+            oGeneralProperties.path_server +
+                "?mod=Map&act=getObjectMembers&show=" +
+                g_view.id +
+                "&i=" +
+                this.conf.object_id,
+            {
+                response_handler: function (data) {
+                    this._members_loading = false;
+                    this.conf.members = data || [];
+                    this.getMembers();
+                    callback();
+                    if (this._members_pending_cb) {
+                        this._members_pending_cb();
+                        this._members_pending_cb = null;
+                    }
+                }.bind(this)
+            }
+        );
+    },
+
     /**
      * PUBLIC saveLastState()
      *

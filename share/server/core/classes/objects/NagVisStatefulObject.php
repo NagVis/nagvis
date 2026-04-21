@@ -1084,15 +1084,6 @@ class NagVisStatefulObject extends NagVisObject
             $arr['num_members'] = $num_members;
         }
 
-        // If there are some members fetch the information for them
-        if (isset($arr['num_members']) && $arr['num_members'] > 0) {
-            $members = [];
-            foreach ($this->getSortedObjectMembers() as $OBJ) {
-                $members[] = $OBJ->fetchObjectAsChild();
-            }
-            $arr['members'] = $members;
-        }
-
         return $arr;
     }
 
