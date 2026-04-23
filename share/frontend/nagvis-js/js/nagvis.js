@@ -44,10 +44,10 @@ const oMapObjects = {};
 const regexCache = {};
 
 // Initialize and define some other basic vars
-const iNow = Math.floor(Date.parse(new Date()) / 1000);
+let iNow = Math.floor(Date.parse(new Date()) / 1000);
 
 // Define some state options
-const oStates = {};
+let oStates = {};
 
 const isIE = navigator.appVersion.indexOf("MSIE") != -1;
 
