@@ -44,9 +44,11 @@ const oMapObjects = {};
 const regexCache = {};
 
 // Initialize and define some other basic vars
+// eslint-disable-next-line prefer-const -- reassigned in frontend.js (periodicUpdateWorker)
 let iNow = Math.floor(Date.parse(new Date()) / 1000);
 
 // Define some state options
+// eslint-disable-next-line prefer-const -- mutated by reference across ElementLine.js, ElementShape.js, View.js, NagVisStatefulObject.js, frontend.js
 let oStates = {};
 
 const isIE = navigator.appVersion.indexOf("MSIE") != -1;
