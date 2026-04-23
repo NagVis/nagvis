@@ -106,7 +106,16 @@ const ElementHover = Element.extend({
         if (this.template_html === null || this.template_html === true) {
             return false; // template not available yet, skip rendering
         }
-        this.renderMenu();
+        if (this.obj.conf.num_members > 0 && (!this.obj.conf.members || this.obj.conf.members.length === 0)) {
+            this.obj.fetchMembers(
+                function () {
+                    this.renderMenu();
+                    this.draw();
+                }.bind(this)
+            );
+        } else {
+            this.renderMenu();
+        }
     },
 
     getTemplate: function () {
@@ -242,7 +251,7 @@ const ElementHover = Element.extend({
 
     // Is the menu currently visible to the user?
     isVisible: function () {
-        return this.dom_obj.style.display !== "none";
+        return this.dom_obj !== null && this.dom_obj.style.display !== "none";
     },
 
     show: function () {

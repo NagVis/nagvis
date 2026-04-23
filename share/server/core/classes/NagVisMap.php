@@ -62,15 +62,14 @@ class NagVisMap
             log_mem('map ' . $this->MAPCFG->getName() . ' ' . count($this->MAPOBJ->getMembers()));
             log_mem('postmapobjects');
 
-            if ($bIsView === IS_VIEW) {
-                $this->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-                $_BACKEND->execute();
-                $this->MAPOBJ->applyState();
-                log_mem('postmapstate');
-            } else {
-                $this->MAPOBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
-                log_mem('postmapstatequeue');
-            }
+            // Never load individual member details eagerly — they are fetched
+            // on demand via getObjectMembers when a hover menu is opened.
+            // Only aggregate state counts (servicegroupMemberState etc.) are
+            // loaded here, which is sufficient for icon colouring.
+            $this->MAPOBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
+            $_BACKEND->execute();
+            $this->MAPOBJ->applyState();
+            log_mem('postmapstate');
         }
     }
 

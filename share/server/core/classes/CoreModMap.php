@@ -52,6 +52,7 @@ class CoreModMap extends CoreModule
             'getMapProperties' => 'view',
             'getMapObjects' => 'view',
             'getObjectStates' => 'view',
+            'getObjectMembers' => 'view',
 
             'manage' => REQUIRES_AUTHORISATION,
             'doExportMap' => 'edit',
@@ -81,6 +82,7 @@ class CoreModMap extends CoreModule
             case 'getMapProperties':
             case 'getMapObjects':
             case 'getObjectStates':
+            case 'getObjectMembers':
             case 'manageTmpl':
             case 'addModify':
             case 'doExportMap':
@@ -138,6 +140,9 @@ class CoreModMap extends CoreModule
                     break;
                 case 'getObjectStates':
                     $sReturn = $this->getObjectStates();
+                    break;
+                case 'getObjectMembers':
+                    $sReturn = $this->getObjectMembers();
                     break;
                 case 'manage':
                     $VIEW = new ViewManageMaps();
@@ -409,6 +414,53 @@ class CoreModMap extends CoreModule
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns member details for a single map object, fetched on demand.
+     * Only the requested object is loaded; member details are queued with
+     * GET_SINGLE_MEMBER_STATES so the backend fills the members array.
+     *
+     * @return string JSON-encoded array of member objects
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
+    private function getObjectMembers()
+    {
+        global $_BACKEND;
+
+        $aOpts = ['i' => MATCH_STRING_NO_SPACE_EMPTY];
+        $aVals = $this->getCustomOptions($aOpts, [], true);
+        $object_id = $aVals['i'];
+
+        if (!isset($object_id) || $object_id === '') {
+            return json_encode([]);
+        }
+
+        $MAPCFG = new GlobalMapCfg($this->name);
+        $MAPCFG->readMapConfig();
+        $MAPCFG->filterMapObjects([$object_id]);
+
+        // Load aggregate state only (no member details yet)
+        $MAP = new NagVisMap($MAPCFG, GET_STATE, IS_VIEW);
+
+        $map_members = $MAP->MAPOBJ->getMembers();
+        if (empty($map_members)) {
+            return json_encode([]);
+        }
+
+        $OBJ = reset($map_members);
+
+        // Now fetch member details specifically for this one object
+        $OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+        $_BACKEND->execute();
+        $OBJ->applyState();
+
+        $members = [];
+        foreach ($OBJ->getSortedObjectMembers() as $MEMBER) {
+            $members[] = $MEMBER->fetchObjectAsChild();
+        }
+        return json_encode($members);
     }
 
     /**

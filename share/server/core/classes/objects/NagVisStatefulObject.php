@@ -783,7 +783,7 @@ class NagVisStatefulObject extends NagVisObject
      *
      * @return array
      */
-    protected function fetchObjectAsChild()
+    public function fetchObjectAsChild()
     {
         return [
             'type' => $this->getType(),

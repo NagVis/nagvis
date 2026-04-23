@@ -137,7 +137,7 @@ class NagVisService extends NagVisStatefulObject
     /**
      * @return array
      */
-    protected function fetchObjectAsChild()
+    public function fetchObjectAsChild()
     {
         $aChild = parent::fetchObjectAsChild();
         $aChild['service_description'] = $this->getServiceDescription();
