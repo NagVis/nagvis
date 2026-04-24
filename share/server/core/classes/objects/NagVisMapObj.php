@@ -355,7 +355,10 @@ class NagVisMapObj extends NagVisStatefulObject
     public function queueState($_unused_flag = true, $bFetchMemberState = true)
     {
         foreach ($this->getStateRelevantMembers() as $OBJ) {
-            $OBJ->queueState(GET_STATE, $bFetchMemberState);
+            // Gadgets render synchronously and read conf.members directly at
+            // render time, so their group member details must be loaded eagerly.
+            $needsMembers = $bFetchMemberState || $OBJ->get('view_type') === 'gadget';
+            $OBJ->queueState(GET_STATE, $needsMembers);
         }
     }
 

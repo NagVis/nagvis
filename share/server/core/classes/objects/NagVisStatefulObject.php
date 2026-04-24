@@ -537,11 +537,20 @@ class NagVisStatefulObject extends NagVisObject
             $arr['perfdata'] = $this->escapeStringForJson(val($this->state, PERFDATA, ''));
         }
 
-        // Enable/Disable fetching children
-        $arr['members'] = [];
-        if ($bFetchChilds && method_exists($this, 'getMembers')) {
-            foreach ($this->getSortedObjectMembers() as $OBJ) {
-                $arr['members'][] = $OBJ->fetchObjectAsChild();
+        // Enable/Disable fetching children.
+        // When $bFetchChilds is false (initial map load), always emit members:[].
+        // When $bFetchChilds is true (state refresh) but members were not loaded
+        // (lazy loading), omit the key entirely so the client preserves its
+        // cached member list rather than overwriting it with an empty array.
+        if (!$bFetchChilds || !method_exists($this, 'getMembers')) {
+            $arr['members'] = [];
+        } else {
+            $sortedMembers = $this->getSortedObjectMembers();
+            if (!empty($sortedMembers)) {
+                $arr['members'] = [];
+                foreach ($sortedMembers as $OBJ) {
+                    $arr['members'][] = $OBJ->fetchObjectAsChild();
+                }
             }
         }
 

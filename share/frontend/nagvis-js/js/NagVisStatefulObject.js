@@ -129,6 +129,13 @@ const NagVisStatefulObject = NagVisObject.extend({
             return;
         }
         this._members_loading = true;
+        const flushPending = function () {
+            if (this._members_pending_cbs && this._members_pending_cbs.length > 0) {
+                const pending = this._members_pending_cbs;
+                this._members_pending_cbs = [];
+                for (let i = 0; i < pending.length; i++) pending[i]();
+            }
+        }.bind(this);
         call_ajax(
             oGeneralProperties.path_server +
                 "?mod=Map&act=getObjectMembers&show=" +
@@ -141,11 +148,12 @@ const NagVisStatefulObject = NagVisObject.extend({
                     this.conf.members = data || [];
                     this.getMembers();
                     callback();
-                    if (this._members_pending_cbs && this._members_pending_cbs.length > 0) {
-                        const pending = this._members_pending_cbs;
-                        this._members_pending_cbs = [];
-                        for (let i = 0; i < pending.length; i++) pending[i]();
-                    }
+                    flushPending();
+                }.bind(this),
+                error_handler: function () {
+                    this._members_loading = false;
+                    callback();
+                    flushPending();
                 }.bind(this)
             }
         );
