@@ -109,10 +109,9 @@ const NagVisStatefulObject = NagVisObject.extend({
     },
 
     // Fetches member details lazily from the server when first needed (hover),
-    // then calls callback. The in-flight guard prevents a duplicate request when
-    // the user moves the mouse out and back before the first response arrives;
-    // any callbacks that arrive while a request is in flight are queued and
-    // all fired once the response is received.
+    // then calls callback. _members_pending_cbs being non-null signals a request
+    // is in flight; all callers (including the first) are queued and fired together
+    // once the response arrives.
     fetchMembers: function (callback) {
         if (this.conf.members && this.conf.members.length > 0) {
             this.getMembers();
@@ -123,19 +122,16 @@ const NagVisStatefulObject = NagVisObject.extend({
             callback();
             return;
         }
-        if (this._members_loading) {
-            if (!this._members_pending_cbs) this._members_pending_cbs = [];
-            this._members_pending_cbs.push(callback);
-            return;
-        }
-        this._members_loading = true;
+        if (!this._members_pending_cbs) this._members_pending_cbs = [];
+        this._members_pending_cbs.push(callback);
+        if (this._members_pending_cbs.length > 1) return; // request already in flight
+
         const flushPending = function () {
-            if (this._members_pending_cbs && this._members_pending_cbs.length > 0) {
-                const pending = this._members_pending_cbs;
-                this._members_pending_cbs = [];
-                for (let i = 0; i < pending.length; i++) pending[i]();
-            }
+            const pending = this._members_pending_cbs;
+            this._members_pending_cbs = null;
+            for (let i = 0; i < pending.length; i++) pending[i]();
         }.bind(this);
+
         call_ajax(
             oGeneralProperties.path_server +
                 "?mod=Map&act=getObjectMembers&show=" +
@@ -144,17 +140,11 @@ const NagVisStatefulObject = NagVisObject.extend({
                 this.conf.object_id,
             {
                 response_handler: function (data) {
-                    this._members_loading = false;
                     this.conf.members = data || [];
                     this.getMembers();
-                    callback();
                     flushPending();
                 }.bind(this),
-                error_handler: function () {
-                    this._members_loading = false;
-                    callback();
-                    flushPending();
-                }.bind(this)
+                error_handler: flushPending
             }
         );
     },
