@@ -194,9 +194,10 @@ function getFormParams(formId, skipHelperFields) {
         } else if (aFields[i].type == "checkbox") {
             if (aFields[i].checked) {
                 add_data(aFields[i].name, aFields[i].value);
-            } else {
-                add_data(aFields[i].name, "");
             }
+            // Unchecked checkboxes are intentionally not submitted, matching standard
+            // HTML form behaviour. This prevents hitting PHP's max_input_vars limit
+            // on forms with many checkboxes (e.g. role permissions with many maps).
         } else if (aFields[i].type == "radio") {
             if (aFields[i].checked) {
                 add_data(aFields[i].name, aFields[i].value);
