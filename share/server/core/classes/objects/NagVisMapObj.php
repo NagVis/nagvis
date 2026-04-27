@@ -348,23 +348,17 @@ class NagVisMapObj extends NagVisStatefulObject
      * the single objects.
      *
      * @param bool $_unused_flag
-     * @param bool $_unused_flag2
+     * @param bool $bFetchMemberState Whether to load individual member details (for hover)
      * @return void
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function queueState($_unused_flag = true, $_unused_flag2 = true)
+    public function queueState($_unused_flag = true, $bFetchMemberState = true)
     {
-        // Get state of all member objects
         foreach ($this->getStateRelevantMembers() as $OBJ) {
-            // The states of the map objects members only need to be fetched when this
-            // is MapObj is used as a view.
-            if ($this->isView === true) {
-                $OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-            } else {
-                // Get the summary state of the host but not the single member states
-                // Not needed cause no hover menu is displayed for this
-                $OBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
-            }
+            // Gadgets render synchronously and read conf.members directly at
+            // render time, so their group member details must be loaded eagerly.
+            $needsMembers = $bFetchMemberState || $OBJ->get('view_type') === 'gadget';
+            $OBJ->queueState(GET_STATE, $needsMembers);
         }
     }
 

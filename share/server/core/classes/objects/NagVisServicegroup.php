@@ -55,6 +55,30 @@ class NagVisServicegroup extends NagVisStatefulObject
     }
 
     /**
+     * Returns the number of group members.
+     * When member details have not been loaded yet (lazy loading), the total
+     * is derived from the state counts returned by servicegroupMemberState.
+     *
+     * @return int
+     */
+    public function getNumMembers()
+    {
+        if (!empty($this->members)) {
+            return count($this->members);
+        }
+        if ($this->aStateCounts === null) {
+            return 0;
+        }
+        $total = 0;
+        foreach ($this->aStateCounts as $aSubstates) {
+            foreach ($aSubstates as $iCount) {
+                $total += $iCount;
+            }
+        }
+        return $total;
+    }
+
+    /**
      * Queues the state fetching to the backend.
      *
      * @param bool $_unused_flag
@@ -66,11 +90,7 @@ class NagVisServicegroup extends NagVisStatefulObject
         global $_BACKEND;
         $queries = ['servicegroupMemberState' => true];
 
-        if (
-            $this->hover_menu == 1
-            && $this->hover_childs_show == 1
-            && $bFetchMemberState
-        ) {
+        if ($bFetchMemberState) {
             $queries['servicegroupMemberDetails'] = true;
         }
 

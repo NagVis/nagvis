@@ -62,14 +62,22 @@ class NagVisMap
             log_mem('map ' . $this->MAPCFG->getName() . ' ' . count($this->MAPOBJ->getMembers()));
             log_mem('postmapobjects');
 
+            // Never load individual member details eagerly — they are fetched
+            // on demand via getObjectMembers when a hover menu is opened.
+            // Only aggregate state counts (servicegroupMemberState etc.) are
+            // loaded here, which is sufficient for icon colouring.
+            // Exception: group objects with view_type=gadget need member details
+            // at render time because the gadget path is synchronous.
+            $this->MAPOBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
+
+            // For IS_VIEW (map page), execute and apply immediately.
+            // For !IS_VIEW (overview/multisite), the caller batches multiple
+            // maps into one execute() call and applies state itself — running
+            // execute/applyState here would cause double-apply.
             if ($bIsView === IS_VIEW) {
-                $this->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
                 $_BACKEND->execute();
                 $this->MAPOBJ->applyState();
                 log_mem('postmapstate');
-            } else {
-                $this->MAPOBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
-                log_mem('postmapstatequeue');
             }
         }
     }

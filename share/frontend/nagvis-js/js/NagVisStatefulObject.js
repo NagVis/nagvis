@@ -108,6 +108,47 @@ const NagVisStatefulObject = NagVisObject.extend({
         return stateful;
     },
 
+    // Fetches member details lazily from the server when first needed (hover),
+    // then calls callback. _members_pending_cbs being non-null signals a request
+    // is in flight; all callers (including the first) are queued and fired together
+    // once the response arrives.
+    fetchMembers: function (callback) {
+        if (this.conf.members && this.conf.members.length > 0) {
+            this.getMembers();
+            callback();
+            return;
+        }
+        if (!this.conf.num_members || this.conf.num_members == 0) {
+            callback();
+            return;
+        }
+        if (!this._members_pending_cbs) this._members_pending_cbs = [];
+        this._members_pending_cbs.push(callback);
+        if (this._members_pending_cbs.length > 1) return; // request already in flight
+
+        const flushPending = function () {
+            const pending = this._members_pending_cbs;
+            this._members_pending_cbs = null;
+            for (let i = 0; i < pending.length; i++) pending[i]();
+        }.bind(this);
+
+        call_ajax(
+            oGeneralProperties.path_server +
+                "?mod=Map&act=getObjectMembers&show=" +
+                g_view.id +
+                "&i=" +
+                this.conf.object_id,
+            {
+                response_handler: function (data) {
+                    this.conf.members = data || [];
+                    this.getMembers();
+                    flushPending();
+                }.bind(this),
+                error_handler: flushPending
+            }
+        );
+    },
+
     /**
      * PUBLIC saveLastState()
      *
