@@ -1,4 +1,13 @@
+1.10.2
+
 1.10.1
+  * Feature: NagVis popup dialogs show white/light theme when browser or OS is in dark mode
+  * FIX: JavaScript crash on maps with BW lines when only one of the in/out perfdata labels is matched
+  * FIX: Geomap source leaks lat/long into map config causing PHP 8.2 dynamic property deprecation warnings
+  * FIX: Fix PHP memory exhaustion on maps with large host/servicegroups by lazily loading group members on demand (#437)
+  * FIX: Updating role permissions silently fails when there are many maps due to PHP max_input_vars limit being exceeded
+  * FIX: Worldmap lines with both endpoints relative to hosts disappear after zoom or page refresh
+  * FIX: Setting zoom to "Fill screen" on an empty map corrupts the URL with zoom=NaN and makes the map disappear
 
 1.10.0
   * FIX: Align code standards with PSR-12 (#378 Thanks to miken32)

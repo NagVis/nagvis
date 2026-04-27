@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-VERSION=1.10.1
+VERSION=1.10.2
 NAME=nagvis-$(VERSION)
 
 SED ?= sed
@@ -21,6 +21,29 @@ dist:
 	git archive --format=tar --prefix=$(NAME)/ HEAD | gzip > $(NAME).tar.gz
 
 create-tag:
+	@fragments=$$(find changelog.d -maxdepth 1 -name '*.md' ! -name 'README.md') ; \
+	if [ -n "$$fragments" ]; then \
+	    echo "ERROR: changelog fragments remain in changelog.d/ — run tools/changelog-release.sh first" ; \
+	    exit 1 ; \
+	fi
+	@if git tag -l "nagvis-$(VERSION)" "nagvis-$(VERSION).0" | grep -q .; then \
+	    echo "ERROR: version $(VERSION) is already tagged — bump the version first (make version)" ; \
+	    exit 1 ; \
+	fi
+	@if ! git diff --quiet || ! git diff --cached --quiet; then \
+	    echo "ERROR: uncommitted changes present — commit the changelog and version bump first" ; \
+	    exit 1 ; \
+	fi
+	@upstream=$$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null) ; \
+	if [ -z "$$upstream" ]; then \
+	    echo "ERROR: current branch has no upstream — push the changelog and version commits first" ; \
+	    exit 1 ; \
+	fi ; \
+	unpushed=$$(git rev-list --count HEAD ^$$upstream) ; \
+	if [ "$$unpushed" != "0" ]; then \
+	    echo "ERROR: $$unpushed unpushed commit(s) — push the changelog and version commits first" ; \
+	    exit 1 ; \
+	fi
 	V=$(VERSION) ; if [ $${#V} -eq 3 ]; then \
 	    TAG=nagvis-$$V.0 ; \
 	else \
