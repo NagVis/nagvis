@@ -790,7 +790,7 @@ const ElementLine = Element.extend({
     calcWeathermapColor: function (id) {
         if (this.obj.conf.summary_state == "ERROR") return oStates["ERROR"].color;
 
-        if (!this.perfdata) return oStates["CRITICAL"].color;
+        if (!this.perfdata || !this.perfdata[id]) return oStates["CRITICAL"].color;
 
         if (this.perfdata[id][2] == "%" && this.perfdata[id][1] !== null) {
             return this.getColorFill(this.perfdata[id][1]);
@@ -824,7 +824,8 @@ const ElementLine = Element.extend({
      */
     calculateUsage: function (oldPerfdata, output) {
         const newPerfdata = [];
-        let foundNew = false;
+        let foundIn = false;
+        let foundOut = false;
         let line_label_in = "in";
         let line_label_out = "out";
 
@@ -854,7 +855,7 @@ const ElementLine = Element.extend({
                     oldPerfdata[i][1] *= 8; // convert those hakish bytes to bits
                     newPerfdata[2] = this.perfdataCalcBitsReadable(oldPerfdata[i]);
                 }
-                foundNew = true;
+                foundIn = true;
             }
             if (oldPerfdata[i][0] == line_label_out && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === "")) {
                 newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
@@ -864,10 +865,10 @@ const ElementLine = Element.extend({
                     oldPerfdata[i][1] *= 8; // convert those hakish bytes to bits
                     newPerfdata[3] = this.perfdataCalcBitsReadable(oldPerfdata[i]);
                 }
-                foundNew = true;
+                foundOut = true;
             }
         }
-        if (foundNew) return newPerfdata;
+        if (foundIn && foundOut) return newPerfdata;
         else return oldPerfdata;
     },
 
