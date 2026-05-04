@@ -111,8 +111,9 @@ const ElementGadget = Element.extend({
         else sParams = "&" + sParams;
 
         this.detectGadgetType(sParams);
+        let oGadget;
         if (this.gadget_type === "img") {
-            const oGadget = document.createElement("img");
+            oGadget = document.createElement("img");
 
             // Register controls reposition handler to handle resizes during
             // loading the image (from alt="" text to the real image)

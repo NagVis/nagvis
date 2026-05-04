@@ -63,15 +63,15 @@ const ElementTile = Element.extend({
 
         // Status image
         if (this.obj.conf.icon !== null && this.obj.conf.icon !== "") {
-            const oImg = document.createElement("img");
-            oImg.className = "state";
-            oImg.align = "right";
-            oImg.src = oGeneralProperties.path_iconsets + this.obj.conf.icon;
-            oImg.style.width = this.obj.conf.icon_size + "px";
-            oImg.style.height = this.obj.conf.icon_size + "px";
-            oImg.alt = this.obj.stateText();
+            const oStateImg = document.createElement("img");
+            oStateImg.className = "state";
+            oStateImg.align = "right";
+            oStateImg.src = oGeneralProperties.path_iconsets + this.obj.conf.icon;
+            oStateImg.style.width = this.obj.conf.icon_size + "px";
+            oStateImg.style.height = this.obj.conf.icon_size + "px";
+            oStateImg.alt = this.obj.stateText();
 
-            oLink.appendChild(oImg);
+            oLink.appendChild(oStateImg);
         }
 
         // Title
@@ -81,11 +81,11 @@ const ElementTile = Element.extend({
 
         // Only show map thumb when configured
         if (oPageProperties.showmapthumbs == 1 && this.obj.conf.overview_image != "") {
-            oImg = document.createElement("img");
-            oImg.style.width = "200px";
-            oImg.style.height = "150px";
-            oImg.src = this.obj.conf.overview_image;
-            oLink.appendChild(oImg);
+            const oThumbImg = document.createElement("img");
+            oThumbImg.style.width = "200px";
+            oThumbImg.style.height = "150px";
+            oThumbImg.src = this.obj.conf.overview_image;
+            oLink.appendChild(oThumbImg);
         }
 
         div.appendChild(oLink);
