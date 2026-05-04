@@ -1,4 +1,5 @@
 1.10.2
+  * FIX: JS crash on maps with image gadgets caused by block-scoped const introduced in var-to-let refactor
 
 1.10.1
   * Feature: NagVis popup dialogs show white/light theme when browser or OS is in dark mode
