@@ -79,7 +79,7 @@ class ViewMapAddModify
 
             if (
                 (isset($attrDefs[$attr]['must']) && $attrDefs[$attr]['must'] == '1')
-                || !has_var('toggle_' . $attr)
+                || !has_var('_has_toggle_' . $attr)
                 || get_checkbox('toggle_' . $attr)
             ) {
                 if (isset($attrDefs[$attr]['array']) && $attrDefs[$attr]['array']) {
@@ -462,6 +462,12 @@ class ViewMapAddModify
         // Add a checkbox to toggle the usage of an attribute. But only add it for
         // non-must attributes.
         if (!$prop['must'] && $fieldType != 'readonly') {
+            // Sentinel hidden field so the server can detect that this toggle exists
+            // in the form regardless of whether the checkbox is checked or not.
+            // Unchecked checkboxes are not submitted by the browser (or by getFormParams),
+            // so has_var('toggle_X') alone cannot distinguish "toggle rendered but unchecked"
+            // from "no toggle rendered at all".
+            hidden('_has_toggle_' . $propname, '1');
             checkbox(
                 'toggle_' . $propname,
                 $isInherited === false,
