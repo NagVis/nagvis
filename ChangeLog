@@ -1,3 +1,6 @@
+1.10.3
+  * FIX: Saving map elements incorrectly applied all attributes after the unchecked-checkbox submission fix
+
 1.10.2
   * FIX: JS crash on maps with image gadgets caused by block-scoped const introduced in var-to-let refactor
 
