@@ -1,0 +1,3126 @@
+# Georgian translation for NagVis.
+# Copyright (C) 2026 NagVis's authors.
+# This file is distributed under the same license as the NagVis package.
+# Lars Michelsen <lm@larsmichelsen.com>, 2026.
+# Ekaterine Papava <papava.e@gtu.ge>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NagVis 1.10.3\n"
+"Report-Msgid-Bugs-To: info@nagvis.org\n"
+"POT-Creation-Date: 2026-05-07 08:01+0200\n"
+"PO-Revision-Date: 2026-05-12 15:55+0200\n"
+"Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
+"Language-Team: NagVis Team <info@nagvis.org>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.9\n"
+
+#: share/server/core/classes/ViewMapAddModify.php:571
+msgid ">>> Specify other"
+msgstr ">>> მიუთითეთ სხვა"
+
+#: share/server/core/classes/ViewManageMaps.php:54
+#: share/server/core/classes/ViewManageMaps.php:209
+msgid "A map with this name already exists"
+msgstr "რუკა ამ სახელით უკვე არსებობს"
+
+#: share/server/core/classes/ViewToNewMap.php:71
+#: share/server/core/classes/ViewToStaticMap.php:60
+msgid "A map with this name already exists."
+msgstr "რუკა ამ სახელით უკვე არსებობს."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:56
+#: share/server/core/classes/ViewMapManageTmpl.php:153
+#: share/server/core/classes/ViewMapManageTmpl.php:276
+msgid "A map with this name does not exists"
+msgstr "რუკა ამ სახელით არ არსებობს"
+
+#: share/server/core/classes/ViewManageRoles.php:61
+msgid "A role with this name already exists."
+msgstr "რუკა ამ სახელით უკვე არსებობს."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:72
+msgid "A template with this name already exists."
+msgstr "ნიმუში ამ სახელით უკვე არსებობს."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:165
+#: share/server/core/classes/ViewMapManageTmpl.php:286
+msgid "A template with this name does not exist."
+msgstr "ნიმუში ამ სახელით არ არსებობს."
+
+#: share/server/core/classes/ViewManageUsers.php:61
+msgid "A user with this name already exists."
+msgstr "მომხმარებელი ამ სახელით უკვე არსებობს."
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:71
+msgid "Access denied"
+msgstr "წვდომა აკრძალულია"
+
+#: share/server/core/classes/NagVisContextMenu.php:146
+#: share/server/core/classes/ViewAck.php:127
+msgid "Acknowledge"
+msgstr "დადასტურება"
+
+#: share/server/core/classes/ViewManageRoles.php:263
+msgid "Action"
+msgstr "ქმედება"
+
+#: share/server/core/classes/CoreModAction.php:91
+msgid "Action handler not implemented."
+msgstr "ქმედების დამმუშავებელი განხორციელებული არაა."
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:467
+#: share/server/core/classes/GlobalMapCfg.php:2385
+msgid "Actions"
+msgstr "ქმედებები"
+
+msgid "Add"
+msgstr "დამატება"
+
+#: share/server/core/classes/ViewManageBackends.php:162
+msgid "Add Backend"
+msgstr "უკანბოლოს დამატება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:475
+msgid "Add Icon"
+msgstr "ხატულას დამატება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:476
+msgid "Add Line"
+msgstr "ხაზის დამატება"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:124
+#: share/server/core/classes/ViewMapManageTmpl.php:247
+msgid "Add Option"
+msgstr "პარამეტრის დამატება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:478
+msgid "Add Special"
+msgstr "სპეციალური დამატება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:484
+#: share/server/core/classes/GlobalCore.php:954
+msgid "Aggregation"
+msgstr "აგრეგაცია"
+
+#: share/server/core/classes/GlobalCore.php:955
+msgid "Aggregation Name"
+msgstr "აგრეგაციის სახელი"
+
+#: share/server/core/classes/ViewManageMaps.php:119
+msgid "Alias"
+msgstr "ფსევდონიმი"
+
+#: share/server/core/functions/core.php:248
+msgid "Alphabetically"
+msgstr "ანბანის მიხედვით"
+
+#: share/server/core/classes/GlobalMapCfg.php:2383
+msgid "Appearance"
+msgstr "გარეგნობა"
+
+msgid "Apply"
+msgstr "გადატარება"
+
+#: share/server/core/functions/core.php:260
+msgid "Ascending"
+msgstr "აღმავალი"
+
+#: share/server/core/classes/GlobalMapCfg.php:481
+msgid "Attribute definition out of object. In map [MAPNAME] at line #[LINE]."
+msgstr "ატრიბუტი ობიექტის გარეთაა აღწერილი. რუკაში [MAPNAME] ხაზზე #[LINE]."
+
+#: share/server/core/classes/CoreModAuth.php:142
+msgid "Authentication failed"
+msgstr "ავთენტიკაცია ჩავარდა"
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:59
+msgid "Authentication failed."
+msgstr "ავთენტიკაცია წარუმატებელია."
+
+msgid "Authentication failed. Invalid credentials."
+msgstr "ავთენტიკაცია ჩავარდა. არასწორი ავტორიზაციის პარამეტრები."
+
+#: share/server/core/classes/GlobalMainCfg.php:3134
+#: share/server/core/classes/GlobalMapCfg.php:2388
+msgid "Automap"
+msgstr "ავტორუკა"
+
+msgid "Automap Index"
+msgstr "ავტორუკის ინდექსი"
+
+#: share/server/core/classes/ViewManageMaps.php:42
+msgid "Automap based on parent/child relations"
+msgstr "მშობელი/შვილის ურთიერთობებზე დაფუძნებული ავტორუკა"
+
+msgid "Automaps"
+msgstr "ავტორუკები"
+
+#: share/server/core/classes/ViewManageUsers.php:205
+msgid "Available Roles"
+msgstr "ხელმისაწვდომი როლები"
+
+#: share/server/core/classes/GlobalBackendmkbi.php:377
+msgid "BI-State is: [S]"
+msgstr "BI-მდგომარეობაა: [S]"
+
+#: share/server/core/classes/ViewManageBackends.php:238
+#: share/server/core/classes/ViewManageBackends.php:250
+#: share/server/core/classes/ViewManageBackends.php:327
+msgid "Backend ID"
+msgstr "უკანბოლოს ID"
+
+#: share/server/core/classes/ViewManageBackends.php:242
+msgid "Backend Type"
+msgstr "უკანაბოლოს ტიპi"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:174
+msgid "Background"
+msgstr "ფონი"
+
+#: share/server/core/sources/automap.php:53
+msgid "Bottom to top"
+msgstr "ქვემოდან ზემოთ"
+
+#: share/server/core/sources/geomap.php:212
+msgid "CSV-File"
+msgstr "CSV-ფაილი"
+
+#: share/server/core/classes/ViewMapAddModify.php:165
+msgid "Cannot edit HTML. Please contact your administrator"
+msgstr "HTML-ის ჩასწორება შეუძლებელია. დაუკავშირდით თქვენს ადმინისტრატორს"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:469
+#: share/server/core/classes/ViewChangePassword.php:113
+msgid "Change password"
+msgstr "პაროლის შეცვლა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:465
+msgid "Choose Language"
+msgstr "აირჩიეთ ენა"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:176
+msgid "Choose a background"
+msgstr "აირჩიეთ ფონი"
+
+#: share/server/core/classes/ViewManageMaps.php:251
+#: share/server/core/classes/ViewManageMaps.php:328
+#: share/server/core/classes/ViewManageMaps.php:383
+msgid "Choose a map"
+msgstr "აირჩიეთ რუკა"
+
+#: share/server/core/classes/ViewManageShapes.php:182
+msgid "Choose a shape"
+msgstr "აირჩიეთ მოხაზულობა"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:94
+#: share/server/core/classes/ViewManageShapes.php:96
+msgid "Choose an Image"
+msgstr "აირჩიეთ გამოსახულება"
+
+msgid "Clone"
+msgstr "კლონი"
+
+#: share/server/core/classes/NagVisContextMenu.php:150
+msgid "Clone object"
+msgstr "ობიექტის კლონირება"
+
+#: share/server/core/classes/ViewEditMainCfg.php:377
+#: share/server/core/classes/ViewMapAddModify.php:322
+msgid "Color select"
+msgstr "ფერის არჩევა"
+
+#: share/server/core/classes/ViewAck.php:115
+msgid "Comment"
+msgstr "კომენტარი"
+
+#: share/server/core/classes/CoreBackendMgmt.php:822
+msgid "Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check."
+msgstr "კონფიგურაციის შეცდომა: სტატუსის ჰოსტი ([STATUSHOST]) იგივე უკანაბოლოა, რომელიც უნდა შემოწმდეს."
+
+#: share/server/core/classes/NagVisContextMenu.php:198
+msgid "Connect (HTTP)"
+msgstr "დაკავშირება (HTTP)"
+
+#: share/server/core/classes/NagVisContextMenu.php:202
+msgid "Connect (HTTPS)"
+msgstr "დაკავშირება (HTTPS)"
+
+#: share/server/core/classes/NagVisContextMenu.php:190
+msgid "Connect (RDP)"
+msgstr "დაკავშირება (RDP)"
+
+#: share/server/core/classes/NagVisContextMenu.php:194
+msgid "Connect (SSH)"
+msgstr "დაკავშირება (SSH)"
+
+#: share/server/core/classes/CoreBackendMgmt.php:270
+#: share/server/core/classes/CoreBackendMgmt.php:339
+#: share/server/core/classes/CoreBackendMgmt.php:380
+#: share/server/core/classes/CoreBackendMgmt.php:413
+#: share/server/core/classes/CoreBackendMgmt.php:540
+#: share/server/core/classes/CoreBackendMgmt.php:595
+msgid "Connection Problem (Backend: [BACKENDID]): [MSG]"
+msgstr "კავშირის პრობლემა (უკანაბოლო: [BACKENDID]): [MSG]"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:488
+msgid "Container"
+msgstr "კონტეინერი"
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:934
+msgid "Contains"
+msgstr "შეიცავს"
+
+#: share/server/core/classes/CoreLogonMultisite.php:79
+#: share/server/core/classes/CoreLogonMultisite.php:90
+msgid "Cookie is invalid."
+msgstr "არასწორი ქუქი."
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:82
+msgid "Cookies disabled"
+msgstr "ქუქიები გამორთულია"
+
+msgid "Could not create livestatus socket [SOCKET] in backend [BACKENDID]."
+msgstr "ვერ შეიქმნა ცოცხალი სტატუსის სოკეტი [SOCKET] უკანაბოლოში [BACKENDID]."
+
+#: share/server/core/classes/ViewManageMaps.php:131
+#: share/server/core/classes/ViewManageRoles.php:93
+#: share/server/core/classes/ViewManageUsers.php:119
+#: share/server/core/classes/ViewMapManageTmpl.php:129
+msgid "Create"
+msgstr "შექმნა"
+
+#: share/server/core/classes/ViewManageMaps.php:36
+msgid "Create Map"
+msgstr "რუკის შექმნა"
+
+#: share/server/core/classes/GlobalCore.php:941
+msgid "Create Object"
+msgstr "ობიექტის შექმნა"
+
+#: share/server/core/classes/ViewManageRoles.php:40
+msgid "Create Role"
+msgstr "როლის შექმნა"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:42
+msgid "Create Template"
+msgstr "ნიმუშის შექმნა"
+
+#: share/server/core/classes/ViewManageUsers.php:40
+msgid "Create User"
+msgstr "მომხმარებლის შექმნა"
+
+#: share/server/core/classes/ViewMapAddModify.php:556
+msgid "Current value is not a known option - falling back to input field."
+msgstr "მიმდინარე მნიშვნელობა ცნობილი პარამერი არაა - გადართვა შეყვანის ველზე."
+
+#: share/server/core/classes/CoreAuthHandler.php:101
+msgid "Data has an invalid format"
+msgstr "მონაცემების ფორმატი არასწორია"
+
+#: share/server/core/classes/CoreModGeneral.php:122
+msgid "Data not parsable: [URL] ([MSG])"
+msgstr "მონაცემები დამუშავებადი არაა: [URL] ([MSG])"
+
+#: share/server/core/classes/ViewManageBackends.php:103
+#: share/server/core/classes/ViewManageBackends.php:131
+msgid "Default Backend"
+msgstr "ნაგულისხმები უკანაბოლო"
+
+#: share/server/core/classes/ViewManageBackends.php:338
+#: share/server/core/classes/ViewManageBackgrounds.php:185
+#: share/server/core/classes/ViewManageMaps.php:337
+#: share/server/core/classes/ViewManageRoles.php:240
+#: share/server/core/classes/ViewManageRoles.php:346
+#: share/server/core/classes/ViewManageShapes.php:191
+#: share/server/core/classes/ViewManageUsers.php:283
+#: share/server/core/classes/ViewMapManageTmpl.php:320
+msgid "Delete"
+msgstr "წაშლა"
+
+#: share/server/core/classes/ViewManageBackends.php:296
+msgid "Delete Backend"
+msgstr "უკანბოლოს წაშლა"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:114
+msgid "Delete Background"
+msgstr "ფონის წაშლა"
+
+#: share/server/core/classes/ViewManageMaps.php:279
+msgid "Delete Map"
+msgstr "რუკის წაშლა"
+
+#: share/server/core/classes/ViewManageRoles.php:290
+msgid "Delete Role"
+msgstr "როლის წაშლა"
+
+#: share/server/core/classes/ViewManageShapes.php:116
+msgid "Delete Shape"
+msgstr "მოხაზულობის წაშლა"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:268
+msgid "Delete Template"
+msgstr "ნიმუშის წაშლა"
+
+#: share/server/core/classes/ViewManageUsers.php:232
+msgid "Delete User"
+msgstr "მომხმარებლის წაშლა"
+
+#: share/server/core/classes/NagVisContextMenu.php:166
+msgid "Delete object"
+msgstr "ობიექტის წაშლა"
+
+#: share/server/core/functions/core.php:261
+msgid "Descending"
+msgstr "დაღმავალი"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:483
+#: share/server/core/classes/GlobalCore.php:951
+msgid "Dynamic Group"
+msgstr "დინამიკური ჯგუფი"
+
+#: share/server/core/classes/GlobalCore.php:952
+msgid "Dynamic Group Name"
+msgstr "დინამიკური ჯგუფის სახელი"
+
+#: share/server/core/classes/ViewManageMaps.php:43
+msgid "Dynamic map"
+msgstr "დინამიკური რუკა"
+
+#: share/server/core/classes/GlobalMapCfg.php:2387
+msgid "Dynmap"
+msgstr "დინრუკა"
+
+#: share/server/core/classes/CoreExceptions.php:38
+#: share/server/core/classes/CoreExceptions.php:86
+msgid "ERROR"
+msgstr "შეცდომა"
+
+msgid "ERROR - Unexpected exception"
+msgstr "შეცდომა - მოულოდნელი გამონაკლისი"
+
+#: share/server/core/classes/ViewManageRoles.php:239
+msgid "Edit"
+msgstr "ჩასწორება"
+
+#: share/server/core/classes/ViewManageBackends.php:164
+msgid "Edit Backend"
+msgstr "უკანბოლოს ჩასწორება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:485
+msgid "Edit Map"
+msgstr "რუკის ჩასწორება"
+
+#: share/frontend/nagvis-js/classes/ViewError.php:46
+msgid "Error"
+msgstr "შეცდომა"
+
+#: share/server/core/classes/CoreModMultisite.php:221
+msgid "Error: "
+msgstr "შეცდომა: "
+
+#: share/server/core/ajax_handler.php:71
+msgid "Error: PHP Error"
+msgstr "შეცდომა: PHP-ის შეცდომა"
+
+#: share/server/core/ajax_handler.php:77
+msgid "Error: Unhandled Exception"
+msgstr "შეცდომა: დაუმუშავებელი გამონაკლისი"
+
+#: share/server/core/classes/GlobalMapCfg.php:2392
+msgid "Events"
+msgstr "მოვლენები"
+
+#: share/server/core/classes/ViewManageMaps.php:392
+msgid "Export"
+msgstr "გატანა"
+
+#: share/server/core/classes/ViewManageMaps.php:350
+msgid "Export Map"
+msgstr "რუკის გატანა"
+
+msgid "Export to Map"
+msgstr "გატანა რუკასი"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:510
+msgid "Export to static map"
+msgstr "გატანა სტატიკურ რუკაში"
+
+#: share/server/core/sources/worldmap.php:423
+msgid "Failed to add object: [E]: [Q]"
+msgstr "ობიექტის დამატება ჩავარდა: [E]: [Q]"
+
+#: share/server/core/classes/ViewManageMaps.php:79
+msgid "Failed to create the map"
+msgstr "რუკის შექმნა ჩავარდა"
+
+#: share/server/core/sources/worldmap.php:566
+msgid "Failed to delete object: [E]: [Q]"
+msgstr "ობიექტის წაშლა ჩავარდა: [E]: [Q]"
+
+#: share/server/core/sources/worldmap.php:308
+msgid "Failed to fetch objects: [E]; Query was [Q]"
+msgstr "ობიექტების გამოთხოვა ჩავარდა: [E]; მოთხოვნა: [Q]"
+
+#: share/server/core/classes/ViewMapAddModify.php:543
+msgid "Failed to get objects: [MSG]"
+msgstr "ობიექტების მიღება ჩავარდა: [MSG]"
+
+#: share/server/core/classes/GlobalCore.php:923
+msgid "Failed to write file to disk"
+msgstr "ფაილის დისკზე ჩაწერა ჩავარდა"
+
+#: share/server/core/classes/GlobalCore.php:915
+msgid "File is too large (FORM limit)"
+msgstr "ფაილი მეტისმეტად დიდია (FORM-ის შეზღუდვა)"
+
+#: share/server/core/classes/GlobalCore.php:913
+msgid "File is too large (PHP limit)"
+msgstr "ფაილი მეტისმეტად დიდია (PHP-ის შეზღუდვა)"
+
+#: share/server/core/classes/GlobalCore.php:925
+msgid "File upload stopped by extension"
+msgstr "ფაილია ატვირთვა გაფართოებამ შეწყვიტა"
+
+#: share/server/core/mapcfg/default.php:163
+msgid "Fill screen"
+msgstr "ეკრანის შევსება"
+
+#: share/server/core/classes/GlobalMapCfg.php:2382
+#: share/server/core/classes/ViewManageRoles.php:193
+msgid "General"
+msgstr "ზოგადი"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:495
+msgid "General Configuration"
+msgstr "ზოგადი კონფიგურაცია"
+
+#: share/server/core/classes/ViewManageMaps.php:40
+msgid "Geographical map (interactive)"
+msgstr "გეოგრაფიული რუკა (ინტერაქტიული)"
+
+#: share/server/core/classes/ViewManageMaps.php:41
+msgid "Geographical map (non interactive)"
+msgstr "გეოგრაფიული რუკა (არაინტერაქტიული)"
+
+#: share/server/core/classes/GlobalMapCfg.php:2389
+msgid "Geomap"
+msgstr "გეორუკა"
+
+#: share/server/core/sources/geomap.php:349
+msgid "Geomap server URL contains not allowed characters. Url: \"[U]\""
+msgstr "გეორუკის URL დაუშვებელ სიმბოლოებს შეიცავს. Url: \"[U]\""
+
+#: share/server/core/sources/geomap.php:364
+msgid "Geomap server cannot contain anchors. URL: \"[U]\""
+msgstr "გეორუკის სერვერი არ შეიძლება, გადატანებს შეიცავდეს. URL: \"[U]\""
+
+#: share/server/core/sources/geomap.php:359
+msgid "Geomap server cannot contain query parameters. URL: \"[U]\""
+msgstr "გეორუკის სერვერი არი შეიძლება, მოთხოვნის პარამეტრებს შეიცავდეს. URL: \"[U]\""
+
+#: share/server/core/classes/ViewMapAddModify.php:347
+msgid "Get current size"
+msgstr "მიმდინარე ზომის მიღება"
+
+#: share/server/core/classes/GlobalMainCfg.php:3128
+msgid "Global Settings"
+msgstr "გლობალური პარამეტრები"
+
+#: share/server/core/sources/geomap.php:429
+msgid "Got empty map after filtering. Terminate rendering geomap."
+msgstr "გაფილტვრის შემდეგ მიღებული რუკა ცარიელია გეორუკის რენდერი შეწყდა."
+
+msgid "Got invalid data from \"[U]\""
+msgstr "მიღებულია არასწორი მონაცემები ბმულიდან \"[U]\""
+
+#: share/server/core/sources/geomap.php:521
+msgid "Got invalid data from \"[U]\": \"[C]\""
+msgstr "მიღებულია არასწორი მონაცემები ბმულიდან \"[U]\": \"[C]\""
+
+#: share/server/core/sources/geomap.php:516
+msgid "Got invalid response from \"[U]\". This is mostly caused by an unhandled request."
+msgstr "მიღებულია არასწორი პასუხი ბმულიდან \"[U]\". ეს, ალბათ, დაუმუშავებელი მოთხოვნის გამოა."
+
+#: share/server/core/sources/automap_pos.php:283
+msgid "Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: \"[CMD]\""
+msgstr "Graphviz-ის გამოძახება ჩავარდა ([CODE]): [OUTPUT]<br /><br >ბრძანება: \"[CMD]\""
+
+#: share/server/core/mapcfg/default.php:100
+msgid "HTML Code"
+msgstr "HTML კოდი"
+
+#: share/server/core/sources/dynmap.php:88
+msgid "Hostgroup"
+msgstr "ჰოსტების ჯგუფი"
+
+#: share/server/core/mapcfg/default.php:144
+#: share/server/core/sources/dynmap.php:86
+msgid "Hosts"
+msgstr "ჰოსტები"
+
+#: share/server/core/classes/ViewManageMaps.php:114
+msgid "ID (Internal Name)"
+msgstr "ID (შიდა სახელი)"
+
+#: share/server/core/classes/CoreExceptions.php:75
+msgid "INFO"
+msgstr "ინფო"
+
+#: share/server/core/mapcfg/default.php:99
+msgid "Image"
+msgstr "გამოსახულება"
+
+#: share/server/core/classes/ViewManageMaps.php:479
+msgid "Import"
+msgstr "შემოტანა"
+
+#: share/server/core/classes/ViewManageMaps.php:404
+msgid "Import Map"
+msgstr "რუკის შემოტანა"
+
+#: share/server/core/classes/ViewMapAddModify.php:771
+msgid "Invalid clone object id"
+msgstr "არასწორი კლონის ობიექტის id"
+
+#: share/server/core/classes/CoreUserCfg.php:81
+msgid "Invalid data in \"[FILE]\"."
+msgstr "არასწორი მონაცემები ფაილში \"[FILE]\"."
+
+#: share/server/core/classes/ViewEditMainCfg.php:79
+msgid "Invalid format given. Regex: [r]"
+msgstr "მოცემულია არასწორი ფორმატი. რეგგამოსი: [r]"
+
+msgid "Invalid mode [MODE] in language_detection option."
+msgstr "არასწორი რეჟიმი [MODE] პარამეტრში language_detection."
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:102
+msgid "Invalid password."
+msgstr "არასწორი პაროლი."
+
+#: share/server/core/classes/CoreModMap.php:108
+msgid "Invalid query. The parameter [NAME] is missing or has an invalid format."
+msgstr "არასწორი მოთხოვნა. პარამეტრი [NAME] მითითებული არაა, ან მისი ფორმატი არასწორია."
+
+#: share/server/core/classes/GlobalBackendmkbi.php:268
+#: share/server/core/classes/GlobalBackendmkbi.php:281
+msgid "Invalid response ([BACKENDID]): [RESPONSE]"
+msgstr "არასწორი პასუხი ([BACKENDID]): [RESPONSE]"
+
+#: share/server/core/sources/geomap.php:354
+msgid "Invalid scheme in Geomap server URL: \"[U]\""
+msgstr "არასწორი სქემა გეორუკის სერვერის URL-ში: \"[U]\""
+
+#: share/server/core/sources/geomap.php:48
+msgid "Invalid source file line found: Line \"[NR]\" in \"[F]\" has less than 4 fields"
+msgstr "აღმოჩენილია არასწორი წყარო ფაილი: ხაზზე \"[NR]\" ფაილში \"[F]\" 4-ზე ნაკლები ველია"
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:902
+msgid "Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME]."
+msgstr "არასწორი მდგომარეობა+ქვემდგომარეობა ([STATE], [SUBSTATE]), აღმოჩენილია მდგომარეობის შედარებისას ობიექტზე ტიპით [TYPE] სახელით [NAME]."
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:844
+msgid "Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE]."
+msgstr "აღმოჩენილი არასწორი მდგომარეობა+ქვემდგომარეობა ([STATE], [SUBSTATE]) მიმდინარე შეჯამების მდგომარეობის ჩატვირთვისას ობიექტსთვის ტიპით [TYPE]."
+
+#: share/server/core/classes/GlobalBackendmkbi.php:363
+#: share/server/core/classes/GlobalBackendnagiosbp.php:270
+msgid "Invalid state: \"[S]\""
+msgstr "არასწორი მდგომარეობა: \"[S]\""
+
+msgid "Invalid target option given."
+msgstr "მოცემულია არასწორი სამიზნე პარამეტრი."
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:95
+msgid "Invalid username."
+msgstr "არასწორი მომხმარებლის სახელი."
+
+#: share/server/core/classes/ViewManageRoles.php:116
+#: share/server/core/classes/ViewManageRoles.php:299
+#: share/server/core/classes/ViewManageUsers.php:146
+#: share/server/core/classes/ViewManageUsers.php:241
+#: share/server/core/classes/ViewManageUsers.php:311
+msgid "Invalid value provided."
+msgstr "შეყვანილი მნიშვნელობა არასწორია."
+
+#: share/server/core/classes/ViewManageBackends.php:206
+#: share/server/core/classes/ViewManageRoles.php:56
+#: share/server/core/classes/ViewManageUsers.php:56
+msgid "Invalid value provided. Needs to match: [P]."
+msgstr "შეყვანილი მნიშვნელობა არასწორია. საჭიროა, რომ ემთხვეოდეს: [P]."
+
+#: share/server/core/functions/core.php:250
+msgid "Keep original order"
+msgstr "ორიგინალი ფერის შენარჩუნება"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:114
+#: share/server/core/classes/ViewMapManageTmpl.php:228
+msgid "Key"
+msgstr "გასაღები"
+
+#: share/server/core/classes/GlobalMapCfg.php:2386
+msgid "Label"
+msgstr "ჭდე"
+
+#: share/server/core/sources/automap.php:52
+msgid "Left to right"
+msgstr "მარცხნიდან მარჯვნივ"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:477
+msgid "Line"
+msgstr "ხაზი"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:1193
+#: share/server/core/classes/GlobalBackendmklivestatus.php:1419
+#: share/server/core/classes/GlobalBackendmklivestatus.php:1598
+msgid "Livestatus version used in backend [BACKENDID] is too old. Please update."
+msgstr "უკანაბოლოში [BACKENDID] გამოყენებული სიცოცხლის სტატუსი მეტისმეტად ძველია. განაახლეთ ის."
+
+#: share/server/core/sources/geomap.php:35
+msgid "Location source file \"[F]\" does not exist."
+msgstr "წყაროს ფაილის \"[F]\" მდებარეობა არ არსებობს."
+
+#: share/server/core/classes/NagVisContextMenu.php:154
+msgid "Lock"
+msgstr "ჩაკეტვა"
+
+msgid "Lock/Unlock"
+msgstr "დაბლოკვა/განბლოკვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:492
+msgid "Lock/Unlock all"
+msgstr "ყველას დაბლოკვა/განბლოკვა"
+
+#: share/server/core/classes/NagVisContextMenu.php:170
+msgid "Lock/Unlock line middle"
+msgstr "ხაზის შუას დაბლოკვა/განბლოკვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:468
+msgid "Logged in"
+msgstr "შესული"
+
+msgid "Logged out"
+msgstr "გახვედით"
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:81
+msgid "Login"
+msgstr "შესვლა"
+
+#: share/server/core/classes/CoreLogonMultisite.php:134
+msgid "LogonMultisite: Not authenticated."
+msgstr "LogonMultisite: ავთენტიკაციის გარეშე."
+
+#: share/server/core/classes/CoreLogonMultisite.php:120
+msgid "LogonMultisite: Not authenticated. "
+msgstr "LogonMultisite: ავთენტიკაციის გარეშე. "
+
+msgid "LogonMultisite: The htpasswd file \"[PATH]\" does not exist."
+msgstr "LogonMultisite: htpasswd ფაილი \"[PATH]\" არ არსებობს."
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:506
+msgid "Logout"
+msgstr "გასვლა"
+
+msgid "Make Permanent"
+msgstr "მუდმივად გარდაქმნა"
+
+#: share/server/core/classes/ViewMapAddModify.php:715
+msgid "Make permanent"
+msgstr "მუდმივად გარდაქმნა"
+
+#: share/server/core/classes/NagVisContextMenu.php:186
+msgid "Make root"
+msgstr "ძირითადად გადაკეთება"
+
+#: share/server/core/classes/CoreLogonMultisite.php:42
+msgid "Malformed hash"
+msgstr "ჩამოუყალიბებელი ჰეში"
+
+#: share/server/core/classes/CoreLogonMultisite.php:39
+msgid "Malformed session id"
+msgstr "არასწორი სესიის id"
+
+#: share/server/core/classes/CoreLogonMultisite.php:36
+msgid "Malformed username"
+msgstr "არასწორი მომხმარებლი სახელი"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:496
+msgid "Manage Backends"
+msgstr "უკანაბოლოების მართვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:497
+msgid "Manage Backgrounds"
+msgstr "ფონების მართვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:498
+msgid "Manage Maps"
+msgstr "რუკების მართვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:462
+msgid "Manage Roles"
+msgstr "როლების მართვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:499
+msgid "Manage Shapes"
+msgstr "მოხაზულობების მართვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:474
+msgid "Manage Templates"
+msgstr "ნიმუშების მართვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:461
+msgid "Manage Users"
+msgstr "მომხმარებლების მართვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:471
+#: share/server/core/classes/ViewManageMaps.php:249
+#: share/server/core/classes/ViewManageMaps.php:326
+#: share/server/core/classes/ViewManageMaps.php:381
+#: share/server/core/classes/ViewManageRoles.php:237
+msgid "Map"
+msgstr "რუკა"
+
+#: share/server/core/classes/CoreModMultisite.php:213
+msgid "Map Configuration Error: "
+msgstr "რუკის კონფიგურაციის შეცდომა: "
+
+#: share/server/core/classes/objects/NagVisMapObj.php:564
+msgid "Map Configuration Error: [ERR]"
+msgstr "რუკის კონფიგურაციის შეცდომა: [ERR]"
+
+#: share/server/core/classes/CoreModOverview.php:263
+msgid "Map Error: [ERR]"
+msgstr "რუკის შეცდომა: [ERR]"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:473
+msgid "Map Options"
+msgstr "რუკის მორგება"
+
+#: share/server/core/classes/ViewManageMaps.php:124
+msgid "Map Type"
+msgstr "რუკის ტიპი"
+
+#: share/server/core/classes/ViewManageMaps.php:473
+msgid "Map file"
+msgstr "რუკის ფაილი"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:52
+#: share/server/core/classes/ViewMapManageTmpl.php:149
+#: share/server/core/classes/ViewMapManageTmpl.php:272
+msgid "Map name missing"
+msgstr "რუკის სახელი მითითებული არაა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:486
+#: share/server/core/classes/ViewManageRoles.php:194
+msgid "Maps"
+msgstr "რუკები"
+
+#: share/server/core/classes/GlobalCore.php:921
+msgid "Missing a temporary folder"
+msgstr "ნაკლული დროებითი საქაღალდე"
+
+#: share/server/core/sources/geomap.php:468
+msgid "Missing mandatory \"width\" and \"height\" parameters.\""
+msgstr "აკლია აუცილებელი პარამეტრები \"width\" და \"height\" პარამეტრები.\""
+
+#: share/server/core/classes/ViewMapManageTmpl.php:253
+msgid "Modify"
+msgstr "ჩასწორება"
+
+msgid "Modify Automap view"
+msgstr "ავტორუკის ინდექსის შეცვლა"
+
+#: share/server/core/classes/ViewManageRoles.php:106
+msgid "Modify Role"
+msgstr "როლის შეცვლა"
+
+msgid "Modify Roles"
+msgstr "როლების შეცვლა"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:145
+msgid "Modify Template"
+msgstr "ნიმუშის შეცვლა"
+
+#: share/server/core/classes/ViewManageUsers.php:136
+msgid "Modify User"
+msgstr "მომხმარებლის ჩასწორება"
+
+#: share/server/core/classes/NagVisContextMenu.php:162
+msgid "Modify object"
+msgstr "ობიექტის შეცვლა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:511
+msgid "Modify view"
+msgstr "ხედის შეცვლა"
+
+#: share/server/core/classes/ViewManageRoles.php:262
+msgid "Module"
+msgstr "მოდული"
+
+#: share/server/core/sources/geomap.php:213
+msgid "NagVis Backend"
+msgstr "NagVis-ის უკანაბოლო"
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:84
+msgid "NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host."
+msgstr "NagVis-მა თქვენს ბრაუზერში ქუქიები ვერ დააყენა. ჩართეთ ქუქიები, სულ ცოტა, NagVis-ის ჰოსტისთვის."
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:79
+#: share/server/core/classes/GlobalCore.php:956
+#: share/server/core/classes/ViewManageRoles.php:87
+#: share/server/core/classes/ViewManageRoles.php:335
+#: share/server/core/classes/ViewManageUsers.php:178
+#: share/server/core/classes/ViewManageUsers.php:273
+#: share/server/core/classes/ViewManageUsers.php:360
+#: share/server/core/classes/ViewMapManageTmpl.php:105
+#: share/server/core/classes/ViewMapManageTmpl.php:213
+#: share/server/core/classes/ViewMapManageTmpl.php:310
+msgid "Name"
+msgstr "სახელი"
+
+msgid "Needs to be migrated."
+msgstr "სჭირდება მიგრაცია."
+
+#: share/server/core/classes/ViewManageMaps.php:258
+msgid "New name"
+msgstr "ახალი სახელი"
+
+#: share/server/core/classes/ViewChangePassword.php:102
+msgid "New password"
+msgstr "ახალი პაროლი"
+
+#: share/server/core/classes/ViewChangePassword.php:106
+msgid "New password (confirm)"
+msgstr "ახალი პაროლი (დაადასტურეთ)"
+
+msgid "New password confirmation"
+msgstr "ახალი პაროლი დადასტურება"
+
+#: share/server/core/classes/ViewEditMainCfg.php:239
+msgid "No"
+msgstr "არა"
+
+#: share/server/core/classes/GlobalMainCfg.php:3157
+#: share/server/core/classes/GlobalMapCfg.php:2099
+msgid "No \"list\" function registered for option \"[OPT]\" of type \"[TYPE]\""
+msgstr "ფუნქცია \"list\" დარეგისტრირებული არაა პარამეტრისთვის \"[OPT]\" ტიპით \"[TYPE]\""
+
+#: share/server/core/classes/CoreLogonMultisite.php:49
+msgid "No auth cookie provided."
+msgstr "ავთენტიკაციის ქუქი მოწოდებული არაა."
+
+#: share/server/core/classes/CoreAuthorisationModMultisite.php:48
+msgid "No auth file configured. Please specify the option authorisation_multisite_file in main configuration"
+msgstr "ავთენტიკაციის ფაილი მორგებული არაა. მიუთითეთ პარამეტრი authorization_multisite_file მთავარ კონფიგურაციაში"
+
+#: share/server/core/classes/GlobalCore.php:919
+msgid "No file uploaded"
+msgstr "ფაილი არ ატვირთულა"
+
+#: share/server/core/classes/CoreAuthorisationModGroups.php:60
+msgid "No group permission file specified. Please configure one via the option authorisation_group_perms_file in global section of the main configuration."
+msgstr "ჯგუფის წვდომების ფაილი მითითებული არაა. მოირგეთ ის პარამეტრით authorization_group_perms_file მთავარი კონფიგურაციის გლობალურ სექციაში."
+
+#: share/server/core/sources/geomap.php:31
+msgid "No location source file given. Terminate rendering geomap."
+msgstr "მდებარეობის წყაროს ფაილი მოწოდებული არაა. გეორუკის რენდერი შეწყდა."
+
+#: share/server/core/classes/CoreLogonMultisite.php:93
+msgid ""
+"No method to check the session validity is available.\n"
+"                Please either enable allow_url_fopen in php.ini or install the curl PHP extension."
+msgstr ""
+"ამ სესიის სისწორის შესამოწმებლად მეთოდი ხელმისაწვდომი არაა.\n"
+"                   ამ ჩართეთ allow_url_fopen php.ini-ში, ან დააყენეთ PHP-ის გაფართოება curl."
+
+#: share/frontend/nagvis-js/classes/FrontendModUrl.php:101
+msgid "No url given."
+msgstr "url მოწოდებული არაა."
+
+#: share/server/core/classes/objects/NagVisAggr.php:186
+msgid "Nodes"
+msgstr "კვანძები"
+
+#: share/server/core/classes/NagVisHoverUrl.php:105
+msgid "Not allowed url"
+msgstr "დაუშვებელი ურლ"
+
+#: share/server/core/classes/ViewManageRoles.php:307
+msgid "Not deleting this role, the role is in use by the users [U]."
+msgstr "ეს როლი არ წაიშლება, რადგან ის გამოიყენება მომხმარებლების მიერ [U]."
+
+#: share/server/core/classes/ViewAck.php:123
+msgid "Notify contacts"
+msgstr "კონტაქტების გაფრთხილება"
+
+#: share/server/core/classes/CoreExceptions.php:87
+msgid "OK"
+msgstr "დიახ"
+
+#: share/server/core/classes/GlobalMapCfg.php:2391
+msgid "Obj. Defaults"
+msgstr "ობიექ. ნაგულისხმევები"
+
+#: share/server/core/classes/ViewManageRoles.php:264
+msgid "Object"
+msgstr "ობიექტი"
+
+#: share/server/core/classes/GlobalMainCfg.php:3129
+msgid "Object Defaults"
+msgstr "ობიექტის ნაგულისხმევები"
+
+#: share/server/core/classes/GlobalCore.php:953
+msgid "Object Name"
+msgstr "ობიექტის სახელი"
+
+msgid "ObjectNotFoundOnMap"
+msgstr "მითითებულ რუკაზე ობიექტი აღმოჩენილი არაა."
+
+#: share/server/core/classes/ViewChangePassword.php:98
+msgid "Old password"
+msgstr "ძველი პაროლი"
+
+msgid "Only map and automap states can be fetched using this module/action."
+msgstr "ამ მოდულის/ქმედების გამოყენებით, მხოლოდ, რუკისა და ავტორუკის მდგომარეობების გამოთხოვა შეგიძლიათ."
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:470
+msgid "Open"
+msgstr "გახსნა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:494
+msgid "Options"
+msgstr "მორგება"
+
+#: share/server/core/classes/GlobalMainCfg.php:3130
+msgid "Overview"
+msgstr "მიმოხილვა"
+
+msgid "PHP ERROR"
+msgstr "PHP ERROR"
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:80
+#: share/server/core/classes/ViewManageUsers.php:109
+#: share/server/core/classes/ViewManageUsers.php:368
+msgid "Password"
+msgstr "პაროლი"
+
+#: share/server/core/classes/ViewManageUsers.php:113
+#: share/server/core/classes/ViewManageUsers.php:372
+msgid "Password Confirm"
+msgstr "პაროლის დადასტურება"
+
+#: share/server/core/classes/GlobalMainCfg.php:3133
+msgid "Paths"
+msgstr "ბილიკები"
+
+#: share/server/core/classes/ViewManageRoles.php:198
+msgid "Permissions"
+msgstr "უფლებები"
+
+#: share/server/core/classes/ViewManageRoles.php:265
+msgid "Permitted"
+msgstr "ნებადართულია"
+
+#: share/server/core/classes/ViewAck.php:126
+msgid "Persist comment"
+msgstr "კომენტარის შენარჩუნება"
+
+#: share/server/core/classes/ViewMapAddModify.php:196
+msgid "Personal settings saved."
+msgstr "პირადი პარამეტრები შენახულია."
+
+#: share/server/core/classes/ViewToNewMap.php:77
+msgid "Please change your viewport before saving as new map."
+msgstr "შეცვალეთ თქვენი ხედის წერტილი ახალი რუკის შენახვამდე."
+
+#: share/server/core/classes/ViewManageBackends.php:133
+#: share/server/core/classes/ViewManageBackends.php:244
+#: share/server/core/classes/ViewManageBackends.php:252
+#: share/server/core/classes/ViewManageBackends.php:329
+#: share/server/core/classes/ViewManageRoles.php:167
+#: share/server/core/classes/ViewManageRoles.php:337
+#: share/server/core/classes/ViewManageUsers.php:180
+#: share/server/core/classes/ViewManageUsers.php:275
+#: share/server/core/classes/ViewManageUsers.php:362
+#: share/server/core/classes/ViewMapManageTmpl.php:215
+#: share/server/core/classes/ViewMapManageTmpl.php:312
+msgid "Please choose"
+msgstr "აირჩიეთ"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:120
+msgid "Please choose a background"
+msgstr "აირჩიეთ ფონი"
+
+#: share/server/core/classes/CoreModMap.php:227
+#: share/server/core/classes/ViewManageMaps.php:196
+#: share/server/core/classes/ViewManageMaps.php:285
+#: share/server/core/classes/ViewManageMaps.php:356
+msgid "Please choose a map"
+msgstr "აირჩიეთ რუკა"
+
+#: share/server/core/classes/ViewManageRoles.php:296
+msgid "Please choose a role to delete."
+msgstr "აირჩიეთ წასაშლელი როლი."
+
+#: share/server/core/classes/ViewManageRoles.php:113
+msgid "Please choose a role to edit."
+msgstr "აირჩიეთ ჩასასწორებელი როლი."
+
+#: share/server/core/classes/ViewManageShapes.php:122
+msgid "Please choose a shape"
+msgstr "აირჩიეთ მოხაზულობა"
+
+#: share/server/core/classes/ViewManageUsers.php:238
+msgid "Please choose a user to delete."
+msgstr "აირჩიეთ წასაშლელი მომხმარებელი."
+
+#: share/server/core/classes/ViewManageUsers.php:143
+msgid "Please choose a user to edit."
+msgstr "აირჩიეთ ჩასასწორებელი მომხმარებელი."
+
+#: share/server/core/classes/ViewManageUsers.php:308
+msgid "Please choose a user."
+msgstr "აირჩიეთ მომხმარებელი."
+
+#: share/server/core/classes/ViewManageUsers.php:75
+#: share/server/core/classes/ViewManageUsers.php:329
+msgid "Please confirm your password."
+msgstr "დაადასტურეთ თქვენი პაროლი."
+
+#: share/server/core/classes/ViewToNewMap.php:60
+#: share/server/core/classes/ViewToStaticMap.php:49
+msgid "Please provide a map name."
+msgstr "შეიყვანეთ რუკის სახელი."
+
+#: share/server/core/classes/ViewManageMaps.php:205
+msgid "Please provide a new name"
+msgstr "შეიყვანეთ ახალი სახელი"
+
+#: share/server/core/classes/ViewAck.php:46
+msgid "Please provide a valid map name."
+msgstr "შეიყვანეთ სწორი რუკის სახელი."
+
+#: share/server/core/classes/ViewAck.php:51
+msgid "Please provide a valid object id."
+msgstr "შეიყვანეთ სწორი ობიექტის id."
+
+#: share/server/core/classes/ViewManageRoles.php:46
+msgid "Please specify a name"
+msgstr "მიუთითეთ სახელი"
+
+#: share/server/core/classes/ViewManageUsers.php:46
+msgid "Please specify a name."
+msgstr "მიუთითეთ სახელი."
+
+#: share/server/core/classes/ViewManageUsers.php:66
+#: share/server/core/classes/ViewManageUsers.php:320
+msgid "Please specify a password."
+msgstr "მიუთითეთ პაროლი."
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:706
+msgid "Problem (Backend: [BACKENDID]): [MSG]"
+msgstr "პრობლემა (უკანაბოლო: [BACKENDID]): [MSG]"
+
+#: share/server/core/classes/ViewManageRoles.php:315
+msgid "Problem while deleting the role."
+msgstr "პრობლემა როლის წაშლისას."
+
+#: share/server/core/classes/ViewManageUsers.php:253
+msgid "Problem while deleting the user."
+msgstr "პრობლემა მომხმარებლის წაშლისას."
+
+msgid "Problem while deleting user."
+msgstr "პრობლემა მომხმარებლის წაშლისას."
+
+#: share/server/core/classes/objects/NagVisMapObj.php:566
+msgid "Problem while processing map: [ERR]"
+msgstr "პრობლემა რუკის დამუშავებისას: [ERR]"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:406
+#: share/server/core/classes/GlobalBackendmklivestatus.php:427
+#: share/server/core/classes/GlobalBackendmklivestatus.php:439
+msgid "Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]"
+msgstr "პრობლემა სოკეტიდან [SOCKET] წაკითხვისას უკანაბოლოში [BACKENDID]: [MSG]"
+
+msgid "Problem while saving the changes."
+msgstr "პრობლემა ცვლილებების შენახვისას."
+
+#: share/server/core/classes/ViewManageRoles.php:145
+msgid "Problem while updating role permissions."
+msgstr "პრობლემა როლის წვდომების განახლებისას."
+
+#: share/server/core/classes/ViewManageUsers.php:159
+msgid "Problem while updating user roles."
+msgstr "პრობლემა მომხმარებლის როლების განახლებისას."
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:374
+#: share/server/core/classes/GlobalBackendmklivestatus.php:386
+msgid "Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]"
+msgstr "პრობლემა სოკეტში [SOCKET] ჩაწერისას უკანაბოლოში [BACKENDID]: [MSG]"
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:717
+msgid "Problem: [MSG]"
+msgstr "პრობლემა: [MSG]"
+
+msgid "Really delete the object?"
+msgstr "მართლა წაიშალოს ობიექტი?"
+
+#: share/server/core/classes/ViewManageMaps.php:39
+msgid "Regular map"
+msgstr "ჩვეულებრივი რუკა"
+
+msgid "Remove"
+msgstr "წაშლა"
+
+#: share/server/core/classes/ViewManageMaps.php:265
+msgid "Rename"
+msgstr "სახელის გადარქმევა"
+
+#: share/server/core/classes/ViewManageMaps.php:190
+msgid "Rename Map"
+msgstr "რუკის სახელის გადარქმევა"
+
+#: share/server/core/classes/GlobalMapCfg.php:798
+#: share/server/core/classes/GlobalMapCfg.php:1031
+msgid "Requested source \"[S]\" does not exist"
+msgstr "მოთხოვნილი წყარო \"[S]\" არ არსებობს"
+
+#: share/server/core/classes/ViewManageUsers.php:302
+msgid "Reset Password"
+msgstr "პაროლის ჩამოყრა"
+
+#: share/server/core/classes/GlobalBackendnagiosbp.php:176
+msgid "Response data is too old (json_created: [C])"
+msgstr "პასუხის მონაცემები მეტისმეტად ძველია (json_created: [C])"
+
+#: share/server/core/sources/automap.php:54
+msgid "Right to left"
+msgstr "მარჯვნიდან მარცხნივ"
+
+msgid "Role Name"
+msgstr "როლის სახელი"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:472
+#: share/server/core/classes/ViewManageRoles.php:195
+msgid "Rotations"
+msgstr "როტაციები"
+
+#: share/server/core/classes/ViewManageBackends.php:141
+#: share/server/core/classes/ViewManageBackends.php:283
+#: share/server/core/classes/ViewManageRoles.php:176
+#: share/server/core/classes/ViewManageUsers.php:218
+#: share/server/core/classes/ViewManageUsers.php:378
+#: share/server/core/classes/ViewMapAddModify.php:724
+#: share/server/core/classes/ViewToNewMap.php:127
+#: share/server/core/classes/ViewToStaticMap.php:97
+msgid "Save"
+msgstr "შენახვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:514
+msgid "Save as new map"
+msgstr "ახალი რუკის სახით შენახვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:513
+msgid "Save view"
+msgstr "ხედის შენახვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:460
+#: share/server/core/classes/ViewSearch.php:37
+msgid "Search"
+msgstr "ძებნა"
+
+#: share/server/core/classes/ViewManageRoles.php:165
+msgid "Select Role"
+msgstr "აირჩიეთ როლი"
+
+msgid "Select User"
+msgstr "მომხმარებლის ამორჩევა"
+
+#: share/server/core/classes/ViewManageUsers.php:207
+msgid "Selected Roles"
+msgstr "მონიშნული როლები"
+
+#: share/server/core/sources/dynmap.php:89
+msgid "Servicegroup"
+msgstr "სერვისების ჯგუფი"
+
+#: share/server/core/mapcfg/default.php:145
+#: share/server/core/sources/dynmap.php:87
+msgid "Services"
+msgstr "სერვისები"
+
+msgid "Set Permissions"
+msgstr "წვდომების დაყენება"
+
+#: share/server/core/classes/ViewManageShapes.php:180
+msgid "Shape"
+msgstr "მოხაზულობა"
+
+#: share/server/core/classes/GlobalMainCfg.php:33
+msgid "Show a flat list"
+msgstr "ბრტყელი სიის ჩვენება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:515
+msgid "Show all objects"
+msgstr "ყველა ობიექტის ჩვენება"
+
+#: share/server/core/classes/GlobalMainCfg.php:32
+msgid "Show the map tree"
+msgstr "რუკის ხის ჩვენება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:509
+msgid "Show/Hide Grid"
+msgstr "ბადის ჩვენება/დამალვა"
+
+#: share/server/core/classes/ViewManageBackends.php:145
+msgid "Some backends are not editable by using the web gui. They can only be configured by modifying the file in the NagVis conf.d directory."
+msgstr "ზოგიერთი უკანაბოლო ვებინტერფეისიდან ჩასწორებადი არაა. მათი მორგება, მხოლოდ, NagVis-ის conf.d საქაღალდეში ფაილის ცვლილებითაა შესაძლებელი."
+
+msgid "Spaces are not allowed in file names."
+msgstr "ფაილის სახელებში ჰარეები დაშვებული არაა."
+
+#: share/server/core/classes/GlobalMapCfg.php:2384
+#: share/server/core/functions/core.php:249
+msgid "State"
+msgstr "მდგომარეობა"
+
+#: share/server/core/classes/GlobalMainCfg.php:3131
+msgid "State Updates"
+msgstr "მდგომარეობის განახლებები"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:490
+msgid "Stateless"
+msgstr "მდგომარეობის გარეშე"
+
+#: share/server/core/classes/GlobalMainCfg.php:3132
+msgid "States"
+msgstr "შტატები"
+
+#: share/server/core/classes/ViewAck.php:120
+msgid "Sticky"
+msgstr "წებოვანი"
+
+msgid "Store as Map"
+msgstr "რუკის სახით შენახვა"
+
+#: share/server/core/classes/NagVisHoverMenu.php:204
+msgid "Tags"
+msgstr "ჭდეები"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:125
+msgid "The PHP function fsockopen is not available. Needed by backend [BACKENDID]."
+msgstr "PHP-ის ფუნქცია fsockopen ხელმისაწვდომი არაა. სჭირდება უკანაბოლოს [BACKENDID]."
+
+msgid "The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID]."
+msgstr "PHP-ის ფუნქცია socket_create ხელმისაწვდომი არაა. შეიძლება, PHP-ის თქვენს ვერსიაში მოდული sockets გამორთულია. სჭირდება უკანაბოლოს [BACKENDID]."
+
+msgid "The [TYPE] has been added. Reloading in 2 seconds."
+msgstr "[TYPE] დაემატა. თავიდან ჩატვირთვა 2 წამში."
+
+#: share/server/core/classes/ViewMapAddModify.php:222
+msgid "The [TYPE] has been modified. Reloading in 2 seconds."
+msgstr "[TYPE] შეიცვალა. თავიდან ჩატვირთვა 2 წამში."
+
+#: share/server/core/classes/objects/NagVisAggr.php:179
+#: share/server/core/classes/objects/NagVisAggr.php:226
+msgid "The aggregation \"[NAME]\" has no members (Backend: [BACKEND])."
+msgstr "აგრეგაციას \"[NAME]\" წევრები არ ჰყავს (უკანაბოლო: [BACKEND])."
+
+#: share/server/core/classes/ViewMapAddModify.php:123
+msgid "The attribute \"[A]\" is unknown."
+msgstr "ატრიბუტი \"[A]\" უცნობია."
+
+#: share/server/core/classes/GlobalMainCfg.php:2478
+msgid "The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration."
+msgstr "ატრიბუტი [ATTRIBUTE], სექციაში [TYPE], მთავარი კონფიგურაციის ფაილში არ ემთხვევა სწორ ფორმატს. გადახედეთ თქვენს კონფიგურაციას."
+
+#: share/server/core/classes/GlobalMainCfg.php:2450
+msgid "The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration."
+msgstr "ატრიბუტი [ATTRIBUTE], სექციაში [TYPE], მთავარი კონფიგურაციის ფაილში მოძველებულია. გადახედეთ დოკუმენტაციას და განაახლეთ კონფიგურაცია."
+
+#: share/server/core/classes/ViewMapAddModify.php:141
+msgid "The attribute has the wrong format (Regex: [MATCH])."
+msgstr "ატრიბუტის ფორმატი არასწორია (რეგგამოსი: [MATCH])."
+
+#: share/server/core/classes/ViewMapAddModify.php:126
+msgid "The attribute is deprecated."
+msgstr "ატრიბუტი მოძველებულია."
+
+msgid "The attribute is unknown."
+msgstr "ატრიბუტი უცნობია."
+
+#: share/server/core/classes/ViewMapAddModify.php:115
+msgid "The attribute needs to be set."
+msgstr "აუცილებელია ატრიბუტის დაყენება."
+
+msgid "The backend could bot be deleted."
+msgstr "უკანაბოლოს წაშლა შეუძლებელია."
+
+#: share/server/core/classes/ViewManageBackends.php:310
+msgid "The backend has been deleted."
+msgstr "უკანაბოლო წაიშალა."
+
+#: share/server/core/classes/CoreBackendMgmt.php:872
+msgid "The backend is reported as dead by the statusHost ([STATUSHOST])."
+msgstr "უკანაბოლო გამოცხადებულია, როგორც მკვდარი statusHost-ის მიერ ([STATUSHOST])."
+
+#: share/server/core/classes/GlobalMainCfg.php:2496
+msgid "The backend with the ID \\\"[BACKENDID]\\\" is not defined."
+msgstr "უკანაბოლო ID-ით \\\"[BACKENDID]\\\" აღწერილი არაა."
+
+msgid "The background could not be created."
+msgstr "ფონის შექმნა შეუძლებელია."
+
+msgid "The background could not be deleted."
+msgstr "ფონის წაშლა შეუძლებელია."
+
+msgid "The background does already exist."
+msgstr "ფონი უკვე არსებობს."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:124
+msgid "The background does not exist."
+msgstr "ფონი არ არსებობს."
+
+msgid "The background has been created."
+msgstr "ფონი შეიქმნა."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:156
+msgid "The background has been deleted."
+msgstr "ფონი წაიშალა."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:75
+msgid "The background has been uploaded."
+msgstr "ფონი აიტვირთა."
+
+#: share/server/core/classes/ViewManageBackends.php:220
+msgid "The changes have been saved."
+msgstr "ცვლილებები შენახულია."
+
+#: share/server/core/classes/ViewManageBackends.php:182
+#: share/server/core/classes/ViewManageBackends.php:302
+msgid "The choosen backend does not exist."
+msgstr "არჩეული უკანაბოლო არ არსებობს."
+
+#: share/server/core/classes/ViewEditMainCfg.php:91
+msgid "The configuration has been saved."
+msgstr "კონფიგურაცია შენახულია."
+
+msgid "The default backend could not be changed."
+msgstr "ნაგულისხმევი უკანაბოლოს შეცვლა შეუძლებელია."
+
+#: share/server/core/classes/ViewManageBackends.php:115
+msgid "The default backend has been changed."
+msgstr "ნაგულისხმევი უკანაბოლო შეიცვალა."
+
+#: share/server/core/classes/objects/NagVisDynGroup.php:186
+#: share/server/core/classes/objects/NagVisDynGroup.php:234
+msgid "The dynamic group \"[GROUP]\" has no members (Backend: [BACKEND])."
+msgstr "დინამიკურ ჯგუფს \"[GROUP]\" წევრები არ აქვს (უკანაბოლო: [BACKEND])."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:52
+#: share/server/core/classes/ViewManageMaps.php:417
+#: share/server/core/classes/ViewManageShapes.php:52
+msgid "The file could not be uploaded (Error: [ERROR])."
+msgstr "ფაილის ატვირთვა შეუძლებელია (შეცდომა: [ERROR])."
+
+#: share/server/core/functions/index.php:130
+msgid "The given action is not valid"
+msgstr "მოცემული ქმედება არასწორია"
+
+#: share/server/core/classes/CoreModAction.php:67
+msgid "The given custom action is not defined."
+msgstr "მოცემული მომხმარებლის ქმედება აღწერილი არაა."
+
+#: share/server/core/classes/CoreModMap.php:231
+#: share/server/core/classes/ViewManageMaps.php:200
+#: share/server/core/classes/ViewManageMaps.php:289
+#: share/server/core/classes/ViewManageMaps.php:360
+msgid "The given map name is invalid"
+msgstr "მოცემული რუკის სახელი არასწორია"
+
+msgid "The given message type [TYPE] is not known"
+msgstr "მოცემული შეტყობინების ტიპი [TYPE] უცნობია"
+
+#: share/server/core/classes/CoreModuleHandler.php:79
+msgid "The given module is not registered"
+msgstr "მოცემული მოდული რეგისტრირებული არაა"
+
+#: share/server/core/classes/CoreUriHandler.php:202
+msgid "The given url is not valid"
+msgstr "მოცემული url არასწორია"
+
+#: share/server/core/classes/objects/NagVisHostgroup.php:192
+msgid "The hostgroup \"[GROUP]\" has no members or does not exist (Backend: [BACKEND])."
+msgstr "ჰოსტების ჯგუფს \"[GROUP]\" წევრები არ აქვს, ან არ არსებობს (უკანაბოლო: [BACKEND])."
+
+msgid "The hostgroup [NAME] could not be found in backend [BACKENDID]."
+msgstr "ჰოსტების ჯგუფი [NAME] უკანაბოლოში [BACKENDID] აღმოჩენილი არაა."
+
+msgid "The main configuration could not be updated."
+msgstr "მთავარი კონფიგურაციის განახლება შეუძლებელია."
+
+msgid "The main configuration has been updated."
+msgstr "მთავარი კონფიგურაცია განახლდა."
+
+msgid "The map configuration could not be exported."
+msgstr "რუკის კონფიგურაციის გატანა შეუძლებელია."
+
+#: share/server/core/classes/ViewManageMaps.php:364
+msgid "The map configuration has been exported."
+msgstr "რუკის კონფიგურაცია გატანილია."
+
+msgid "The map could not be created."
+msgstr "რუკის შექმნა შეუძლებელია."
+
+msgid "The map could not be deleted."
+msgstr "რუკის წაშლა შეუძლებელია."
+
+msgid "The map could not be renamed."
+msgstr "რუკის სახელის გადარქმევა შეუძლებელია."
+
+#: share/server/core/classes/CoreModMap.php:531
+msgid "The map does already exist."
+msgstr "რუკა უკვე არსებობს."
+
+#: share/server/core/classes/CoreModAction.php:72
+#: share/server/core/classes/CoreModMap.php:528
+#: share/server/core/classes/ViewMapAddModify.php:758
+msgid "The map does not exist."
+msgstr "რუკა არ არსებობს."
+
+#: share/server/core/classes/ViewToNewMap.php:108
+#: share/server/core/classes/ViewToStaticMap.php:78
+msgid "The map has been created."
+msgstr "რუკა შეიქმნა."
+
+#: share/server/core/classes/ViewManageMaps.php:96
+msgid "The map has been created. Changing to the new map..."
+msgstr "რუკა შეიქმნა. მიმდინარეობს ახალ რუკაზე გადასვლა..."
+
+#: share/server/core/classes/ViewManageMaps.php:299
+msgid "The map has been deleted."
+msgstr "რუკა წაიშალა."
+
+#: share/server/core/classes/ViewManageMaps.php:454
+msgid "The map has been imported. Changing to the new map..."
+msgstr "რუკა შემოტანილია. მიმდინარეობს ახალ რუკაზე გადასვლა..."
+
+#: share/server/core/classes/ViewManageMaps.php:220
+msgid "The map has been renamed."
+msgstr "რუკის სახელი შეიცვალა."
+
+#: share/server/core/classes/CoreModOverview.php:144
+#: share/server/core/classes/CoreModOverview.php:146
+msgid "The map is in maintenance mode. Please be patient."
+msgstr "რუკა რემონტის რეჟიმშია. მოითმინეთ."
+
+msgid "The mapname does already exist."
+msgstr "რუკის სახელი უკვე არსებობს."
+
+#: share/server/core/functions/index.php:98
+msgid "The module [MOD] is not known"
+msgstr "მოდული [MOD] უცნობია"
+
+#: share/server/core/classes/CoreModuleHandler.php:100
+msgid "The module class does not exist"
+msgstr "მოდულის კლასი არ არსებობს"
+
+#: share/server/core/classes/GlobalMainCfg.php:2384
+msgid "The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation."
+msgstr "საჭირო ატრიბუტი [ATTRIBUTE], სექციაში [TYPE], მთავარი კონფიგურაციის ფაილში აღმოჩენილი არაა. გადახედეთ დოკუმენტაციას."
+
+#: share/server/core/classes/ViewChangePassword.php:67
+msgid "The new and old passwords are equal. Won't change anything."
+msgstr "ახალი და ძველი პაროლები ერთი და იგივეა. არაფერი შეიცვლება."
+
+msgid "The new backend could not be added."
+msgstr "ახალი უკანაბოლოს დამატება შეუძლებელია."
+
+#: share/server/core/classes/ViewManageBackends.php:218
+msgid "The new backend has been added."
+msgstr "ახალი უკანაბოლო დაემატა."
+
+msgid "The new mapname does already exist."
+msgstr "ახალი რუკის სახელი უკვე არსებობს."
+
+#: share/server/core/classes/ViewChangePassword.php:61
+msgid "The new passwords do not match."
+msgstr "ახალი პაროლები არ ემთხვევა."
+
+#: share/server/core/classes/CoreBackendMgmt.php:718
+msgid "The object \"[OBJ]\" does not exist ([TYPE])."
+msgstr "ობიექტი \"[OBJ]\" არ არსებობს ([TYPE])."
+
+msgid "The object [NAME] has an invalid state \"[STATE]\"."
+msgstr "ობიექტის [NAME] მდგომარეობა \"[STATE]\" არასწორია."
+
+msgid "The object [TYPE]/[NAME] as child of [PTYPE]/[PNAME] has an invalid state \"[STATE]\"."
+msgstr "ობიექტს [TYPE]/[NAME] როგორც [PTYPE]/[PNAME]-ის შვილს აქვს არასწორი მდგომარეობა \"[STATE]\"."
+
+msgid "The object could not be added."
+msgstr "ობიექტის დამატება შეუძლებელია."
+
+#: share/server/core/classes/CoreModMap.php:166
+msgid "The object could not be deleted."
+msgstr "ობიექტის წაშლა შეუძლებელია."
+
+#: share/server/core/classes/CoreModMap.php:156
+msgid "The object could not be modified."
+msgstr "ობიექტის შეცვლა შეუძლებელია."
+
+#: share/server/core/classes/CoreModAction.php:85
+#: share/server/core/classes/CoreModMap.php:259
+#: share/server/core/classes/CoreModMap.php:334
+#: share/server/core/classes/ViewAck.php:59
+#: share/server/core/classes/ViewMapAddModify.php:202
+#: share/server/core/classes/ViewMapAddModify.php:780
+msgid "The object does not exist."
+msgstr "ობიექტი არ არსებობს."
+
+msgid "The object has been added."
+msgstr "ობიექტი დამატებულია."
+
+msgid "The object has been modified."
+msgstr "ობიექტი შეიცვალა."
+
+#: share/server/core/classes/CoreModAction.php:81
+msgid "The object_id value is missing."
+msgstr "object_id-ის მნიშვნელობა აღმოჩენილი არაა."
+
+#: share/server/core/classes/CoreUriHandler.php:144
+msgid "The parameter \"[key]\" does not match the valid value format"
+msgstr "პარამეტრი \"[key]\" სწორი მნიშვნელობის ფორმატს არ ემთხვევა"
+
+msgid "The password could not be changed."
+msgstr "პაროლის შეცვლა შეუძლებელია."
+
+msgid "The password could not be reset."
+msgstr "პაროლის ჩამოყრა შეუძლებელია."
+
+msgid "The password has been changed."
+msgstr "პაროლი შეიცვალა."
+
+#: share/server/core/classes/ViewManageUsers.php:337
+msgid "The password has been reset."
+msgstr "პაროლი ჩამოყრილია."
+
+#: share/server/core/classes/GlobalCore.php:752
+msgid "The path \"[PATH]\" does not exist on your site."
+msgstr "თქვენს საიტზე ბილიკი \"[PATH]\" არ არსებობს."
+
+#: share/server/core/classes/GlobalCore.php:753
+msgid "The path \"[PATH]\" does not exist."
+msgstr "ბილიკი \"[PATH]\" არ არსებობს."
+
+#: share/server/core/classes/GlobalCore.php:773
+msgid "The path \"[PATH]\" is not readable on your site."
+msgstr "თქვენს საიტზე ბილიკი \"[PATH]\" წაკითხვადი არაა."
+
+#: share/server/core/classes/GlobalCore.php:774
+msgid "The path \"[PATH]\" is not readable."
+msgstr "ბილიკი \"[PATH]\" წაკითხვადი არაა."
+
+#: share/server/core/classes/GlobalCore.php:794
+msgid "The path \"[PATH]\" is not writable on your site."
+msgstr "თქვენს საიტზე ბილიკი \"[PATH]\" ჩაწერადი არაა."
+
+#: share/server/core/classes/GlobalCore.php:795
+msgid "The path \"[PATH]\" is not writeable."
+msgstr "ბილიკი \"[PATH]\" ჩაწერადი არაა."
+
+#: share/server/core/classes/CoreAuthorisationModGroups.php:92
+msgid "The permissions file [FILE] could not be parsed."
+msgstr "უფლებების ფაილის [FILE] დამუშავება შეუძლებელია."
+
+#: share/server/core/classes/ViewManageRoles.php:143
+msgid "The permissions for this role have been updated."
+msgstr "წვდომები ამ როლისთვის განახლდა."
+
+#: share/server/core/classes/ViewAck.php:97
+msgid "The problem has been acknowledged."
+msgstr "პრობლემა მიღებულია."
+
+#: share/server/core/classes/CoreBackendMgmt.php:938
+msgid "The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend."
+msgstr "მოთხოვნილი თვისება [FEATURE] არაა მოწოდებული უკანაბოლოს (უკანაბოლოს-ID: [BACKENDID], უკანაბოლოს-ტიპი: [BACKENDTYPE]) მიერ. მოთხოვნილი ხედი, შეიძლება, არ იყოს ხელმისაწვდომი ამ უკანაბოლოს გამოყენებით."
+
+#: share/server/core/classes/ViewAck.php:66
+msgid "The requested feature is not available for this backend. The MKLivestatus backend supports this feature."
+msgstr "მოთხოვნილი თვისება ამ უკანაბოლოს გამოყენებით ხელმისაწვდომი არაა. უკანაბოლოს MKLivestatus აქვს ამ ფუნქციის მხარდაჭერა."
+
+#: share/server/core/classes/CoreRotation.php:150
+msgid "The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]"
+msgstr "მოთხოვნილი ნაბიჯი [STEP] ტიპით [TYPE] არ არსებობს როტაციის პულში [ROTATION]"
+
+msgid "The response from the backend is not valid (Asked for [NUMASKED] attributes, got [NUMRESPONSE]) in backend [BACKENDID]"
+msgstr "უკანაბოლოს პასუხი სწორი არაა (მოვითხოვე [NUMASKED] ატრიბუტი და მივიღე [NUMRESPONSE]) უკანაბოლოში [BACKENDID]"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:462
+#: share/server/core/classes/GlobalBackendnagiosbp.php:167
+msgid "The response has an invalid format in backend [BACKENDID]."
+msgstr "პასუხი არასწორი ფორმატითაა უკანაბოლოში [BACKENDID]."
+
+#: share/server/core/classes/ViewManageRoles.php:65
+msgid "The role has been created."
+msgstr "როლი შეიქმნა."
+
+#: share/server/core/classes/ViewManageRoles.php:313
+msgid "The role has been deleted."
+msgstr "როლი წაიშალა."
+
+msgid "The rolename is invalid or does already exist."
+msgstr "როლის სახელი არასწორია, ან უკვე არსებობს."
+
+#: share/server/core/classes/ViewManageUsers.php:157
+msgid "The roles for this user have been updated."
+msgstr "ამ მომხმარებლისთვის როლები განახლდა."
+
+#: share/server/core/classes/GlobalMainCfg.php:2511
+msgid "The section [TYPE] is not supported in main configuration. Please take a look at the documentation."
+msgstr "სექცია [TYPE] მთავარ კონფიგურაციაში მხარდაჭერილი არაა. გადახედეთ დოკუმენტაციას."
+
+#: share/server/core/classes/objects/NagVisServicegroup.php:205
+msgid "The servicegroup \"[GROUP]\" has no members or does not exist (Backend: [BACKEND])."
+msgstr "სერვისების ჯგუფს \"[GROUP]\" წევრები არ აქვს, ან არ არსებობს (უკანაბოლო: [BACKEND])."
+
+msgid "The servicegroup [GROUP] could not be found in the backend [BACKENDID]."
+msgstr "სერვისების ჯგუფი [NAME] უკანაბოლოში [BACKENDID] აღმოჩენილი არაა."
+
+msgid "The shape could not be deleted."
+msgstr "მოხაზულობის წაშლა შეუძლებელია."
+
+#: share/server/core/classes/ViewManageShapes.php:127
+msgid "The shape does not exist."
+msgstr "მოხაზულობა არ არსებობს."
+
+#: share/server/core/classes/ViewManageShapes.php:162
+msgid "The shape has been deleted."
+msgstr "მოხაზულობა წაიშალა."
+
+#: share/server/core/classes/ViewManageShapes.php:77
+msgid "The shape has been uploaded."
+msgstr "მოხაზულობა აიტვირთა."
+
+msgid "The shared var folder [PATH] does not exist"
+msgstr "გაზიარებული var საქაღალდე [PATH] არ არსებობს"
+
+msgid "The shared var folder [PATH] is not writeable"
+msgstr "გაზიარებული var საქაღალდე [PATH] ჩაწერადი არაა"
+
+msgid "The template could not be deleted."
+msgstr "ნიმუშის წაშლა შეუძლებელია."
+
+msgid "The template does not exist."
+msgstr "ნიმუში არ არსებობს."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:87
+msgid "The template has been created."
+msgstr "ნიმუში შეიქმნა."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:291
+msgid "The template has been deleted."
+msgstr "ნიმუში წაიშალა."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:194
+msgid "The template has been modified."
+msgstr "ნიმუში შეიცვალა."
+
+msgid "The two new passwords are not equal."
+msgstr "პაროლები ერთმანეთს არ ემთხვევიან."
+
+#: share/server/core/classes/ViewManageUsers.php:79
+#: share/server/core/classes/ViewManageUsers.php:333
+msgid "The two passwords are not equal."
+msgstr "პაროლები ერთმანეთს არ ემთხვევიან."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:62
+#: share/server/core/classes/ViewManageShapes.php:64
+msgid "The uploaded file is no image (png,jpg,gif) file or contains unwanted chars."
+msgstr "ატვირთული ფაილი გამოსახულების (png,jpg,gif) ფაილი არაა, ან შეიცავს არასასურველ სიმბოლოებს."
+
+#: share/server/core/classes/ViewManageMaps.php:428
+msgid "The uploaded file is no map configuration file."
+msgstr "ატვირთული ფაილი რუკის კონფიგურაციის ფაილი არაა."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:68
+#: share/server/core/classes/ViewManageShapes.php:70
+msgid "The uploaded file is not an image (png, jpg and gif are allowed)."
+msgstr "ატვირთული ფაილი გამოსახულების (დაშვებულია png,jpg და gif) ფაილი არაა."
+
+#: share/server/core/classes/ViewManageMaps.php:449
+msgid "The uploaded map configuration caused a crash: [ERROR]."
+msgstr "ატვირთულმა რუკის კონფიგურაციამ გამოიწვია შეცდომა: [ERROR]."
+
+#: share/server/core/classes/ViewManageMaps.php:445
+msgid "The uploaded map configuration is invalid."
+msgstr "ატვირთული რუკის კონფიგურაცია არასწორია."
+
+msgid "The user could not be created."
+msgstr "მომხმარებლის შექმნა შეუძლებელია."
+
+#: share/server/core/classes/ViewManageUsers.php:83
+msgid "The user has been created."
+msgstr "მომხმარებელი შეიქმნა."
+
+#: share/server/core/classes/ViewManageUsers.php:251
+msgid "The user has been deleted."
+msgstr "მომხმარებელი წაიშალა."
+
+msgid "The username is invalid or does already exist."
+msgstr "მომხმარებლის სახელი არასწორია, ან უკვე არსებობს."
+
+#: share/server/core/classes/CoreModule.php:351
+msgid "The value of option \"[ATTRIBUTE]\" does not match the valid format."
+msgstr "პარამეტრის \"[ATTRIBUTE]\" მნიშვნელობა სწორ ფორმატს არ ემთხვევა."
+
+#: share/server/core/classes/ViewManageBackends.php:180
+msgid "This ID is already used by another backend."
+msgstr "ეს ID უკვე გამოიყენება სხვა უკანაბოლოს მიერ."
+
+#: share/server/core/classes/GlobalBackendmkbi.php:457
+msgid "This backend only supports \"Aggregation\" objects."
+msgstr "ამ უკანაბოლოს, მხოლოდ, \"აგრეგაციის\" ობიექტების მხარდაჭერა აქვს."
+
+#: share/server/core/classes/ViewManageMaps.php:73
+msgid "This is not a valid map alias (need to match [M])"
+msgstr "ეს სწორი რუკის ფსევდონიმი არაა (საჭიროა, რომ ემთხვეოდეს [M]-ს)"
+
+#: share/server/core/classes/ViewManageMaps.php:60
+#: share/server/core/classes/ViewManageMaps.php:215
+#: share/server/core/classes/ViewManageMaps.php:434
+#: share/server/core/classes/ViewToNewMap.php:66
+#: share/server/core/classes/ViewToStaticMap.php:55
+msgid "This is not a valid map name (need to match [M])"
+msgstr "ეს სწორი რუკის სახელი არაა (საჭიროა, რომ ემთხვეოდეს [M]-ს)"
+
+#: share/server/core/classes/ViewToNewMap.php:82
+msgid "This is not a valid worldmap center"
+msgstr "ეს სწორი მსოფლიო რუკის ცენტრი არაა"
+
+#: share/server/core/classes/ViewToNewMap.php:90
+msgid "This is not a valid worldmap zoom"
+msgstr "ეს სწორი მსოფლიო რუკის გადიდება არაა"
+
+#: share/server/core/classes/ViewManageRoles.php:50
+msgid "This name is too long"
+msgstr "ეს სახელი მეტისმეტად გრძელია"
+
+#: share/server/core/classes/ViewManageUsers.php:50
+msgid "This name is too long."
+msgstr "ეს სახელი მეტისმეტად გრძელია."
+
+#: share/server/core/classes/ViewManageUsers.php:70
+#: share/server/core/classes/ViewManageUsers.php:324
+msgid "This password is too long."
+msgstr "ეს პაროლი მეტისმეტად გრძელია."
+
+#: share/server/core/classes/CoreBackendMgmt.php:310
+#: share/server/core/classes/CoreBackendMgmt.php:324
+msgid "This type of object is not supportd by this backend ([BACKENDID])."
+msgstr "ამ ტიპის ობიექტი ჯერ ამ უკანაბოლოს მიერ მხარდაჭერილი არაა ([BACKENDID])."
+
+#: share/server/core/classes/CoreBackendMgmt.php:676
+msgid "This type of object is not supported by this backend ([BACKENDID])."
+msgstr "ამ ტიპის ობიექტი ჯერ ამ უკანაბოლოს მიერ მხარდაჭერილი არაა ([BACKENDID])."
+
+#: share/server/core/sources/automap.php:51
+msgid "Top to bottom"
+msgstr "ზემოდან ქვემოთ"
+
+#: share/server/core/classes/CoreLogonEnv.php:45
+msgid "Unable to authenticate user. The environment variable [VAR] is not set or empty."
+msgstr "მომხმარებლის ავთენტიკაცია შეუძლებელია. გარემოს ცვლადი [VAR] დაყენებული არაა, ან ცარიელია."
+
+#: share/server/core/classes/CoreLogonModule.php:67
+msgid "Unable to authenticate user. User does not exist."
+msgstr "მომხმარებლის ავთენტიკაცია შეუძლებელია. მომხმარებელი არ არსებობს."
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:116
+msgid "Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting."
+msgstr "სიცოცხლის სტატუსის სოკეტთან დაკავშირება შეუძლებელია. სოკეტი [SOCKET] უკანაბოლოში [BACKENDID] არ არსებობს. შეიძლება, Nagios გაშვებული არაა, ან მიმდინარეობს მისი გადატვირთვა."
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:285
+msgid "Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]"
+msgstr "[SOCKET]-ზე მიერთების შეცდომა უკანაბოლოში [BACKENDID]: [MSG]"
+
+msgid "Unable to create map configuration file."
+msgstr "რუკის კონფიგურაციის ფაილის შექმნა შეუძლებელია."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:146
+msgid "Unable to delete this background, because it is currently used by these maps: [M]."
+msgstr "ამ ფონის წაშლა შეუძლებელია, რადგან ის ამჟამად გამოიყენება ამ რუკების მიერ: [M]."
+
+#: share/server/core/classes/ViewManageShapes.php:150
+msgid "Unable to delete this shape, because it is currently used by these maps: [M]."
+msgstr "ამ მოხაზულობის წაშლა შეუძლებელია, რადგან ის ამჟამად გამოიყენება ამ რუკების მიერ: [M]."
+
+#: share/server/core/classes/ViewManageUsers.php:247
+msgid "Unable to delete your own user."
+msgstr "საკუთარ მომხმარებელს ვერ წაშლით."
+
+msgid "Unable to export the automap. A map with this name already exists."
+msgstr "ავტორუკის გატანა შეუძლებელია. რუკა ამ სახელით უკვე არსებობს"
+
+#: share/server/core/sources/geomap.php:188
+msgid "Unable to fetch URL \"[U]\".<br/><br />The geomap needs to be able to fetch some data from the internet via webservice API. Please take a look at the docs for more details.<br /><br /><small>[E]</small>"
+msgstr "URL-ის \"[U]\" გამოთხოვა შეუძლებელია.<br/><br />გეორუკას სჭირდება გარკვეული მონაცემების მიღება ინტერნეტიდან ვებსერვისის API-ის გამოყენებით. მეტი დეტალებისთვის იხილეთ დოკუმენტაცია.<br /><br /><small>[E]</small>"
+
+#: share/server/core/classes/GlobalBackendmkbi.php:256
+#: share/server/core/classes/GlobalBackendnagiosbp.php:148
+msgid "Unable to fetch data from URL [U]: [M]"
+msgstr "შეუძლებელია მონაცემების გამოთხოვა URL-დან [U]: [M]"
+
+#: share/server/core/classes/ViewMapAddModify.php:576
+msgid "Unable to fetch data from backend - falling back to input field."
+msgstr "უკანაბოლოდან მონაცემების გამოთხოვა შეუძლებელია - ისევ გადავერთვები შეყვანის ველზე."
+
+#: share/server/core/classes/CoreModAuth.php:75
+msgid "Unable to log you out. Maybe it is not supported by your authentication module."
+msgstr "სისტემიდან გასვლა შეუძლებელია. შეიძლება, ეს მხარდაჭერილი არაა თქვენი ავთენტიკაციის მოდულის მიერ."
+
+msgid "Unable to open auth database"
+msgstr "ავთენტიკაციის მონაცემთა ბაზის გახსნა შეუძლებელია"
+
+msgid "Unable to open auth database ([DB])"
+msgstr "ავთენტიკაციის მონაცემთა ბაზის ([DB]) გახსნა შეუძლებელია"
+
+#: share/server/core/classes/CoreAuthModPDO.php:81
+#: share/server/core/classes/CoreAuthorisationModPDO.php:50
+msgid "Unable to open auth database ([DB]): [MSG]"
+msgstr "ავთენტიკაციის მონაცემთა ბაზის ([DB]) გახსნა შეუძლებელია: [MSG]"
+
+#: share/server/core/classes/CoreAuthorisationModGroups.php:66
+#: share/server/core/classes/CoreAuthorisationModMultisite.php:54
+msgid "Unable to open auth file ([FILE])."
+msgstr "ავთენტიკაციის ფაილის ([FILE]) გახსნა შეუძლებელია."
+
+#: share/server/core/sources/worldmap.php:192
+msgid "Unable to open worldmap database ([DB]): [MSG]"
+msgstr "მსოფლიო რუკის მონაცემთა ბაზის ([DB]) გახსნა შეუძლებელია: [MSG]"
+
+msgid "Unable to reset the password for your own user."
+msgstr "თქვენი საკუთარი მომხმარებლისთვის პაროლის ჩამოყრა შეუძლებელია."
+
+#: share/server/core/classes/GlobalCore.php:927
+msgid "Unhandled error"
+msgstr "დაუმუშავებელი შეცდომა"
+
+#: share/server/core/sources/geomap.php:126
+#: share/server/core/sources/geomap.php:153
+msgid "Unhandled source type \"[S]\""
+msgstr "დაუმუშავებელი წყაროს ტიპი \"[S]\""
+
+msgid "Unknown message type"
+msgstr "უცნობი შეტყობინების ტიპi"
+
+#: share/server/core/sources/automap_pos.php:263
+msgid "Unknown render mode: [MODE]"
+msgstr "უცნობი რენდერის რეჟიმი: [MODE]"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:175
+msgid "Unknown socket type given in backend [BACKENDID]"
+msgstr "მითითებულია უცნობი სოკეტის ტიპი უკანაბოლოში [BACKENDID]"
+
+#: share/server/core/classes/GlobalMainCfg.php:2436
+msgid "Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file."
+msgstr "მთავარი კონფიგურაციის ფაილის სექციაში [TYPE] გამოყენებულია უცნობი მნიშვნელობა [ATTRIBUTE]."
+
+#: share/server/core/classes/NagVisContextMenu.php:158
+msgid "Unlock"
+msgstr "განბლოკვა"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:100
+#: share/server/core/classes/ViewManageShapes.php:102
+msgid "Upload"
+msgstr "ატვირთვა"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:39
+msgid "Upload Background Image"
+msgstr "ფონის გამოსახულების ატვირთვა"
+
+#: share/server/core/classes/ViewManageShapes.php:39
+msgid "Upload Shape"
+msgstr "მოხაზულობის ატვირთვა"
+
+#: share/server/core/classes/GlobalCore.php:917
+msgid "Upload incomplete"
+msgstr "ატვირთვა არასრულია"
+
+#: share/server/core/classes/CoreAuthHandler.php:256
+msgid "User logged in ("
+msgstr "მომხმარებელი შესულია ("
+
+#: share/server/core/classes/CoreAuthHandler.php:289
+msgid "User logged out ("
+msgstr "მომხმარებელი გამოსულია ("
+
+#: share/server/core/classes/CoreAuthHandler.php:260
+msgid "User login failed ("
+msgstr "მომხმარებლის შესვლა ჩავარდა ("
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:466
+msgid "User menu"
+msgstr "მომხმარებლის მენიუ"
+
+#: share/server/core/classes/ViewManageUsers.php:105
+msgid "Username"
+msgstr "მომხმარებლის სახელი"
+
+msgid "ValidatorNotAllowedParameterEntry"
+msgstr "პარამეტრი [VAR] დაშვებული ჩანაწერი არაა."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:114
+#: share/server/core/classes/ViewMapManageTmpl.php:228
+msgid "Value"
+msgstr "მნიშვნელობა"
+
+#: share/server/core/classes/ViewManageRoles.php:238
+msgid "View"
+msgstr "ხედი"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:493
+msgid "View current map"
+msgstr "მიმდინარე რუკის ნახვა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:512
+msgid "Viewport"
+msgstr "ჩვენების არე"
+
+msgid "WUI"
+msgstr "WUI"
+
+#: share/server/core/classes/GlobalMapCfg.php:2390
+msgid "Worldmap"
+msgstr "მსოფლიო რუკა"
+
+#: share/server/core/classes/ViewToNewMap.php:86
+msgid "Worldmap zoom parameter missing."
+msgstr "მსოფლიო რუკის გადიდების პარამეტრი მითითებული არაა."
+
+#: share/server/core/classes/CoreModMultisite.php:245
+msgid "Worldmaps do not support state preview"
+msgstr "მსოფლიო რუკებს მდგომარეობის გადახედვის მხარდაჭერა არ აქვს"
+
+#: share/server/core/classes/ViewEditMainCfg.php:237
+msgid "Yes"
+msgstr "დიახ"
+
+#: share/server/core/classes/CoreModAuth.php:127
+msgid "You are already logged in. You will be redirected."
+msgstr "სისტემაში უკვე შესული ბრძანდებით. ახლა გადაგამისამართებთ."
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:71
+msgid "You are not authenticated"
+msgstr "ავთენტიკაცია არ გაგივლიათ"
+
+msgid "You are not permitted to access this page"
+msgstr "ამ გვერდზე წვდომის უფლება არ გაქვთ"
+
+#: share/server/core/classes/CoreModule.php:161
+msgid "You are not permitted to access this page ([PAGE])."
+msgstr "ამ გვერდზე ([PAGE]) წვდომის უფლება არ გაქვთ."
+
+#: share/server/core/classes/CoreModAuth.php:141
+msgid "You entered invalid credentials."
+msgstr "თქვენი შეყვანილი ავტორიზაციის დეტალები არასწორია."
+
+#: share/server/core/classes/CoreModMap.php:169
+#: share/server/core/classes/CoreModule.php:297
+msgid "You entered invalid information."
+msgstr "თქვენი შეყვანილი ინფორმაცია არასწორია."
+
+msgid "You have been authenticated. You will be <a href=\"[refererUrl]\">redirected</a>."
+msgstr "ავთენტიკაცია გაიარეთ. ახლა მოხდება თქვენი <a href=\"[refererUrl]\">გადამისამართება</a>."
+
+msgid "You have been authenticated. You will be redirected."
+msgstr "ავთენტიკაცია გაიარეთ. ახლა მოხდება თქვენი გადამისამართება."
+
+msgid "You have been logged out. You will be redirected."
+msgstr "სისტემიდან გახვედით. ახლა გადაგამისამართებთ."
+
+#: share/server/core/classes/ViewManageBackends.php:172
+msgid "You need to choose a backend type."
+msgstr "საჭიროა, აირჩიოთ უკანაბოლოს ტიპი."
+
+#: share/server/core/classes/ViewManageBackends.php:109
+msgid "You need to choose a default backend."
+msgstr "საჭიროა, აირჩიოთ ნაგულისხმევი უკანაბოლო."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:66
+msgid "You need to configure an unique name."
+msgstr "საჭიროა, უნიკალური სახელი მიანიჭოთ."
+
+#: share/server/core/classes/ViewManageBackends.php:202
+msgid "You need to configure this option."
+msgstr "საჭიროა, მოირგოთ ეს პარამეტრი."
+
+#: share/server/core/classes/ViewAck.php:84
+msgid "You need to provide a comment."
+msgstr "კომენტარის შეყვანა აუცილებელია."
+
+#: share/server/core/classes/ViewMapAddModify.php:748
+msgid "You need to provide a map name."
+msgstr "რუკის სახელის მითითება აუცილებელია."
+
+#: share/server/core/classes/ViewManageMaps.php:50
+msgid "You need to provide a unique map name (ID) for the map"
+msgstr "საჭიროა შეიყვანოთ რუკის უნიკალური სახელი (ID)"
+
+#: share/server/core/classes/ViewManageMaps.php:409
+msgid "You need to select a file to import."
+msgstr "შემოსატანად ჯერ ფაილი უნდა აირჩიოთ."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:44
+#: share/server/core/classes/ViewManageShapes.php:44
+msgid "You need to select an image to import."
+msgstr "შემოსატანად ჯერ გამოსახულება უნდა აირჩიოთ."
+
+#: share/server/core/classes/ViewManageBackends.php:176
+msgid "You need to specify a identifier for the backend."
+msgstr "უკანაბოლოსთვის იდენტიფიკატორი უნდა მიუთითოთ."
+
+#: share/server/core/classes/ViewChangePassword.php:52
+msgid "You need to specify the new password."
+msgstr "საჭიროა ახალი პაროლის მითითება."
+
+#: share/server/core/classes/ViewChangePassword.php:47
+msgid "You need to specify the old password."
+msgstr "საჭიროა ძველი პაროლის მითითება."
+
+#: share/server/core/classes/ViewChangePassword.php:57
+msgid "You need to specify to confirm the new password."
+msgstr "საჭიროა ახალი პაროლის დადასტურება."
+
+#: share/server/core/classes/ViewManageMaps.php:66
+msgid "You provided an invalid type"
+msgstr "შეყვანილი ტიპი არასწორია"
+
+msgid "Your PHP installation does not support PDO SQLite (3.x). Please check if you installed the PHP module."
+msgstr "PHP-ის თქვენს ვერსიას არ აქვს PDO SQLite-ის (3x) მხარდაჭერა. შეამოწმეთ, დააყენეთ, თუ არა შესაბამისი PHP-ის მოდული."
+
+msgid "Your PHP installation does not support PDO. Please check if you installed the PHP module."
+msgstr "PHP-ის თქვენს ვერსიას არ აქვს PDO-ის მხარდაჭერა. შეამოწმეთ, დააყენეთ, თუ არა შესაბამისი PHP-ის მოდული."
+
+msgid "Your PHP installation does not support SQLite. Please check if you installed the PHP module."
+msgstr "PHP-ის თქვენს ვერსიას არ აქვს SQLite-ის მხარდაჭერა. შეამოწმეთ, დააყენეთ, თუ არა შესაბამისი PHP-ის მოდული."
+
+msgid "Your PHP installation does not support mysql. Please check if you installed the PHP module."
+msgstr "PHP-ის თქვენს ვერსიას არ აქვს mysql-ის მხარდაჭერა. შეამოწმეთ, დააყენეთ, თუ არა შესაბამისი PHP-ის მოდული."
+
+#: share/server/core/classes/ViewChangePassword.php:78
+msgid "Your password could not be changed."
+msgstr "თქვენი პაროლის შეცვლა შეუძლებელია."
+
+#: share/server/core/classes/ViewChangePassword.php:80
+msgid "Your password has been changed."
+msgstr "თქვენი პაროლი შეცვლილია."
+
+msgid "accessModeIsNotValid"
+msgstr "წვდომის რეჟიმი \"[MODE]\" არასწორია."
+
+msgid "addBackend"
+msgstr "უკანაბოლოს დამატება"
+
+msgid "addObject"
+msgstr "ობიექტის დამატეაბა"
+
+#: share/server/core/classes/NagVisHoverMenu.php:136
+msgid "address"
+msgstr "მისამართი"
+
+#: share/server/core/classes/NagVisHoverMenu.php:132
+msgid "alias"
+msgstr "მეტსახელი"
+
+#: share/server/core/classes/objects/NagVisDynGroup.php:196
+#: share/server/core/classes/objects/NagVisHostgroup.php:202
+msgid "and"
+msgstr "და"
+
+msgid "automapNotSupportedHere"
+msgstr "ავტორუკა აქ ხელმისაწვდომი არაა."
+
+#: share/server/core/classes/GlobalBackendPDO.php:266
+msgid "backendInstanceNameNotUniq"
+msgstr "გაშვებული ასლის სახელი \"[NAME]\" უკანაბოლოში \"[BACKENDID]\" უნიკალური არაა."
+
+#: share/server/core/classes/GlobalBackendPDO.php:261
+msgid "backendInstanceNameNotValid"
+msgstr "გაშვებული ასლის სახელი \"[NAME]\" უკანაბოლოში \"[BACKENDID]\" სწორი არაა."
+
+#: share/server/core/classes/CoreBackendMgmt.php:855
+msgid "backendNotDefined"
+msgstr "უკანაბოლო id-ით \"[BACKENDID]\" აღწერილი არაა."
+
+#: share/server/core/classes/CoreBackendMgmt.php:798
+msgid "backendNotExists"
+msgstr "The backend with ID \"[BACKENDID]\" of type \"[BACKENDTYPE]\" does not exist."
+
+#: share/server/core/classes/CoreBackendMgmt.php:908
+msgid "backendNotInitialized"
+msgstr "The backend with the ID \"[BACKENDID]\" of type \"[BACKENDTYPE]\" is not initialized. Maybe there is an undefined backend used in a map?"
+
+msgid "background"
+msgstr "ფონი"
+
+msgid "backgroundColor"
+msgstr "ფერი (თექვსმ)"
+
+msgid "backgroundFolderNotWriteable"
+msgstr "ფონის სურათების საქაღალდე \"[PATH]\" ჩაწერადი არაა."
+
+msgid "backgroundHeight"
+msgstr "სიმაღლე (პიქს)"
+
+msgid "backgroundName"
+msgstr "სახელი"
+
+msgid "backgroundNotExists"
+msgstr "რუკის გამოსახულების ფაილი \"[IMGPATH]\" არ არსებობს"
+
+msgid "backgroundNotReadable"
+msgstr "ფონის სურათი \"[IMGPATH]\" წაკითხვადი არაა."
+
+msgid "backgroundNotWriteable"
+msgstr "რუკის გამოსახულების ფაილი \"[IMGPATH]\" ჩაწერადი არაა."
+
+msgid "backgroundWidth"
+msgstr "სიგანე (პიქს)"
+
+msgid "cacheFileNotExists"
+msgstr "კეშის ფაილი \"[FILE]\" არ არსებობს."
+
+#: share/server/core/classes/GlobalFileCache.php:130
+msgid "cacheFileNotWriteable"
+msgstr "კეშის ფაილი \"[FILE]\" ჩაწერადი არაა."
+
+msgid "cacheFolderNotWriteable"
+msgstr "The parent folder for the cache file \"[FILE]\" is not writeable. The cache file can not be created. Please fix the permissions on the filesystem."
+
+msgid "change"
+msgstr "ცვლილება"
+
+msgid "childStatesAre"
+msgstr "არსებობს"
+
+msgid "chooseImage"
+msgstr "აირჩიეთ გამოსახულება"
+
+msgid "chooseMap"
+msgstr "აირჩიეთ რუკა"
+
+msgid "chooseMapFile"
+msgstr "აირჩიეთ რუკის კონფიგურაციის ფაილი"
+
+msgid "chooseMapName"
+msgstr "საჭიროა ახალი რუკის სახელის ჩასმა."
+
+msgid "choosePngImage"
+msgstr "აირჩიეთ PNG/GIF/JPG გამოსახულება"
+
+msgid "chosenLineTypeNotValid"
+msgstr "მონოშნული line_type არასწორია."
+
+msgid "clickMapToSetPoints"
+msgstr "Click on the map to determine the position of the missing points."
+
+#: share/server/core/sources/automap.php:68
+msgid "compress"
+msgstr "შეკუმშვა"
+
+msgid "configured"
+msgstr "მორგებულია"
+
+msgid "confirmBackgroundDeletion"
+msgstr "მართლა გნებავთ ამ ფონის სურათის წაშლა? ეს ქმედება შეუქცევადია."
+
+#: share/server/core/classes/NagVisContextMenu.php:126
+msgid "confirmDelete"
+msgstr "მართლა გნებავთ ამ ობიექტის წაშლა?"
+
+msgid "confirmMapDeletion"
+msgstr "მართლა გნებავთ ამ რუკის წაშლა? ეს ქმედება შეუქცევადია."
+
+msgid "confirmMapRename"
+msgstr "მართლა გნებავთ ამ რუკის სახელის გადარქმევა?"
+
+msgid "confirmNewMap"
+msgstr "მართლა გნებავთ ახალი რუკის შექმნა?"
+
+msgid "confirmRestore"
+msgstr "მართლა გნებავთ ამ მარქაფის აღდგენა?"
+
+msgid "confirmShapeDeletion"
+msgstr "მართლა გნებავთ ამ მოხაზულობის სურათის წაშლა? ეს ქმედება შეუქცევადია."
+
+#: share/server/core/classes/NagVisContextMenu.php:130
+msgid "contextConnectBySsh"
+msgstr "ssh-ით მიერთება"
+
+#: share/server/core/classes/NagVisContextMenu.php:134
+msgid "contextRefreshStatus"
+msgstr "განახლების სტატუსი"
+
+#: share/server/core/classes/NagVisContextMenu.php:138
+msgid "contextRescheduleNextCheck"
+msgstr "შემდეგი შემოწმების გადაგეგმვა"
+
+#: share/server/core/classes/NagVisContextMenu.php:142
+msgid "contextScheduleDowntime"
+msgstr "გამორთვის დროის დაგეგმვა"
+
+msgid "contextTemplateNotExists"
+msgstr "ნიმუშის ფაილი \"[FILE]\" არ არსებობს."
+
+msgid "contextTemplateNotReadable"
+msgstr "The template is not readable. Please check the webservers permissions on the template file \"[FILE]\"."
+
+#: share/server/core/classes/GlobalMapCfg.php:2168
+msgid "couldNotDeleteMapCfg"
+msgstr "ვერ წავშალე რუკის კონფიგურაციის ფაილი \"[MAPPATH]\"."
+
+#: share/server/core/classes/GlobalBackground.php:190
+msgid "couldNotDeleteMapImage"
+msgstr "ვერ წავშალე რუკის სურათის ფაილი \"[IMGPATH]\"."
+
+#: share/server/core/classes/NagVisHoverUrl.php:110
+msgid "couldNotGetHoverUrl"
+msgstr "Could not get hover URL \"[URL]\". Maybe the URL is password protected."
+
+#: share/server/core/sources/automap.php:268
+msgid "couldNotGetRootHostname"
+msgstr "The Automap needs one root hostname to start the drawing.<br><br> There are three ways to get a root host: URL parameter \"root\", Main configuration \"automap > default_root\", auto detect (only possible when there is <b>one</b> host with no parent)."
+
+msgid "create"
+msgstr "შექმნა"
+
+msgid "createBackground"
+msgstr "ფონის სურათის შექმნა"
+
+msgid "createMap"
+msgstr "რუკის შექმნა"
+
+#: share/server/core/classes/NagVisHoverMenu.php:180
+msgid "currentAttempt"
+msgstr "მიმდინარე ცდა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:142
+msgid "de_DE"
+msgstr "გერმანული"
+
+msgid "defaultBackend"
+msgstr "ნაგულისხმევი უკანაბოლო"
+
+msgid "defaultValue"
+msgstr "ნაგულისხმევი მნიშვნელობა"
+
+msgid "delBackend"
+msgstr "უკანაბოლოს წაშლა"
+
+msgid "delete"
+msgstr "წაშლა"
+
+msgid "deleteBackground"
+msgstr "ფონის სურათის წაშლა"
+
+msgid "deleteMap"
+msgstr "რუკის წაშლა"
+
+msgid "deleteShape"
+msgstr "მოხაზულობის წაშლა"
+
+msgid "deprecatedOption"
+msgstr "The given option \"[ATTRIBUTE]\" in section \"[TYPE]\" is deprecated in this version. Please read the documentation/changelog for details."
+
+msgid "disabled"
+msgstr "გამორთულია"
+
+msgid "editBackend"
+msgstr "უკანაბოლოს ჩასწორება"
+
+msgid "editMap"
+msgstr "მიმდინარე რუკის ჩასწორება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:139
+msgid "en_US"
+msgstr "ინგლისური"
+
+msgid "errorConnectingMySQL"
+msgstr "Error while connecting to MySQL server. Maybe wrong connection properties in backend? MySQL-Error: [MYSQLERR]. (Backend-ID: [BACKENDID])"
+
+msgid "errorSelectingDb"
+msgstr "Error selecting the database. Maybe wrong database name or insufficient permissions. MySQL-Error: [MYSQLERR]. (Backend-ID: [BACKENDID])"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:145
+msgid "es_ES"
+msgstr "ესპანური"
+
+msgid "export"
+msgstr "გატანა"
+
+msgid "exportMap"
+msgstr "რუკის გატანა"
+
+msgid "failedToDeleteShape"
+msgstr "ვერ წავშალე მოხაზულობა \"[IMAGE]\"."
+
+#: share/server/core/sources/automap.php:62
+msgid "false"
+msgstr "მცდარი"
+
+msgid "fileCouldNotBeUploaded"
+msgstr "ფაილის ვებსერვერზე ატვირთვა შეუძლებელია."
+
+#: share/server/core/classes/GlobalFileCache.php:167
+msgid "fileNotCached"
+msgstr "ფაილი \"[FILE]\" დაკეშილი არაა."
+
+msgid "fileNotExists"
+msgstr "ფაილი \"[FILE]\" არ არსებობს."
+
+msgid "firstMustChoosePngImage"
+msgstr "აირჩიეთ PNG ფორმატის მქონე გამოსახულება."
+
+#: share/server/core/classes/ViewMapAddModify.php:718
+msgid "for all users"
+msgstr "ყველა მომხმარებლისთვის"
+
+#: share/server/core/classes/ViewMapAddModify.php:720
+msgid "for you"
+msgstr "თქვენთვის"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:502
+msgid "forum"
+msgstr "ფორუმი"
+
+msgid "foundNoBackgroundToDelete"
+msgstr "ფონის სურათი აღმოჩენილი არაა. ოპერაცია შეწყდა."
+
+msgid "foundNoMapToDelete"
+msgstr "რუკა აღმოჩენილი არაა. ოპერაცია შეწყდება."
+
+msgid "foundNoMapToExport"
+msgstr "რუკა აღმოჩენილი არაა. აირჩიეთ გასატანი რუკა."
+
+msgid "foundNoMapToImport"
+msgstr "შემოსატანი ფაილი მოცემული არაა. აირჩიეთ შემოსატანი ფაილი."
+
+msgid "foundNoObjectOfThatTypeOnMap"
+msgstr "მოცემულ რუკაზე ამ ტიპის ობიექტი აღმოჩენილი არაა."
+
+msgid "foundNoShapeToDelete"
+msgstr "მოხაზულობის გამოსახულება აღმოჩენილი არაა. ოპერაცია შეწყდა."
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:148
+msgid "fr_FR"
+msgstr "ფრანგული"
+
+#: share/server/core/classes/GlobalCore.php:188
+msgid "gdLibNotFound"
+msgstr "You told NagVis to use the GD-Libs for drawing lines on the background image (usegdlibs=1). GD-Libs are not installed or loaded in your php."
+
+#: share/server/core/sources/automap_pos.php:34
+msgid "graphvizBinaryNotFound"
+msgstr "The required graphviz binary \"[NAME]\" could not be found in the paths: \"[PATHS]\"."
+
+msgid "headerTemplateNotExists"
+msgstr "მოთხოვნილი თავსართის ნიმუშის ფაილი \"[FILE]\" არ არსებობს."
+
+msgid "headerTemplateNotReadable"
+msgstr "შეამოწმეთ ვებსერვერის წვდომები თავსართი ნიმუშის ფაილზე \"[FILE]\"."
+
+msgid "help"
+msgstr "დახმარება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:479
+#: share/server/core/classes/GlobalCore.php:943
+msgid "host"
+msgstr "ჰოსტი"
+
+#: share/server/core/classes/objects/NagVisHostgroup.php:243
+msgid "hostGroupNotFoundInDB"
+msgstr "The hostgroup \"[HOSTGROUP]\" could not be found in the database. Maybe it is spelled wrong? (Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/objects/NagVisHost.php:253
+#: share/server/core/classes/objects/NagVisHost.php:286
+msgid "hostHasNoServices"
+msgstr "ჰოსტს \"[HOST]\" სერვისები არ აქვს."
+
+#: share/server/core/classes/GlobalBackendPDO.php:626
+#: share/server/core/classes/GlobalBackendmklivestatus.php:908
+msgid "hostIsPending"
+msgstr "ჰოსტი \"[HOST]\" მომლოდინე რეჟიმშია"
+
+msgid "hostNotFoundInDB"
+msgstr "The host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong?  (Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/objects/NagVisHost.php:211
+#: share/server/core/classes/objects/NagVisHost.php:267
+msgid "hostStateIs"
+msgstr "ჰოსტის მდგომარეობაა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:481
+#: share/server/core/classes/GlobalCore.php:947
+msgid "hostgroup"
+msgstr "ჰოსტების ჯგუფი"
+
+#: share/server/core/classes/GlobalCore.php:948
+msgid "hostgroupname"
+msgstr "ჰოსტების ჯგუფის სახელი"
+
+#: share/server/core/classes/GlobalCore.php:944
+msgid "hostname"
+msgstr "ჰოსტის სახელი"
+
+#: share/server/core/classes/objects/NagVisAggr.php:223
+#: share/server/core/classes/objects/NagVisDynGroup.php:194
+#: share/server/core/classes/objects/NagVisDynGroup.php:231
+#: share/server/core/classes/objects/NagVisHostgroup.php:200
+#: share/server/core/classes/objects/NagVisHostgroup.php:241
+msgid "hosts"
+msgstr "ჰოსტები"
+
+msgid "hoverTemplateNotExists"
+msgstr "გაჩერების ნიმუშის ფაილი \"[FILE]\" არ არსებობს."
+
+msgid "hoverTemplateNotReadable"
+msgstr "The hover template is not readable. Please check the webservers permissions for the hover template file \"[FILE]\"."
+
+msgid "icon"
+msgstr "ხატულა"
+
+msgid "iconNotExists"
+msgstr "ხატულა \"[IMGPATH]\", რომელიც რუკაზე გამოიყენება, არ არსებობს."
+
+#: share/server/core/classes/GlobalCore.php:501
+msgid "iconsetFiletypeUnknown"
+msgstr "Unable do determine the filetype of the iconset \"[ICONSET]\". Maybe the \"_ok\" image is missing?"
+
+msgid "imageAlreadyExists"
+msgstr "გამოსახულების ფაილი \"[MAPNAME]\" უკვე არსებობს. გადაარქვით ფაილს სახელი."
+
+msgid "imageNotExists"
+msgstr "გამოსახულება \"[FILE]\", რომელიც საჭიროა მინიატურის შესაქმნელად, არ არსებობს."
+
+msgid "import"
+msgstr "შემოტანა"
+
+msgid "importMap"
+msgstr "რუკის შემოტანა"
+
+msgid "inherited"
+msgstr "მემკვიდრეობით"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:505
+#: share/server/core/classes/NagVisHoverMenu.php:164
+msgid "instance"
+msgstr "გაშვებული ასლი"
+
+#: share/server/core/sources/automap.php:69
+msgid "ipsep"
+msgstr "ipsep"
+
+msgid "languageNotFound"
+msgstr "თქვენ მოირგეთ NagVis ისე, რომ მან ჩატვირთოს ენა \"[LANG]\". ეს ენა შესაბამის ბილიკზე აღმოჩენილი არაა."
+
+#: share/server/core/classes/NagVisHoverMenu.php:172
+msgid "lastCheck"
+msgstr "ბოლო შემოწმება"
+
+#: share/server/core/classes/NagVisHoverMenu.php:184
+msgid "lastStateChange"
+msgstr "ბოლო მდგომარეობის ცვლილება"
+
+#: share/server/core/classes/NagVisHoverMenu.php:200
+msgid "lastStatusRefresh"
+msgstr "ბოლო სტატუსის განახლება"
+
+msgid "line"
+msgstr "ხაზი"
+
+msgid "lineTypeButViewTypeNotSet"
+msgstr "You told NagVis to show an object as line (option line_type set). Since NagVis 1.4 you have to set the option \"view_type=line\" for line objects. This problem was detected in an object of the type \"[TYPE]\" on map \"[MAP]\"."
+
+msgid "lineTypeNotSet"
+msgstr "პარამეტრი \"line_type\" დაყენებული არაა."
+
+msgid "loopInMapRecursion"
+msgstr "მარყუჟი რუკის რეკურსიაში"
+
+#: share/server/core/classes/GlobalMainCfg.php:3080
+msgid "mainCfgCouldNotWriteMainConfigFile"
+msgstr "მთავარი კონფიგურაციის ფაილის კეში ჩაწერადი არაა."
+
+msgid "mainCfgNotExists"
+msgstr "მთავარი კონფიგურაციის ფაილი \"[MAINCFG]\" არ არსებობს."
+
+msgid "mainCfgNotReadable"
+msgstr "შეამოწმეთ ვებსერვერის წვდომები მთავარი კონფიგურაციის ფაილზე ფაილზე \"[MAINCFG]\"."
+
+#: share/server/core/classes/GlobalMainCfg.php:3076
+msgid "mainCfgNotWriteable"
+msgstr "მთავარი კონფიგურაციის ფაილი ჩაწერადი არაა."
+
+msgid "mainMustValueNotSet"
+msgstr "The must value \"[ATTRIBUTE]\" is not set the section \"[TYPE]\" in main configuration file."
+
+msgid "manage"
+msgstr "მართვა"
+
+msgid "manageBackends"
+msgstr "უკანაბოლოები"
+
+msgid "manageBackgrounds"
+msgstr "ფონები"
+
+msgid "manageMaps"
+msgstr "რუკები"
+
+msgid "manageShapes"
+msgstr "მოხაზულობები"
+
+msgid "manualInput"
+msgstr "» ხელით შეყვანა..."
+
+#: share/server/core/classes/GlobalCore.php:957
+msgid "map"
+msgstr "რუკა"
+
+#: share/server/core/classes/ViewMapAddModify.php:221
+msgid "map configuration"
+msgstr "რუკის კონფიგურაცია"
+
+msgid "mapAlreadyExists"
+msgstr "რუკა \"[MAPNAME]\" უკვე არსებობს. გადაარქვით ფაილს სახელი."
+
+msgid "mapCfgDirNotWriteable"
+msgstr "შეამოწმეთ ვებსერვერის წვდომები რუკის კონფიგურაციის საქაღალდეზე \"[MAPPATH]\"."
+
+#: share/server/core/classes/GlobalMapCfg.php:1268
+msgid "mapCfgMustValueNotSet"
+msgstr "The mandantory option [ATTRIBUTE] is not set in object [TYPE]/[ID] in map [MAPNAME]."
+
+#: share/server/core/classes/objects/NagVisMapObj.php:577
+msgid "mapCfgNotExists"
+msgstr "რუკის კონფიგურაციის ფაილი \"[MAP]\" არ არსებობს"
+
+msgid "mapCfgNotReadable"
+msgstr "რუკის კონფიგურაციის ფაილი \"[MAP]\" წაკითხვადი არაა."
+
+msgid "mapCfgNotWriteable"
+msgstr "რუკის კონფიგურაციის ფაილი ჩაწერადი არაა."
+
+msgid "mapDeprecatedOption"
+msgstr "The given option \"[ATTRIBUTE]\" in section of type \"[TYPE]\" in map \"[MAP]\" is deprecated in this version. Please read the documentation/changelog for details."
+
+msgid "mapIconset"
+msgstr "რუკის ხატულების ნაკრები"
+
+#: share/server/core/classes/CoreExceptions.php:74
+#: share/server/core/classes/CoreModMultisite.php:253
+msgid "mapInMaintenance"
+msgstr "The map you are trying to access is in maintenance mode. Please be patient. This page is reloaded automatically."
+
+#: share/frontend/nagvis-js/classes/NagVisOverviewView.php:52
+msgid "mapIndex"
+msgstr "რუკის ინდექსი"
+
+#: share/server/core/classes/objects/NagVisMapObj.php:711
+msgid "mapIsEmpty"
+msgstr "რუკაზე \"[MAP]\" 0 ობიექტია."
+
+#: share/server/core/classes/CoreModMap.php:267
+#: share/server/core/classes/CoreModMap.php:347
+#: share/server/core/classes/ViewMapAddModify.php:245
+msgid "mapLockNotDeleted"
+msgstr "რუკის ჩაკეტვის წაშლა შეუძლებელია."
+
+msgid "mapLockNotExists"
+msgstr "ბლოკის ფაილი \"[MAP]\" არ არსებობს."
+
+msgid "mapLockNotReadable"
+msgstr "ბლოკის ფაილი \"[MAP]\" წაკითხვადი არაა."
+
+msgid "mapLockNotWriteable"
+msgstr "ბლოკის ფაილი \"[MAP]\" ჩაწერადი არაა."
+
+#: share/server/core/classes/GlobalMapCfg.php:2209
+msgid "mapLocked"
+msgstr ""
+"The map \"[MAP]\" is locked by user \"[USER]\" from IP \"[IP]\" since [TIME].\n"
+"\n"
+" Edit anyway? (Override lock?)"
+
+msgid "mapName"
+msgstr "რუკის სახელი"
+
+msgid "mapObjectWillShowSummaryState"
+msgstr "ეს რუკის ობიექტი გაჩვენებთ რუკისა და მისი შვილების შეჯამებულ მდგომარეობას."
+
+#: share/server/core/classes/CoreRotation.php:61
+msgid "mapRotationPoolNotExists"
+msgstr "გადმოცემული რუკის როტაციის პული \"[ROTATION]\" NagVis-ში აღწერილი არაა."
+
+#: share/server/core/classes/GlobalCore.php:958
+msgid "mapname"
+msgstr "რუკის სახელი"
+
+msgid "methodNotSupportedByBackend"
+msgstr "მეთოდი \"[METHOD]\" უკანაბოლოს მიერ მხარდაჭერილი არაა."
+
+msgid "minOneUserAccess"
+msgstr "რუკასთან წვდომა, სულ ცოტა, ერთ მომხმარებელს უნდა ჰქონდეს."
+
+msgid "minOneUserWriteAccess"
+msgstr "ამ რუკის შესაცვლელად ავტორიზაცია, სულ ცოტა, ერთ მომხმარებელს უნდა ჰქონდეს."
+
+#: share/server/core/classes/GlobalCore.php:940
+msgid "more items..."
+msgstr "მეტი ჩანაწერი..."
+
+msgid "moveUploadedFileFailed"
+msgstr "Could not move the uploaded file to the shape directory \"[PATH]\"."
+
+msgid "mustBePngFile"
+msgstr "ფაილის გაფართოება არასწორია (უნდა იყოს *.png)"
+
+msgid "mustChooseValidImageFormat"
+msgstr "უნდა აირჩიოთ მხარდაჭერილი ფორმატის (Png, Gif, Jpg) მქონე სურათი."
+
+msgid "mustValueNotSet"
+msgstr "საჭირო მნიშვნელობა დაყენებული არაა. ყველა წითელი ველის შევსება აუცილებელია"
+
+#: share/server/core/classes/CoreModule.php:331
+msgid "mustValueNotSet1"
+msgstr "აუცილებელი მნიშვნელობა \"[ATTRIBUTE]\" დაყენებული არაა"
+
+msgid "mysqlNotSupported"
+msgstr "Your PHP installation lacks SQL support. You can not use the NDOMy Backend without php-mysql.  (Backend-ID: [BACKENDID])"
+
+msgid "nagVisConfig"
+msgstr "NagVis-ის მორგება"
+
+#: share/server/core/classes/GlobalBackendPDO.php:190
+msgid "nagiosDataNotUpToDate"
+msgstr "NDO claims that Nagios did no status update for more than \"[TIMEWITHOUTUPDATE]\" seconds. Make sure that Nagios and NDO daemons are running. (Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/GlobalBackendPDO.php:180
+msgid "nagiosNotRunning"
+msgstr "NDO reports that Nagios is not running (Backend-ID: [BACKENDID])"
+
+msgid "ndo2fsFileStructureNotValid"
+msgstr "The file structure in the ndo2fs directory \"[PATH]\" is not valid. The directory is used by backend with the id \"[BACKENDID]\""
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:500
+msgid "needHelp"
+msgstr "დახმარება გჭირდებათ?"
+
+msgid "newMapName"
+msgstr "ახალი სახელი"
+
+#: share/server/core/classes/NagVisHoverMenu.php:168
+msgid "nextCheck"
+msgstr "შემდეგი შემოწმება"
+
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:97
+#: share/server/core/classes/ViewEditMainCfg.php:331
+#: share/server/core/classes/ViewMapAddModify.php:517
+msgid "no"
+msgstr "არა"
+
+#: share/server/core/classes/CoreBackendMgmt.php:776
+msgid "noBackendDefined"
+msgstr "No backend could be found in NagVis configuration. You need to define a backend for gathering status information."
+
+msgid "noMapToRename"
+msgstr "რუკა აღმოჩენილი არაა. ოპერაცია შეწყდება."
+
+msgid "noNewNameGiven"
+msgstr "სერვერის სახელები არ მიგითითებიათ."
+
+msgid "noPermissions"
+msgstr "ამ რუკის შეცვლის უფლება არ გაქვთ."
+
+#: share/server/core/classes/objects/NagVisMapObj.php:732
+msgid "noReadPermissions"
+msgstr "თქვენ არ გაქვთ უფლება, ამ რუკის მდგომარეობა ნახოთ."
+
+msgid "noSpaceAllowed"
+msgstr "ცარიელები დაშვებული არაა."
+
+#: share/server/core/classes/GlobalBackendPDO.php:235
+msgid "noTablesExists"
+msgstr "There are no tables in the database matching given prefix \"[PREFIX]\". (Backend-ID: [BACKENDID])"
+
+msgid "noUser"
+msgstr "No user name was handed over to NagVis! For possible solutions please have a look at the FAQ on www.nagvis.org."
+
+msgid "not2coords"
+msgstr "It seems that you want to define a line (\"line_type\" is set) but you didn\"t give two \"[COORD]\" coordinates."
+
+msgid "notCfgFile"
+msgstr "მოწოდებულ ფაილს არ აქვს გაფართოება\".cfg\". გადაარქვით ფაილს სახელი."
+
+#: share/server/core/classes/NagVisHoverMenu.php:196
+msgid "notes"
+msgstr "შენიშვნები"
+
+#: share/server/core/classes/GlobalCore.php:959
+msgid "objectname"
+msgstr "ობიექტის სახელი"
+
+#: share/server/core/classes/objects/NagVisMapObj.php:709
+msgid "objects"
+msgstr "ობიექტები"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:501
+msgid "onlineDoc"
+msgstr "დოკუმენტაცია"
+
+msgid "only1or2coords"
+msgstr "შესაძლებელია, მხოლოდ, ერთი, ან ორი კოორდინატის [COORD] აღწერა."
+
+msgid "onlyLineOrIcon"
+msgstr "An object can only be an icon or a line, \"iconset\" and \"line_type\" can be used not together."
+
+#: share/server/core/classes/CoreModOverview.php:396
+#: share/server/core/classes/CoreModOverview.php:469
+msgid "onlyPngOrJpgImages"
+msgstr "რუკის გამოსახულების ფაილისთვის დაშვებულია, მხოლოდ, PNG და JPG გამოსახულებები."
+
+msgid "open"
+msgstr "რუკის გახსნა"
+
+msgid "openInNagVis"
+msgstr "NagVis-ში გახსნა"
+
+#: share/server/core/sources/automap.php:65
+msgid "ortho"
+msgstr "ორთო"
+
+#: share/server/core/sources/automap.php:66
+msgid "orthoxy"
+msgstr "ორთოxy"
+
+#: share/server/core/sources/automap.php:67
+msgid "orthoyx"
+msgstr "ორთოyx"
+
+#: share/server/core/classes/NagVisHoverMenu.php:148
+msgid "output"
+msgstr "გამოტანა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:504
+#: share/server/core/classes/NagVisHoverMenu.php:160
+msgid "overview"
+msgstr "მიმოხილვა"
+
+msgid "parameterNameNotSet"
+msgstr "პარამეტრი \"name\" მითითებული არაა."
+
+msgid "parameterObjIdNotSet"
+msgstr "პარამეტრი \"objId\" მითითებული არაა."
+
+msgid "parameterObjName1NotSet"
+msgstr "პარამეტრი objName1 მითითებული არაა."
+
+msgid "parameterObjName2NotSet"
+msgstr "პარამეტრი objName2 მითითებული არაა."
+
+msgid "parameterObjTypeNotSet"
+msgstr "პარამეტრი objType მითითებული არაა."
+
+msgid "parameterTypeNotSet"
+msgstr "პარამეტრი \"type\" მითითებული არაა."
+
+msgid "parameterUrlNotSet"
+msgstr "პარამეტრი \"url\" მითითებული არაა."
+
+#: share/server/core/classes/NagVisHoverMenu.php:152
+msgid "perfdata"
+msgstr "წარმმონაცემები"
+
+msgid "permissionDenied"
+msgstr "მომხმარებელს \"[USER]\" ამ ქმედების შესრულების უფლება არ აქვს"
+
+msgid "phpModuleNotLoaded"
+msgstr "PHP-ის მოდული \"[MODULE]\" ჩატვირთული არაა."
+
+msgid "positionSize"
+msgstr "პოზიცია/ზომა"
+
+#: share/server/core/sources/automap.php:71
+msgid "prism"
+msgstr "პრიზმა"
+
+#: share/server/core/classes/CoreModUrl.php:90
+#: share/server/core/classes/CoreModUrl.php:103
+#: share/server/core/classes/CoreModUrl.php:111
+#: share/server/core/classes/NagVisHoverUrl.php:103
+msgid "problemReadingUrl"
+msgstr "ვერ გავხსენი URL \"[URL]\". შეცდომა: \"[MSG]\""
+
+msgid "properties"
+msgstr "თვისებები"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:151
+msgid "pt_BR"
+msgstr "ბრაზილიური პორტუგალიური"
+
+msgid "readUsers"
+msgstr "მომხმარებელი წაკითხვის უფლებით"
+
+msgid "refreshStart"
+msgstr "განახლების დაწყება"
+
+msgid "refreshStop"
+msgstr "განახლების გაჩერება"
+
+msgid "rename"
+msgstr "სახელის შეცვლა"
+
+msgid "renameMap"
+msgstr "რუკის სახელის გადარქმევა"
+
+msgid "restore"
+msgstr "აღდგენა"
+
+#: share/frontend/nagvis-js/classes/NagVisOverviewView.php:53
+msgid "rotationPools"
+msgstr "როტაციის პულები"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:507
+msgid "rotationStart"
+msgstr "როტაციის დაწყება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:508
+msgid "rotationStop"
+msgstr "როტაციის გაჩერება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:154
+msgid "ru_RU"
+msgstr "რუსული"
+
+#: share/server/core/classes/ViewEditMainCfg.php:130
+msgid "save"
+msgstr "შენახვა"
+
+#: share/server/core/sources/automap.php:63
+msgid "scale"
+msgstr "სასწორი"
+
+#: share/server/core/sources/automap.php:64
+msgid "scalexy"
+msgstr "მასშტაბიxy"
+
+msgid "selectMap"
+msgstr "აირჩიეთ რუკა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:480
+#: share/server/core/classes/GlobalCore.php:946
+msgid "service"
+msgstr "სერვსი"
+
+#: share/server/core/classes/objects/NagVisServicegroup.php:235
+msgid "serviceGroupNotFoundInDB"
+msgstr "The servicegroup \"[SERVICEGROUP]\" could not be found in the database. Maybe it is spelled wrong? (Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/GlobalBackendPDO.php:771
+#: share/server/core/classes/GlobalBackendmklivestatus.php:1048
+msgid "serviceNotChecked"
+msgstr "სერვისი \"[SERVICE]\" ჯერ არ შემოწმებულა"
+
+msgid "serviceNotFoundInDB"
+msgstr "The service \"[SERVICE]\" on host \"[HOST]\" could not be found in the database. Maybe it is spelled wrong? (Backend-ID: [BACKENDID])"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:482
+#: share/server/core/classes/GlobalCore.php:949
+msgid "servicegroup"
+msgstr "სერვისების ჯგუფი"
+
+#: share/server/core/classes/GlobalCore.php:950
+msgid "servicegroupname"
+msgstr "სერვისების ჯგუფის სახელი"
+
+#: share/server/core/classes/GlobalCore.php:945
+#: share/server/core/classes/NagVisHoverMenu.php:192
+msgid "servicename"
+msgstr "სერვისის სახელი"
+
+#: share/server/core/classes/objects/NagVisDynGroup.php:197
+#: share/server/core/classes/objects/NagVisHost.php:248
+#: share/server/core/classes/objects/NagVisHost.php:284
+#: share/server/core/classes/objects/NagVisHostgroup.php:203
+#: share/server/core/classes/objects/NagVisServicegroup.php:200
+#: share/server/core/classes/objects/NagVisServicegroup.php:233
+msgid "services"
+msgstr "სერვისები"
+
+msgid "setDefaultBackend"
+msgstr "ნაგულისხმევი უკანაბოლოს დაყენება"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:489
+msgid "shape"
+msgstr "მოხაზულობა"
+
+msgid "shapeDoesNotExist"
+msgstr "მოხაზულობა \"[IMAGE]\" არ არსებობს."
+
+msgid "shapeInUse"
+msgstr "გამოსახულება გამოიყენება რუკაზე \"[MAP]\"."
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:491
+msgid "special"
+msgstr "სპეციალური"
+
+#: share/server/core/classes/NagVisHoverMenu.php:140
+msgid "state"
+msgstr "მდგომარეობა"
+
+#: share/server/core/classes/NagVisHoverMenu.php:188
+msgid "stateDuration"
+msgstr "მდგომარეობის ხანგრძლივობა"
+
+#: share/server/core/classes/NagVisHoverMenu.php:176
+msgid "stateType"
+msgstr "მდგომარეობის ტიპი"
+
+#: share/server/core/classes/NagVisHoverMenu.php:156
+msgid "summaryOutput"
+msgstr "შეჯამების გამოტანა"
+
+#: share/server/core/classes/NagVisHoverMenu.php:144
+msgid "summaryState"
+msgstr "შეჯარების მდგომარეობა"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:503
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:63
+msgid "supportInfo"
+msgstr "NagVis-ის მხარდაჭერის ინფორმაცია"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:487
+msgid "textbox"
+msgstr "ტექსტური ველი"
+
+#: share/server/core/sources/automap.php:61
+msgid "true"
+msgstr "ჭეშმარიტი"
+
+msgid "unableToDeleteBackground"
+msgstr "Cannot delete the background image \"[IMAGENAME]\" because it is used by map \"[MAP]\"."
+
+msgid "unableToDeleteMap"
+msgstr "Unable to delete map \"[MAP]\". The map is included in another map \"[PARENTMAP]\"."
+
+msgid "unableToDeleteShape"
+msgstr "ვერ წავშალე მოხაზულობა \"[IMAGENAME]\", რადგან ის გამოიყენება რუკაში \"[MAP]\"."
+
+msgid "unableToWorkWithMap"
+msgstr "The map changes can not be processed anymore. Procedure was terminated."
+
+msgid "unknownAction"
+msgstr "ქმედება \"[ACTION]\" ajax დამმუშავებლის მიერ მხარდაჭერილი არაა."
+
+#: share/server/core/classes/GlobalMapCfg.php:1288
+msgid "unknownAttribute"
+msgstr "The attribute \"[ATTRIBUTE]\" is not supported in objects of type \"[TYPE]\" on map [MAPNAME]."
+
+#: share/server/core/classes/GlobalMapCfg.php:461
+#: share/server/core/classes/objects/NagVisMapObj.php:630
+msgid "unknownObject"
+msgstr "ობიექტი ტიპით \"[TYPE]\" რუკაზე \"[MAPNAME]\" დაშვებული არაა."
+
+msgid "unknownQuery"
+msgstr "უცნობი მოთხოვნა"
+
+msgid "unknownRenderMode"
+msgstr "რენდერის რეჟიმი \"[MODE]\" მხარდაჭერილი არაა."
+
+msgid "unknownSection"
+msgstr "სექცია \"[TYPE]\" მთავარი კონფიგურაციის ფაილში დაშვებული არაა."
+
+msgid "unknownValue"
+msgstr "The attribute \"[ATTRIBUTE]\" is not allowed in section \"[TYPE]\" in main configuration file."
+
+msgid "unknownrender_mode"
+msgstr "უცნობირენდერერის_რეჟიმი"
+
+msgid "upload"
+msgstr "ატვირთვა"
+
+msgid "uploadBackground"
+msgstr "ფონის გამოსახულების ატვირთვა"
+
+msgid "uploadFailed"
+msgstr "ატვირთვა შეუძლებელია. თქვენი ვებსერვერის კონფიგურაციაში რაღაც პრობლემაა."
+
+msgid "uploadShape"
+msgstr "მოხაზულობის ატვირთვა"
+
+msgid "vaidatorNotValidUrl"
+msgstr "პარამეტრი [VAR] სწორი URL არაა."
+
+msgid "validatorIsEmptyParameter"
+msgstr "პარამეტრი [VAR] ცარიელია. შეავსეთ ეს პარამეტრი (სწორი) მნიშვნელობით."
+
+msgid "validatorNotDefinedParameter"
+msgstr "პარამეტრი [VAR] აღწერილი პარამეტრი არაა."
+
+msgid "validatorNotSetParameterValue"
+msgstr "პარამეტრი [VAR] დაყენებული არაა."
+
+msgid "validatorNotValidBoolean"
+msgstr "პარამეტრი [VAR] სწორი ლოგიკური პარამეტრი (TRUE / FALSE) არაა."
+
+msgid "validatorNotValidInteger"
+msgstr "პარამეტრი [VAR] სწორ მთელ რიცხვს არ შეიცავს."
+
+msgid "validatorNotValidString"
+msgstr "პარამეტრი [VAR] სწორ სტრიქონს არ შეიცავს."
+
+msgid "validatorValueOutOfRange"
+msgstr "პარამეტრი [VAR] შუალედს გარეთაა."
+
+msgid "varFolderNotExists"
+msgstr "ცვლადების საქაღალდე \"[PATH]\" არ არსებობს."
+
+msgid "varFolderNotWriteable"
+msgstr "ცვლადების საქაღალდე \"[PATH]\" ჩაწერადი არაა."
+
+msgid "viewTypeGadgetButNoGadgetUrl"
+msgstr "NagVis found an object whitout gadget_url option but view_type=\"gadget\". This problem was detected in an object of the type \"[TYPE]\" on map \"[MAP]\"."
+
+msgid "viewTypeWrong"
+msgstr "The given view_type is wrong. You configured more than one \"[COORD]\" coordinate. Though you should set view_type to \"line\""
+
+#: share/server/core/sources/automap.php:70
+msgid "vpsc"
+msgstr "vpsc"
+
+msgid "writeUsers"
+msgstr "მომხმარებელი ჩაწერის უფლებით"
+
+msgid "wrongPhpVersion"
+msgstr "PHP-ის ვერსია, რომელსაც იყენებთ (\"[CURRENT_VERSION]\"), ძალიან ძველია. NagVis-ს სჭირდება PHP ვერსიით \"[NEEDED_VERSION]\", ან უფრო ახალი."
+
+msgid "wrongValueFormat"
+msgstr "The attribute \"[ATTRIBUTE]\" in section \"[TYPE]\" in main configuration file does not match the valid value format"
+
+#: share/server/core/classes/GlobalMapCfg.php:1311
+#: share/server/core/classes/GlobalMapCfg.php:1320
+msgid "wrongValueFormatMap"
+msgstr "The attribute \"[ATTRIBUTE]\" in element of type \"[TYPE]\" in map configuration file \"[MAP]\" does not match the valid value format"
+
+msgid "wrongValueFormatOption"
+msgstr "ატრიბუტი \"[ATTRIBUTE]\" სწორი მნიშვნელობის ფორმატს არ ემთხვევა"
+
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:97
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:98
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:99
+#: share/server/core/classes/ViewEditMainCfg.php:330
+#: share/server/core/classes/ViewMapAddModify.php:516
+msgid "yes"
+msgstr "დიახ"
