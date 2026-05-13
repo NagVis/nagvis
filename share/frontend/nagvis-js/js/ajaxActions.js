@@ -6,8 +6,14 @@ function saveObjectAttr(objId, attr) {
     let urlPart = "";
     for (const key in attr)
         // parseInt() returned NaN, because value was set to "auto";
-        // but also allow relative coordinate strings (contain '%')
-        if (!isNaN(attr[key]) || isRelativeCoord(attr[key])) urlPart += "&" + key + "=" + escapeUrlValues(attr[key]);
+        // but also allow relative coordinate strings (contain '%') and
+        // comma-separated line endpoint coordinates (e.g. "100,500")
+        if (
+            !isNaN(attr[key]) ||
+            isRelativeCoord(attr[key]) ||
+            (typeof attr[key] === "string" && attr[key].includes(","))
+        )
+            urlPart += "&" + key + "=" + escapeUrlValues(attr[key]);
 
     call_ajax(
         oGeneralProperties.path_server +
