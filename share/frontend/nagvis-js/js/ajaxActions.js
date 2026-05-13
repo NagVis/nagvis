@@ -8,7 +8,11 @@ function saveObjectAttr(objId, attr) {
         // parseInt() returned NaN, because value was set to "auto";
         // but also allow relative coordinate strings (contain '%') and
         // comma-separated line endpoint coordinates (e.g. "100,500")
-        if (!isNaN(attr[key]) || isRelativeCoord(attr[key]) || (typeof attr[key] === "string" && attr[key].includes(",")))
+        if (
+            !isNaN(attr[key]) ||
+            isRelativeCoord(attr[key]) ||
+            (typeof attr[key] === "string" && attr[key].includes(","))
+        )
             urlPart += "&" + key + "=" + escapeUrlValues(attr[key]);
 
     call_ajax(
