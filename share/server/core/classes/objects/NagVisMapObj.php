@@ -348,17 +348,40 @@ class NagVisMapObj extends NagVisStatefulObject
      * the single objects.
      *
      * @param bool $_unused_flag
-     * @param bool $bFetchMemberState Whether to load individual member details (for hover)
+     * @param bool $_unused_flag2
      * @return void
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function queueState($_unused_flag = true, $bFetchMemberState = true)
+    public function queueState($_unused_flag = true, $_unused_flag2 = true)
     {
         foreach ($this->getStateRelevantMembers() as $OBJ) {
+            $sType = $OBJ->getType();
+
+            // Host- and servicegroups can contain thousands of members. To avoid
+            // exhausting the PHP memory limit their member details are not loaded
+            // on map load, but lazily on demand via the getObjectMembers endpoint
+            // when a hover menu is opened (see #437). Only the cheap aggregate
+            // state counts are queried here, which is enough for icon colouring
+            // and for reporting the correct num_members to the frontend.
+            $bLazyMembers = $sType === 'hostgroup' || $sType === 'servicegroup';
+
             // Gadgets render synchronously and read conf.members directly at
-            // render time, so their group member details must be loaded eagerly.
-            $needsMembers = $bFetchMemberState || $OBJ->get('view_type') === 'gadget';
-            $OBJ->queueState(GET_STATE, $needsMembers);
+            // render time, so their member details must be loaded eagerly even
+            // for the otherwise lazily loaded group types.
+            $bGadget = $OBJ->get('view_type') === 'gadget';
+
+            if ($bLazyMembers && !$bGadget) {
+                $OBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
+            } elseif ($this->isView === true || $bGadget) {
+                // On a viewed map the hover menus of hosts, dyngroups, aggregates
+                // and submaps need their single member states right away. When the
+                // map object is only rendered as a summary icon (e.g. overview or
+                // multisite snapin) no hover menu is shown, so the details are not
+                // fetched.
+                $OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+            } else {
+                $OBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
+            }
         }
     }
 
