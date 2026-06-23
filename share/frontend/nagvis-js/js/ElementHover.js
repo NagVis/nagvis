@@ -562,9 +562,14 @@ const ElementHover = Element.extend({
         if (this.obj.conf.hover_childs_show && this.obj.conf.hover_childs_show == "1")
             template_html = this.replaceChildMacros(template_html);
 
-        // Replace all normal macros
-        template_html = template_html.replace(/\[(\w*)\]/g, function () {
-            return oMacros[arguments[1]] || "";
+        // Replace all normal macros. This pass also runs over the already
+        // substituted child rows, so a bracketed string that is part of a
+        // child value (e.g. a service description like "Switch1 [xxx]") must
+        // not be mistaken for an unknown macro and dropped. Keep the original
+        // "[name]" text for tokens that are not actual macros, while still
+        // replacing defined macros that legitimately hold an empty value.
+        template_html = template_html.replace(/\[(\w*)\]/g, function (match, name) {
+            return Object.prototype.hasOwnProperty.call(oMacros, name) ? oMacros[name] : match;
         });
         return template_html;
     },
