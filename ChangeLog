@@ -1,4 +1,7 @@
 1.10.5
+  * FEAT: Add Georgian (ka_GE) language translation (#445)
+  * FIX: Restore service list in host hover menus that disappeared after the lazy group member loading change (#437)
+  * FIX: Hover menu no longer strips bracketed strings (e.g. "[xxx]") from service descriptions
 
 1.10.4
   * FIX: Moving lines snaps back to original position because comma-separated coordinates are incorrectly filtered out before saving
