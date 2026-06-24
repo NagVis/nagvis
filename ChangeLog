@@ -1,3 +1,5 @@
+1.10.6
+
 1.10.5
   * FEAT: Add Georgian (ka_GE) language translation (#445)
   * FIX: Restore service list in host hover menus that disappeared after the lazy group member loading change (#437)
