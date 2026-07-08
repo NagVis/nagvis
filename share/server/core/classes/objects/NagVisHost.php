@@ -90,6 +90,44 @@ class NagVisHost extends NagVisStatefulObject
     }
 
     /**
+     * Returns the number of service members.
+     * When the service details have not been loaded yet (lazy loading), the
+     * total is derived from the service state counts fetched via hostMemberState.
+     * The host's own state, which is merged into the counts for the summary
+     * calculation, is excluded. The count is only reported when the host is
+     * configured to show its services in the hover menu, matching the condition
+     * under which the service details are loaded on demand.
+     *
+     * @return int
+     */
+    public function getNumMembers()
+    {
+        if (!empty($this->members)) {
+            return count($this->members);
+        }
+        if (
+            !$this->recognize_services
+            || $this->hover_menu != 1
+            || $this->hover_childs_show != 1
+            || $this->aStateCounts === null
+        ) {
+            return 0;
+        }
+        $total = 0;
+        foreach ($this->aStateCounts as $sState => $aSubstates) {
+            // The host state is added to the counts for summary purposes; only
+            // the service states represent actual members.
+            if (is_host_state($sState)) {
+                continue;
+            }
+            foreach ($aSubstates as $iCount) {
+                $total += $iCount;
+            }
+        }
+        return $total;
+    }
+
+    /**
      * Queues the state fetching to the backend.
      *
      * @param bool $bFetchObjectState Optional flag to disable fetching of the object status

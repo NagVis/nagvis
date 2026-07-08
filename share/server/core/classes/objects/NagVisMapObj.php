@@ -357,24 +357,32 @@ class NagVisMapObj extends NagVisStatefulObject
         foreach ($this->getStateRelevantMembers() as $OBJ) {
             $sType = $OBJ->getType();
 
-            // Host- and servicegroups can contain thousands of members. To avoid
-            // exhausting the PHP memory limit their member details are not loaded
-            // on map load, but lazily on demand via the getObjectMembers endpoint
-            // when a hover menu is opened (see #437). Only the cheap aggregate
-            // state counts are queried here, which is enough for icon colouring
-            // and for reporting the correct num_members to the frontend.
-            $bLazyMembers = $sType === 'hostgroup' || $sType === 'servicegroup';
+            // Hosts (with their services) and host-/servicegroups can contain
+            // thousands of members. To avoid exhausting the PHP memory limit their
+            // member details are not loaded on map load, but lazily on demand via
+            // the getObjectMembers endpoint when a hover menu is opened (see #437).
+            // Only the cheap aggregate state counts are queried here, which is
+            // enough for icon colouring and for reporting the correct num_members
+            // to the frontend so it can trigger the lazy fetch.
+            //
+            // Hosts only expose a num_members fallback (and therefore only support
+            // lazy loading) when recognize_services is enabled, because that is the
+            // only case in which the aggregate service state counts are fetched.
+            // Without it, hosts keep loading their services eagerly.
+            $bLazyMembers = $sType === 'hostgroup'
+                || $sType === 'servicegroup'
+                || ($sType === 'host' && $OBJ->getRecognizeServices());
 
             // Gadgets render synchronously and read conf.members directly at
             // render time, so their member details must be loaded eagerly even
-            // for the otherwise lazily loaded group types.
+            // for the otherwise lazily loaded object types.
             $bGadget = $OBJ->get('view_type') === 'gadget';
 
             if ($bLazyMembers && !$bGadget) {
                 $OBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
             } elseif ($this->isView === true || $bGadget) {
-                // On a viewed map the hover menus of hosts, dyngroups, aggregates
-                // and submaps need their single member states right away. When the
+                // On a viewed map the hover menus of dyngroups, aggregates and
+                // submaps need their single member states right away. When the
                 // map object is only rendered as a summary icon (e.g. overview or
                 // multisite snapin) no hover menu is shown, so the details are not
                 // fetched.
