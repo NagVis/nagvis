@@ -205,7 +205,12 @@ class ViewManageRoles
             'rotations' => [],
         ];
         foreach ($AUTHORISATION->getAllVisiblePerms() as $perm) {
-            if ($perm['mod'] == 'Map' && $perm['act'] != 'add' && $perm['act'] != 'manage') {
+            if (
+                $perm['mod'] == 'Map'
+                && $perm['act'] != 'add'
+                && $perm['act'] != 'manage'
+                && $perm['act'] != 'editHtml'
+            ) {
                 $map_name = $perm['obj'];
                 if (!isset($permissions_by_section['maps'][$map_name])) {
                     $permissions_by_section['maps'][$map_name] = [];
