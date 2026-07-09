@@ -160,9 +160,24 @@ class ViewMapAddModify
         $perm_user = get_checkbox('perm_user');
         $show_dialog = false;
 
+        // Only block when an HTML field (e.g. textbox "text") is actually
+        // changed, so regular map editing works without editHtml (CVE-2024-47090).
         global $AUTHORISATION;
         if (!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
-            throw new NagVisException(l('Cannot edit HTML. Please contact your administrator'));
+            $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
+            foreach ($this->attrs as $key => $val) {
+                if (!isset($attrDefs[$key]['field_type']) || $attrDefs[$key]['field_type'] !== 'textarea') {
+                    continue;
+                }
+
+                $current = ($this->object_id !== null && $this->MAPCFG->objExists($this->object_id))
+                    ? $this->MAPCFG->getValue($this->object_id, $key, true)
+                    : null;
+
+                if ($val !== $current) {
+                    throw new NagVisException(l('Cannot edit HTML. Please contact your administrator'));
+                }
+            }
         }
 
         // Modification/Creation?
