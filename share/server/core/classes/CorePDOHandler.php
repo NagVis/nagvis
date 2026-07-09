@@ -657,6 +657,18 @@ class CorePDOHandler
                 }
             }
 
+            // Add the "editHtml" permission on existing installs so it shows up
+            // in the role management GUI. Count-guarded to stay idempotent and
+            // to tolerate installs where it was already added manually.
+            if ($this->count('-perm-count', ['mod' => 'Map', 'act' => 'editHtml', 'obj' => '*']) <= 0) {
+                $reason = 'Could not add the Map/editHtml permission';
+                if (!$this->inTrans) {
+                    $this->DB->beginTransaction();
+                    $this->inTrans = true;
+                }
+                $this->query('-perm-add', ['mod' => 'Map', 'act' => 'editHtml', 'obj' => '*']);
+            }
+
             foreach (GlobalCore::getInstance()->demoMaps as $map) {
                 if (count(GlobalCore::getInstance()->getAvailableMaps('/^' . $map . '$/')) <= 0) {
                     continue;
@@ -829,6 +841,10 @@ class CorePDOHandler
         // Access controll: Edit/Delete maps
         $this->queryFatal('-perm-add', ['mod' => 'Map', 'act' => 'manage', 'obj' => '*']);
         $this->queryFatal('-perm-add', ['mod' => 'Map', 'act' => 'add', 'obj' => '*']);
+
+        // Access controll: Edit HTML content of map objects, grantable via the
+        // role management GUI (CVE-2024-47090)
+        $this->queryFatal('-perm-add', ['mod' => 'Map', 'act' => 'editHtml', 'obj' => '*']);
 
         $this->queryFatal('-perm-add', ['mod' => 'MainCfg', 'act' => 'edit', 'obj' => '*']);
 
