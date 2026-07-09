@@ -431,7 +431,10 @@ function textarea($name, $default = '', $class = '', $style = '')
 
     global $AUTHORISATION;
     if (!$AUTHORISATION->isPermitted('Map', 'editHtml', '*')) {
-        echo '<b>Cannot edit HTML. Please contact your administrator.</b>';
+        // No editHtml permission (CVE-2024-47090): hide the editor but keep the
+        // current value so the object can still be saved/moved unchanged.
+        hidden($name, $default);
+        echo '<b>' . l('Cannot edit HTML. Please contact your administrator') . '</b>';
         return;
     }
     // plain <textarea>
