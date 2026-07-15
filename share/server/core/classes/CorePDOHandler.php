@@ -174,6 +174,10 @@ class CorePDOHandler
                 ],
 
                 'updates' => [
+                    '1100500' => [
+                        ['-perm-add', ['mod' => 'Map', 'act' => 'editHtml', 'obj' => '*']],
+                    ],
+
                     '1091500' => [
                         ['-perm-change-act', ['mod' => 'ChangePassword', 'old_act' => 'change', 'new_act' => '*']]
                     ],
@@ -655,18 +659,6 @@ class CorePDOHandler
                     $reason = "Could not update the database to version $ver: '$q[0]'";
                     $this->query($q[0], $q[1]);
                 }
-            }
-
-            // Add the "editHtml" permission on existing installs so it shows up
-            // in the role management GUI. Count-guarded to stay idempotent and
-            // to tolerate installs where it was already added manually.
-            if ($this->count('-perm-count', ['mod' => 'Map', 'act' => 'editHtml', 'obj' => '*']) <= 0) {
-                $reason = 'Could not add the Map/editHtml permission';
-                if (!$this->inTrans) {
-                    $this->DB->beginTransaction();
-                    $this->inTrans = true;
-                }
-                $this->query('-perm-add', ['mod' => 'Map', 'act' => 'editHtml', 'obj' => '*']);
             }
 
             foreach (GlobalCore::getInstance()->demoMaps as $map) {
