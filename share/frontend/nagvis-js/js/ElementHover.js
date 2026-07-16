@@ -506,7 +506,16 @@ const ElementHover = Element.extend({
     },
 
     replaceDynamicMacros: function (template_html) {
-        const oMacros = {};
+        // Defaults: unset optional state macros collapse to an empty string
+        // instead of rendering as literal [obj_*] tokens.
+        const oMacros = {
+            obj_summary_acknowledged: "",
+            obj_acknowledged: "",
+            obj_summary_in_downtime: "",
+            obj_in_downtime: "",
+            obj_summary_stale: "",
+            obj_stale: ""
+        };
 
         if (g_view.type === "map") oMacros.map_name = oPageProperties.map_name;
 
