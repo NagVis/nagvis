@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 // NagVis Version
-const CONST_VERSION = '1.10.6';
+const CONST_VERSION = '1.10.7';
 
 // Set PHP error handling to standard level
 // Different levels for php versions below 5.1 because PHP 5.1 reports
