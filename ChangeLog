@@ -1,4 +1,8 @@
 1.10.6
+  * FEAT: The "editHtml" permission can now be granted to roles via the role management GUI, instead of only being available to administrators (#452)
+  * FIX: Non-admin roles (e.g. Managers) can edit maps again - the editHtml permission is now only required to change HTML content, not for every map modification (#452)
+  * FIX: Fix PHP memory exhaustion on maps with many hosts by lazily loading host services on demand (#437)
+  * FIX: Hover menus no longer render unset optional state macros as literal [obj_*] tokens - they now collapse to an empty string
 
 1.10.5
   * FEAT: Add Georgian (ka_GE) language translation (#445)
