@@ -24,6 +24,21 @@
 const g_context_templates = {};
 let g_context_open = null;
 
+// The custom macros come from the backend definitions in the main config, which
+// only admins can edit, and are meant to hold HTML or URLs
+const g_context_raw_macros = new Set(["custom_1", "custom_2", "custom_3"]);
+
+// Makes a context macro value safe for the menu HTML as well as for JS strings
+// in inline handlers and javascript: URLs. The browser decodes HTML entities
+// (and the percent encoding of javascript: URLs) before running the JS, so
+// backslashes, quotes and percent signs are JS escaped first. "%20" is kept for
+// the space encoded pnp_* macros.
+function escapeContextMacro(name, value) {
+    if (!value) return "";
+    if (g_context_raw_macros.has(name)) return value;
+    return htmlspecialchars(String(value).replace(/[\\'"]|%(?!20)/g, (c) => "\\x" + c.charCodeAt(0).toString(16)));
+}
+
 // Hides the currently open context menu
 function contextHide() {
     if (g_context_open !== null) g_context_open.hide();
@@ -369,9 +384,10 @@ const ElementContext = Element.extend({
         }
         oSectionMacros = null;
 
-        // Loop and replace all normal macros
+        // Loop and replace all normal macros. The values are object derived, so
+        // escape them to prevent XSS when the menu is inserted via innerHTML.
         this.template_html = this.template_html.replace(/\[(\w*)\]/g, function () {
-            return oMacros[arguments[1]] || "";
+            return escapeContextMacro(arguments[1], oMacros[arguments[1]]);
         });
         oMacros = null;
     }
