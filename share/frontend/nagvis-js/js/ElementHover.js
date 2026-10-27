@@ -26,6 +26,23 @@ const g_hover_template_childs = {};
 const g_hover_urls = {};
 let g_hover_open = null;
 
+// State output macros are pre-encoded by the server and get their own escaping
+const g_hover_state_output_macros = new Set(["obj_output", "obj_summary_output", "obj_perfdata"]);
+
+// The custom macros come from the backend definitions in the main config, which
+// only admins can edit, and are meant to hold HTML or URLs
+const g_hover_raw_macros = new Set(["custom_1", "custom_2", "custom_3"]);
+
+// Escapes a hover macro value before it is inserted into the menu HTML. Every
+// macro is escaped except the language strings and the custom macros, so newly
+// added macros are safe by default.
+function escapeHoverMacro(name, value) {
+    if (value === null || value === undefined) return "";
+    if (name.startsWith("lang_") || g_hover_raw_macros.has(name)) return value;
+    if (g_hover_state_output_macros.has(name)) return escapeStateOutput(value);
+    return htmlspecialchars(value);
+}
+
 // Hides the currently open hover menu
 function hoverHide() {
     if (g_hover_open !== null) g_hover_open.hide();
@@ -500,7 +517,9 @@ const ElementHover = Element.extend({
 
         // Replace all normal macros
         template_html = template_html.replace(/\[(\w*)\]/g, function () {
-            return htmlspecialchars(oMacros[arguments[1]] || "");
+            // The child display_name is pre-encoded by the server just like the output
+            if (arguments[1] === "obj_display_name") return escapeStateOutput(oMacros.obj_display_name);
+            return escapeHoverMacro(arguments[1], oMacros[arguments[1]]);
         });
         return template_html;
     },
@@ -577,8 +596,9 @@ const ElementHover = Element.extend({
         // not be mistaken for an unknown macro and dropped. Keep the original
         // "[name]" text for tokens that are not actual macros, while still
         // replacing defined macros that legitimately hold an empty value.
+        // All values are escaped to prevent XSS via check output.
         template_html = template_html.replace(/\[(\w*)\]/g, function (match, name) {
-            return Object.prototype.hasOwnProperty.call(oMacros, name) ? oMacros[name] : match;
+            return Object.prototype.hasOwnProperty.call(oMacros, name) ? escapeHoverMacro(name, oMacros[name]) : match;
         });
         return template_html;
     },
@@ -719,7 +739,8 @@ const ElementHover = Element.extend({
 
         // Loop and replace all normal macros
         this.template_html = this.template_html.replace(/\[(\w*)\]/g, function () {
-            return oMacros[arguments[1]] || "[" + arguments[1] + "]";
+            const name = arguments[1];
+            return oMacros[name] ? escapeHoverMacro(name, oMacros[name]) : "[" + name + "]";
         });
 
         // Re-add the clean child code
