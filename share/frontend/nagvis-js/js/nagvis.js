@@ -787,7 +787,23 @@ function htmlspecialchars(sStr) {
         '"': "&quot;",
         "'": "&#39;"
     };
-    return sStr.replace(/[&<>"']/g, (match) => map[match]);
+    if (sStr === null || sStr === undefined) return "";
+    return String(sStr).replace(/[&<>"']/g, (match) => map[match]);
+}
+
+/**
+ * Escapes state output (output/summary_output/perfdata) which has already been
+ * pre-encoded by the server (escapeStringForJson). Neutralises HTML tags while
+ * keeping the server generated <br /> line breaks and entities intact.
+ *
+ * "&" is not escaped, so the result is only safe in element content and in
+ * quoted attributes, not in unquoted attributes or inline JS.
+ */
+function escapeStateOutput(sStr) {
+    return (sStr || "")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/&lt;br \/&gt;/g, "<br />");
 }
 
 /**

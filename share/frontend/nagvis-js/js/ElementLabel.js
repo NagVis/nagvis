@@ -37,13 +37,17 @@ const ElementLabel = Element.extend({
                 objName = this.obj.conf.name;
             }
 
-            this.label_text = this.label_text.replace(getRegEx("name", "\\[name\\]", "g"), objName);
-            this.label_text = this.label_text.replace(getRegEx("alias", "\\[alias\\]", "g"), this.obj.conf.alias);
+            // The label is rendered as HTML, so object derived values are escaped
+            const name = htmlspecialchars(objName);
+            const alias = htmlspecialchars(this.obj.conf.alias);
+            this.label_text = this.label_text.replace(getRegEx("name", "\\[name\\]", "g"), () => name);
+            this.label_text = this.label_text.replace(getRegEx("alias", "\\[alias\\]", "g"), () => alias);
 
             if (this.obj.conf.type == "service") {
+                const service_description = htmlspecialchars(this.obj.conf.service_description);
                 this.label_text = this.label_text.replace(
                     getRegEx("service_description", "\\[service_description\\]", "g"),
-                    this.obj.conf.service_description
+                    () => service_description
                 );
             }
         }
@@ -124,15 +128,18 @@ const ElementLabel = Element.extend({
 
         // Replace static macros in label_text when needed
         if (text && text !== "") {
-            text = text.replace(getRegEx("output", "\\[output\\]", "g"), this.obj.conf.output);
+            const output = escapeStateOutput(this.obj.conf.output);
+            text = text.replace(getRegEx("output", "\\[output\\]", "g"), () => output);
 
             if (this.obj.conf.type == "service" || this.obj.conf.type == "host") {
-                text = text.replace(getRegEx("perfdata", "\\[perfdata\\]", "g"), this.obj.conf.perfdata);
+                const perfdata = escapeStateOutput(this.obj.conf.perfdata);
+                text = text.replace(getRegEx("perfdata", "\\[perfdata\\]", "g"), () => perfdata);
             }
         }
 
+        // Drop a trailing entity or tag which has been cut in half by the truncation
         if (this.obj.conf.label_maxlen > 0 && text.length > this.obj.conf.label_maxlen)
-            text = text.substr(0, this.obj.conf.label_maxlen - 2) + "...";
+            text = text.substr(0, this.obj.conf.label_maxlen - 2).replace(/&[^;\s]*$|<[^>]*$/, "") + "...";
 
         return text;
     },
