@@ -285,6 +285,16 @@ function showAckDialog(map_name, objectId) {
     );
 }
 
+// Reloads the current automap with the given object as root. The object name
+// is looked up here instead of being put into the context template, because
+// HTML escaping does not protect a value inside inline JS.
+function makeRootObject(map_name, objectId) {
+    const obj = getMapObjByDomObjId(objectId);
+    if (!obj) return;
+    window.location =
+        "index.php?mod=Map&act=view&show=" + escapeUrlValues(map_name) + getViewParams({ root: obj.conf.name }, true);
+}
+
 // Handles manual map object update triggered by e.g. the context menu
 function refreshMapObject(event, objectId, only_state) {
     if (typeof only_state === "undefined") only_state = true;
