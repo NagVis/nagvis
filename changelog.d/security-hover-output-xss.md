@@ -1,1 +1,0 @@
-FIX: Prevent XSS via check output and object names in hover menus and labels (CVSS: 7.3) CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:A/VC:H/VI:H/VA:H/SC:N/SI:L/SA:N. HTML in check output, notes or object names is now shown as text instead of being rendered.

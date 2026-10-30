@@ -1,4 +1,8 @@
 1.10.7
+  * FIX: Special characters in hover menu child rows are no longer shown as HTML entities (#459)
+  * FIX: NagVis logo link now opens nagvis.org in a new tab, so a Content-Security-Policy no longer blocks it when NagVis is embedded in a frame (e.g. the Checkmk NagVis snapin)
+  * FIX: Prevent XSS via object names in context menus
+  * FIX: Prevent XSS via check output and object names in hover menus and labels (CVSS: 7.3) CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:A/VC:H/VI:H/VA:H/SC:N/SI:L/SA:N. HTML in check output, notes or object names is now shown as text instead of being rendered.
 
 1.10.6
   * FEAT: The "editHtml" permission can now be granted to roles via the role management GUI, instead of only being available to administrators (#452)
