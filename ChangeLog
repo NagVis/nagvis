@@ -1,3 +1,5 @@
+1.10.8
+
 1.10.7
   * FIX: Special characters in hover menu child rows are no longer shown as HTML entities (#459)
   * FIX: NagVis logo link now opens nagvis.org in a new tab, so a Content-Security-Policy no longer blocks it when NagVis is embedded in a frame (e.g. the Checkmk NagVis snapin)
